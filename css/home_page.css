@@ -9,6 +9,8 @@ body {
     margin: 0;
     padding: 0;
     background: url(../images/home_background.jpg);
+    width: 100vw;
+    height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -70,7 +72,7 @@ body {
 #welcome-message button {
     border: none;
     border-radius: 30px;
-    width: 35%;
+    width: 40%;
     background-color: var(--button);
     padding: 10px 15px;
 }
@@ -82,7 +84,7 @@ body {
 }
 
 #welcome-message button:hover a {
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     transition: ease-in-out 0.5s;
 }
 
@@ -120,4 +122,20 @@ body {
     color: #fff;
     font-weight: 500;
     border-radius: 20px;
+}
+
+.navbar-toggler-icon {
+    display: none;
+}
+
+@media (max-width: 536px) {
+    .customised-navbar {
+        width: 100%;
+    }
+
+    .navbar-toggler-icon {
+        display: inline;
+        font-size: 20px;
+    }
+    
 }
