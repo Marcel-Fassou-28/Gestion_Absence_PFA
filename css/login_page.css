@@ -1,4 +1,53 @@
-header{
-    background: #8BB0F0;
-    color: white;
+* {
+    box-sizing: border-box;
+}
+:root {
+    --navbar : #8bb0f0;
+    --button: #363753;
+    --background-section: rgba(28, 29, 30, 0.2);
+}
+.navbar {
+    height: 50px;
+    background-color: var(--navbar);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 20px;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url(../images/home_background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-x: hidden;
+    height: 100vh;
+}
+.logo {
+    margin-bottom: 15px;
+    margin-left: 20px;
+}
+
+.logo span {
+    font-family: "Jacques François";
+    font-size: 25px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.navbar ul {
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.navbar ul li {
+    list-style: none;
+    margin-right: 20%;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
 }

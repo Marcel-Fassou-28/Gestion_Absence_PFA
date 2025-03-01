@@ -5,6 +5,8 @@ const toggleOpen = document.querySelector('.toggle-open');
 const hr = document.getElementsByTagName('hr');
 const width = window.innerWidth;
 
+
+
 sidePanel.classList.remove('sidepanel');
 
 if (width <= 352) {

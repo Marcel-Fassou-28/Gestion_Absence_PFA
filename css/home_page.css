@@ -42,6 +42,7 @@ body {
 .navbar ul {
     display: flex;
     flex-direction: row;
+    
 }
 
 .navbar ul li {
