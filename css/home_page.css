@@ -1,0 +1,277 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --navbar : #8bb0f0;
+    --button: #363753;
+    --background-section: rgba(28, 29, 30, 0.2);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url(../images/home_background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-x: hidden;
+    height: 100vh;
+}
+
+.navbar {
+    height: 50px;
+    background-color: var(--navbar);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 20px;
+}
+
+.logo {
+    margin-bottom: 15px;
+    margin-left: 20px;
+}
+
+.logo span {
+    font-family: "Jacques François";
+    font-size: 25px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.navbar ul {
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar ul li {
+    list-style: none;
+    margin-right: 20%;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+}
+
+section {
+   transform: translate(12%, 350px);
+}
+
+.container-div {
+    color: #fff;
+    background-color: var(--background-section);
+    text-align: center;
+    padding: 15px;
+    border-radius: 30px;
+}
+
+.container-div p {
+    font-family: "Kiwi Maru";
+}
+
+hr {
+    display: none;
+}
+
+.container-div button {
+    border: none;
+    border-radius: 20px;
+    width: 150px;
+    background-color: var(--button);
+    padding: 10px 15px;
+}
+
+.container-div button a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #fff;
+}
+
+.col-1 { width: 8.33%;}
+.col-2 { width: 16.66%;}
+.col-3 { width: 25%;}
+.col-4 { width: 33.33%;}
+.col-5 { width: 41.66%;}
+.col-6 { width: 50%;}
+.col-7 { width: 58.33%;}
+.col-8 { width: 66.66%;}
+.col-9 { width: 75%;}
+.col-10 { width: 83.33%;}
+.col-12 { width: 91.66%;}
+.col-13 { width: 100%;}
+
+[class*="col-"] {
+    float: left;
+}
+
+.toggle, .toggle-open {
+    display: none;
+}
+
+@media (min-width: 700px) and (max-width: 900px) {
+    .container-mobile {
+        width: 60%;
+        transition: 0.2s;
+    }
+
+    .container-mobile h2 {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 700px) {
+    
+    .navbar {
+        padding-right: 15%;
+        transition: 0.2s;
+    }
+
+    .navbar ul li {
+        margin-right: 15%;
+        transition: 0.2s;
+    }
+
+    .container-mobile {
+        width: 70%;
+        transition: 0.2s;
+    }
+
+    .container-mobile h2 {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 475px) {
+
+    section {
+        transform: translate(10% ,350px);
+    }
+
+    .container-mobile {
+        padding: 7px 10px;
+        text-align: left;
+        width: 70%;
+        transition: 0.2s;
+    }
+
+    .container-mobile p {
+        font-size: 15px;
+    }
+
+    .container-mobile h2 {
+        font-size: 25px;
+    }
+
+    .container-mobile button {
+        margin-left: 25%;
+        padding: 5px 10px;
+        transition: 0.2s;
+    }
+
+    .navbar {
+        flex-direction: row-reverse;
+        padding-left: 5%;
+        transition: 0.2s;
+    }
+
+    .navbar ul li {
+        margin-right: 50%;
+    }
+
+    .logo {
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 320px) {
+    /* Ces classes seront activées lorsque la taille maximale
+    de la page sera de 320px */
+    .navbar ul {
+        display: none;
+    }
+
+    .toggle {
+        padding: 5px;
+        position: fixed;
+        top: 0px;
+        left: 5px;
+        font-size: 22px;
+        font-weight: 600;
+        display: none;
+        /*transform: translate(1%, -160%);*/
+    }
+
+    .toggle-open {
+        display: block;
+        padding: 5px;
+        position: fixed;
+        top: 0px;
+        left: 5px;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    section {
+        transform: translate(10% ,200px);
+    }
+
+    .container-mobile button {
+        margin-left: 15%;
+    }
+
+    .logo {
+        margin-right: 15%;
+    }
+
+    .sidepanel {
+        height: 100%; 
+        width: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: var(--navbar);
+        overflow-x: hidden;
+        transition: 0.2s;
+        z-index: 1;
+    }
+
+    .sidepanel .logo {
+        margin-top: 7px;
+        margin-left: 45px;
+    }
+    
+    .sidepanel .logo span {
+        font-family: "Jacques François" sans-serif;
+        font-size: 21px;
+        font-weight: 550;
+        color: #fff;
+    }
+
+    .sidepanel ul {
+        position: relative;
+        top: -240px;
+        left: 10px;
+        height: 70px;
+        width: 200px;
+    }
+
+    .sidepanel ul li {
+        list-style: none;
+        padding: 5px 5px;
+    }
+
+    .sidepanel ul li a {
+        text-decoration: none;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    hr {
+        position: absolute;
+        top: 42px;
+        color: #fff;
+        display: none;
+    }
+}
