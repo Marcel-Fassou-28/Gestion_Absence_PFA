@@ -13,7 +13,7 @@ CREATE TABLE Professeur (
     CIN_Prof VARCHAR(20) PRIMARY KEY, 
     Nom VARCHAR(50) NOT NULL,
     Prenom VARCHAR(50) NOT NULL,
-    Password VARCHAR(20) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
     IdentifiantAdmin VARCHAR(50), -- Foreign key to Administration table
     FOREIGN KEY (IdentifiantAdmin) REFERENCES Administration(identifiant_Admin)
 );
@@ -31,15 +31,15 @@ CREATE TABLE Module (
 -- Table for Etudiant
 CREATE TABLE Etudiant (
     CIN_Etudiant VARCHAR(20) PRIMARY KEY NOT NULL,
-    Nom VARCHAR(15) NOT NULL,
-    Prenom VARCHAR(15) NOT NULL,
-    Password VARCHAR(15) NOT NULL,
+    Nom VARCHAR(50) NOT NULL,
+    Prenom VARCHAR(50) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
     CNE VARCHAR(20) UNIQUE NOT NULL, -- Student National Code
     Email VARCHAR(100) NOT NULL,
     IdentifiantAdmin VARCHAR(50), -- Foreign key to Administration
     code_filiere VARCHAR(100), -- Foreign key to Filiere
     FOREIGN KEY (IdentifiantAdmin) REFERENCES Administration(identifiant_Admin),
-    FOREIGN KEY (code_filiere) REFERENCES Filiere(code_filiere),
+    FOREIGN KEY (code_filiere) REFERENCES Filiere(code_filiere)
 );
 
 -- Table for Administration
