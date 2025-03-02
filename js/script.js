@@ -2,14 +2,16 @@ const sidePanel = document.querySelector('.sidepanel');
 const navbar = document.querySelector('.navbar');
 const toggleClose = document.querySelector('.toggle');
 const toggleOpen = document.querySelector('.toggle-open');
-const hr = document.getElementsByTagName('hr');
+const hr = document.querySelector('hr');
 const width = window.innerWidth;
-
-
 
 sidePanel.classList.remove('sidepanel');
 
 if (width <= 352) {
+    toggleClose.style.display = "none";
+    toggleOpen.style.display = "block";
+    hr.style.display = "none";
+
     toggleOpen.addEventListener('click', () => {
         sidePanel.classList.remove('navbar');
         navbar.classList.add('sidepanel');
@@ -29,6 +31,3 @@ if (width <= 352) {
     toggleClose.style.display = "none";
     toggleOpen.style.display = "none";
 }
-
-
-console.log(width);
