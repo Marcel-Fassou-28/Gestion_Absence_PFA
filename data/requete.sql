@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS gaensaj;
+USE gaensaj;
+
 -- Table for Filière
 CREATE TABLE Filiere (
     code_filiere VARCHAR(10) PRIMARY KEY,
