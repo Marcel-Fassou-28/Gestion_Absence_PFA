@@ -41,7 +41,7 @@ CREATE TABLE Etudiant (
     FOREIGN KEY (IdentifiantAdmin) REFERENCES Administration(identifiant_Admin),
     FOREIGN KEY (code_filiere) REFERENCES Filiere(code_filiere)
 );
-
+ 
 -- Table for Administration
 CREATE TABLE Administration (
     identifiant_Admin VARCHAR(50) PRIMARY KEY,

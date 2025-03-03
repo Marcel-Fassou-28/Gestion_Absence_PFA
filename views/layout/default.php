@@ -4,39 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../css/home_page.css">
-    <link rel="stylesheet" href="../../css/general_style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/login_page.css">
+    <link rel="stylesheet" href="/css/general_style.css">
     <title>Gestion d'Absence</title>
 </head>
 <body>
-    <nav class="row navbar sidepanel">
+    <nav class="row nav-bar">
         <div class="logo col-3">
             <span>GAENSAJ</span>
         </div>
         <hr>
-        <ul class=" col-3">
-            <li><a href="index.html" target="_self">Accueil</a></li>
-            <li><a href="../login/login.html" target="_blank">Connexion</a></li>
+        <ul class="wrapped col-3">
+            <li><a href=<?= $router->url('accueil') ?> target="_self">Accueil</a></li>
+            <li><a href=<?= $router->url('login_page') ?> target="_blank">Connexion</a></li>
         </ul>
-        <div class="toggle">
-            &times;
-        </div>
-        <div class="toggle-open">
-            &#9776;
-        </div>
     </nav>
-    <section>
-        <div class="container-div col-5 container-mobile">
-            <h2>Bienvenue sur GAENSAJ</h2>
-            <p>Votre nouvelle plateforme de gestion <br> d'absence en ligne</p>
-            <button><a href="../login/login.html" target="_blank">Connectez-vous</a></button>
-        </div>
-    </section>
-    <script src="../../js/script.js"></script>
+    <div class="toggle">&times;</div>
+    <div class="toggle-open">&#9776;</div>
+    <?= $content ?>
+    <script src="/js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
