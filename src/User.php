@@ -3,15 +3,38 @@
 namespace App;
 
 class User {
+
+    /**
+     * Propriétés de la classe Utilisateur, mais relatif à un etudiant
+     * 
+     * @var string
+     */
     private $CIN_Etudiant;
+    /** @var string
+     */
     private $Nom;
+    /** @var string
+     */
     private $Prenom;
+    /** @var string
+     */
     private $Password;
+    /** @var string
+     */
     private $CNE;
+    /** @var string
+     */
     private $Email;
+    /** @var string
+     */
     private $IdentifiantAdmin;
 
-    // Constructeur pour initialiser les propriétés
+    
+    
+    /**
+     * Constructeur pour initialiser les propriétés
+     * @param array Un dictionnaire lui sera passer pour initialiser dynamiquement le constructeur
+     * */
     public function __construct($data = []) {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
@@ -21,31 +44,31 @@ class User {
     }
 
     // Getters
-    public function getCIN_Etudiant() {
+    public function getCIN_Etudiant(): ?string {
         return $this->CIN_Etudiant;
     }
 
-    public function getNom() {
+    public function getNom(): ?string {
         return $this->Nom;
     }
 
-    public function getPrenom() {
+    public function getPrenom(): ?string {
         return $this->Prenom;
     }
 
-    public function getPassword() {
+    public function getPassword(): ?string {
         return $this->Password;
     }
 
-    public function getCNE() {
+    public function getCNE(): ?string {
         return $this->CNE;
     }
 
-    public function getEmail() {
+    public function getEmail(): ?string {
         return $this->Email;
     }
 
-    public function getIdentifiantAdmin() {
+    public function getIdentifiantAdmin(): ?string {
         return $this->IdentifiantAdmin;
     }
 
