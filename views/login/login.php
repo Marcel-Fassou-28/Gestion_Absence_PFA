@@ -41,12 +41,12 @@ if (!empty($_POST)) {
 ?>
 <div class="login-container">
     <div class="login-box">
-    <?php if($error_password): ?>
-        <div class="alert alert-danger">
+        <h2>Se connecter à GAENSAJ</h2>
+        <?php if($error_password): ?>
+        <div class="alert">
             Identifiant ou mot de passe incorrect
         </div>
-    <?php endif ?>
-        <h2>Se connecter à GAENSAJ</h2>
+        <?php endif ?>
         <form method="post" action="">
             <div class="input-group">
                 <input type="text" placeholder="Identifiant" name="identifiant" required>

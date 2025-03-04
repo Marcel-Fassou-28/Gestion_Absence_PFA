@@ -79,6 +79,11 @@
     background: #2b2c4a;
 }
 
+.alert {
+    font-weight: 550;
+    margin: 5px;
+    padding: 0px;
+}
 @media (max-width: 425px) {
     .login-container {
         width: 80%;
