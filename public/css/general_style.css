@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
 }
-
+  
 :root {
     --navbar : #8bb0f0;
     --button: #363753;
@@ -18,7 +18,7 @@ body {
     height: 100vh;
 }
 
-.navbar {
+.nav-bar {
     height: 50px;
     background-color: var(--navbar);
     display: flex;
@@ -37,20 +37,21 @@ body {
     font-size: 25px;
     font-weight: 500;
     color: #fff;
+    cursor: pointer;
 }
 
-.navbar ul {
+.nav-bar ul {
     display: flex;
     flex-direction: row;
-    
+    margin-top: 10px;
 }
 
-.navbar ul li {
+.nav-bar ul li {
     list-style: none;
     margin-right: 20%;
 }
 
-.navbar ul li a {
+.nav-bar ul li a {
     text-decoration: none;
     color: #fff;
     font-weight: 600;
@@ -58,6 +59,7 @@ body {
 
 section {
    transform: translate(12%, 350px);
+   transition: 0.2s;
 }
 
 .container-div {
@@ -131,12 +133,12 @@ hr {
         transform: translate(10% ,250px);
     }
     
-    .navbar {
+    .nav-bar {
         padding-right: 15%;
         transition: 0.2s;
     }
 
-    .navbar ul li {
+    .nav-bar ul li {
         margin-right: 15%;
         transition: 0.2s;
     }
@@ -178,13 +180,13 @@ hr {
         transition: 0.2s;
     }
 
-    .navbar {
+    .nav-bar {
         flex-direction: row-reverse;
         padding-left: 5%;
         transition: 0.2s;
     }
 
-    .navbar ul li {
+    .nav-bar ul li {
         margin-right: 50%;
     }
 
@@ -196,29 +198,27 @@ hr {
 @media (max-width: 320px) {
     /* Ces classes seront activées lorsque la taille maximale
     de la page sera de 320px */
-    .navbar ul {
-        display: none;
-    }
 
     .toggle {
         padding: 5px;
-        position: fixed;
-        top: 0px;
-        left: 5px;
-        font-size: 22px;
-        font-weight: 600;
+        position: absolute;
+        top: -7px;
+        left: 7px;
+        font-size: 30px;
+        font-weight: 700;
         display: none;
-        /*transform: translate(1%, -160%);*/
+        z-index: 2;
     }
 
     .toggle-open {
         display: block;
         padding: 5px;
-        position: fixed;
-        top: 0px;
-        left: 5px;
+        position: absolute;
+        top: -2px;
+        left: 7px;
         font-size: 22px;
         font-weight: 600;
+        z-index: 2;
     }
 
     section {
@@ -233,7 +233,7 @@ hr {
         margin-right: 15%;
     }
 
-    .sidepanel {
+    .nav-bar {
         height: 100%; 
         width: 50%;
         position: fixed;
@@ -243,34 +243,36 @@ hr {
         overflow-x: hidden;
         transition: 0.2s;
         z-index: 1;
+        display: none;
     }
 
-    .sidepanel .logo {
-        margin-top: 7px;
-        margin-left: 45px;
+    .nav-bar .logo {
+        margin-top: 5px;
+        margin-left: 20px;
     }
     
-    .sidepanel .logo span {
+    .nav-bar .logo span {
         font-family: "Jacques François" sans-serif;
         font-size: 21px;
         font-weight: 550;
         color: #fff;
     }
 
-    .sidepanel ul {
-        position: relative;
-        top: -240px;
+    .nav-bar ul {
+        position: absolute;
+        top: 50px;
         left: 10px;
         height: 70px;
         width: 200px;
+        flex-direction: column;
     }
 
-    .sidepanel ul li {
+    .nav-bar ul li {
         list-style: none;
-        padding: 5px 5px;
+        padding: 5px;
     }
 
-    .sidepanel ul li a {
+    .nav-bar ul li a {
         text-decoration: none;
         font-weight: 600;
         color: #fff;
@@ -278,8 +280,9 @@ hr {
 
     hr {
         position: absolute;
-        top: 42px;
+        top: 45px;
+        left: 0;
         color: #fff;
-        display: none;
+        display: inline-block;
     }
 }
