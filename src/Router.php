@@ -6,12 +6,12 @@ use AltoRouter;
 class Router {
 
     /**
-     * @var string Chemin absolue vers lequel on voudra se diriger
+     * @var string $viewPath Chemin absolue vers lequel on voudra se diriger
      */
     private $viewPath;
 
     /**
-     * @var object Contient une  instance de la classe Altorouter
+     * @var object $router Contient une  instance de la classe Altorouter
      */
     private $router;
 
@@ -23,10 +23,10 @@ class Router {
 
     /**
      * Pour maper les chemins en GET
-     * @param url Chemin qu'on voudra accéder en get
-     * @param view Chemin vers le fichier correspondant à l'url
-     * @param name Nom donné à l'url
-     * @return object Il retourne l'objet lui meme
+     * @param string $url Chemin qu'on voudra accéder en get
+     * @param string $view Chemin vers le fichier correspondant à l'url
+     * @param string $name Nom donné à l'url
+     * @return object $this Il retourne l'objet lui meme
      */
     public function get(string $url, string $view, ?string $name = null):self 
     {
@@ -36,10 +36,10 @@ class Router {
     
     /**
      * Pour maper les chemins en POST
-     * @param url Chemin qu'on voudra accéder en post
-     * @param view Chemin vers le fichier correspondant à l'url
-     * @param name Nom donné à l'url
-     * @return object Il retourne l'objet lui meme
+     * @param string $url Chemin qu'on voudra accéder en post
+     * @param string $view Chemin vers le fichier correspondant à l'url
+     * @param string $name  Nom donné à l'url
+     * @return object $this Il retourne l'objet lui meme
      */
     public function post(string $url, string $view, ?string $name = null):self 
     {
@@ -49,9 +49,9 @@ class Router {
 
     /**
      * Pour Maper les chemins en POST ou GET
-     * @param url Chemin qu'on voudra accéder en post ou en get
-     * @param view Chemin vers le fichier correspondant à l'url
-     * @param name Nom donné à l'url
+     * @param string $url Chemin qu'on voudra accéder en post ou en get
+     * @param string $view Chemin vers le fichier correspondant à l'url
+     * @param string $name  Nom donné à l'url
      * @return object Il retourne l'objet lui meme
      */
     public function match(string $url, string $view, ?string $name = null):self 
@@ -64,9 +64,9 @@ class Router {
 
     /**
      * Cette fonction permettra de matcher toutes les requetes d'url
-     * @var view Recupère la cible, (la page demander par l'utilisateur)
-     * @var params S'occupe des arguments de la page
-     * @var router Pour rendre accessible le router depuis n'importe quel fichier
+     * @var string $view Recupère la cible, (la page demander par l'utilisateur)
+     * @var string $params S'occupe des arguments de la page
+     * @var object Pour rendre accessible le router depuis n'importe quel fichier
      * 
      * La fonction ob_start() active la mise en tampon de sortie (output buffering). 
      * Cela signifie que, au lieu d'envoyer directement la sortie (comme du HTML ou du texte) au navigateur,
@@ -88,8 +88,8 @@ class Router {
  
     /**
      * Genere une url qui en paramètre le nom qui lui est attribué
-     * @param name Nom de l'url donné à la methode get, post, match
-     * @param param Les paramètres de l'url, si elle dynamique
+     * @param string $name Nom de l'url donné à la methode get, post, match
+     * @param array $param Les paramètres de l'url, si elle dynamique
      */
     public function url(string $name, array $param = []) {
         return $this->router->generate($name, $param);

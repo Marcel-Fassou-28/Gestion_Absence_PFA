@@ -7,25 +7,31 @@ class User {
     /**
      * Propriétés de la classe Utilisateur, mais relatif à un etudiant
      * 
-     * @var string
+     * @var string $CIN_Etudiant
      */
     private $CIN_Etudiant;
-    /** @var string
+
+    /** @var string $Nom
      */
     private $Nom;
-    /** @var string
+
+    /** @var string $prenom
      */
     private $Prenom;
-    /** @var string
+
+    /** @var string $Password
      */
     private $Password;
-    /** @var string
+
+    /** @var string $CNE
      */
     private $CNE;
-    /** @var string
+
+    /** @var string $Email
      */
     private $Email;
-    /** @var string
+
+    /** @var string $identifiantAdmin
      */
     private $IdentifiantAdmin;
 
@@ -33,7 +39,8 @@ class User {
     
     /**
      * Constructeur pour initialiser les propriétés
-     * @param array Un dictionnaire lui sera passer pour initialiser dynamiquement le constructeur
+     * 
+     * @param array $data Un dictionnaire lui sera passer pour initialiser dynamiquement le constructeur
      * */
     public function __construct($data = []) {
         foreach ($data as $key => $value) {
@@ -44,151 +51,130 @@ class User {
     }
 
     // Getters
+    /**
+     * Getter
+     * 
+     * @return string $CIN_Etudiant
+     */
     public function getCIN_Etudiant(): ?string {
         return $this->CIN_Etudiant;
     }
 
+    /**
+     * Getter
+     * 
+     * @return string $Nom
+     */
     public function getNom(): ?string {
         return $this->Nom;
     }
 
+    /**
+     * Getter
+     * 
+     * @return string $Prenom
+     */
     public function getPrenom(): ?string {
         return $this->Prenom;
     }
 
+    /**
+     * Getter
+     * 
+     * @return string $Password
+     */
     public function getPassword(): ?string {
         return $this->Password;
     }
 
+    /**
+     * Getter
+     * 
+     * @return string $CNE
+     */
     public function getCNE(): ?string {
         return $this->CNE;
     }
 
+    /**
+     * Getter
+     * 
+     * @return string $Email
+     */
     public function getEmail(): ?string {
         return $this->Email;
     }
 
+    /**
+     * Getter
+     * 
+     * @return string $IdentifiantAdmin
+     */
     public function getIdentifiantAdmin(): ?string {
         return $this->IdentifiantAdmin;
     }
 
     // Setters
+    /**
+     * Setter
+     * 
+     * @param string $CIN_Etudiant
+     */
     public function setCIN_Etudiant($CIN_Etudiant) {
         $this->CIN_Etudiant = $CIN_Etudiant;
     }
 
+    /**
+     * Setter
+     * 
+     * @param string $Nom
+     */
     public function setNom($Nom) {
         $this->Nom = $Nom;
     }
 
+    /**
+     * Setter
+     * 
+     * @param string $Prenom
+     */
     public function setPrenom($Prenom) {
         $this->Prenom = $Prenom;
     }
 
+    /**
+     * Setter
+     * 
+     * @param string $Password
+     */
     public function setPassword($Password) {
         $this->Password = $Password; // Optionnel : ajouter un hash ici, ex. password_hash($Password, PASSWORD_DEFAULT)
     }
 
+    /**
+     * Setter
+     * 
+     * @param string $CNE
+     */
     public function setCNE($CNE) {
         $this->CNE = $CNE;
     }
 
+    /**
+     * Setter
+     * 
+     * @param string $Email
+     */
     public function setEmail($Email) {
         $this->Email = $Email;
     }
 
+    /**
+     * Setter
+     * 
+     * @param string $IdentifiantAdmin
+     */
     public function setIdentifiantAdmin($IdentifiantAdmin) {
         $this->IdentifiantAdmin = $IdentifiantAdmin;
     }
 }
-/*
-class User {
-
-    private $cin_etudiant;
-    private $nom;
-    private $prenom;
-    private $password;
-    private $cne;
-    private $email;
-    private $identifiantadmin;
-    private $code_filiere;
-
-    public function __construct($data = []) {
-        foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            }
-        }
-    }
-
-    *//*public function __construct($cin_etudiant, $nom, $prenom, $password, $cne, $email, $identifiantadmin, $code_filiere)
-    {
-        $this->cin_etudiant = $cin_etudiant;
-        $this->nom = $nom;
-        $this->prenom = $prenom;
-        $this->password = $password;
-        $this->cne = $cne;
-        $this->email = $email;
-        $this->identifiantadmin = $identifiantadmin;
-        $this->code_filiere = $code_filiere; 
-    }*/
-
-    /*public function setCIN(int $cin): self {
-        $this->cin_etudiant = $cin;
-        return $this;
-    }
-
-    public function setNom(string $nom): self {
-        $this->nom = $nom;
-        return $this;
-    }
-
-    public function setPrenom(string $prenom): self {
-        $this->prenom = $prenom;
-        return $this;
-    }
-
-    public function setEmail(string $email): self {
-        $this->email = $email;
-        return $this;
-    }
-
-    public function setPassword(string $password): self {
-        $this->password = $password;
-        return $this;
-    }
-
-    public function setCNE(int $cne): self {
-        $this->cne = $cne;
-        return $this;
-    }
-
-    public function getNom(): ?string {
-        return $this->nom;
-    }
-
-    public function getPassword(): ?string {
-        return $this->password;
-    }
-
-    public function getCNE(): ?string {
-        return $this->cne;
-    }
-
-    public function getPrenom(): ?string {
-        return $this->prenom;
-    }
-
-    public function getEmail(): ?string {
-        return $this->email;
-    }
-
-    public function getCIN(): ?string {
-        return $this->cin_etudiant;
-    }
-
-    public function getCodeFiliere(): ?string {
-        return $this->code_filiere;
-    }
-
-}*/

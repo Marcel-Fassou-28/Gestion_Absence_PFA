@@ -5,7 +5,14 @@ use App\User;
 
 class UserTable {
 
+    /**
+     * @var array $table
+     */
     private $table;
+
+    /**
+     * @var object $pdo
+     */
     private $pdo;
 
     public function __construct(\PDO $pdo, $table)
@@ -15,7 +22,7 @@ class UserTable {
     }
 
     /**
-     * @param string CIN_Etudiant sera utilisé comme paramètre
+     * @param string $CIN_Etudiant sera utilisé comme paramètre
      * @return object Un object User sera retourner
      */
     public function findByCIN(string $cin_etudiant) {

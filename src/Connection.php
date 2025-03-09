@@ -11,7 +11,7 @@ class Connection {
     */
 
     /**
-     * @return object Une nouvelle connexion
+     * @return object PDO Une nouvelle connexion
      */
     public static function getPDO():PDO {
         $dsn = "mysql:host=localhost;dbname=gaensaj;charset=utf8mb4";
