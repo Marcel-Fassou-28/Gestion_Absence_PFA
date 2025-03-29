@@ -1,59 +1,104 @@
-CREATE DATABASE IF NOT EXISTS gaensaj;
+CREATE DATABASE gaensaj;
 USE gaensaj;
 
--- Table for Filière
+-- Table Administrateur
+CREATE TABLE Administrateur (
+    idAdmin INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50),
+    prenom VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(50),
+);
+
+-- Table Utilisateur
+CREATE TABLE Utilisateur (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    photo LONGBLOB,
+    role ENUM('admin', 'professeur', 'etudiant') NOT NULL
+);
+
+-- Table RecuperationPassword
+CREATE TABLE RecuperationPassword (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(100),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    code VARCHAR(10),
+    FOREIGN KEY (email) REFERENCES Utilisateur(email)
+);
+
+-- Table Filière
 CREATE TABLE Filiere (
-    code_filiere VARCHAR(10) PRIMARY KEY,
-    nom VARCHAR(15) NOT NULL,
-    departement VARCHAR(15) NOT NULL
+    idFiliere INT PRIMARY KEY AUTO_INCREMENT,
+    nomFiliere VARCHAR(100),
+    niveau VARCHAR(50),
+    departement VARCHAR(100)
 );
 
--- Table for Professeur
+-- Table Matière
+CREATE TABLE Matiere(
+    idMatiere INT PRIMARY KEY AUTO_INCREMENT,
+    idProf INT,
+    nomMatiere VARCHAR(100),
+    idFiliere INT,
+    FOREIGN KEY (idProf) REFERENCES Professeur(idProf),
+    FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE
+);
+
+-- Table Professeur
 CREATE TABLE Professeur (
-    CIN_Prof VARCHAR(20) PRIMARY KEY, 
-    Nom VARCHAR(50) NOT NULL,
-    Prenom VARCHAR(50) NOT NULL,
-    Password VARCHAR(255) NOT NULL,
-    IdentifiantAdmin VARCHAR(50), -- Foreign key to Administration table
-    FOREIGN KEY (IdentifiantAdmin) REFERENCES Administration(identifiant_Admin)
+    idProf INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50),
+    prenom VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255),
 );
 
--- Table for Module
-CREATE TABLE Module (
-    code_module VARCHAR(10) PRIMARY KEY,
-    intitule_module VARCHAR(100) NOT NULL,
-    code_filiere VARCHAR(10) , -- Foreign key to Filiere
-    CIN_Prof VARCHAR(20), -- Foreign key to Professeur
-    FOREIGN KEY (code_filiere) REFERENCES Filiere(code_filiere),
-    FOREIGN KEY (CIN_Prof) REFERENCES Professeur(CIN_Prof)
-);
 
--- Table for Etudiant
+
+-- Table Étudiant
 CREATE TABLE Etudiant (
-    CIN_Etudiant VARCHAR(20) PRIMARY KEY NOT NULL,
-    Nom VARCHAR(50) NOT NULL,
-    Prenom VARCHAR(50) NOT NULL,
-    Password VARCHAR(255) NOT NULL,
-    CNE VARCHAR(20) UNIQUE NOT NULL, -- Student National Code
-    Email VARCHAR(100) NOT NULL,
-    IdentifiantAdmin VARCHAR(50), -- Foreign key to Administration
-    code_filiere VARCHAR(100), -- Foreign key to Filiere
-    FOREIGN KEY (IdentifiantAdmin) REFERENCES Administration(identifiant_Admin),
-    FOREIGN KEY (code_filiere) REFERENCES Filiere(code_filiere)
-);
- 
--- Table for Administration
-CREATE TABLE Administration (
-    identifiant_Admin VARCHAR(50) PRIMARY KEY,
-    Nom VARCHAR(100) NOT NULL,
-    Prenom VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
-    Password VARCHAR(255) NOT NULL
+    idEtudiant INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50),
+    prenom VARCHAR(50),
+    cne VARCHAR(20) UNIQUE,
+    cin VARCHAR(20) UNIQUE,
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(50),
+    idFiliere INT,
+    FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE
 );
 
--- Table for Absence (Absence Record)
+-- Table Absence
 CREATE TABLE Absence (
-    id_Absence INT PRIMARY KEY AUTO_INCREMENT,
-    Date DATE NOT NULL,
-    Horaire TIME NOT NULL
+    idAbsence INT PRIMARY KEY AUTO_INCREMENT,
+    date DATE,
+    horaire TIME,
+    idEtudiant INT,
+    idMatiere INT,
+    FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere),
+    FOREIGN KEY (idEtudiant) REFERENCES Etudiant(idEtudiant)
+);
+
+-- Table Justificatif
+CREATE TABLE Justificatif (
+    idJustificatif INT PRIMARY KEY AUTO_INCREMENT,
+    dateSoumission DATE,
+    statut ENUM('accepté', 'refusé', 'en attente') DEFAULT 'en attente',
+    message TEXT,
+    idAbsence INT,
+    FOREIGN KEY (idAbsence) REFERENCES Absence(idAbsence) ON DELETE CASCADE
+);
+
+-- Table ListePrésence
+CREATE TABLE ListePresence (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    date DATE,
+    niveau VARCHAR(50),
+    idFiliere INT,
+    imageJustificatif LONGBLOB,
+    FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere)
 );
