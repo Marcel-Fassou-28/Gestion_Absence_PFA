@@ -6,7 +6,7 @@ use \PDO;
 class Connection {
 
     /**
-     * Cette permet de créer une connexion
+     * Cette classe permet de créer une connexion
      * Pour ne pas à repeter chaque fois les memes codes
     */
 
