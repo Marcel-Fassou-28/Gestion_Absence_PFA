@@ -2,20 +2,22 @@
 require '../vendor/autoload.php';
 use App\Router;
 
+$env = parse_ini_file(dirname(__DIR__) .DIRECTORY_SEPARATOR . '.env');
+$secretKey = $env['SECRET_KEY'];
+
 $router = new Router(dirname(__DIR__) . '/views');
 $router
-
-    /**
-     * Pour les utilisateurs de la plateforme
-     */
     ->get('/', 'home/index', 'accueil')
-    ->match('/login', 'login/login', 'login_page')
-    ->match('/login/[*:slug]/[*:id]', 'compte/profil', 'login')
-    ->get('/login/forget_password', 'Authentification/forget_password', 'forget_password')
-    ->get('/login/forget_password/password_recorver/[*:slug]-[i:id]', 'Authentification/password_recorver', 'password_recover')
+    ->match('/login', 'login/login', 'page-connexion')
+    ->get('/login/reset-password', 'utilisateur/recovery/passwordRecover', 'forget-password')
+    ->get('/login/reset-password/recover/[*:id]', 'utilisateur/recovery/resetPassword', 'password-recovery')
+    ->match('/login/[*:id]/my/[*:role]', 'utilisateur/redirect', 'authenticated')
+    
+    /*Redirect de l'Utilisateur */
+    ->get('/[*:name]/[*:id]', 'utilisateur/professors/home','professor')
+    ->get('/[*:name]/[*:id]', 'utilisateur/admin/home','administrator')
+    ->get('/[*:name]/[*:id]', 'utilisateur/students/home','student')
+    
+    /* Lorsque l'utilisateur est connecté */
 
-    /**
-     * Pour l'administration uniquement 
-     */
-    ->get('/administration', 'admin/login', 'administration')
     ->run();

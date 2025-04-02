@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 use DateTime;
 
 /**
@@ -17,36 +17,36 @@ class Absence {
     /**
      * @var int $idAbsence
      */
-    private $idAbsence;
+    protected $idAbsence;
 
     /**
      * @var \DateTime $date
      */
-    private $date;
+    protected $date;
 
     /**
      * @var \DateTime $horaire
      */
-    private $horaire;
+    protected $horaire;
 
     /**
      * @var int $idEtudiant
      */
-    private $idEtudiant;
+    protected $idEtudiant;
 
     /**
      * @var int $idMatiere
      */
-    private $idMatiere;
+    protected $idMatiere;
 
-    public function __construct($idAbsence, $date, $horaire, $idEtudiant, $idMatiere)
+    /*public function __construct($idAbsence, $date, $horaire, $idEtudiant, $idMatiere)
     {
         $this->idAbsence = $idAbsence;
         $this->date = $date;
         $this->horaire = $horaire;
         $this->idEtudiant = $idEtudiant;
         $this->idMatiere = $idMatiere;
-    }
+    }*/
 
     /**
      * Getters

@@ -76,13 +76,18 @@ class Router {
     public function run():self
     {
         $match = $this->router->match();
-        $view = $match['target'] ?? 'erreur';
+        $view = $match['target'] ?? 'errors/erreur';
         $params = $match['params'] ?? '';
         $router = $this;
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         ob_start();
         require $this->viewPath . DIRECTORY_SEPARATOR. $view . '.php';
         $content = ob_get_clean();
-        require $this->viewPath . DIRECTORY_SEPARATOR . '/layout/default.php';
+        $layout = isset($_SESSION['id_user']) ? 'defaultAuthenticated' : 'defaultUnauthenticated';
+        require $this->viewPath . DIRECTORY_SEPARATOR . 'layout/'. $layout.'.php';
         return $this;
     }
  

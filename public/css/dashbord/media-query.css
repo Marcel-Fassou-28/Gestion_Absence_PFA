@@ -1,0 +1,97 @@
+@media (min-width: 375px) {
+    .menu-hamburger {
+        display: none;
+    }
+}
+
+
+@media (max-width: 375px) {
+    nav {
+        position: relative;
+
+        .nav-icon {
+            transform: scale(0.9);
+            transition: scale 0.2s ease-out;
+            margin-left: -5px;
+        }
+    }
+
+    .navlink-container {
+        flex-direction: column;
+        background-color: var(--navbar-color);
+        position: absolute;
+        top: 50px;
+        left: 0;
+        height: calc(100vh - 50px);
+        transform: translateX(-200%);
+        border-right: 1px solid var(--text-color);
+        padding-right: 25px;
+        z-index: 1;
+        width: 40% !important;
+
+        li {
+            margin-top: 10px;
+            transform: translateY(calc(-100vh + 120px));
+        }
+    }
+
+    .open {
+        transform: translateX(0);
+    }
+
+    .menu-hamburger {
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        border: none;
+        background-color: transparent;
+        margin-left:  -15px;
+        margin-right: 10px;
+
+        span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: var(--bg-btn);
+            position: absolute;
+            pointer-events: none;
+            transition: opacity 0.3s 0.15s ease-out;
+        }
+
+        span:nth-child(1), span:nth-child(3) {
+            transition: transform 0.3s ease-out;
+        } 
+        
+
+        span:nth-child(1) {
+            transform: translateY(7px);
+        }
+
+        span:nth-child(3) {
+            transform: translateY(-7px);
+        }
+    }
+
+    .menu-hamburger.open span:nth-child(1) {
+        transform: translate(0) rotate(135deg);
+    }
+
+    .menu-hamburger.open span:nth-child(2) {
+        opacity: 0;
+        transition: opacity 0s ease-out;
+    }
+
+    .menu-hamburger.open span:nth-child(3) {
+        transform: translate(0) rotate(-135deg);
+    }
+}
+
+
+@media (max-width: 190px) {
+    .nav-icon {
+        display: none;
+    }
+}

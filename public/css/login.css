@@ -1,4 +1,4 @@
-.login-container {
+.login-section {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,7 @@
 }
 
 
-.login-box {
+.login-container {
     background: rgba(28, 29, 30, 0.4);
     padding: 40px;
     border-radius: 20px;
@@ -17,16 +17,16 @@
 }
 
 
-.login-box h2 {
+.login-container h2 {
     margin-bottom: 20px;
 }
 
-.input-group {
+.input-field {
     position: relative;
     margin-bottom: 20px;
 }
 
-.input-group input {
+.input-field input {
     width: 100%;
     padding: 10px;
     padding-right: 40px;
@@ -38,11 +38,11 @@
     
 }
 
-.input-group input::placeholder {
+.input-field input::placeholder {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.input-group i {
+.input-field i {
     position: absolute;
     right: 10px;
     top: 50%;
@@ -83,10 +83,4 @@
     font-weight: 550;
     margin: 5px;
     padding: 0px;
-}
-@media (max-width: 425px) {
-    .login-container {
-        width: 80%;
-        margin: auto;
-    }
 }

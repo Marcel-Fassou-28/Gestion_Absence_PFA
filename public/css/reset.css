@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url(/images/background.jpg);
+    min-height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-x: hidden;
+    background-position: center;
+}  
+
+main {
+    min-height: calc(100vh - 50px);
+    background: rgba(28, 29, 30, 0.4);
+    width: 100vw;
+    backdrop-filter: blur(4px);
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+}

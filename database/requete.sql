@@ -7,7 +7,9 @@ CREATE TABLE Administrateur (
     nom VARCHAR(250) NOT NULL,
     prenom VARCHAR(250) NOT NULL,
     email VARCHAR(250) UNIQUE,
-    password VARCHAR(250) NOT NULL
+    password VARCHAR(250) NOT NULL,
+    cin VARCHAR(20) UNIQUE NOT NULL,
+    CONSTRAINT fk_admin_user FOREIGN KEY (idAdmin) REFERENCES Utilisateur(id) ON DELETE CASCADE
 );
 
 -- Table Utilisateur
@@ -16,9 +18,11 @@ CREATE TABLE Utilisateur (
     username VARCHAR(250) UNIQUE,
     nom VARCHAR(250) NOT NULL,
     prenom VARCHAR(250) NOT NULL,
+    email VARCHAR(250) NOT NULL,
     password VARCHAR(250) NOT NULL,
-    photo LONGBLOB,
-    role ENUM('admin', 'professeur', 'etudiant') NOT NULL
+    cin VARCHAR(20) UNIQUE NOT NULL,
+    role ENUM('admin', 'professeur', 'etudiant') NOT NULL,
+    photo MEDIUMBLOB,
 );
 
 -- Table RecuperationPassword
@@ -54,7 +58,9 @@ CREATE TABLE Professeur (
     nom VARCHAR(250) NOT NULL,
     prenom VARCHAR(250) NOT NULL,
     email VARCHAR(250) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL NOT NULL
+    password VARCHAR(255) NOT NULL NOT NULL,
+    cin VARCHAR(20) UNIQUE NOT NULL,
+    CONSTRAINT fk_admin_professeur FOREIGN KEY (idProf) REFERENCES Utilisateur(id) ON DELETE CASCADE
 );
 
 
@@ -69,7 +75,8 @@ CREATE TABLE Etudiant (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(250) NOT NULL,
     idFiliere INT NOT NULL,
-    CONSTRAINT fk_etudiant_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE
+    CONSTRAINT fk_etudiant_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE,
+    CONSTRAINT fk_admin_etudiant FOREIGN KEY (idEtudiant) REFERENCES Utilisateur(id) ON DELETE CASCADE
 );
 
 -- Table Absence
@@ -96,9 +103,9 @@ CREATE TABLE Justificatif (
 -- Table ListePrésence
 CREATE TABLE ListePresence (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    date DATE,
-    niveau VARCHAR(50),
-    idFiliere INT,
+    date DATE NOT NULL,
+    niveau VARCHAR(50) NOT NULL,
+    idFiliere INT NOT NULL,
     imageJustificatif LONGBLOB,
     CONSTRAINT fk_liste_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere)
 );

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 /**
  * Cette classe est définie pour caractériser une Filière
@@ -15,35 +15,35 @@ class Filiere {
     /**
      * @var int $idFiliere
      */
-    private $idFiliere;
+    protected $idFiliere;
 
     /**
      * @var string $nomFiliere
      */
-    private $nomFiliere;
+    protected $nomFiliere;
 
     /**
      * @var string $niveau
      */
-    private $niveau;
+    protected $niveau;
 
     /**
      * @var int $departement
      */
-    private $departement;
+    protected $departement;
 
-    public function __construct($idFiliere, $nomFiliere, $niveau, $departement)
+    /*public function __construct($idFiliere, $nomFiliere, $niveau, $departement)
     {
         $this->idFiliere = $idFiliere;
         $this->nomFiliere = $nomFiliere;
         $this->niveau = $niveau;
         $this->departement = $departement;
-    }
+    }*/
 
     /**
      * Getters
      * 
-     * @return int $idFiliere
+     * @return int|null
      */
     public function getIDFiliere() : ?int {
         return $this->idFiliere;
@@ -52,7 +52,7 @@ class Filiere {
     /**
      * Getters
      * 
-     * @return int $idFiliere
+     * @return int|null
      */
     public function getNomFiliere() : ?string {
         return $this->nomFiliere;
@@ -61,7 +61,7 @@ class Filiere {
     /**
      * Getters
      * 
-     * @return string $niveau
+     * @return string|null
      */
     public function getNiveau() : ?string {
         return $this->niveau;
@@ -70,7 +70,7 @@ class Filiere {
     /**
      * Getters
      * 
-     * @return string $departement
+     * @return string|null
      */
     public function getDepartement() : ?string {
         return $this->departement;

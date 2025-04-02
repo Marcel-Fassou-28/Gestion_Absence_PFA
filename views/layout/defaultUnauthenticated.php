@@ -8,24 +8,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/login_page.css">
-    <link rel="stylesheet" href="/css/general_style.css">
+    <link rel="stylesheet" href="/css/main-style.css">
     <title>Gestion d'Absence</title>
 </head>
 <body>
-    <nav class="row nav-bar">
-        <div class="logo col-3">
+    <nav>
+        <a href="" class="nav-icon" aria-label="site icon & home page" aria-current="page">
             <span>GAENSAJ</span>
+        </a>
+        <div class="main-navlink">
+            <button class="menu-hamburger" type="button" aria-label="afficher les liens de navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navlink-container">
+                <li><a href="<?= $router->url('accueil') ?>" aria-current="page">Accueil</a></li>
+                <li><a href="<?= $router->url('page-connexion') ?>">Connexion</a></li>
+            </ul>
         </div>
-        <hr>
-        <ul class="wrapped col-3">
-            <li><a href=<?= $router->url('accueil') ?> target="_self">Accueil</a></li>
-            <li><a href=<?= $router->url('login_page') ?> target="_blank">Connexion</a></li>
-        </ul>
     </nav>
-    <div class="toggle">&times;</div>
-    <div class="toggle-open">&#9776;</div>
-    <main class="col-13">
+    <main>
         <?= $content ?>
     </main>
     <footer></footer>
