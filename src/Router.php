@@ -83,10 +83,37 @@ class Router {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+        
+        $urlUser = [];
+        if (isset($_SESSION['id_user'])) {
+            $id = $_SESSION['id_user'];
+            $name = $_SESSION['username'];
+            
+            switch ($_SESSION['role']) {
+                case 'admin':
+                    $urlUser = [
+                        'dashboard' => $router->url('administrator-dashboard'),
+                        'home' => $router->url('administrator-home')
+                    ];
+                    break;
+                case 'professeur':
+                    $urlUser = [
+                        'dashboard' => $router->url('professor-dashboard'),
+                        'home' => $router->url('professor-home')
+                    ];
+                    break;
+                case 'etudiant':
+                    $urlUser = [
+                        'dashboard' => $this->url('student-dashboard'),
+                        'home' => $this->url('student-home')
+                    ];
+                    break;
+            }
+        }
         ob_start();
         require $this->viewPath . DIRECTORY_SEPARATOR. $view . '.php';
-        $content = ob_get_clean();
         $layout = isset($_SESSION['id_user']) ? 'defaultAuthenticated' : 'defaultUnauthenticated';
+        $content = ob_get_clean();
         require $this->viewPath . DIRECTORY_SEPARATOR . 'layout/'. $layout.'.php';
         return $this;
     }

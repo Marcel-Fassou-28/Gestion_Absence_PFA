@@ -18,13 +18,13 @@
             <span></span>
             <span></span>
         </button>
-        <a href="" class="nav-icon" aria-label="site icon & home page" aria-current="page">
+        <a href="<?= $urlUser['home'] ?>" class="nav-icon" aria-label="site icon & home page" aria-current="page">
             <span>GAENSAJ</span>
         </a>
         <div class="main-navlink">
             <ul class="navlink-container">
-                <li><a href="" aria-current="page">Accueil</a></li>
-                <li><a href="">Dashboard</a></li>
+                <li><a href="<?= $urlUser['home'] ?>" aria-current="page">Accueil</a></li>
+                <li><a href="<?= $urlUser['dashboard'] ?>">Dashboard</a></li>
             </ul>
             <div class="profil">
                 <a class="profil-img">
@@ -46,13 +46,7 @@
         </div>
     </nav>
     <main>
-        <section class="presentation-section">
-            <div class="mobil">
-                <h2>Bienvenue sur GAENSAJ</h2>
-                <p class="welcome-text">Votre nouvelle plateforme de gestion d'absence en ligne</p>
-                <button><a href="" target="_blank">Voir Plus</a></button>
-            </div>
-        </section>
+        <?= $content ?>
     </main>
     <footer>
     </footer>

@@ -9,15 +9,17 @@ $router = new Router(dirname(__DIR__) . '/views');
 $router
     ->get('/', 'home/index', 'accueil')
     ->match('/login', 'login/login', 'page-connexion')
-    ->get('/login/reset-password', 'utilisateur/recovery/passwordRecover', 'forget-password')
-    ->get('/login/reset-password/recover/[*:id]', 'utilisateur/recovery/resetPassword', 'password-recovery')
+    ->get('/login/reset-password', 'utilisateur/recovery/resetPassword', 'forget-password')
+    ->get('/login/reset-password/recover/[*:id]', 'utilisateur/recovery/passwordRecover', 'password-recovery')
     ->match('/login/[*:id]/my/[*:role]', 'utilisateur/redirect', 'authenticated')
-    
-    /*Redirect de l'Utilisateur */
-    ->get('/[*:name]/[*:id]', 'utilisateur/professors/home','professor')
-    ->get('/[*:name]/[*:id]', 'utilisateur/admin/home','administrator')
-    ->get('/[*:name]/[*:id]', 'utilisateur/students/home','student')
-    
+
     /* Lorsque l'utilisateur est connecté */
+    ->get('/my', 'utilisateur/professors/home','professor-home')
+    ->get('/my', 'utilisateur/admin/home','administrator-home')
+    ->get('/my', 'utilisateur/students/home','student-home')
+
+    ->get('/my/dashboard', 'utilisateur/professors/dashboard','professor-dashboard')
+    ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
+    ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
 
     ->run();
