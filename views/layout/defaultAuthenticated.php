@@ -40,7 +40,7 @@
                     <li><a href="">Historique</a></li>
                     <li><a href="">Signaler un problème</a></li>
                     <li></li>
-                    <li><a href="">Deconnexion</a></li>
+                    <li><a href="<?= $router->url('page-deconnexion') ?>">Deconnexion</a></li>
                 </ul>
             </div>
         </div>

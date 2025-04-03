@@ -22,4 +22,15 @@ $router
     ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
     ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
 
+    /* Contenu pour les profs */
+    ->get('/my/use/calendrier', 'utilisateur/professors/ressources/calendrier','professor-calendrier')
+    ->get('/my/use/liste-des-etudants', 'utilisateur/professors/ressources/listeEtudiant','professor-listEtudiant')
+    ->get('/my/use/matieres-enseignes', 'utilisateur/professors/ressources/matiereEnseignes','professor-matiere')
+
+    ->get('/my/historics/absence', 'utilisateur/professors/historics/absence','historic-absence')
+    ->get('/my/historics/logs', 'utilisateur/professors/historics/logs','historic-logs')
+    ->get('/my/historics/stats', 'utilisateur/professors/historics/stats','historic-stats')
+
+    ->match('/my/logout', 'login/logout', 'page-deconnexion')
+
     ->run();
