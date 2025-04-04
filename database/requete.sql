@@ -22,11 +22,7 @@ CREATE TABLE Utilisateur (
     password VARCHAR(250) NOT NULL,
     cin VARCHAR(20) UNIQUE NOT NULL,
     role ENUM('admin', 'professeur', 'etudiant') NOT NULL,
-<<<<<<< HEAD
     photo MEDIUMBLOB
-=======
-    photo MEDIUMBLOB -- à modifier 
->>>>>>> 46920cf71479be8702d5cc82f655de31adb33265
 );
 
 -- Table RecuperationPassword
