@@ -34,7 +34,7 @@ if (!empty($_POST)) {
         $table = new UserTable($pdo);
         $user = $table->findByUsername($username);
 
-        if (password_verify( $password, $user->getPassword()) === true) {
+        if (password_verify( $password, $user->getPassword()) === true){
             session_start();
             $_SESSION['id_user'] = encodindCIN($user->getCIN());
             $_SESSION['role'] = $user->getRole();

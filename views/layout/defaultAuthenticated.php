@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
+    <link rel="stylesheet" href="/css/dashbord-etudiant/dashbord-etudiant.css">
     <title>Gestion d'Absence</title>
 </head>
 <body> 
@@ -40,7 +41,7 @@
                     <li><a href="">Historique</a></li>
                     <li><a href="">Signaler un problème</a></li>
                     <li></li>
-                    <li><a href="">Deconnexion</a></li>
+                    <li><a href="<?=$router->url('deconnexion')?>">Deconnexion</a></li>
                 </ul>
             </div>
         </div>

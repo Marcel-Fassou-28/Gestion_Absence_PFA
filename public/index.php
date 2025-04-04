@@ -22,4 +22,8 @@ $router
     ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
     ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
 
+    ->get('/my/dashboard-etudiant','utilisateur/students/dashboard','dashboard')
+    ->match('/logout','login/logout','deconnexion')
+
+
     ->run();
