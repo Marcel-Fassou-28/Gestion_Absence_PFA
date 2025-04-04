@@ -1,4 +1,3 @@
-
 <div class="container dashboard">
     <div class="dashboard-intro">
         <h1>Tableau de Bord</h1>

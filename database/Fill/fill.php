@@ -20,7 +20,6 @@ $pdo->exec('TRUNCATE TABLE classe');
 //username : CIN.nom
 
 
-
 $pdo->exec("INSERT INTO utilisateur (username, nom, prenom, email, password, cin, role) VALUES 
         ('O00790130.haba', 'Haba', 'Marcel Fassou', 'marcelfassouhaba2003@gmail.com', '" . password_hash('O00790130', PASSWORD_BCRYPT) . "', 'O00790130', 'professeur'),
         ('BJ8478559.msaboue', 'Msaboue', 'Mohamed', 'mohamedmsb6@gmail.com', '" . password_hash('BJ8478559', PASSWORD_BCRYPT) . "', 'BJ8478559', 'etudiant'),
