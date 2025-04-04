@@ -79,10 +79,10 @@ class ProfessorTable extends Table {
 
     public function getClasse(int $idProf) {
         $query = $this->pdo->prepare('
-            SELECT DISTINCT c.idClasse, c.nomClasse, c.idNiveau, c.idFiliere FROM '. $this->tableClasse
-            .' c JOIN ' . $this->tableClasse .' c ON c.idNiveau = n.idNiveau JOIN '. $this->tableFiliere .' f 
+            SELECT DISTINCT c.idClasse, c.nomClasse, c.idNiveau, c.idFiliere FROM '. $this->tableNiveau
+            .' n JOIN ' . $this->tableClasse .' c ON c.idNiveau = n.idNiveau JOIN '. $this->tableFiliere .' f 
             ON f.idFiliere = c.idFiliere JOIN '.$this->tableMatiere .' m ON m.idFiliere = f.idFiliere 
-            JOIN '. $this->tableProf .' p ON m.idProf = :idProf WHERE c.idClasse = etudiant.idClasse');
+            JOIN '. $this->tableProf .' p ON m.idProf = :idProf');
 
         $query->execute(['idProf' => $idProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classClasse);
