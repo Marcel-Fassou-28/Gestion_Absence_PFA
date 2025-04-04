@@ -22,11 +22,6 @@ $router
     ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
     ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
 
-<<<<<<< HEAD
-    ->get('/my/dashboard-etudiant','utilisateur/students/dashboard','dashboard')
-    ->match('/logout','login/logout','deconnexion')
-
-=======
     /* Contenu pour les profs */
     ->match('/my/use/calendrier', 'utilisateur/professors/ressources/calendrier','professor-calendrier')
     ->match('/my/use/liste-des-etudants', 'utilisateur/professors/ressources/listeEtudiant','professor-listEtudiant')
@@ -37,6 +32,5 @@ $router
     ->get('/my/historics/stats', 'utilisateur/professors/historics/stats','historic-stats')
 
     ->match('/my/logout', 'login/logout', 'page-deconnexion')
->>>>>>> 8c97789c2cd423440a95bf4f2ee7c93857466c35
 
     ->run();
