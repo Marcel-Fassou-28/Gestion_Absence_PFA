@@ -9,6 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
+    <?php 
+    if (!empty($_GET) && isset($_GET['use-link'])) {
+        echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
+    }
+    ?>
     <title>Gestion d'Absence</title>
 </head>
 <body> 

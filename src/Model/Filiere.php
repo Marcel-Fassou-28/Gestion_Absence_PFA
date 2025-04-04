@@ -7,8 +7,7 @@ namespace App\Model;
  * 
  * @property int $idFiliere
  * @property string $nomFiliere
- * @property string $niveau
- * @property string $departement
+ * @property int $idDepartement
  */
 class Filiere {
 
@@ -23,21 +22,15 @@ class Filiere {
     protected $nomFiliere;
 
     /**
-     * @var string $niveau
+     * @var int $idDepartement
      */
-    protected $niveau;
+    protected $idDepartement;
 
-    /**
-     * @var int $departement
-     */
-    protected $departement;
-
-    /*public function __construct($idFiliere, $nomFiliere, $niveau, $departement)
+    /*public function __construct($idFiliere, $nomFiliere, $idDepartement)
     {
         $this->idFiliere = $idFiliere;
         $this->nomFiliere = $nomFiliere;
-        $this->niveau = $niveau;
-        $this->departement = $departement;
+        $this->idDepartement = $idDepartement;
     }*/
 
     /**
@@ -58,22 +51,14 @@ class Filiere {
         return $this->nomFiliere;
     }
 
-    /**
-     * Getters
-     * 
-     * @return string|null
-     */
-    public function getNiveau() : ?string {
-        return $this->niveau;
-    }
 
     /**
      * Getters
      * 
-     * @return string|null
+     * @return int|null
      */
-    public function getDepartement() : ?string {
-        return $this->departement;
+    public function getIDDepartement() : ?int {
+        return $this->idDepartement;
     }
     
     /**
@@ -97,19 +82,10 @@ class Filiere {
     /**
      * Setters
      * 
-     * @param string $niveau
+     * @param int $idDepartement
      */
-    public function setNiveau(string $niveau) {
-        $this->niveau = $niveau;
-    }
-
-    /**
-     * Setters
-     * 
-     * @param string $departement
-     */
-    public function setDepartement(string $departement) {
-        $this->departement = $departement;
+    public function setDepartement(string $idDepartement) {
+        $this->idDepartement = $idDepartement;
     }
 
 }

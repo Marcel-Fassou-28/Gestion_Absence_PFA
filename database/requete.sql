@@ -9,7 +9,7 @@ CREATE TABLE Administrateur (
     email VARCHAR(250) UNIQUE,
     password VARCHAR(250) NOT NULL,
     cin VARCHAR(20) UNIQUE NOT NULL,
-    CONSTRAINT fk_admin_user FOREIGN KEY (idAdmin) REFERENCES Utilisateur(id) ON DELETE CASCADE
+    CONSTRAINT fk_admin_user FOREIGN KEY (idAdmin) REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Table Utilisateur
@@ -22,7 +22,7 @@ CREATE TABLE Utilisateur (
     password VARCHAR(250) NOT NULL,
     cin VARCHAR(20) UNIQUE NOT NULL,
     role ENUM('admin', 'professeur', 'etudiant') NOT NULL,
-    photo MEDIUMBLOB,
+    photo MEDIUMBLOB
 );
 
 -- Table RecuperationPassword
@@ -34,12 +34,34 @@ CREATE TABLE RecuperationPassword (
     CONSTRAINT fk_recuperation_user FOREIGN KEY (email) REFERENCES Utilisateur(email)
 );
 
+-- Table des Departements
+CREATE TABLE Departement (
+    idDepartement INT PRIMARY KEY AUTO_INCREMENT,
+    nomDepartement VARCHAR(250) NOT NULL
+);
+
+
 -- Table Filière
 CREATE TABLE Filiere (
     idFiliere INT PRIMARY KEY AUTO_INCREMENT,
     nomFiliere VARCHAR(100),
-    niveau VARCHAR(50),
-    departement VARCHAR(100)
+    idDepartement INT NOT NULL
+);
+
+-- Table Niveau
+CREATE TABLE Niveau (
+    idNiveau INT PRIMARY KEY AUTO_INCREMENT,
+    nomNiveau VARCHAR(50)
+);
+
+-- Table des Salle de Classe
+CREATE TABLE Classe (
+    idClasse INT PRIMARY KEY AUTO_INCREMENT,
+    nomClasse VARCHAR(50),
+    idNiveau INT NOT NULL,
+    idFiliere INT NOT NULL,
+    CONSTRAINT fk_classe_niveau FOREIGN KEY (idNiveau) REFERENCES Niveau(idNiveau) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_classe_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Table Matière
@@ -48,8 +70,8 @@ CREATE TABLE Matiere(
     idProf INT NOT NULL,
     nomMatiere VARCHAR(100) NOT NULL,
     idFiliere INT NOT NULL,
-    CONSTRAINT fk_matiere_professeur FOREIGN KEY (idProf) REFERENCES Professeur(idProf) ON DELETE CASCADE,
-    CONSTRAINT fk_matiere_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE
+    CONSTRAINT fk_matiere_professeur FOREIGN KEY (idProf) REFERENCES Professeur(idProf) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_matiere_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Table Professeur
@@ -60,7 +82,7 @@ CREATE TABLE Professeur (
     email VARCHAR(250) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL NOT NULL,
     cin VARCHAR(20) UNIQUE NOT NULL,
-    CONSTRAINT fk_admin_professeur FOREIGN KEY (idProf) REFERENCES Utilisateur(id) ON DELETE CASCADE
+    CONSTRAINT fk_admin_professeur FOREIGN KEY (idProf) REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -74,9 +96,9 @@ CREATE TABLE Etudiant (
     cin VARCHAR(20) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(250) NOT NULL,
-    idFiliere INT NOT NULL,
-    CONSTRAINT fk_etudiant_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE,
-    CONSTRAINT fk_admin_etudiant FOREIGN KEY (idEtudiant) REFERENCES Utilisateur(id) ON DELETE CASCADE
+    idClasse INT NOT NULL,
+    CONSTRAINT fk_etudiant_classe FOREIGN KEY (idClasse) REFERENCES Classe(idClasse) ON UPDATE CASCADE,
+    CONSTRAINT fk_admin_etudiant FOREIGN KEY (idEtudiant) REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Table Absence
