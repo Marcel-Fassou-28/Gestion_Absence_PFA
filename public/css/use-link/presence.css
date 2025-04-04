@@ -141,6 +141,55 @@ padding-bottom: 50px;
     color: var(--text-color);
 }
 
+
+.custom-checkbox {
+    position: relative;
+    display: inline-block;
+    width: 24px; /* Taille de la checkbox */
+    height: 24px;
+}
+
+.custom-checkbox input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.custom-checkbox .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    background-color: #999898; /* Vert clair pour non coché */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.custom-checkbox .checkmark::before {
+    content: '\2714';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    color: var(--text-color) !important;
+    font-size: 16px;
+    display: block;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkmark {
+    background-color: red;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkmark::before {
+    content: '\2716';
+    color: var(--text-color) !important;
+    font-size: 16px;
+}
+
+  
 @media (max-width : 1200px) {
     .professor-info {
         flex-wrap: wrap;

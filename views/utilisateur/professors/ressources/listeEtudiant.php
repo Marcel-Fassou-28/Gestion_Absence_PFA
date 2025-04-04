@@ -11,39 +11,44 @@ $professeurTable = new ProfessorTable($pdo);
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $moisEnFrancais = [
-    'January' => 'Janvier',
-    'February' => 'Février',
-    'March' => 'Mars',
-    'April' => 'Avril',
-    'May' => 'Mai',
-    'June' => 'Juin',
-    'July' => 'Juillet',
-    'August' => 'Août',
-    'September' => 'Septembre',
-    'October' => 'Octobre',
-    'November' => 'Novembre',
-    'December' => 'Décembre'
+    'January' => 'Janvier', 'February' => 'Février', 'March' => 'Mars', 'April' => 'Avril',
+    'May' => 'Mai', 'June' => 'Juin', 'July' => 'Juillet', 'August' => 'Août',
+    'September' => 'Septembre', 'October' => 'Octobre', 'November' => 'Novembre', 'December' => 'Décembre'
 ];
-
 $moisAnglais = $date->format('F');
 $dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $date->format('Y');
+$dateSql = $date->format('Y-m-d H:i:s');
 
 $idProf = (int) $_SESSION['id_user'];
-if ($idProf > 0) {
-    $tableFiliere = $professeurTable->getFiliere($idProf);
-    $tableClasse = $professeurTable->getClasse($idProf);
-    $tableMatiere = $professeurTable->getMatiere($idProf);
-}
+$listeEtudiant = [];
+$filiere = '';
+$matiere = '';
+$class = '';
+$submittedFirst = false;
+$submittedSecond = false;
 
-$studentList = [];
-if(!empty($_POST)) {
-    $class = isset($_POST['classe']) ? $_POST['classe'] : '';
+$tableFiliere = $professeurTable->getFiliere($idProf);
+$tableClasse = $professeurTable->getClasse($idProf);
+$tableMatiere = $professeurTable->getMatiere($idProf);
 
-    if  (!empty($class)) {
-        $studentList = $professeurTable->findStudentByClass($class);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
+    $filiere = isset($_POST['filiere-prof']) ? $_POST['filiere-prof'] : '';
+    $matiere = isset($_POST['matiere-prof']) ? $_POST['matiere-prof'] : '';
+    $class = isset($_POST['classe-prof']) ? $_POST['classe-prof'] : '';
+    $submittedFirst = true;
+    if (!empty($class)) {
+        $listeEtudiant = $professeurTable->findStudentByClass($class);
     }
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-second'])) {
+    $matiere = isset($_POST['matiere']) ? $_POST['matiere'] : '';
+    $arrayAbsence = isset($_POST['arrayCheckbox']) ? $_POST['arrayCheckbox'] : [];
+    $listeEtudiant = $professeurTable->findStudentByClass($_POST['classe-prof']);
+    $idMatiere = array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
+    $professeurTable->setAbsence($arrayAbsence, $dateSql, $listeEtudiant, $idMatiere);
+    $submittedSecond = true;
+}
 
 ?>
 
@@ -56,10 +61,10 @@ if(!empty($_POST)) {
     </div>
     <div class="hr"></div>
     <div class="presence-container">
-        <form class="professor-info container" method="post" action="<?= $router->url('professor-listEtudiant') . '?use-link=student-list' ?>">
+        <form class="professor-info container" method="post" action="">
             <div class="filiere-group">
-                <select id="filiere" name="filiere">
-                    <option name="filiere" value="filiere">Filière</option>
+                <select id="filiere" name="filiere-prof">
+                    <option name="filiere-prof" value="filiere">Filière</option>
                     <?php
                         foreach($tableFiliere as $mejor) {
                             $selected = ($filiere === $mejor->getNomFiliere()) ? 'selected' : '';
@@ -69,8 +74,8 @@ if(!empty($_POST)) {
                 </select>
             </div>
             <div class="subject-group">
-                <select id="matiere" name="matiere">
-                    <option name="matiere"  value="matiere">Matière</option>
+                <select id="matiere" name="matiere-prof">
+                    <option name="matiere-prof"  value="matiere">Matière</option>
                     <?php
                         foreach($tableMatiere as $subject) {
                             $selected = ($matiere === $subject->getNomMatiere()) ? 'selected' : '';
@@ -80,8 +85,8 @@ if(!empty($_POST)) {
                 </select>
             </div>
             <div class="level-group">
-                <select id="classe" name="classe">
-                    <option name="classe" value="classe">Niveau</option>
+                <select id="classe" name="classe-prof">
+                    <option name="classe-prof" value="classe">Niveau</option>
                     <?php
                         foreach($tableClasse as $classe) {
                             $selected = ($class === $classe->getNomClasse()) ? 'selected' : '';
@@ -91,33 +96,43 @@ if(!empty($_POST)) {
                 </select>
             </div>
             <div>
-                <input class="submit-btn" type="submit" value="Afficher les Etudiants">
+                <input class="submit-btn" type="submit" name="submit-first" value="Afficher les Etudiants">
             </div>
         </form>
-        <section class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Matricule</th>
-                        <th>Nom et Prénom</th>
-                        <th>Présence</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach($studentList as $student) : ?>
-                <tr>
-                    <td><?= htmlspecialchars($student->getIdEtudiant()) ?></td>
-                    <td><?= htmlspecialchars($student->getCNE()) ?></td>
-                    <td><?= htmlspecialchars($student->getNom() . ' ' . $student->getPrenom()) ?></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <?php endforeach ?>
-                </tbody>
-            </table>
-        </section>
-    </div>
-    <form method="post" action="<?= $router->url('professor-listEtudiant') . '?use-link=student-list'. '&submit=1' ?>">
-        <input class="btn-presence" type="submit" value="Valider et Envoyer">
-    </form>
+        <?php if ($submittedFirst && !$submittedSecond && !empty($listeEtudiant)): ?>
+            <form class="table-container" method="post" action="">
+                <input type="hidden" name="matiere" value="<?= htmlspecialchars($matiere) ?>">
+                <input type="hidden" name="classe-prof" value="<?= htmlspecialchars($class) ?>">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Matricule</th>
+                            <th>Nom et Prénom</th>
+                            <th>Présence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $numero = 1; ?>
+                        <?php foreach ($listeEtudiant as $etudiant): ?>
+                            <tr>
+                                <td><?= sprintf("%02d", $numero++) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getCNE()) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getNom() . ' ' . $etudiant->getPrenom()) ?></td>
+                                <td>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" name="arrayCheckbox[<?= htmlspecialchars($etudiant->getIdEtudiant()) ?>]">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div>
+                    <input class="btn-presence" type="submit" name="submit-second" value="Valider et Envoyer">
+                </div>
+            </form>
+        </div>
+    <?php endif ?>
 </div>

@@ -9,6 +9,7 @@ use App\Model\Classe;
 use App\Model\Matiere;
 use App\Model\Niveau;
 use App\Model\Professeur;
+use DateTime;
 
 class ProfessorTable extends Table {
     
@@ -69,7 +70,7 @@ class ProfessorTable extends Table {
 
     public function getMatiere(int $idProf) :array {
         $query = $this->pdo->prepare('
-            SELECT DISTINCT m.nomMatiere FROM '. $this->tableMatiere . ' m JOIN professeur p ON p.idProf = :idProf');
+            SELECT DISTINCT m.idMatiere, m.nomMatiere FROM '. $this->tableMatiere . ' m JOIN professeur p ON p.idProf = :idProf');
         $query->execute(['idProf' => $idProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classMatiere);
         $result = $query->fetchAll();
@@ -89,6 +90,22 @@ class ProfessorTable extends Table {
         $result = $query->fetchAll();
 
         return count($result) != 0 ? $result : [];
+    }
+
+    public function setAbsence(array $ArrayAbsence, string $date, array $studentList, int $idMatiere) {
+        $query = $this->pdo->prepare('INSERT INTO absence (date, idEtudiant, idMatiere) VALUES (:date, :idEtudiant, :idMatiere)');
+
+        foreach($studentList as $student) {
+            $idEtudiant = $student->getIdEtudiant();
+            
+            if (isset($ArrayAbsence[$idEtudiant]) && $ArrayAbsence[$idEtudiant] === 'on') {
+                $query->execute([
+                    'date' => $date,
+                    'idEtudiant' => $idEtudiant,
+                    'idMatiere' => $idMatiere,
+                ]);
+            }
+        }
     }
 
 }
