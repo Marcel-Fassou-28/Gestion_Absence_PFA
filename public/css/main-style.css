@@ -4,7 +4,7 @@
 @import url(/css/media-query.css);
 
 
-nav {
+nav{
     width: 100%;
     display: flex;
     padding: 0px 10% 0px 10px;
@@ -26,8 +26,6 @@ nav {
         color: var(--text-color);
     }
 }
-
-
 
 .main-navlink {
     width: 50%;
@@ -86,6 +84,6 @@ nav {
 footer {
     position: relative;
     width: 100%;
-    min-height: 35vh;
+    min-height: 25vh;
     background-color: var(--text-color);
 }

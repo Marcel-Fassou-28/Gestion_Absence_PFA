@@ -12,7 +12,7 @@ namespace App\Model;
  * @property string $cin
  * @property string $email
  * @property string $password
- * @property int $idFiliere
+ * @property int $idClasse
  */
 class Etudiant {
     /**
@@ -51,14 +51,14 @@ class Etudiant {
     protected $password;
     
     /**
-     * @var int $idFiliere
+     * @var int $idClasse
      */
-    protected $idFiliere;
+    protected $idClasse;
 
     /**
      * Constructeur
      */
-    /*public function __construct(int $idEtudiant, string $nom, string $prenom, string $cne, string $cin, string $email, string $password, int $idFiliere) {
+    /*public function __construct(int $idEtudiant, string $nom, string $prenom, string $cne, string $cin, string $email, string $password, int $idClasse) {
         $this->idEtudiant = $idEtudiant;
         $this->nom = $nom;
         $this->prenom = $prenom;
@@ -66,7 +66,7 @@ class Etudiant {
         $this->cin = $cin;
         $this->email = $email;
         $this->password = $password;
-        $this->idFiliere = $idFiliere;
+        $this->idClasse = $idClasse;
     }*/
 
     /**
@@ -200,16 +200,16 @@ class Etudiant {
      * 
      * @return int|null
      */
-    public function getIdFiliere(): ?int { 
-        return $this->idFiliere; 
+    public function getIdClasse(): ?int { 
+        return $this->idClasse; 
     }
 
     /**
      * Setters
      * 
-     * @param int $idFiliere
+     * @param int $idClasse
      */
-    public function setIdFiliere(int $idFiliere) {
-        $this->idFiliere = $idFiliere; 
+    public function setIdClasse(int $idClasse) {
+        $this->idClasse = $idClasse; 
     }
 }

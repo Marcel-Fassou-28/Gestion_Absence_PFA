@@ -34,13 +34,13 @@ if (!empty($_POST)) {
         $table = new UserTable($pdo);
         $user = $table->findByUsername($username);
 
-        if (password_verify( $password, $user->getPassword()) === true) {
+        if (password_verify( $password, $user->getPassword()) === true){
             session_start();
-            $_SESSION['id_user'] = encodindCIN($user->getCIN());
+            $_SESSION['id_user'] = $user->getID();
             $_SESSION['role'] = $user->getRole();
             $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
 
-            header('Location:' . $router->url('authenticated', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));
+            header('Location:' . $router->url('authenticated', ['role' =>$user->getRole(), 'id' => $user->getID()]));
             exit();
         }else {
             $errorPassword = true;

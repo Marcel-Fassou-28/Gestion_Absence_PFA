@@ -9,7 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
+<<<<<<< HEAD
     <link rel="stylesheet" href="/css/Profiles/test.css">
+=======
+    <link rel="stylesheet" href="/css/dashbord-etudiant/dashbord-etudiant.css">
+    <?php if(isset($_GET['use-link'])) {
+        echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
+    } 
+    ?>
+>>>>>>> 4dbd43cc4026d70c23405141bd3503257181814a
     <title>Gestion d'Absence</title>
 </head>
 <body> 
@@ -41,7 +49,7 @@
                     <li><a href="">Historique</a></li>
                     <li><a href="">Signaler un problème</a></li>
                     <li></li>
-                    <li><a href="">Deconnexion</a></li>
+                    <li><a href="<?= $router->url('page-deconnexion') ?>">Deconnexion</a></li>
                 </ul>
             </div>
         </div>
@@ -51,7 +59,7 @@
     </main>
     <footer>
     </footer>
-    <script src="../js/script.js"></script>
+    <script src="/js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

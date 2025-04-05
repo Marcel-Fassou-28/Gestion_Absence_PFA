@@ -18,7 +18,7 @@ class Router {
     public function __construct(string $viewPath)
     {
         $this->viewPath = $viewPath;
-        $this->router = new \AltoRouter();
+        $this->router = new AltoRouter();
     }
 
     /**
