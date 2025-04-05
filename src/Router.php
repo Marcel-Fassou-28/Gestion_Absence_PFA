@@ -93,19 +93,22 @@ class Router {
                 case 'admin':
                     $urlUser = [
                         'dashboard' => $router->url('administrator-dashboard'),
-                        'home' => $router->url('administrator-home')
+                        'home' => $router->url('administrator-home'),
+                        'profil' => $router->url('admin-profil')
                     ];
                     break;
                 case 'professeur':
                     $urlUser = [
                         'dashboard' => $router->url('professor-dashboard'),
-                        'home' => $router->url('professor-home')
+                        'home' => $router->url('professor-home'),
+                        'profil' => $router->url('professor-profil')
                     ];
                     break;
                 case 'etudiant':
                     $urlUser = [
                         'dashboard' => $this->url('student-dashboard'),
-                        'home' => $this->url('student-home')
+                        'home' => $this->url('student-home'),
+                        'profil' => $router->url('etudiant-profil')
                     ];
                     break;
             }

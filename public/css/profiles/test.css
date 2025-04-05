@@ -1,0 +1,244 @@
+#interface {
+    color: white;
+    padding: 50px 10% 5% 10%;
+    width: 100%;
+}
+
+.nomphoto {
+    display: flex;
+    margin-left: 5%;
+
+
+}
+
+
+
+#interface #img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: white;
+    width: 170px;
+    height: 170px;
+    margin-right: 20px;
+
+
+}
+
+#nom {
+    display: flex;
+    align-items: center;
+    top: 10px;
+    text-transform: capitalize;
+
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    background-color: #1D1C1E80;
+    color: white;
+    margin: 15px 5% 1px 5%;
+    border-radius: 15px;
+    padding: 10px 10px 1px 10px;
+    height: auto;
+    line-height: auto;
+    ;
+    overflow: hidden;
+
+
+}
+.info{
+    margin-left: 10%;
+}
+.info tr td{
+    padding: 10px;
+}
+.general {
+    width: 100%;
+    display: flex;
+   
+}
+.bloc{
+    width: 40%;
+    max-width: 350px;
+}
+
+.bloc1 {
+    margin-right: 0;
+    width: 60%;
+    max-width: 570px;
+   
+    
+}
+
+.bloc2 {
+    margin-right: 0;
+    
+    
+}
+
+.userInfo h3 {
+    color: #8BB0F0;
+    
+
+}
+
+.userInfo a {
+    color: #8BB0F0;
+    text-align: right;
+    font-weight: 600;
+    font-size: large;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+@media (min-width: 530px) and (max-width: 700px) {
+    .info{
+        margin-left: 1%;
+    }
+    #interface{
+        padding-left: 1%;
+    }
+}
+
+
+@media (max-width: 530px) and (min-width: 400px) {
+    .nomphoto {
+        display: inline-block;
+        margin-left: 38%;
+        margin-bottom: 15px;
+
+    }
+
+    #interface #img {
+        justify-content: center;
+        width: 130px;
+        height: 130px;
+        margin-bottom: 20px;
+        margin-left: 13%;
+    }
+
+    .userInfo{
+        margin: 15px 0 1px 0;
+    }
+    .general {
+        display: block;
+    }
+    .info{
+        margin-left: 1%;
+    }
+
+    .bloc{
+        width: 100%;
+        max-width: 100%;
+    }
+    .bloc1 {
+        width: 100%;
+    }
+
+    .bloc2 {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 400px) and (min-width: 320px) {
+    .general{
+        display: block;
+        
+    }
+
+    .nomphoto {
+        display: inline-block;
+        margin-left: 30%;
+        margin-bottom: 15px;
+
+    }
+
+    #nom {
+        font-size: large;
+    }
+
+    #interface #img {
+        justify-content: center;
+        width: 90px;
+        height: 90px;
+        margin-bottom: 20px;
+        margin-left: 25%;
+    }
+    .info{
+        margin-left: 0;
+    }
+    .bloc{
+        width: 100%;
+    }
+
+    .userInfo {
+        margin: 15px 0 1px 0;
+        width: 100%;
+    }
+
+    .bloc1 h3 {
+        text-align: left;
+    }
+}
+
+@media (max-width: 320px) {
+    /* Ces classes seront activées lorsque la taille maximale
+    de la page sera de 320px */
+
+    .general{
+        display: block;
+        
+    }
+    .nomphoto {
+        display: block;
+        margin-left: 20%;
+        text-align: center;
+    }
+
+    #interface #img {
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        margin-left: 30%;
+        margin-bottom: 15px;
+    }
+
+    .nomphoto #nom {
+
+        font-weight: 100;
+        font-size: smaller;
+
+    }
+    .info{
+        tr td{
+        padding: 1px;
+        margin: 0;
+        }
+        line-height: 50px;
+        font-size: medium;
+        margin-left: 1%;
+    }
+    .bloc{
+        width: 100%;
+    }
+    .userInfo {
+        margin: 15px 0 1px 0;
+        height: auto;
+        width: 100%;
+    }
+
+    .bloc1 h3 {
+        text-align: left;
+    }
+
+    .userInfo a {
+        font-weight: 600;
+        font-size: medium;
+        margin-right: 2px;
+    }
+
+}
