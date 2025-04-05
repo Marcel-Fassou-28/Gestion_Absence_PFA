@@ -10,8 +10,7 @@ function encodindCIN($cin) {
  $sql = "SELECT * FROM utilisateur";
  $info = [];
  foreach($pdo->query($sql) as $row){
-    echo "je viens \n tu viens";
-    if ($_SESSION['id_user'] === encodindCIN($row['cin'])){
+    if ($_SESSION['id_user'] === $row['id']){
         foreach($row as $col=>$val){
             if (!is_integer($col)){
                $info[$col] = $val; 
