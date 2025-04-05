@@ -9,15 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
-<<<<<<< HEAD
     <link rel="stylesheet" href="/css/Profiles/test.css">
-=======
     <link rel="stylesheet" href="/css/dashbord-etudiant/dashbord-etudiant.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
     } 
     ?>
->>>>>>> 4dbd43cc4026d70c23405141bd3503257181814a
     <title>Gestion d'Absence</title>
 </head>
 <body> 
