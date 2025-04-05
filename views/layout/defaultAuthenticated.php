@@ -9,11 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
-<<<<<<< HEAD
-    <link rel="stylesheet" href="/css/profiles/test.css">
-=======
     <link rel="stylesheet" href="/css/Profiles/test.css">
->>>>>>> 6eb4f5ab6cbb3e6c68f434e6e6547f1548ee1d4f
     <link rel="stylesheet" href="/css/dashbord-etudiant/dashbord-etudiant.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
