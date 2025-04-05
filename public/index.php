@@ -21,10 +21,6 @@ $router
     ->get('/my/dashboard', 'utilisateur/professors/dashboard','professor-dashboard')
     ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
     ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
-<<<<<<< HEAD
-    ->get('/my/profil','utilisateur/profile','admin-profil')
-    ->match('/my/profil', 'utilisateur/profile',)
-=======
     ->get('/my/profil','utilisateur/admin/profile','admin-profil')
 
     ->get('/my/dashboard-etudiant','utilisateur/students/dashboard','dashboard')
@@ -39,6 +35,5 @@ $router
     ->get('/my/historics/stats', 'utilisateur/professors/historics/stats','historic-stats')
 
     ->match('/my/logout', 'login/logout', 'page-deconnexion')
->>>>>>> 6eb4f5ab6cbb3e6c68f434e6e6547f1548ee1d4f
     ->run();
     
