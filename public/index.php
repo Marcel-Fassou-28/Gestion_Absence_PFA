@@ -21,6 +21,7 @@ $router
     ->get('/my/dashboard', 'utilisateur/professors/dashboard','professor-dashboard')
     ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
     ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
-    ->get('/my/profil','utilisateur/admin/profile','admin-profil')
+    ->get('/my/profil','utilisateur/profile','admin-profil')
+    ->match('/my/profil', 'utilisateur/profile',)
     ->run();
     
