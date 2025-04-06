@@ -9,13 +9,16 @@ function encodindCIN($cin) {
 
  $sql = "SELECT * FROM utilisateur";
  $info = [];
+ var_dump($_SESSION);
  foreach($pdo->query($sql) as $row){
+   
     if ($_SESSION['id_user'] === $row['cin']){ //J'ai remplacé l'id par cin, car la variale de session id_user est le cin
         foreach($row as $col=>$val){
             if (!is_integer($col)){
                $info[$col] = $val; 
             }  
         }
+        var_dump($info);
     }
  }
 
