@@ -20,19 +20,23 @@ $pdo->exec('TRUNCATE TABLE classe');
 //username : CIN.nom
 
 
-$pdo->exec("INSERT INTO utilisateur (username, nom, prenom, email, password, cin, role) VALUES 
-        ('O00790130.haba', 'Haba', 'Marcel Fassou', 'marcelfassouhaba2003@gmail.com', '" . password_hash('O00790130', PASSWORD_BCRYPT) . "', 'O00790130', 'professeur'),
-        ('BJ8478559.msaboue', 'Msaboue', 'Mohamed', 'mohamedmsb6@gmail.com', '" . password_hash('BJ8478559', PASSWORD_BCRYPT) . "', 'BJ8478559', 'etudiant'),
-        ('CD8478559.claude', 'Claude', 'Douglas', 'tyu87885@gmail.com', '" . password_hash('CD8478559', PASSWORD_BCRYPT) . "', 'CD8478559', 'admin')");
+$pdo->exec("INSERT INTO utilisateur (username, nom, prenom, email, cin, password, role) VALUES 
+        ('O00790130.haba', 'Haba', 'Marcel Fassou', 'marcelfassouhaba2003@gmail.com', 'O00790130','" . password_hash('O00790130', PASSWORD_BCRYPT)."', 'professeur'),
+        ('JK84785592.kolie','kolie', 'Justin', 'justinkolie6@gmail.com', 'JK84785592','" . password_hash('JK84785592', PASSWORD_BCRYPT)."', 'professeur'),
+        ('BJ8478559.msaboue', 'Msaboue', 'Mohamed', 'mohamedmsb6@gmail.com', 'BJ8478559','" . password_hash('BJ8478559', PASSWORD_BCRYPT)."' ,'etudiant'),
+        ('CD8478559.claude', 'Claude', 'Douglas', 'tyu87885@gmail.com', 'CD8478559','" . password_hash('CD8478559', PASSWORD_BCRYPT)."',  'admin')");
+        
 
-$pdo->exec("INSERT INTO administrateur (nom, prenom, email, password, cin) VALUES 
-        ('Claude', 'Douglas', 'tyu87885@gmail.com', '" . password_hash('CD8478559', PASSWORD_BCRYPT) . "', 'CD8478559')");
+$pdo->exec("INSERT INTO administrateur (nom, prenom, email, cinAdmin) VALUES 
+        ('Claude', 'Douglas', 'tyu87885@gmail.com', 'CD8478559')");
 
-$pdo->exec("INSERT INTO professeur (nom, prenom, email, password, cin) VALUES 
-        ('Haba', 'Marcel Fassou', 'marcelfassouhaba2003@gmail.com', '" . password_hash('O00790130', PASSWORD_BCRYPT) . "', 'O00790130')");
+$pdo->exec("INSERT INTO professeur (nom, prenom, email, cinProf) VALUES 
+        ('Haba', 'Marcel Fassou', 'marcelfassouhaba2003@gmail.com', 'O00790130'),
+        ('Kolie', 'Justin', 'justinkolie6@gmail.com', 'JK84785592')");
 
-$pdo->exec("INSERT INTO etudiant (nom, prenom, cne, cin, email, password, idclasse) VALUES 
-        ('Msaboue', 'Mohamed', 'BJ84785592', 'BJ8478559', 'mohamedmsb6@gmail.com', '" . password_hash('BJ8478559', PASSWORD_BCRYPT) . "', '1')");
+
+$pdo->exec("INSERT INTO etudiant (nom, prenom, cne, cinEtudiant, email, idclasse) VALUES 
+        ('Msaboue', 'Mohamed', 'BJ84785592', 'BJ8478559', 'mohamedmsb6@gmail.com', 1)");
 
 
 $pdo->exec("INSERT INTO `filiere` (`idFiliere`, `nomFiliere`, `idDepartement`) VALUES
@@ -44,10 +48,13 @@ $pdo->exec("INSERT INTO `filiere` (`idFiliere`, `nomFiliere`, `idDepartement`) V
 (6, 'Génie Industriel', 2),
 (7, 'Années Préparatoires', 3)");
 
-$pdo->exec("INSERT INTO `matiere` (`idMatiere`, `idProf`, `nomMatiere`, `idFiliere`) VALUES
-    (1, 1, 'Théorie des langages et Compilation', 1),
-    (2, 1, 'Informatique Théorique', 1),
-    (3, 1, 'Developpement Web', 1)");
+$pdo->exec("INSERT INTO `matiere` (`idMatiere`, `cinProf`, `nomMatiere`, `idFiliere`, `idClasse`) VALUES
+    (1, 'O00790130', 'Théorie des langages et Compilation', 1, 1),
+    (2, 'O00790130', 'Informatique Théorique', 1, 1),
+    (3, 'JK84785592', 'POO Java', 2, 7),
+    (4, 'JK84785592', 'Informatique Théorique et Sécurité', 3, 4),
+    (5, 'JK84785592', 'Cryptographie', 1, 4),
+    (6, 'O00790130', 'Developpement Web et Java', 3, 5)");
 
 $pdo->exec("INSERT INTO `niveau` (`idNiveau`, `nomNiveau`) VALUES
 (1, '1ere Année'),
@@ -94,7 +101,7 @@ function generateCIN($index) {
     return 'CI' . str_pad($index, 8, '0', STR_PAD_LEFT);
 }
 
-for ($i = 1; $i <= 100; $i++) {
+for ($i = 1; $i <= 105; $i++) {
     $nom = $noms[array_rand($noms)];
     $prenom = $prenoms[array_rand($prenoms)];
     $username = strtolower($nom . $i);
@@ -107,15 +114,15 @@ for ($i = 1; $i <= 100; $i++) {
 
     try {
         // 1. Insertion dans Utilisateur
-        $stmt = $pdo->prepare("INSERT INTO Utilisateur (username, nom, prenom, email, password, cin, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$username, $nom, $prenom, $email, $passwordHashed, $cin, $role]);
+        $stmt = $pdo->prepare("INSERT INTO Utilisateur (username, cin, nom, prenom, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$username, $cin, $nom, $prenom, $email, $passwordHashed, $role]);
 
         // Récupération de l'ID inséré (clé étrangère pour Etudiant)
         $idUtilisateur = $pdo->lastInsertId();
 
         // 2. Insertion dans Etudiant
-        $stmt = $pdo->prepare("INSERT INTO Etudiant (idEtudiant, nom, prenom, cne, cin, email, password, idClasse) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$idUtilisateur, $nom, $prenom, $cne, $cin, $email, $passwordHashed, $idClasse]);
+        $stmt = $pdo->prepare("INSERT INTO Etudiant (idEtudiant, cinEtudiant, nom, prenom, cne, email, idClasse) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$idUtilisateur, $cin, $nom, $prenom, $cne, $email, $idClasse]);
 
         echo "Utilisateur et étudiant $prenom $nom inséré avec succès !<br>";
     } catch (Exception $e) {

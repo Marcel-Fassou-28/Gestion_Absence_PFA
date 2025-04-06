@@ -10,7 +10,6 @@ namespace App\Model;
  * @property string $nom
  * @property string $prenom
  * @property string $email
- * @property string $password
  * @property string $cin
  */
 class Administrateur {
@@ -36,23 +35,17 @@ class Administrateur {
     protected $email;
 
     /**
-     * @var string $password
+     * @var string $cinAdmin
      */
-    protected $password;
+    protected $cinAdmin;
 
-    /**
-     * @var string $cin
-     */
-    protected $cin;
-
-    /*public function __construct($idAdmin, $nom, $prenom, $email, $password, $cin)
+    /*public function __construct($idAdmin, $nom, $prenom, $email, $cinAdmin)
     {
         $this->idAdmin = $idAdmin;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->email = $email;
-        $this->password = $password;
-        $this->cin = $cin;
+        $this->cinAdmin = $cinAdmin;
     }*/
 
     /**
@@ -128,39 +121,20 @@ class Administrateur {
     }
 
     /**
-     * Getters
-     * 
-     * @return string|null
-     */
-    public function getPassword():?string {
-      return $this->password;
-    }
-
-    /**
-     * Setters
-     * 
-     * @param string $password
-     */
-    public function setPassword(string $password) {
-      $this->password = $password;
-    }
-
-    
-     /**
     * Getters
     * 
     * @return string|null
     */
     public function getCIN():?string {
-      return $this->cin;
+      return $this->cinAdmin;
     }
 
     /**
      * Setters
      * 
-     * @param string $cin
+     * @param string $cinAdmin
      */
-    public function setCIN(string $cin) {
-      $this->cin = $cin;
+    public function setCIN(string $cinAdmin) {
+      $this->cinAdmin = $cinAdmin;
     }
 }

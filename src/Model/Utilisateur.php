@@ -13,8 +13,8 @@ namespace App\Model;
  * @property string $email
  * @property string $password
  * @property string $cin
- * @property $photo
  * @property string $role
+ * @property $photo
  */
 class Utilisateur {
 

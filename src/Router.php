@@ -86,8 +86,6 @@ class Router {
         
         $urlUser = [];
         if (isset($_SESSION['id_user'])) {
-            $id = $_SESSION['id_user'];
-            $name = $_SESSION['username'];
             
             switch ($_SESSION['role']) {
                 case 'admin':

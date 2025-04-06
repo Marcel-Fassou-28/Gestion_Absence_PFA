@@ -11,7 +11,6 @@ namespace App\Model;
  * @property string $nom
  * @property string $prenom
  * @property string $email
- * @property string $password
  * @property string $cin
  */
 class Professeur {
@@ -19,7 +18,7 @@ class Professeur {
     /**
      * @var int $idProf
      */
-    protected $idAdmin;
+    protected $idProf;
 
     /**
      * @var string $nom
@@ -37,23 +36,18 @@ class Professeur {
     protected $email;
 
     /**
-     * @var string $password
-     */
-    protected $password;
-
-    /**
      * @var string $cin
      */
-    protected $cin;
+    protected $cinProf;
 
-    /*public function __construct($idProf, $nom, $prenom, $email, $password, $cin)
+    /*public function __construct($idProf, $nom, $prenom, $email, $password, $cinProf)
     {
         $this->idProf = $idProf;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->email = $email;
         $this->password = $password;
-        $this->cin = $cin;
+        $this->cinProf = $cinProf;
     }*/
 
     /**
@@ -128,32 +122,13 @@ class Professeur {
       $this->email = $email;
     }
 
-    /**
-     * Getters
-     * 
-     * @return string|null
-     */
-    public function getPassword():?string {
-      return $this->password;
-    }
-
-    /**
-     * Setters
-     * 
-     * @param string $password
-     */
-    public function setPassword(string $password) {
-      $this->password = $password;
-    }
-
-    
      /**
     * Getters
     * 
     * @return string|null
     */
     public function getCIN():?string {
-      return $this->cin;
+      return $this->cinProf;
     }
 
     /**
@@ -161,7 +136,7 @@ class Professeur {
      * 
      * @param string $cin
      */
-    public function setCIN(string $cin) {
-      $this->cin = $cin;
+    public function setCIN(string $cinProf) {
+      $this->cinProf = $cinProf;
     }
 }

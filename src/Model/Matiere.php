@@ -6,9 +6,10 @@ namespace App\Model;
  * Cette classe est un model qui caractérise une Matière
  * 
  * @property int $idMatiere
- * @property int $idProf
+ * @property string $cinProf
  * @property string $nomMatiere
  * @property int $idFiliere
+ * @property int $idClasse
  */
 class Matiere {
 
@@ -18,9 +19,9 @@ class Matiere {
     protected $idMatiere;
 
     /**
-     * @var int $idProf
+     * @var string $cinProf
      */
-    protected $idProf;
+    protected $cinProf;
 
     /**
      * @var string $nomMatiere
@@ -31,6 +32,11 @@ class Matiere {
      * @var int $idFiliere
      */
     protected $idFiliere;
+
+    /**
+     * @var int $idClasse
+     */
+    protected $idClasse;
 
     /**
      * Getters
@@ -53,19 +59,19 @@ class Matiere {
     /**
     * Getters
     * 
-    * @return int|null
+    * @return string|null
     */
-    public function getIdProf():?int {
-      return $this->idProf;
+    public function getCINProf():?string {
+      return $this->cinProf;
     }
 
     /**
      * Setters
      * 
-     * @param int $idProf
+     * @param string $cinProf
      */
-    public function setIdProf(int $idProf) {
-      $this->idProf = $idProf;
+    public function setIdProf(string $cinProf) {
+      $this->cinProf = $cinProf;
     }
 
     /**
@@ -103,4 +109,20 @@ class Matiere {
     public function setIdFiliere(int $idFiliere) {
       $this->idFiliere = $idFiliere;
     }
+
+    /** 
+    * @return int|null
+    */
+   public function getIdClasse():?int {
+     return $this->idClasse;
+   }
+
+   /**
+    * Setters
+    * 
+    * @param int $idClasse
+    */
+   public function setIdClasse(int $idClasse) {
+     $this->idClasse = $idClasse;
+   }
 }

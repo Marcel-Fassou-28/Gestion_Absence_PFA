@@ -3,21 +3,19 @@
 namespace App\Model;
 
 /**
- * Cette classe est un modèle qui caractérise un Étudiant
+ * Cette classe est un modèle qui caractérise un Absents
  * 
- * @property int $idEtudiant
- * @property string $cin
+ * @property string $cinEtudiant
  * @property string $nom
  * @property string $prenom
  * @property string $cne
- * @property string $email
- * @property int $idClasse
+ * @property string $nbrAbsence
  */
-class Etudiant {
+class Absents {
     /**
-     * @var int $idEtudiant
+     * @var string $cinEtudiant
      */
-    protected $idEtudiant;
+    protected $cinEtudiant;
     
     /**
      * @var string $nom
@@ -35,50 +33,20 @@ class Etudiant {
     protected $cne;
     
     /**
-     * @var string $cinEtudiant
+     * @var int $nbrAbsence
      */
-    protected $cinEtudiant;
-    
-    /**
-     * @var string $email
-     */
-    protected $email;
-    
-    /**
-     * @var int $idClasse
-     */
-    protected $idClasse;
+    protected $nbrAbsence;
 
     /**
      * Constructeur
      */
-    /*public function __construct(int $idEtudiant, string $nom, string $prenom, string $cne, string $cinEtudiant, string $email, int $idClasse) {
-        $this->idEtudiant = $idEtudiant;
+    /*public function __construct(string $cinEtudiant, string $nom, string $prenom, string $cne, int $nbrAbsence) {
+        $this->cinEtudiant = $cinEtudiant;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->cne = $cne;
-        $this->email = $email;
-        $this->cinEtudiant = $cinEtudiant;
-        $this->idClasse = $idClasse;
+        $this->nbrAbsence = $nbrAbsence;
     }*/
-
-    /**
-     * Getters
-     * 
-     * @return int|null
-     */
-    public function getIdEtudiant(): ?int { 
-        return $this->idEtudiant; 
-    }
-
-    /**
-     * Setters
-     * 
-     * @param int $idEtudiant
-     */
-    public function setIdEtudiant(int $idEtudiant) { 
-        $this->idEtudiant = $idEtudiant; 
-    }
 
     /**
      * Getters
@@ -139,7 +107,7 @@ class Etudiant {
      * 
      * @return string|null
      */
-    public function getCIN(): ?string { 
+    public function getCINEtudiant(): ?string { 
         return $this->cinEtudiant; 
     }
 
@@ -148,26 +116,8 @@ class Etudiant {
      * 
      * @param string $cinEtudiant
      */
-    public function setCIN(string $cinEtudiant) { 
+    public function setCINEtudiant(string $cinEtudiant) { 
         $this->cinEtudiant = $cinEtudiant; 
-    }
-
-    /**
-     * Getters
-     * 
-     * @return string|null
-     */
-    public function getEmail(): ?string { 
-        return $this->email; 
-    }
-
-    /**
-     * Setters
-     * 
-     * @param string $email
-     */
-    public function setEmail(string $email) { 
-        $this->email = $email; 
     }
 
     /**
@@ -175,16 +125,16 @@ class Etudiant {
      * 
      * @return int|null
      */
-    public function getIdClasse(): ?int { 
-        return $this->idClasse; 
+    public function getNbrAbsence(): ?int { 
+        return $this->nbrAbsence; 
     }
 
     /**
      * Setters
      * 
-     * @param int $idClasse
+     * @param int $nbrAbsence
      */
-    public function setIdClasse(int $idClasse) {
-        $this->idClasse = $idClasse; 
+    public function setNbrAbsence(int $nbrAbsence) {
+        $this->nbrAbsence = $nbrAbsence; 
     }
 }
