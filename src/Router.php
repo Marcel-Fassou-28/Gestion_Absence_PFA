@@ -101,14 +101,16 @@ class Router {
                     $urlUser = [
                         'dashboard' => $router->url('professor-dashboard'),
                         'home' => $router->url('professor-home'),
-                        'profil' => $router->url('professor-profil')
+                        'profil' => $router->url('professor-profil'),
+                        'listeProfesseurs' => $router->url('liste_Des_Professeur')
                     ];
                     break;
                 case 'etudiant':
                     $urlUser = [
                         'dashboard' => $this->url('student-dashboard'),
                         'home' => $this->url('student-home'),
-                        'profil' => $router->url('etudiant-profil')
+                        'profil' => $router->url('etudiant-profil'),
+                        'listeProfesseurs' => $router->url('liste_Des_Professeur')
                     ];
                     break;
             }

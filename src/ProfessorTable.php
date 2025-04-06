@@ -35,7 +35,7 @@ class ProfessorTable extends Table {
      * @var bool|null $errorMessage
      */
     protected $errorMessage;
-
+    
 
     /**
      * Cette fonction permet d'obtenir les noms des etudiants par classe 
