@@ -72,7 +72,7 @@ function encodindCIN($cin) {
                 <h3 class="titre">Historiques</h3>
                 <p>Historiques des soumissions</p>
                 <p>listes des eleves</p>
-                <p>Liste des etudiants</p>
+                <p><a href="<?= $urlUser['listeProfesseurs'] ?>">Liste des professeurs</a></p>
             </div>
         </div>
     </div>

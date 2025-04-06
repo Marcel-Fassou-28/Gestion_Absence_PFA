@@ -94,7 +94,9 @@ class Router {
                     $urlUser = [
                         'dashboard' => $router->url('administrator-dashboard'),
                         'home' => $router->url('administrator-home'),
-                        'profil' => $router->url('admin-profil')
+                        'profil' => $router->url('admin-profil'),
+                        'listeProfesseurs' => $router->url('liste_Des_Professeur')
+                        
                     ];
                     break;
                 case 'professeur':

@@ -37,5 +37,8 @@ $router
     ->get('/my/historics/stats', 'utilisateur/professors/historics/stats','historic-stats')
 
     ->match('/my/logout', 'login/logout', 'page-deconnexion')
+    /* Contenu pour les admins */
+    ->match('/my/liste-des-professeurs', 'utilisateur/admin/listeProfesseur','liste_Des_Professeur')
+    
     ->run();
     
