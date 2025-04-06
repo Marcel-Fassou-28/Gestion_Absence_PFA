@@ -14,6 +14,9 @@
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
     } 
+    if (isset($_GET['historic'])) {
+        echo '<link rel="stylesheet" href="/css/use-link/historic.css">';
+    }
     ?>
     <title>Gestion d'Absence</title>
 </head>

@@ -31,9 +31,9 @@ $router
     ->match('/my/use/liste-des-etudants', 'utilisateur/professors/ressources/listeEtudiant','professor-listEtudiant')
     ->match('/my/use/matieres-enseignes', 'utilisateur/professors/ressources/matiereEnseignes','professor-matiere')
 
-    ->get('/my/historics/absence', 'utilisateur/professors/historics/absence','historic-absence')
-    ->get('/my/historics/logs', 'utilisateur/professors/historics/logs','historic-logs')
-    ->get('/my/historics/stats', 'utilisateur/professors/historics/stats','historic-stats')
+    ->match('/my/historics/absence', 'utilisateur/professors/historics/absence','historic-absence')
+    ->match('/my/historics/logs', 'utilisateur/professors/historics/logs','historic-logs')
+    ->match('/my/historics/stats', 'utilisateur/professors/historics/stats','historic-stats')
 
     ->match('/my/logout', 'login/logout', 'page-deconnexion')
     ->run();

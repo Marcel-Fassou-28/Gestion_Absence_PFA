@@ -8,8 +8,7 @@ use DateTime;
  * 
  * @property int $idAbsence
  * @property \DateTime $date
- * @property \DateTime $horaire
- * @property int $idEtudiant
+ * @property string $cinEtudiant
  * @property int $idMatiere
  */
 class Absence {
@@ -25,26 +24,20 @@ class Absence {
     protected $date;
 
     /**
-     * @var \DateTime $horaire
+     * @var string $cinEtudiant
      */
-    protected $horaire;
-
-    /**
-     * @var int $idEtudiant
-     */
-    protected $idEtudiant;
+    protected $cinEtudiant;
 
     /**
      * @var int $idMatiere
      */
     protected $idMatiere;
 
-    /*public function __construct($idAbsence, $date, $horaire, $idEtudiant, $idMatiere)
+    /*public function __construct($idAbsence, $date, $cinEtudiant, $idMatiere)
     {
         $this->idAbsence = $idAbsence;
         $this->date = $date;
-        $this->horaire = $horaire;
-        $this->idEtudiant = $idEtudiant;
+        $this->cinEtudiant = $cinEtudiant;
         $this->idMatiere = $idMatiere;
     }*/
 
@@ -69,10 +62,10 @@ class Absence {
     /**
      * Getters
      * 
-     * @return int $idEtudiant
+     * @return string $cinEtudiant
      */
-    public function getIDEtudiant() :?int {
-        return $this->idEtudiant;
+    public function getCINEtudiant() :?string {
+        return $this->cinEtudiant;
     }
     
     /**
@@ -82,15 +75,6 @@ class Absence {
      */
     public function getIDMatiere() :?int {
         return $this->idMatiere;
-    }
-
-    /**
-     * Getters
-     * 
-     * @return DateTime $horaire
-     */
-    public function getHoraire() :?DateTime {
-        return $this->horaire;
     }
 
     /**
@@ -123,19 +107,10 @@ class Absence {
     /**
      * Setters
      * 
-     * @param DateTime $horaire
+     * @param string $cinEtudiant
      */
-    public function setHoraire(DateTime $horaire) {
-        $this->horaire = $horaire;
-    }
-
-    /**
-     * Setters
-     * 
-     * @param int $idEtudiant
-     */
-    public function setIDEtudiant(int $idEtudiant) {
-        $this->idEtudiant = $idEtudiant;
+    public function setIDEtudiant(string $cinEtudiant) {
+        $this->cinEtudiant = $cinEtudiant;
     }
     
 }

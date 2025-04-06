@@ -1,0 +1,112 @@
+@import url(../variables.css);
+
+main {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.absence {
+    max-width: 90%;
+    background-color: #1c1d1e88;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 1%;
+    
+
+    .intro {
+        display: flex;
+        justify-content: space-between;
+
+        h1 {
+            color: var(--text-color);
+            letter-spacing: 1px;
+            padding-left: 2.5%;
+        }
+    }
+}
+
+.absence-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.professor-info {
+    display: flex;
+    margin-top: 25px;
+    padding-left: 2%;
+    justify-content: space-around;
+    width: 100%;
+
+    .date-debut, .date-now {
+        label {
+            font-weight: 550;
+            font-size: 20px;
+            color: var(--text-color);
+        }
+        input {
+            border: none;
+            border-radius: 10px;
+            padding: 7px 15px;
+            font-weight: 500;
+
+        }
+    }
+
+    .level-group, .subject-group {
+        select {
+            padding: 7px 15px;
+            border: none;
+            font-weight: 550;
+            border-radius: 10px;
+            
+            option {
+                font-weight: 550;
+            }
+        }
+    }
+
+    .submit-btn {
+        padding: 7px 15px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 550;
+
+    }
+
+}
+    
+.table-container {
+    width: 90%;
+    background-color: var(--text-color);
+    margin: auto;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    border-collapse: collapse;
+    padding: 10px 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    thead tr th {
+        background-color: var(--navbar-color);
+        padding: 5px;
+        color: var(--text-color);
+    }
+
+    tbody tr td  {
+        padding: 5px;
+        border: 1px solid var(--navbar-color);
+        font-weight: 500;
+    }
+}
+
+
+.alert-absence {
+    font-weight: 550;
+    color: var(--text-color);
+    font-size: 17.5px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+}

@@ -36,11 +36,11 @@ if (!empty($_POST)) {
 
         if (password_verify( $password, $user->getPassword()) === true){
             session_start();
-            $_SESSION['id_user'] = $user->getID();
+            $_SESSION['id_user'] = $user->getCIN();
             $_SESSION['role'] = $user->getRole();
             $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
 
-            header('Location:' . $router->url('authenticated', ['role' =>$user->getRole(), 'id' => $user->getID()]));
+            header('Location:' . $router->url('authenticated', ['role' =>$user->getRole(), 'id' => $user->getCIN()]));
             exit();
         }else {
             $errorPassword = true;

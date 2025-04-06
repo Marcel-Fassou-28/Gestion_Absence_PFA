@@ -19,22 +19,23 @@ $moisAnglais = $date->format('F');
 $dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $date->format('Y');
 $dateSql = $date->format('Y-m-d H:i:s');
 
-$idProf = (int) $_SESSION['id_user'];
+$cinProf = $_SESSION['id_user'];
 $listeEtudiant = [];
-$filiere = '';
+$filiere = ''; 
 $matiere = '';
 $class = '';
 $submittedFirst = false;
 $submittedSecond = false;
 
-$tableFiliere = $professeurTable->getFiliere($idProf);
-$tableClasse = $professeurTable->getClasse($idProf);
-$tableMatiere = $professeurTable->getMatiere($idProf);
+$tableFiliere = $professeurTable->getFiliere($cinProf);
+$tableClasse = $professeurTable->getClasse($cinProf);
+$tableMatiere = $professeurTable->getMatiere($cinProf);
+$listeEtudiant = $professeurTable->findStudent($cinProf);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
-    $filiere = isset($_POST['filiere-prof']) ? $_POST['filiere-prof'] : '';
-    $matiere = isset($_POST['matiere-prof']) ? $_POST['matiere-prof'] : '';
-    $class = isset($_POST['classe-prof']) ? $_POST['classe-prof'] : '';
+    $filiere = $_POST['filiere-prof'] ?? '';
+    $matiere = $_POST['matiere-prof'] ?? '';
+    $class = $_POST['classe-prof'] ?? '';
     $submittedFirst = true;
     if (!empty($class)) {
         $listeEtudiant = $professeurTable->findStudentByClass($class);
@@ -42,10 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-second'])) {
-    $matiere = isset($_POST['matiere']) ? $_POST['matiere'] : '';
-    $arrayAbsence = isset($_POST['arrayCheckbox']) ? $_POST['arrayCheckbox'] : [];
+    $matiere = $_POST['matiere'] ?? '';
+    $arrayAbsence = $_POST['arrayCheckbox'] ?? [];
+    
     $listeEtudiant = $professeurTable->findStudentByClass($_POST['classe-prof']);
     $idMatiere = array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
+
     $professeurTable->setAbsence($arrayAbsence, $dateSql, $listeEtudiant, $idMatiere);
     $submittedSecond = true;
 }
@@ -99,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-second'])) {
                 <input class="submit-btn" type="submit" name="submit-first" value="Afficher les Etudiants">
             </div>
         </form>
-        <?php if ($submittedFirst && !$submittedSecond && !empty($listeEtudiant)): ?>
+        <?php if (!empty($listeEtudiant)): ?>
             <form class="table-container" method="post" action="">
                 <input type="hidden" name="matiere" value="<?= htmlspecialchars($matiere) ?>">
                 <input type="hidden" name="classe-prof" value="<?= htmlspecialchars($class) ?>">
@@ -121,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-second'])) {
                                 <td><?= htmlspecialchars($etudiant->getNom() . ' ' . $etudiant->getPrenom()) ?></td>
                                 <td>
                                     <label class="custom-checkbox">
-                                        <input type="checkbox" name="arrayCheckbox[<?= htmlspecialchars($etudiant->getIdEtudiant()) ?>]">
+                                        <input type="checkbox" name="arrayCheckbox[<?= htmlspecialchars($etudiant->getCIN()) ?>]">
                                         <span class="checkmark"></span>
                                     </label>
                                 </td>
