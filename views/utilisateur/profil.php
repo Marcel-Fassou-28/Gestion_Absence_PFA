@@ -105,7 +105,8 @@ if (isset($_SESSION)) {
         <h3>Historiques</h3>
         <ul>
             <li><a href="">Historiques des Soumissions</a></li>
-            <li><a href="">Historiques des Absences</a></li>
+            <li><a href="<?= $urlUser['listeProfesseurs']?>">Liste des professeurs</a></li>
+            <li><a href="<?= $urlUser['justifications']?>">Historiques des justificatif</a></li>
             <li><a href="">Informations Supplementaire</a></li>
         </ul>
     </div>

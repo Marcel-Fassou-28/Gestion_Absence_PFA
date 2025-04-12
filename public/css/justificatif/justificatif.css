@@ -1,0 +1,52 @@
+#liste {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 15% 15px 15%;
+}
+#liste h1{
+    margin: 0;
+}
+#liste hr{
+    display:inline;
+    background-color: aqua;
+    height: 1px;
+    width: 100%;
+    margin:0;
+}
+#justificatif {
+    background-color: #1D1C1E90;
+    padding: 40px;
+    width: 70%;
+    border-radius: 25px;
+    margin-top: 45px;
+}
+#tables{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+ table tr td{
+    border-bottom: solid 1px white;
+    text-align: center;
+    font-size: medium;
+    padding-bottom: 25px;
+    padding-top: 20px;
+ }
+table tr th {
+    border-bottom: solid 1px white;
+    text-align: center;
+    
+    font-size: large;
+    padding-bottom: 25px;
+    padding-top: 20px;
+}
+table tr td button{
+    border-radius: 15px;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    a {
+        text-decoration: none;
+        color: #000;
+    }
+}

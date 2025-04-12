@@ -2,13 +2,38 @@
 namespace App;
 
 
-use App\Model\Departement;;  
+use App\Model\Departement;
+use App\Model\Filiere;
+use App\Model\Classe;
+use App\Model\Etudiant;
+use App\Model\Professeur;
+use App\Model\Absence;
+use App\Model\Matiere;
+use App\Model\Utilisateur;
+
+use App\Model\Justificatif;  
 use App\ProfessorTable;
 
-class listProfTable extends ProfessorTable {
+class adminTable extends ProfessorTable {
     protected $tableDepartement = "departement";
-    protected $classDepartement = Departement::class;
+    protected $tableFiliere = "filiere";
+    protected $tableClasse = "classe";
+    protected $tableProf = "professeur";
+    protected $tableEtudiant = "etudiant";
+    protected $tableMatiere = "matiere";
+    protected $tableAbsence = "absence";
+    
+    protected $tableJustificatif = "justificatif";
 
+    protected $classDepartement = Departement::class;
+    protected $classJustificatif = Justificatif::class;
+    protected $classFiliere = Filiere::class;
+    protected $classClasse = Classe::class;
+    protected $classProf = Professeur::class;
+    protected $classEtudiant = Etudiant::class;
+    protected $classAbsence = Absence::class;
+    protected $classMatiere = Matiere::class;
+    
 
 
 /**
@@ -81,6 +106,17 @@ public function getProfByClass(string $class):array{
     $query->execute(['class' => $class]);
     $query->setFetchMode(\PDO::FETCH_CLASS,$this->classProf);
     $result=$query->fetchAll();
+    return count($result) != 0 ? $result : [];
+}
+
+public function getAllJustificatif():array{
+    $query = $this->pdo->prepare('
+    SELECT e.nom as nom,e.prenom as prenom, j.dateSoumission as 
+    Date_Soumission FROM '.$this->tableAbsence .' a JOIN '
+    . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence'
+    . ' JOIN ' . $this->tableEtudiant . ' e ON e.cinEtudiant = a.cinEtudiant');
+    $query->execute();
+    $result = $query->fetchALL();
     return count($result) != 0 ? $result : [];
 }
 

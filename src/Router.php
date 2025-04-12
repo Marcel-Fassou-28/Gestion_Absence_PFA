@@ -93,7 +93,8 @@ class Router {
                         'dashboard' => $router->url('administrator-dashboard'),
                         'home' => $router->url('administrator-home'),
                         'profil' => $router->url('admin-profil'),
-                        'listeProfesseurs' => $router->url('liste_Des_Professeur')
+                        'listeProfesseurs' => $router->url('liste_Des_Professeur'),
+                        'justifications' => $router->url('justification')
                         
                     ];
                     break;

@@ -1,12 +1,13 @@
 <?php
+
+use App\adminTable;
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 use App\Connection;
-use App\listProfTable;
 $pdo = Connection::getPDO();
-$list = new listProfTable($pdo);
+$list = new adminTable($pdo);
 
 $listeDepart = $list->getAll("departement", "classDepartement");
 $listeFiliere = $list->getAll("filiere", "classFiliere");
