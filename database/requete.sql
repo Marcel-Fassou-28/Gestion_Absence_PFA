@@ -43,7 +43,8 @@ CREATE TABLE Departement (
 -- Table Filière
 CREATE TABLE Filiere (
     idFiliere INT PRIMARY KEY AUTO_INCREMENT,
-    nomFiliere VARCHAR(100),
+    nomFiliere VARCHAR(100) NOT NULL,
+    alias VARCHAR(10) NOT NULL,
     idDepartement INT NOT NULL
 );
 
@@ -75,6 +76,19 @@ CREATE TABLE Matiere(
     CONSTRAINT fk_matiere_classe FOREIGN KEY (idClasse) REFERENCES Classe(idClasse)
 );
 
+-- Table Créneaux
+CREATE TABLE Creneaux (
+    heureDebut TIME NOT NULL,
+    heureFin TIME NOT NULL,
+    cinProf VARCHAR(20) NOT NULL,
+    idMatiere INT NOT NULL,
+    /*idClasse INT NOT NULL,*/
+    CONSTRAINT pk_creneaux PRIMARY KEY (cinProf, idMatiere),
+    CONSTRAINT fk_creneaux_prof FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_creneaux_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere) ON UPDATE CASCADE ON DELETE CASCADE
+    /*CONSTRAINT fk_creneaux_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere) ON UPDATE CASCADE ON DELETE CASCADE */
+);
+
 -- Table Professeur
 CREATE TABLE Professeur (
     idProf INT PRIMARY KEY AUTO_INCREMENT,
@@ -103,7 +117,7 @@ CREATE TABLE Etudiant (
 -- Table Absence
 CREATE TABLE Absence (
     idAbsence INT PRIMARY KEY AUTO_INCREMENT,
-    date DATE NOT NULL,
+    date DATETIME NOT NULL,
     cinEtudiant VARCHAR(50) NOT NULL,
     idMatiere INT NOT NULL,
     CONSTRAINT fk_absence_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere),

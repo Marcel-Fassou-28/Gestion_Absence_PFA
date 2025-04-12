@@ -16,6 +16,7 @@ $pdo->exec('TRUNCATE TABLE filiere');
 $pdo->exec('TRUNCATE TABLE niveau');
 $pdo->exec('TRUNCATE TABLE departement');
 $pdo->exec('TRUNCATE TABLE classe');
+$pdo->exec('TRUNCATE TABLE creneaux');
 
 //username : CIN.nom
 
@@ -39,22 +40,30 @@ $pdo->exec("INSERT INTO etudiant (nom, prenom, cne, cinEtudiant, email, idclasse
         ('Msaboue', 'Mohamed', 'BJ84785592', 'BJ8478559', 'mohamedmsb6@gmail.com', 1)");
 
 
-$pdo->exec("INSERT INTO `filiere` (`idFiliere`, `nomFiliere`, `idDepartement`) VALUES
-(1, 'Ingénierie Informatique et Technologies Emergentes', 1),
-(2, 'Cybersécurité et Confiance Numérique', 1),
-(3, 'Ingénierie des Systèmes d\'Information et de Communication', 1),
-(4, 'Génie Civil', 2),
-(5, 'Génie Electrique et Energétique', 2),
-(6, 'Génie Industriel', 2),
-(7, 'Années Préparatoires', 3)");
+$pdo->exec("INSERT INTO filiere (idFiliere, nomFiliere, alias, idDepartement) VALUES
+(1, 'Ingénierie Informatique et Technologies Emergentes','2ITE', 1),
+(2, 'Cybersécurité et Confiance Numérique','CCN', 1),
+(3, 'Ingénierie des Systèmes d\'Information et de Communication', 'ISIC', 1),
+(4, 'Génie Civil','GC', 2),
+(5, 'Génie Electrique et Energétique', 'GEE', 2),
+(6, 'Génie Industriel', 'GI', 2),
+(7, 'Années Préparatoires','AP', 3)");
 
-$pdo->exec("INSERT INTO `matiere` (`idMatiere`, `cinProf`, `nomMatiere`, `idFiliere`, `idClasse`) VALUES
+$pdo->exec("INSERT INTO matiere (idMatiere, cinProf, nomMatiere, idFiliere, idClasse) VALUES
     (1, 'O00790130', 'Théorie des langages et Compilation', 1, 1),
     (2, 'O00790130', 'Informatique Théorique', 1, 1),
     (3, 'JK84785592', 'POO Java', 2, 7),
     (4, 'JK84785592', 'Informatique Théorique et Sécurité', 3, 4),
     (5, 'JK84785592', 'Cryptographie', 1, 4),
     (6, 'O00790130', 'Developpement Web et Java', 3, 5)");
+
+$pdo->exec("INSERT INTO creneaux (heureDebut, heureFin, cinProf, idMatiere) VALUES
+    ('08:30:00', '10:20:00', 'O00790130', 1),
+    ('10:30:00', '12:20:00','O00790130', 2),
+    ('18:00:00', '20:20:00','JK84785592', 3),
+    ('13:30:00', '15:20:00', 'JK84785592', 4),
+    ('08:30:00', '10:20:00','JK84785592', 5),
+    ('00:00:00', '23:20:00','O00790130', 6)");
 
 $pdo->exec("INSERT INTO `niveau` (`idNiveau`, `nomNiveau`) VALUES
 (1, '1ere Année'),

@@ -21,19 +21,19 @@ $router
     ->get('/my/dashboard', 'utilisateur/professors/dashboard','professor-dashboard')
     ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
     ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
-    ->get('/my/profil','utilisateur/profile','admin-profil')
-    ->get('/my/profil','utilisateur/profile','professor-profil')
-    ->get('/my/profil','utilisateur/profile','etudiant-profil')
+    ->get('/my/profil','utilisateur/profil','admin-profil')
+    ->get('/my/profil','utilisateur/profil','professor-profil')
+    ->get('/my/profil','utilisateur/profil','etudiant-profil')
 
     ->get('/my/dashboard-etudiant','utilisateur/students/dashboard','dashboard')
 
     /* Contenu pour les profs */
     ->match('/my/use/calendrier', 'utilisateur/professors/ressources/calendrier','professor-calendrier')
-    ->match('/my/use/liste-des-etudants', 'utilisateur/professors/ressources/listeEtudiant','professor-listEtudiant')
-    ->match('/my/use/matieres-enseignes', 'utilisateur/professors/ressources/matiereEnseignes','professor-matiere')
+    ->match('/my/use/liste-des-presence', 'utilisateur/professors/ressources/listePresence','professor-listePresence')
+    ->match('/my/use/liste-des-etudants', 'utilisateur/professors/ressources/listeEtudiant','professor-listeEtudiant')
+    ->match('/my/use/matieres-enseignes', 'utilisateur/professors/ressources/autreInfo','professor-autreInfo')
 
     ->match('/my/historics/absence', 'utilisateur/professors/historics/absence','historic-absence')
-    ->match('/my/historics/logs', 'utilisateur/professors/historics/logs','historic-logs')
     ->match('/my/historics/stats', 'utilisateur/professors/historics/stats','historic-stats')
 
     ->match('/my/logout', 'login/logout', 'page-deconnexion')

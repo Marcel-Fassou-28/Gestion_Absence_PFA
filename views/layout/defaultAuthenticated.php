@@ -9,13 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
-    <link rel="stylesheet" href="/css/Profiles/test.css">
+
     <link rel="stylesheet" href="/css/dashbord-etudiant/dashbord-etudiant.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
     } 
     if (isset($_GET['historic'])) {
         echo '<link rel="stylesheet" href="/css/use-link/historic.css">';
+    }
+    if(isset($_GET['user'])) {
+        echo '<link rel="stylesheet" href="/css/profil/profil.css">';
     }
     ?>
     <title>Gestion d'Absence</title>
@@ -44,7 +47,7 @@
                     <span></span>
                 </button>
                 <ul class="profil-pop-up">
-                    <li><a href="<?= $urlUser['profil']?>">Profil</a></li>
+                    <li><a href="<?= $urlUser['profil'] . '?user='.$_SESSION['role']?>">Profil</a></li>
                     <li><a href="">Calendrier</a></li>
                     <li><a href="">Historique</a></li>
                     <li><a href="">Signaler un problème</a></li>

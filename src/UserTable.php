@@ -15,7 +15,7 @@ class UserTable extends Table {
     protected $errorMessage;
 
     /**
-     * Cette fonction permet de trouver un nom d'utilisateur 
+     * Cette methode permet de trouver un nom d'utilisateur 
      * 
      * @param string $username
      * @return Utilisateur|null
@@ -30,6 +30,23 @@ class UserTable extends Table {
             $this->errorMessage = true;
         }
         return $result ?: null;
+    }
+
+
+    /**
+     * Cette methode a pour role de reourner les information d'un utilisateur
+     * 
+     * @param string $role
+     * @return object
+     */
+    public function getIdentification(string $cin):Utilisateur {
+        $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE cin = :cin');
+        $query->execute(['cin' => $cin]);
+
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
+        $result = $query->fetch();
+
+        return $result;
     }
 
     /**

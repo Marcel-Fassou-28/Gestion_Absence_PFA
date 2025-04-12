@@ -8,8 +8,9 @@
             <div class="hr"></div>
             <ul class="use-link-list">
                 <li><a href="<?= $router->url('professor-calendrier') . '?use-link=calendrier' ?>">Calendrier</a></li>
-                <li><a href="<?= $router->url('professor-listEtudiant') . '?use-link=student-list' ?>">Listes des Etudiants</a></li>
-                <li><a href="<?= $router->url('professor-matiere') . '?use-link=my-subject' ?>">Autres Matières Enseignants</a></li>
+                <li><a href="<?= $router->url('professor-listePresence') . '?use-link=student-presence' ?>">Effectuer la Présence</a></li>
+                <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list' ?>">Listes des Etudiants</a></li>
+                <li><a href="<?= $router->url('professor-autreInfo') . '?use-link=other' ?>">Autres Informations Supplementaires</a></li>
             </ul>
         </section>
         <section class="container historic">
@@ -17,7 +18,6 @@
             <div class="hr"></div>
             <ul class="historic-list">
                 <li><a href="<?= $router->url('historic-absence') . '?historic=absence' ?>">Historiques des Absences</a></li>
-                <li><a href="<?= $router->url('historic-logs') . '?historic=logs' ?>">Historiques des Logs</a></li>
                 <li><a href="<?= $router->url('historic-stats') . '?historic=stats' ?>">Statistiques</a></li>
             </ul>
         </section>

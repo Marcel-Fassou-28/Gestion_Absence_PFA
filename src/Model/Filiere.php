@@ -7,6 +7,7 @@ namespace App\Model;
  * 
  * @property int $idFiliere
  * @property string $nomFiliere
+ * @property string $alias
  * @property int $idDepartement
  */
 class Filiere {
@@ -22,14 +23,20 @@ class Filiere {
     protected $nomFiliere;
 
     /**
+     * @var string $alias
+     */
+    protected $alias;
+
+    /**
      * @var int $idDepartement
      */
     protected $idDepartement;
 
-    /*public function __construct($idFiliere, $nomFiliere, $idDepartement)
+    /*public function __construct($idFiliere, $nomFiliere, $alias, $idDepartement)
     {
         $this->idFiliere = $idFiliere;
         $this->nomFiliere = $nomFiliere;
+        $this->alias = $alias;
         $this->idDepartement = $idDepartement;
     }*/
 
@@ -45,10 +52,19 @@ class Filiere {
     /**
      * Getters
      * 
-     * @return int|null
+     * @return string|null
      */
     public function getNomFiliere() : ?string {
         return $this->nomFiliere;
+    }
+
+    /**
+     * Getters
+     * 
+     * @return string|null
+     */
+    public function getAlias() : ?string {
+        return $this->alias;
     }
 
 
@@ -77,6 +93,15 @@ class Filiere {
      */
     public function setNomFiliere(string $nomFiliere) {
         $this->nomFiliere = $nomFiliere;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string $alias
+     */
+    public function setAlias(string $alias) {
+        $this->alias = $alias;
     }
 
     /**
