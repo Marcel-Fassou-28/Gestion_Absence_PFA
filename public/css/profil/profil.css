@@ -1,60 +1,126 @@
+
 :root {
-    --profile-bg: #1c1d1e66;
+    --profile-bg: #1c1d1e88; 
 }
 
 .profil-interface {
+    max-width: 70%;
+    margin: 0 auto;
+    padding: 5% 0 50px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: 70%;
-    padding-top: 5%;
-    padding-bottom: 50px;
+    gap: 2rem;
+    color: var(--text-color);
+}
+
+.image-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 30px;
+}
+
+.image-section img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.image-section img:hover {
+    transform: scale(1.05);
+}
+
+.image-section h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+    text-transform: capitalize;
 }
 
 .container-useful {
     display: grid;
-    margin-top: 5%;
     grid-template-columns: 1fr 1fr;
-    grid-auto-rows: auto;  
+    grid-auto-rows: auto;
     gap: 10px;
+    margin-top: 5%;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .info-section {
     grid-row: span 3;
-    display: flex;
-    flex-direction: column;
     background-color: var(--profile-bg);
     border-radius: 10px;
-    padding: 10px 25px 20px 15px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
     height: fit-content;
+}
 
-    h3 {
-        color: var(--navbar-color);
-        font-size: 35px;
-    }
+.info-section h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 1rem;
+}
 
-    a {
-        color: var(--navbar-color);
-        font-size: 20px;
-        font-weight: 600;
-        display: flex;
-        justify-content: flex-end;
-    }
+.edit-profile {
+    align-self: flex-end;
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 5%;
+}
 
+.edit-profile:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.edit-profile:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
 }
 
 .personal-info {
-    padding-top: 25px;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
+
 .personal-info > div {
     display: flex;
     gap: 10%;
     padding-left: 20px;
+}
 
-    p {
-        font-weight: 600;
-        color: var(--text-color);
-    }
+.personal-info p:first-child {
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.9;
+
+}
+
+.personal-info p:last-child {
+    font-weight: 500;
+    color: var(--text-color);
 }
 
 .academic-section {
@@ -63,154 +129,277 @@
     background-color: var(--profile-bg);
     border-radius: 10px;
     padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     height: fit-content;
-    color: var(--text-color);
-    font-weight: 600;
-
-    div {
-        display: flex;
-        gap: 10%;
-    }
 }
 
-.image-section {
+.academic-section div {
     display: flex;
-    align-items: center;
-    gap: 5px;
-    padding-left: 30px;
-
-    img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-    }
-
-    h3 {
-        color: var(--text-color);
-        font-size: 35px;
-        padding-left: 15px;
-    }
-
-    h3::first-letter {
-        text-transform: uppercase;
-    }
+    gap: 10px;
+    margin-bottom: 0.75rem;
 }
 
-.useful-link-section {
-    background-color: var(--profile-bg);
-    border-radius: 10px;
-    height: fit-content;
-
-    h3 {
-        color: var(--navbar-color);
-        font-size: xx-large;
-        margin-left: 10px;
-    }
-
-    ul {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-
-        li {
-            a {
-                font-weight: 600;
-            }
-        }
-
-
-    }
+.academic-section p:first-child {
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.9;
 }
 
+.academic-section p:last-child {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.useful-link-section,
 .historic-section {
     background-color: var(--profile-bg);
     border-radius: 10px;
+    padding: 10px;
     height: fit-content;
-
-    h3 {
-        color: var(--navbar-color);
-        font-size: 35px;
-        margin-left: 10px;
-    }
-
-    ul {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 768px) {
+.useful-link-section h3,
+.historic-section h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 1rem;
+}
+
+.useful-link-section ul,
+.historic-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.useful-link-section a,
+.historic-section a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.useful-link-section a:hover,
+.historic-section a:hover {
+    background-color: var(--bg-btn);
+    transform: translateX(5px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.useful-link-section a:focus,
+.historic-section a:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.useful-link-section li:nth-child(1) a::before {
+    content: '\1F4C5'; /* Calendrier */
+    margin-right: 0.5rem;
+}
+
+.useful-link-section li:nth-child(2) a::before {
+    content: '\1F465'; /* Élèves */
+    margin-right: 0.5rem;
+}
+
+.useful-link-section li:nth-child(3) a::before {
+    content: '\1F465'; /* Étudiants */
+    margin-right: 0.5rem;
+}
+
+
+.historic-section li:nth-child(1) a::before {
+    content: '\1F4DA'; /* Soumissions */
+    margin-right: 0.5rem;
+}
+
+.historic-section li:nth-child(2) a::before {
+    content: '\1F9D1'; /* Professeurs */
+    margin-right: 0.5rem;
+}
+
+.historic-section li:nth-child(3) a::before {
+    content: '\1F4C3'; /* Justificatifs */
+    margin-right: 0.5rem;
+}
+
+.historic-section li:nth-child(4) a::before {
+    content: '\1F4D3';
+    margin-right: 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
     .profil-interface {
-        width: 100%;
-        padding-top: 50px;
-
-        .image-section {
-            width: 90%;
-
-            img {
-                height: 75px;
-                width: 75px;
-            }
-
-            h3 {
-                font-size: 25px;
-            }
-        }
+        max-width: 98%;
+        padding: 50px 0;
     }
+
+    .image-section {
+        padding: 0 7% !important;
+        display: flex;
+        flex-direction: row !important;
+        align-items: center !important;
+    }
+
+    .image-section img {
+        width: 75px;
+        height: 75px;
+    }
+
+
+    .image-section h3 {
+        font-size: 1rem;
+    }
+
     .container-useful {
         display: flex;
         flex-direction: column;
-        align-self: center;
-        width: 98%;
+        gap: 1rem;
+        margin-top: 3%;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
 
-        .info-section {
-            h3 {
-                font-size: 27px;
-            }
+    .info-section h3,
+    .academic-section h3,
+    .useful-link-section h3,
+    .historic-section h3 {
+        font-size: 1.3rem;
+    }
 
-            a {
-                font-size: 20px;
-            }
-        }
+
+    .edit-profile {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .useful-link-section a,
+    .historic-section a {
+        font-size: 0.95rem;
+        padding: 0.4rem 0.75rem;
+    }
+
+    .useful-link-section a::before,
+    .historic-section a::before {
+        font-size: 0.9rem;
     }
 }
 
-@media (max-width: 425px){
+@media screen and (max-width: 600px) {
+    .image-section img {
+        width: 65px;
+        height: 65px;
+    }
+
+    .image-section h3 {
+        font-size: 1.3rem;
+    }
+
+    .info-section h3,
+    .academic-section h3,
+    .useful-link-section h3,
+    .historic-section h3 {
+        font-size: 1.2rem;
+    }
+
+    .edit-profile {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.7rem;
+    }
+
+
+    .personal-info p:first-child,
+    .academic-section p:first-child {
+        font-size: 0.9rem;
+    }
+
+    .personal-info p:last-child,
+    .academic-section p:last-child {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .useful-link-section a,
+    .historic-section a {
+        font-size: 0.9rem;
+        padding: 0.35rem 0.6rem;
+    }
+
+    .useful-link-section a::before,
+    .historic-section a::before {
+        font-size: 0.85rem;
+    }
+}
+
+@media screen and (max-width: 425px) {
     .profil-interface {
-        .image-section {
-            img {
-                height: 50px;
-                width: 50px;
-
-            }
-
-            h3 {
-                font-size: 20px;
-            }
-        }
+        max-width: 100%;
+        padding: 40px 0;
     }
 
-    .info-section {
-        h3 {
-            font-size: 25px;
-        }
-
-        a {
-            font-size: 17.5px;
-        }
-    }
-
-    .personal-info {
-        margin-left: -10px;
-    }
-
-    .personal-info > div:nth-child(1) {
+    .image-section {
         flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0 2%;
+    }
 
-        p:nth-child(2) {
-            font-size: 15px;
-            margin-top: -15px;
-        }
+    .image-section img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .image-section h3 {
+        font-size: 1.1rem;
+    }
+
+    .info-section,
+    .academic-section,
+    .useful-link-section,
+    .historic-section {
+        padding: 1rem;
+    }
+
+    .info-section h3,
+    .academic-section h3,
+    .useful-link-section h3,
+    .historic-section h3 {
+        font-size: 1.1rem;
+    }
+
+    .edit-profile {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .personal-info p:first-child,
+    .academic-section p:first-child {
+        font-size: 0.85rem;
+    }
+
+    .personal-info p:last-child,
+    .academic-section p:last-child {
+        font-size: 0.85rem;
+    }
+
+    .useful-link-section a,
+    .historic-section a {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.5rem;
+    }
+
+    .useful-link-section a::before,
+    .historic-section a::before {
+        font-size: 0.8rem;
     }
 }

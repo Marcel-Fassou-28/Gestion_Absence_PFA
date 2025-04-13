@@ -30,6 +30,7 @@ $router
     /* Contenu pour les profs */
     ->match('/my/use/calendrier', 'utilisateur/professors/ressources/calendrier','professor-calendrier')
     ->match('/my/use/liste-des-presence', 'utilisateur/professors/ressources/listePresence','professor-listePresence')
+    ->match('/my/use/liste-des-presence/presence', 'utilisateur/professors/ressources/presence','professor-presence')
     ->match('/my/use/liste-des-etudants', 'utilisateur/professors/ressources/listeEtudiant','professor-listeEtudiant')
     ->match('/my/use/matieres-enseignes', 'utilisateur/professors/ressources/autreInfo','professor-autreInfo')
 
@@ -40,6 +41,8 @@ $router
     /* Contenu pour les admins */
     ->match('/my/liste-des-professeurs', 'utilisateur/admin/listeProfesseur','liste_Des_Professeur')
     ->match('/my/justificatif','utilisateur/admin/justifyHistory','justification')
+
+    ->match('/api/matiere_classe', 'api/get_matiere_classe', 'api')
     
     ->run();
     

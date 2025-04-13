@@ -8,6 +8,7 @@ namespace App\Model;
  * @property string $cinEtudiant
  * @property string $nom
  * @property string $prenom
+ * @property string $email
  * @property string $cne
  * @property string $nbrAbsence
  */
@@ -15,35 +16,41 @@ class Absents {
     /**
      * @var string $cinEtudiant
      */
-    protected $cinEtudiant;
+    private $cinEtudiant;
     
     /**
      * @var string $nom
      */
-    protected $nom;
+    private $nom;
     
     /**
      * @var string $prenom
      */
-    protected $prenom;
+    private $prenom;
     
+    /**
+     * @var string $email
+     */
+    private $email;
+
     /**
      * @var string $cne
      */
-    protected $cne;
+    private $cne;
     
     /**
      * @var int $nbrAbsence
      */
-    protected $nbrAbsence;
+    private $nbrAbsence;
 
     /**
      * Constructeur
      */
-    /*public function __construct(string $cinEtudiant, string $nom, string $prenom, string $cne, int $nbrAbsence) {
+    /*public function __construct(string $cinEtudiant, string $nom, string $prenom,string $email, string $cne, int $nbrAbsence) {
         $this->cinEtudiant = $cinEtudiant;
         $this->nom = $nom;
         $this->prenom = $prenom;
+        $this->email = $email;
         $this->cne = $cne;
         $this->nbrAbsence = $nbrAbsence;
     }*/
@@ -82,6 +89,24 @@ class Absents {
      */
     public function setPrenom(string $prenom) { 
         $this->prenom = $prenom; 
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string $prenom
+     */
+    public function setEmail(string $email) { 
+        $this->email = $email; 
+    }
+
+    /**
+     * Getters
+     * 
+     * @return string|null
+     */
+    public function getEmail(): ?string { 
+        return $this->email; 
     }
 
     /**

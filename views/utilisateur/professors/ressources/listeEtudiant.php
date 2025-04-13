@@ -1,10 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
-use App\ProfessorTable;
 use App\Connection;
+use App\Professeur\ProfessorTable;
 
 $pdo = Connection::getPDO();
 $professeurTable = new ProfessorTable($pdo);
@@ -20,40 +17,34 @@ $dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $
 $dateSql = $date->format('Y-m-d H:i:s');
 
 $cinProf = $_SESSION['id_user'];
-$listeEtudiant = [];
+$listeEtudiant = $professeurTable->findStudent($cinProf);
+$listDesAbsents = $professeurTable->getAllStudentAbsenceState($cinProf);
+$listeComplete = $professeurTable->getAllStudentList($listeEtudiant, $listDesAbsents);
+
 $filiere = ''; 
 $matiere = '';
 $class = '';
-$submittedFirst = false;
-$submittedSecond = false;
 
 $tableFiliere = $professeurTable->getFiliere($cinProf);
 $tableClasse = $professeurTable->getClasse($cinProf);
 $tableMatiere = $professeurTable->getMatiere($cinProf);
 $listeEtudiant = $professeurTable->findStudent($cinProf);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $filiere = $_POST['filiere-prof'] ?? '';
     $matiere = $_POST['matiere-prof'] ?? '';
     $class = $_POST['classe-prof'] ?? '';
 
-    $idMatiere = array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
-    $idClasse = array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class)[array_key_first(array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class))]->getIDClasse();
+    $idMatiere = (int) array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
+    $idClasse = (int) array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class)[array_key_first(array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class))]->getIDClasse();
 
     if (!empty($class) && !empty($matiere)) {
-        $listeEtudiant = $professeurTable->findStudentByClass($class);
-        $listDesAbsents = $professeurTable->getNbrAbsence($cinProf, $idClasse, $idMatiere);
+
+        $listeEtudiants = $professeurTable->findStudentByClass($idClasse);
+        $listAbsents = $professeurTable->getNbrAbsence($cinProf, $idClasse, $idMatiere);
+        $listeComplete = $professeurTable->getAllStudentList($listeEtudiants, $listAbsents);
     }
 }
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-second'])) {
-    
-    
-    $listeEtudiant = $professeurTable->findStudentByClass($_POST['classe-prof']);
-    $idMatiere = array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
-
-}
-
 ?>
 
 <div class="presence">
@@ -68,39 +59,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-second'])) {
         <form class="professor-info container" method="post" action="">
             <div class="filiere-group">
                 <select id="filiere" name="filiere-prof" required>
-                    <option name="filiere-prof" value="">Filière</option>
-                    <?php
-                        foreach($tableFiliere as $mejor) {
-                            $selected = ($filiere === $mejor->getNomFiliere()) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($mejor->getNomFiliere()) . '" ' . $selected . '>' . htmlspecialchars($mejor->getNomFiliere()) . '</option>';
-                        }
-                    ?>
+                    <option value="">Filière</option>
+                    <?php foreach($tableFiliere as $mejor): ?>
+                        <option value="<?= htmlspecialchars($mejor->getNomFiliere()) ?>" <?= $filiere === $mejor->getNomFiliere() ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($mejor->getNomFiliere()) ?>
+                        </option>
+                    <?php endforeach ?>
                 </select>
             </div>
             <div class="subject-group">
                 <select id="matiere" name="matiere-prof" required>
                     <option name="matiere-prof"  value="">Matière</option>
-                    <?php
-                        foreach($tableMatiere as $subject) {
-                            $selected = ($matiere === $subject->getNomMatiere()) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($subject->getNomMatiere()) . '" ' . $selected . '>' . htmlspecialchars($subject->getNomMatiere()) . '</option>';
-                        }
-                    ?>
+                    <?php foreach($tableMatiere as $subject): ?>
+                        <option value="<?= htmlspecialchars($subject->getNomMatiere()) ?>" <?= $matiere === $subject->getNomMatiere() ? 'selected' : ''?>>
+                            <?= htmlspecialchars($subject->getNomMatiere()) ?>
+                        </option>
+                    <?php endforeach ?>
                 </select>
             </div>
             <div class="level-group">
                 <select id="classe" name="classe-prof" required>
                     <option name="classe-prof" value="" >Niveau</option>
-                    <?php
-                        foreach($tableClasse as $classe) {
-                            $selected = ($class === $classe->getNomClasse()) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($classe->getNomClasse()) . '" ' . $selected . '>' . htmlspecialchars($classe->getNomClasse()) . '</option>';
-                        }
-                    ?>
+                    <?php foreach($tableClasse as $classe): ?>
+                        <option value="<?= htmlspecialchars($classe->getNomClasse()) ?>" <?= $class === $classe->getNomClasse() ? 'selected' : ''?>>
+                            <?= htmlspecialchars($classe->getNomClasse()) ?>
+                        </option> 
+                    <?php endforeach ?>
                 </select>
             </div>
             <div>
-                <input class="submit-btn" type="submit" name="submit-first" value="Afficher les Etudiants">
+                <input class="submit-btn" type="submit" name="submit" value="Afficher les Etudiants">
             </div>
         </form>
         <?php if (!empty($listeEtudiant)): ?>
@@ -109,20 +97,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-second'])) {
                     <thead>
                         <tr>
                             <th>N°</th>
-                            <th>Matricule</th>
+                            <th>CIN</th>
+                            <th>CNE</th>
                             <th>Nom et Prénom</th>
                             <th>Nombre d'Absence</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $numero = 1; ?>
-                        <?php foreach ($listeEtudiant as $etudiant): ?>
+                        <?php foreach ($listeComplete as $etat): ?>
                             <tr>
                                 <td><?= sprintf("%02d", $numero++) ?></td>
-                                <td><?= htmlspecialchars($etudiant->getCNE()) ?></td>
-                                <td><?= htmlspecialchars($etudiant->getNom() . ' ' . $etudiant->getPrenom()) ?></td>
-                                <td>A voir</td>
+                                <td><?= htmlspecialchars($etat->getCINEtudiant()) ?></td>
+                                <td><?= htmlspecialchars($etat->getCNE()) ?></td>
+                                <td><?= htmlspecialchars($etat->getNom() . ' ' . $etat->getPrenom()) ?></td>
+                                <td><?= htmlspecialchars($etat->getNbrAbsence()) ?></td>
+                                <td><button class="show-state" data-modal-id="modal-<?= $numero ?>">Voir plus</button></td>
                             </tr>
+                            <div class="modal" id="modal-<?= $numero ?>">
+                                <div class="modal-overlay"></div>
+                                <div class="modal-content">
+                                    <div>
+                                        <p>CIN: </p>
+                                        <p><?= htmlspecialchars($etat->getCINEtudiant()) ?></p>
+                                    </div>
+                                    <div>
+                                        <p>CNE: </p>
+                                        <p><?= htmlspecialchars($etat->getCNE()) ?></p>
+                                    </div>
+                                    <div>
+                                        <p>Nom: </p>
+                                        <p><?= htmlspecialchars($etat->getNom()) ?></p>
+                                    </div>
+                                    <div>
+                                        <p>Prénom: </p>
+                                        <p><?= htmlspecialchars($etat->getPrenom()) ?></p>
+                                    </div>
+                                    <div>
+                                        <p>Nombre d'Absence: </p>
+                                        <p><?= htmlspecialchars($etat->getNbrAbsence()) ?></p>
+                                    </div>
+                                    <div class="modal-buttons">
+                                        <button class="btn-modal close-modal">Fermer</button>
+                                        <button class="btn-modal">
+                                            <a href="mailto:<?= $etat->getEmail() ?>">Contactez</a>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
