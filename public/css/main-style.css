@@ -40,22 +40,24 @@ nav{
         }
 
         li:nth-child(1) {
-            margin-right: 25%;
+            padding-right: 20%;
         }
     }
 }
 
 
 .presentation-section {
-    transform: translate(12%, 350px);
+    position: absolute;
+    top: 350px;
+    left: 10%;
+    right: 10px;
 
     div {
         color: var(--text-color);
         background-color: var(--bg-section-abstract);
         text-align: center;
-        padding: 15px;
+        padding: 15px 30px;
         border-radius: 30px;
-        width: 41.66%;
         max-width: 500px;
         display: flex;
         justify-content: center;

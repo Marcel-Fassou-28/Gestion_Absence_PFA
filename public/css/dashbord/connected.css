@@ -44,7 +44,7 @@ nav {
         }
 
         li:nth-child(1) {
-            margin-right: 50%;
+            padding-right: 30%;
         }
     }
 }
