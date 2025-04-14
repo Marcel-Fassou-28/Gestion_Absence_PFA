@@ -99,8 +99,6 @@ CREATE TABLE Professeur (
     CONSTRAINT fk_admin_professeur FOREIGN KEY (cinProf) REFERENCES Utilisateur(cin) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
-
 -- Table Étudiant
 CREATE TABLE Etudiant (
     idEtudiant INT PRIMARY KEY AUTO_INCREMENT,
@@ -142,4 +140,22 @@ CREATE TABLE ListePresence (
     idFiliere INT NOT NULL,
     imageJustificatif MEDIUMBLOB,
     CONSTRAINT fk_liste_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere)
+);
+
+-- Table Message
+CREATE TABLE Message (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    objet VARCHAR(250) NOT NULL,
+    contenu TEXT NOT NULL, 
+    idExpediteur VARCHAR(20) NOT NULL, 
+    idDestinataire VARCHAR(20) NOT NULL, 
+    typeDestinataire ENUM('admin', 'etudiant') NOT NULL,
+    lu ENUM('oui', 'non') DEFAULT 'non', 
+
+    CONSTRAINT fk_message_expediteur FOREIGN KEY (idExpediteur) 
+        REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT fk_message_destinataire FOREIGN KEY (idDestinataire) 
+        REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
