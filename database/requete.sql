@@ -134,11 +134,12 @@ CREATE TABLE Justificatif (
 -- Table ListePrésence
 CREATE TABLE ListePresence (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    cinProf VARCHAR(20) NOT NULL,
     date DATE NOT NULL,
-    niveau VARCHAR(50) NOT NULL,
-    idFiliere INT NOT NULL,
+    classe VARCHAR(10) NOT NULL,
     imageJustificatif MEDIUMBLOB,
-    CONSTRAINT fk_liste_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere)
+    CONSTRAINT fk_liste_professeur FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE,
+    CONSTRAINT fk_liste_classe FOREIGN KEY (classe) REFERENCES Classe(nomClasse) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Table Message

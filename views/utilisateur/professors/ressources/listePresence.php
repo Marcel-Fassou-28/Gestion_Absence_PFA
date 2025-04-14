@@ -73,11 +73,11 @@ $dateSql = $date->format('Y-m-d H:i:s');
             <h2>Liste de présence</h2>
             <div class="upload-desktop">
                 <label for="presence-file">Uploader un fichier :</label>
-                <input type="file" id="presence-file" accept=".pdf,image/*">
+                <input type="file" id="presence-file" name="absence-list" accept=".pdf,image/*">
             </div>
             <div id="upload-mobile">
                 <label for="presence-camera">Prendre une photo :</label>
-                <input type="file" id="presence-camera" accept="image/*" capture="environment">
+                <input type="file" id="presence-camera" name="absence-list" accept="image/*" capture="environment">
             </div>
             <div class="modal-buttons">
                 <button type="button" class="btn-modal close-modal">Annuler</button>

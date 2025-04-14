@@ -6,9 +6,9 @@ namespace App\Model;
  * Cette classe est un modèle qui caractérise une Liste de Présence
  * 
  * @property int $id
+ * @property string $cinProf
  * @property string $date
- * @property string $niveau
- * @property int $idFiliere
+ * @property string $classe
  * @property $imageJustificatif
  */
 class ListePresence {
@@ -23,25 +23,25 @@ class ListePresence {
     protected $date;
     
     /**
-     * @var string $niveau
+     * @var string $classe
      */
-    protected $niveau;
+    protected $classe;
     
     /**
-     * @var int $idFiliere
+     * @var string $cinProf
      */
-    protected $idFiliere;
+    protected $cinProf;
     
     /**
      * @var $imageJustificatif
      */
     protected $imageJustificatif;
 
-    /*public function __construct(int $id, string $date, string $niveau, int $idFiliere, string $imageJustificatif) {
+    /*public function __construct(int $id, string $date, string $classe, string $cinProf, $imageJustificatif) {
         $this->id = $id;
         $this->date = $date;
-        $this->niveau = $niveau;
-        $this->idFiliere = $idFiliere;
+        $this->classe = $classe;
+        $this->cinProf = $cinProf;
         $this->imageJustificatif = $imageJustificatif;
     }*/
 
@@ -86,35 +86,35 @@ class ListePresence {
      * 
      * @return string|null
      */
-    public function getNiveau(): ?string {
-        return $this->niveau;
+    public function getClasse(): ?string {
+        return $this->classe;
     }
 
     /**
      * Setters
      * 
-     * @param string $niveau
+     * @param string $classe
      */
-    public function setNiveau(string $niveau) {
-        $this->niveau = $niveau;
+    public function setNiveau(string $classe) {
+        $this->classe = $classe;
     }
 
     /**
      * Getters
      * 
-     * @return int|null
+     * @return string|null
      */
-    public function getIdFiliere(): ?int {
-        return $this->idFiliere;
+    public function getCINProf(): ?string {
+        return $this->cinProf;
     }
 
     /**
      * Setters
      * 
-     * @param int $idFiliere
+     * @param string $cinProf
      */
-    public function setIdFiliere(int $idFiliere) {
-        $this->idFiliere = $idFiliere;
+    public function setCINProf(string $cinProf) {
+        $this->cinProf = $cinProf;
     }
 
     /**

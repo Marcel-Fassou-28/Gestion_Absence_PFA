@@ -36,7 +36,7 @@
         <div class="main-navlink">
             <ul class="navlink-container">
                 <li><a href="<?= $urlUser['home'] ?>" aria-current="page">Accueil</a></li>
-                <li><a href="<?= $router->url('student-dashboard') ?>">Dashboard</a></li>
+                <li><a href="<?= $urlUser['dashboard'] ?>">Dashboard</a></li>
             </ul>
             <div class="profil">
                 <a class="profil-img">

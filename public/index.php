@@ -13,7 +13,7 @@ $router
     ->get('/login/reset-password/recover/[*:id]', 'utilisateur/recovery/passwordRecover', 'password-recovery')
 
     /* Lorsque l'utilisateur est connecté */
-    ->get('/home/[*:id]/my/[*:role]', 'utilisateur/home','user-home')
+    ->get('/home/my/[*:role]/[*:id]', 'utilisateur/home','user-home')
 
     ->get('/my/professors/dashboard', 'utilisateur/professors/dashboard','professor-dashboard')
     ->get('/my/admin/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
