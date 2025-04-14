@@ -317,6 +317,13 @@
         padding: 0.35rem 0.7rem;
     }
 
+    .personal-info div:first-child {
+        flex-direction: column;
+
+        p:nth-child(2) {
+            margin-top: -12.5px;
+        }
+    }
 
     .personal-info p:first-child,
     .academic-section p:first-child {

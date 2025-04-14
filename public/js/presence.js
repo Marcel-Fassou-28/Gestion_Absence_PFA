@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
             modalContent.classList.add('active');
             document.body.style.overflow = 'hidden';
             // Centre dynamiquement
-            modalContent.style.top = '50%';
-            modalContent.style.left = '50%';
+            modalContent.style.top = '50vh';
+            modalContent.style.left = '50vw';
             modalContent.style.transform = 'translate(-50%, -50%)';
         });
     }
@@ -117,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     }
     
-    // Affiche uniquement l'input correspondant à l'appareil
     window.addEventListener('DOMContentLoaded', () => {
         if (isMobileDevice()) {
             document.querySelector('#upload-desktop').style.display = 'none';

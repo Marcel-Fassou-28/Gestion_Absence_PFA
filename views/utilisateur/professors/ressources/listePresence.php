@@ -42,6 +42,30 @@ $dateSql = $date->format('Y-m-d H:i:s');
             </button>
         </div>
     </div>
+    <div class="documentation">
+        <div class="documentation-intro" >
+            <h1>documentation</h1>
+        </div>
+        <div class="hr"></div>
+        <div class="documentation-container">
+        <section class="container how-to-scan">
+            <h2>Comment Scanner</h2>
+            <div class="hr"></div>
+            <div class="use-info">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta quidem ab iste vitae aut harum laudantium illum quas. Itaque ullam ipsa tempora modi ab maiores! Fuga ad, porro cumque, quas saepe placeat in eligendi labore vero provident minus, odit dolores vel possimus ab ea unde! Nemo vel quas totam in.
+            </div>
+            
+        </section>
+        <section class="container how-to-check">
+            <h2>Effectuer la présence</h2>
+            <div class="hr"></div>
+            <div class="use-info">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas, natus quam! Aspernatur omnis rerum libero voluptate, perferendis perspiciatis ex cumque praesentium, quo odit alias? Sapiente aspernatur itaque beatae eius minima vitae! Delectus rerum officiis nisi porro. Tempora omnis commodi dicta nesciunt reiciendis, minus voluptatum quidem quis esse dignissimos quisquam laboriosam veritatis. Possimus fuga ex, vero quo assumenda vel architecto unde sed veniam veritatis quam quisquam laboriosam, laudantium inventore quibusdam atque voluptate quasi quis recusandae eius dicta tenetur enim delectus. Quidem reprehenderit ad provident nulla quas pariatur aspernatur nam suscipit numquam molestias temporibus vitae unde, repudiandae eos voluptate culpa sunt ex?
+            </div>
+
+        </section>
+        </div>
+    </div>
     <!-- Boîte modale pour le scanner -->
     <div class="modal-box" id="scanner-modal">
         <div class="modal-box-overlay"></div>

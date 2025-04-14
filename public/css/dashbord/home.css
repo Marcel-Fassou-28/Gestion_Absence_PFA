@@ -1,7 +1,7 @@
 .presentation-section {
     position: absolute;
     left: 10%;
-    top: 350px;
+    top: 55vh;
     right: 10px;
 
     div {
@@ -25,7 +25,7 @@
             border-radius: 20px;
             width: 150px;
             background-color: var(--bg-btn);
-            padding: 10px 15px;
+            padding: 5px 10px;
 
             a {
                 font-weight: 600;
