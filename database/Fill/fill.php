@@ -57,13 +57,19 @@ $pdo->exec("INSERT INTO matiere (idMatiere, cinProf, nomMatiere, idFiliere, idCl
     (5, 'JK84785592', 'Cryptographie', 2, 4),
     (6, 'O00790130', 'Developpement Web et Java', 2, 5)");
 
-$pdo->exec("INSERT INTO creneaux (heureDebut, heureFin, cinProf, idMatiere) VALUES
-    ('08:30:00', '10:20:00', 'O00790130', 1),
-    ('10:30:00', '12:20:00','O00790130', 2),
-    ('18:00:00', '20:20:00','JK84785592', 3),
-    ('13:30:00', '15:20:00', 'JK84785592', 4),
-    ('08:30:00', '10:20:00','JK84785592', 5),
-    ('00:00:00', '23:20:00','O00790130', 6)");
+$pdo->exec("INSERT INTO creneaux (jourSemaine,heureDebut, heureFin, cinProf, idMatiere) VALUES
+    ('Lundi', '08:30:00', '10:20:00', 'O00790130', 1),
+    ('Mardi', '10:30:00', '12:20:00','O00790130', 2),
+    ('Mercredi', '18:00:00', '20:20:00','JK84785592', 3),
+    ('Jeudi', '13:30:00', '15:20:00', 'JK84785592', 4),
+    ('Vendredi', '08:30:00', '10:20:00','JK84785592', 5),
+    ('Lundi', '00:00:00', '23:20:00','O00790130', 6),
+    ('Mardi', '00:00:00', '23:20:00','O00790130', 6),
+    ('Mercredi', '00:00:00', '23:20:00','O00790130', 6),
+    ('Jeudi', '00:00:00', '23:20:00','JK84785592', 3),
+    ('Lundi', '00:00:00', '23:20:00','JK84785592', 3),
+    ('Mardi', '00:00:00', '23:20:00','JK84785592', 3),
+    ('Mercredi', '00:00:00', '23:20:00','JK84785592', 3)");
 
 $pdo->exec("INSERT INTO `niveau` (`idNiveau`, `nomNiveau`) VALUES
 (1, '1ere Année'),
