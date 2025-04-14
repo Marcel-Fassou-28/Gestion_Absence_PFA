@@ -91,8 +91,8 @@ class Router {
                 case 'admin':
                     $urlUser = [
                         'dashboard' => $router->url('administrator-dashboard'),
-                        'home' => $router->url('administrator-home'),
-                        'profil' => $router->url('admin-profil'),
+                        'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
+                        'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
                         'listeProfesseurs' => $router->url('liste_Des_Professeur'),
                         'justifications' => $router->url('justification')
                         
@@ -101,16 +101,16 @@ class Router {
                 case 'professeur':
                     $urlUser = [
                         'dashboard' => $router->url('professor-dashboard'),
-                        'home' => $router->url('professor-home'),
-                        'profil' => $router->url('professor-profil'),
+                        'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
+                        'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
                         'listeProfesseurs' => $router->url('liste_Des_Professeur')
                     ];
                     break;
                 case 'etudiant':
                     $urlUser = [
                         'dashboard' => $this->url('student-dashboard'),
-                        'home' => $this->url('student-home'),
-                        'profil' => $router->url('etudiant-profil'),
+                        'home' => $this->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
+                        'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
                         'listeProfesseurs' => $router->url('liste_Des_Professeur')
                     ];
                     break;
