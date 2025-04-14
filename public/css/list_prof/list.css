@@ -60,6 +60,16 @@ hr {
 
 }
 
+.heads tr th:first-child {
+    border-radius: 10px 0 0 0;
+}
+
+.heads tr th:last-child {
+    border-radius: 0 10px 0 0;
+}
+
+
+
 td {
     background-color: white;
     color: black;
