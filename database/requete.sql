@@ -78,15 +78,14 @@ CREATE TABLE Matiere(
 
 -- Table Créneaux
 CREATE TABLE Creneaux (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    jourSemaine ENUM('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'),
     heureDebut TIME NOT NULL,
     heureFin TIME NOT NULL,
     cinProf VARCHAR(20) NOT NULL,
     idMatiere INT NOT NULL,
-    /*idClasse INT NOT NULL,*/
-    CONSTRAINT pk_creneaux PRIMARY KEY (cinProf, idMatiere),
     CONSTRAINT fk_creneaux_prof FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_creneaux_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere) ON UPDATE CASCADE ON DELETE CASCADE
-    /*CONSTRAINT fk_creneaux_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere) ON UPDATE CASCADE ON DELETE CASCADE */
 );
 
 -- Table Professeur

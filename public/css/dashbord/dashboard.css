@@ -121,11 +121,48 @@
     padding: 1.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
     gap: 2rem;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeIn 0.5s forwards;
+}
+
+.dashboard-container .statistic {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    grid-template-rows: 1fr 1fr;
+}
+
+.last-absence h2, .creneaux h2, .classe-stat h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.list-statistic,
+.list-creneaux,
+.list-info-absence {
+    background-color: #1c1d1e55;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 0;
+    list-style: none;
+}
+
+.list-statistic li,
+.list-creneaux li,
+.list-info-absence li {
+    margin-bottom: 0.75rem;
+}
+
+.list-creneaux li:last-child,
+.list-statistic li:last-child,
+.list-info-absence li:last-child {
+    margin-bottom: 0;
 }
 
 @keyframes fadeIn {
@@ -133,6 +170,11 @@
 }
 
 /* Sections Liens Utiles et Historiques */
+
+.link-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
 .use-link,
 .historic {
     display: flex;
