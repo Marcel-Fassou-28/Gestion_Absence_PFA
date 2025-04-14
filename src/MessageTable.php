@@ -1,6 +1,6 @@
 <?php
 namespace App;
-
+use App\Abstract\Table;
 use App\Model\Message;
 
 class MessageTable extends Table {
