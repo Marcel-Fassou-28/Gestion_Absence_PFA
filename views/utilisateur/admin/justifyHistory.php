@@ -7,6 +7,7 @@ $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
 $listeJustificatif = $list->getAllJustificatif();
+
 ?>
 
 <div id="interface">

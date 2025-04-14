@@ -1,14 +1,15 @@
-
 .presentation-section {
-    transform: translate(12%, 350px);
+    position: absolute;
+    left: 10%;
+    top: 55vh;
+    right: 10px;
 
     div {
         color: var(--text-color);
         background-color: var(--bg-section-abstract);
         text-align: center;
-        padding: 15px;
+        padding: 15px 30px;
         border-radius: 30px;
-        width: 41.66%;
         max-width: 500px;
         display: flex;
         justify-content: center;
@@ -24,10 +25,11 @@
             border-radius: 20px;
             width: 150px;
             background-color: var(--bg-btn);
-            padding: 10px 15px;
+            padding: 5px 10px;
 
             a {
                 font-weight: 600;
+                color: var(--text-color);
             }
         } 
     }

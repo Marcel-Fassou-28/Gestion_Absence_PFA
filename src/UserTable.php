@@ -36,7 +36,7 @@ class UserTable extends Table {
     /**
      * Cette methode a pour role de reourner les information d'un utilisateur
      * 
-     * @param string $role
+     * @param string $cin
      * @return object
      */
     public function getIdentification(string $cin):Utilisateur {

@@ -12,7 +12,7 @@ use App\Model\Matiere;
 use App\Model\Utilisateur;
 
 use App\Model\Justificatif;  
-use App\ProfessorTable;
+use App\Professeur\ProfessorTable;
 
 class adminTable extends ProfessorTable {
     protected $tableDepartement = "departement";

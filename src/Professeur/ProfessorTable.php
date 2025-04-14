@@ -1,22 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Professeur;
 
 use App\Model\Etudiant;
 use App\Model\Filiere;
 use App\Abstract\Table;
-use App\Model\Absence;
 use App\Model\Absents;
 use App\Model\Classe;
 use App\Model\Matiere;
-use App\Model\Professeur;
+use App\Model\AbsenceEtudiant;
 
 class ProfessorTable extends Table {
 
-    /**
-     * @var bool|null $errorMessage
-     */
-    protected $errorMessage;
+    private $listeComplete = [];
     
 
     /**
@@ -29,8 +25,8 @@ class ProfessorTable extends Table {
     public function findStudent(string $cinProf):array {
         $query = $this->pdo->prepare('
             SELECT DISTINCT e.idEtudiant, e.nom, e.prenom, e.cne, e.cinEtudiant, e.email
-            FROM etudiant e JOIN classe c ON e.idClasse = c.idClasse JOIN 
-            matiere m ON c.idClasse = m.idMatiere WHERE m.cinProf = :cinProf');
+            FROM professeur p JOIN matiere m ON p.cinProf = m.cinProf JOIN 
+            classe c ON m.idClasse = c.idClasse JOIN etudiant e ON e.idClasse = c.idClasse WHERE p.cinProf = :cinProf');
             
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Etudiant::class);
@@ -45,76 +41,16 @@ class ProfessorTable extends Table {
      * @param string $class
      * @return array
      */
-    public function findStudentByClass(string $class):array {
+    public function findStudentByClass(int $idClass):array {
         $query = $this->pdo->prepare('
-            SELECT e.idEtudiant, e.nom, e.prenom, e.cne, e.cinEtudiant, e.email FROM 
-            etudiant e JOIN classe c ON e.idClasse = c.idClasse WHERE c.nomClasse = :class');
+            SELECT e.idEtudiant, e.nom, e.prenom, e.cne, e.cinEtudiant, e.email, e.idClasse FROM 
+            etudiant e WHERE e.idClasse = :idClasse');
 
-        $query->execute(['class' => $class]);
+        $query->execute(['idClasse' => $idClass]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Etudiant::class);
         $result = $query->fetchAll();
 
         return count($result) != 0 ? $result : [];
-    }
-
-    /**
-     * Cette methode permet de retourner la liste des filiere
-     * en passant le cin du Prof en paramètre
-     * 
-     * @param string $cinProf
-     * @return object|null
-     */
-    public function getCurrentFiliere(string $cinProf):?Filiere {
-        $query = $this->pdo->prepare('
-            SELECT f.* FROM creneaux c JOIN matiere m ON c.idMatiere = m.idMatiere
-            JOIN classe cl ON m.idClasse = cl.idClasse JOIN filiere f ON cl.idFiliere = f.idFiliere
-            WHERE c.cinProf = :cinProf AND CURRENT_TIME BETWEEN c.heureDebut AND c.heureFin');
-
-        $query->execute(['cinProf' => $cinProf]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, Filiere::class);
-        $result = $query->fetch();
-
-        return $result;
-    }
-
-    /**
-     * Cette methode permet de retourner la liste des matiere
-     * en passant le cin d'un professeur en paramètre
-     * 
-     * @param string $cinProf
-     * @return object|null
-     */
-    public function getCurrentMatiere(string $cinProf):?Matiere {
-        $query = $this->pdo->prepare('
-            SELECT m.* FROM creneaux c JOIN matiere m ON c.idMatiere = m.idMatiere
-            JOIN classe cl ON m.idClasse = cl.idClasse JOIN filiere f ON cl.idFiliere = f.idFiliere
-            WHERE c.cinProf = :cinProf AND CURRENT_TIME BETWEEN c.heureDebut AND c.heureFin');
-            
-        $query->execute(['cinProf' => $cinProf]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, Matiere::class);
-        $result = $query->fetch();
-
-        return $result;
-    }
-
-    /**
-     * Cette methode permet de retourner la liste des classes dans lesquelles
-     * un professeur enseigne, ici le cin du prof en question est passé en paramètre
-     * 
-     * @param string $cinProf
-     * @return object
-     */
-    public function getCurrentClasse(string $cinProf): ?Classe {
-        $query = $this->pdo->prepare('
-            SELECT cl.* FROM creneaux c JOIN matiere m ON c.idMatiere = m.idMatiere
-            JOIN classe cl ON m.idClasse = cl.idClasse JOIN filiere f ON cl.idFiliere = f.idFiliere
-            WHERE c.cinProf = :cinProf AND CURRENT_TIME BETWEEN c.heureDebut AND c.heureFin');
-
-        $query->execute(['cinProf' => $cinProf]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, Classe::class);
-        $result = $query->fetch();
-
-        return $result;
     }
 
     /**
@@ -154,10 +90,10 @@ class ProfessorTable extends Table {
      */
     public function getNbrAbsence(string $cinProf, int $idClass, int $idMatiere):?array {
         $query = $this->pdo->prepare('
-            SELECT e.cinEtudiant, e.nom, e.prenom, e.cne, COUNT(a.idAbsence) AS nbrAbsence
-            FROM absence a JOIN etudiant e ON a.cinEtudiant = e.cinEtudiant 
-            JOIN classe c ON e.idClasse = c.idClasse JOIN matiere m ON a.idMatiere = m.idMatiere 
-            WHERE m.cinProf = :cinProf AND m.idClasse = :idClasse AND m.idMatiere = :idMatiere
+            SELECT e.cinEtudiant, e.nom, e.prenom, e.email, e.cne, COUNT(a.idAbsence) AS nbrAbsence
+            FROM absence a JOIN etudiant e ON a.cinEtudiant = e.cinEtudiant JOIN matiere m ON a.idMatiere = m.idMatiere
+            JOIN classe c ON e.idClasse = c.idClasse WHERE m.cinProf = :cinProf AND m.idClasse = :idClasse AND m.idMatiere = :idMatiere
+            GROUP BY e.cinEtudiant, e.nom, e.cne ORDER BY nbrAbsence DESC
         ');
 
         $query->execute([
@@ -189,32 +125,6 @@ class ProfessorTable extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, Absents::class);
         $result = $query->fetchAll();
         return count($result) > 0 ? $result : null;
-    }
-
-    public function studentCurrent(string $cinProf) {
-        $query = $this->pdo->prepare('
-            SELECT DISTINCT e.* FROM etudiant e JOIN classe cl ON e.idClasse = cl.idClasse 
-            JOIN matiere m ON cl.idClasse = m.idClasse JOIN creneaux cr ON m.idMatiere = cr.idMatiere 
-            JOIN professeur p ON cr.cinProf = p.cinProf WHERE p.cinProf = :cinProf 
-            AND CURRENT_TIME BETWEEN cr.heureDebut AND cr.heureFin;
-        ');
-
-        $query->execute(['cinProf' => $cinProf]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, Etudiant::class);
-        $result = $query->fetchAll();
-        return count($result) > 0 ? $result : null;
-    }
-
-    public function getCreneau(string $cinProf) {
-        $query = $this->pdo->prepare('
-            SELECT c.* FROM creneaux c WHERE c.cinProf = :cinProf 
-            AND CURRENT_TIME BETWEEN c.heureDebut AND c.heureFin');
-
-        $query->execute(['cinProf' => $cinProf]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, \App\Model\Creneaux::class);
-        $result = $query->fetch();
-
-        return $result;
     }
 
     public function getFiliere(string $cinProf) :?array {
@@ -254,5 +164,61 @@ class ProfessorTable extends Table {
 
         return count($result) != 0 ? $result : null;
     }
+
+    public function getAllStudentList(array $studentList, array $absenceList):array {
+        $this->listeComplete = [];
+        foreach ($studentList as $etudiant) {
+            $absenceTrouvee = false;
+            if ($absenceList) {
+                foreach ($absenceList as $absent) {
+                    if ($etudiant->getCIN() === $absent->getCINEtudiant()) {
+                        $this->listeComplete[] = new AbsenceEtudiant(
+                            $etudiant->getCIN(),
+                            $etudiant->getNom(),
+                            $etudiant->getPrenom(),
+                            $etudiant->getEmail(),
+                            $etudiant->getCNE(),
+                            $absent->getNbrAbsence()
+                        );
+                        $absenceTrouvee = true;
+                        break;
+                    }
+                }
+            }
+            if (!$absenceTrouvee) {
+                $this->listeComplete[] = new AbsenceEtudiant(
+                    $etudiant->getCIN(),
+                    $etudiant->getNom(),
+                    $etudiant->getPrenom(),
+                    $etudiant->getEmail(),
+                    $etudiant->getCNE(),
+                    0
+                );
+            }
+        }
+        return $this->listeComplete;
+    }
+
+        /**
+     * Permet de retourner la liste de tous les étudiants et leurs situations d'absence
+     * 
+     * @param string $cinProf
+     * @return array
+     */
+    public function getAllStudentAbsenceState(string $cinProf):?array {
+        $query = $this->pdo->prepare('
+            SELECT e.cinEtudiant, e.nom, e.prenom,e.email, e.cne, COUNT(a.idAbsence) AS nbrAbsence
+            FROM professeur p JOIN matiere m ON p.cinProf = m.cinProf JOIN 
+            absence a ON a.idMatiere = m.idMatiere JOIN etudiant e ON e.cinEtudiant = a.cinEtudiant
+            WHERE m.cinProf = :cinProf GROUP BY e.cinEtudiant, e.nom, e.prenom, e.cne ORDER BY nbrAbsence DESC
+        ');
+
+        $query->execute(['cinProf' => $cinProf]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, Absents::class);
+        $result = $query->fetchAll();
+
+        return $result;
+    }
+
 
 }

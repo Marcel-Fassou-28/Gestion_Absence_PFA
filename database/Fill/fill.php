@@ -52,10 +52,10 @@ $pdo->exec("INSERT INTO filiere (idFiliere, nomFiliere, alias, idDepartement) VA
 $pdo->exec("INSERT INTO matiere (idMatiere, cinProf, nomMatiere, idFiliere, idClasse) VALUES
     (1, 'O00790130', 'Théorie des langages et Compilation', 1, 1),
     (2, 'O00790130', 'Informatique Théorique', 1, 1),
-    (3, 'JK84785592', 'POO Java', 2, 7),
-    (4, 'JK84785592', 'Informatique Théorique et Sécurité', 3, 4),
-    (5, 'JK84785592', 'Cryptographie', 1, 4),
-    (6, 'O00790130', 'Developpement Web et Java', 3, 5)");
+    (3, 'JK84785592', 'POO Java', 3, 7),
+    (4, 'JK84785592', 'Informatique Théorique et Sécurité', 2, 4),
+    (5, 'JK84785592', 'Cryptographie', 2, 4),
+    (6, 'O00790130', 'Developpement Web et Java', 2, 5)");
 
 $pdo->exec("INSERT INTO creneaux (heureDebut, heureFin, cinProf, idMatiere) VALUES
     ('08:30:00', '10:20:00', 'O00790130', 1),
