@@ -20,7 +20,7 @@ $router
 
     ->get('/my/dashboard', 'utilisateur/professors/dashboard','professor-dashboard')
     ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
-    ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
+    ->get('/my/dashboard/etudiant', 'utilisateur/students/dashboard','student-dashboard')
     ->get('/my/profil','utilisateur/profil','admin-profil')
     ->get('/my/profil','utilisateur/profil','professor-profil')
     ->get('/my/profil','utilisateur/profil','etudiant-profil')
@@ -42,7 +42,6 @@ $router
     ->match('/my/liste-des-professeurs', 'utilisateur/admin/listeProfesseur','liste_Des_Professeur')
     ->match('/my/justificatif','utilisateur/admin/justifyHistory','justification')
 
-    ->match('/api/matiere_classe', 'api/get_matiere_classe', 'api')
     
     ->run();
     

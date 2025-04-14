@@ -2,7 +2,6 @@
 
 namespace App\Utils;
 
-use App\Connection;
 use App\Abstract\Table;
 use App\Model\Creneaux;
 
