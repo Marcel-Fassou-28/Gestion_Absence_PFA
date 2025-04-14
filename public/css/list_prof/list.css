@@ -1,0 +1,68 @@
+.test{
+    
+    padding: 1px;
+    color: var(--text-color);
+
+}
+.prof-list {
+    margin: 15px 10%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-section-abstract);
+    color: var(--text-color);
+
+
+}
+
+hr {
+
+    background-color: white;
+    height: 5px;
+    border-radius: 10px;
+}
+
+.tri-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#tri {
+    width: 25%;
+    height: 50px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.tri-list input {
+    border-radius: 10px;
+
+    border: none;
+    height: 50px;
+    width: 10%;
+    text-align: center;
+}
+
+
+.prof-table {
+    width: 100%;
+    text-align: center;
+
+}
+
+.heads th{
+
+    padding: 10px;
+    background-color: var(--navbar-color);
+    
+
+}
+
+td {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    border: solid 1px var(--bg-section-abstract);
+}
