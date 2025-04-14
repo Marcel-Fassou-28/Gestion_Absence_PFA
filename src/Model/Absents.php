@@ -10,7 +10,7 @@ namespace App\Model;
  * @property string $prenom
  * @property string $email
  * @property string $cne
- * @property string $nbrAbsence
+ * @property int $nbrAbsence
  */
 class Absents {
     /**
