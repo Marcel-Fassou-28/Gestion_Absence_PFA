@@ -40,7 +40,7 @@ if (!empty($_POST)) {
             $_SESSION['role'] = $user->getRole();
             $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
 
-            header('Location:' . $router->url('authenticated', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));
+            header('Location:' . $router->url('user-home', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));
             exit();
         }else {
             $errorPassword = true;

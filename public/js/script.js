@@ -121,3 +121,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+// Pour ouvrire le formulaire du message
+document.addEventListener("DOMContentLoaded", function() {
+    const btn = document.querySelector(".btn-nouveau-message"); // bonne classe
+    const form = document.querySelector(".new-msg"); 
+
+    btn.addEventListener("click", function () {
+        if (form.style.display === "none" || form.style.display === "") {
+            form.style.display = "flex"; 
+        } else {
+            form.style.display = "none"; // Cacher si déjà affiché
+        }
+    });
+});

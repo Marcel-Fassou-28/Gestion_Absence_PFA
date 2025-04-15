@@ -11,21 +11,15 @@ $router
     ->match('/login', 'login/login', 'page-connexion')
     ->get('/login/reset-password', 'utilisateur/recovery/resetPassword', 'forget-password')
     ->get('/login/reset-password/recover/[*:id]', 'utilisateur/recovery/passwordRecover', 'password-recovery')
-    ->match('/login/[*:id]/my/[*:role]', 'utilisateur/redirect', 'authenticated')
 
     /* Lorsque l'utilisateur est connecté */
-    ->get('/my', 'utilisateur/professors/home','professor-home')
-    ->get('/my', 'utilisateur/admin/home','administrator-home')
-    ->get('/my', 'utilisateur/students/home','student-home')
+    ->get('/home/my/[*:role]/[*:id]', 'utilisateur/home','user-home')
 
-    ->get('/my/dashboard', 'utilisateur/professors/dashboard','professor-dashboard')
-    ->get('/my/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
-    ->get('/my/dashboard', 'utilisateur/students/dashboard','student-dashboard')
-    ->get('/my/profil','utilisateur/profil','admin-profil')
-    ->get('/my/profil','utilisateur/profil','professor-profil')
-    ->get('/my/profil','utilisateur/profil','etudiant-profil')
+    ->get('/my/professors/dashboard', 'utilisateur/professors/dashboard','professor-dashboard')
+    ->get('/my/admin/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
+    ->get('/my/students/dashboard', 'utilisateur/students/dashboard','student-dashboard')
 
-    ->get('/my/dashboard-etudiant','utilisateur/students/dashboard','dashboard')
+    ->get('/my/profil/[*:role]','utilisateur/profil','user-profil')
 
     /* Contenu pour les profs */
     ->match('/my/use/calendrier', 'utilisateur/professors/ressources/calendrier','professor-calendrier')
@@ -46,6 +40,14 @@ $router
 
     
     ->match('/api/matiere_classe', 'api/get_matiere_classe', 'api')
+    ->match(  '/my/admin/messagerie', 'utilisateur/admin/messagerie','admin-messagerie')
     
+    // Contenu pour les étudiants
+    ->match(  '/my/etudiant/messagerie', 'utilisateur/etudiant/messagerie','etudiant-messagerie')
+    ->match('/my/etudiant/historique/absence', 'utilisateur/etudiant/historique/absences','etudiant-absences')
+
+
+
+
     ->run();
     

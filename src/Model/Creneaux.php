@@ -4,7 +4,8 @@ namespace App\Model;
 
 /**
  * Cette classe est définie pour caractériser un Créneau
- * 
+ * @property int $id
+ * @property string $jourSemaine
  * @property string $heureDebut
  * @property string $heureFin
  * @property string $cinProf
@@ -13,32 +14,81 @@ namespace App\Model;
 class Creneaux {
 
     /**
+     * @var int $id
+     */
+    private $id;
+
+    /**
+     * @var string $jourSemaine
+     */
+    private $jourSemaine;
+
+    /**
      * @var string $heureDebut
      */
-    protected $heureDebut;
+    private $heureDebut;
 
     /**
      * @var string $heureFin
      */
-    protected $heureFin;
+    private $heureFin;
 
     /**
      * @var string $cinProf
      */
-    protected $cinProf;
+    private $cinProf;
 
     /**
      * @var int $idMatiere
      */
-    protected $idMatiere;
+    private $idMatiere;
 
-    /*public function __construct($heureDebut, $heureFin, $cinProf, $idMatiere)
+    /*public function __construct(int $id, string $jourSemaine,string $heureDebut,string $heureFin,string $cinProf,int $idMatiere)
     {
+        $this->id = $id;
+        $this->jourSemaine = $jourSemaine;
         $this->heureDebut = $heureDebut;
         $this->heureFin = $heureFin;
         $this->cinProf = $cinProf;
         $this->idMatiere = $idMatiere;
     }*/
+
+    /**
+     * Getters
+     * 
+     * @return int|null
+     */
+    public function getID() : ?int {
+        return $this->id;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param int|null
+     */
+    public function setID(int $id) {
+        $this->id = $id;
+    }
+
+    /**
+     * Getters
+     * 
+     * @return string|null
+     */
+    public function getJourSemaine() : ?string {
+        return $this->jourSemaine;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string|null
+     */
+    public function setJourSemaine(string $jourSemaine) {
+        $this->jourSemaine = $jourSemaine;
+    }
+
 
     /**
      * Getters

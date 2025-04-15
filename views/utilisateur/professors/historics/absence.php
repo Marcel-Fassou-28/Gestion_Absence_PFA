@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-use App\ProfessorTable;
+use App\Professeur\ProfessorTable;
 use App\Connection;
 
 $pdo = Connection::getPDO();

@@ -1,71 +1,8 @@
-/*.dashboard {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 80%;
-    color: var(--text-color);
-    padding-top: 2%;
-}
-
-.dashboard-intro {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 5px 20px 2px 20px;
-
-}
-
-.dashboard-container {
-    background-color: #1c1d1e66;
-    padding: 10px;
-    border-radius: 10px;
-    align-items: center;
-}
-
-.date-output {
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    font-weight: 550;
-}
-
-.use-link-list {
-    border-radius: 5px;
-    padding: 15px 20px;
-    margin: 25px 10px;
-    background-color: #1c1d1e55;
-}
-
-.use-link-list li {
-    margin-bottom: 7.5px;
-}
-
-.historic-list {
-    border-radius: 10px;
-    padding: 15px 20px;
-    margin: 25px 10px;
-    background-color: #1c1d1e55;
-}
-
-.historic-list li {
-    margin-bottom: 7.5px;
-}
-
-.hr {
-    border: none;
-    width: 100%;
-    height: 2.5px;
-    background-color: var(--text-color);
-    margin-top: -5px;
-}
-*/
-
 /* Conteneur principal */
 .dashboard {
     max-width: 80%;
     margin: 0 auto;
-    padding: 2% 0;
-    padding-top: 5%;
+    padding: 2rem 0;
     color: var(--text-color);
     display: flex;
     flex-direction: column;
@@ -74,7 +11,7 @@
 
 /* Introduction avec titre, utilisateur, et date */
 .dashboard-intro {
-    padding: 0 3%;
+    padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -95,10 +32,10 @@
 .date-today {
     background-color: var(--navbar-color);
     color: var(--text-color);
-    padding: 0.4rem 0.8rem;
+    padding: 0.5rem 1rem;
     border-radius: 6px;
     font-size: 0.95rem;
-    font-weight: 550;
+    font-weight: 500;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -119,20 +56,230 @@
     background-color: #1c1d1e88;
     border-radius: 10px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeIn 0.5s forwards;
 }
 
+.dashboard-container .statistic {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+}
+
+.last-absence {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+.creneaux {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+}
+
+.classe-stat {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+.last-absence h2,
+.creneaux h2,
+.classe-stat h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-color);
+}
+
+/* Listes communes */
+.list-statistic,
+.list-creneaux,
+.list-info-absence {
+    background-color: #1c1d1e55;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 0;
+    list-style: none;
+    min-height: 80px;
+}
+
+/* Dernière absence */
+.list-info-absence {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.absence-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+.absence-empty {
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    padding: 0.5rem 0;
+}
+
+.absence-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.absence-detail:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.absence-label {
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.absence-value {
+    font-weight: 400;
+    text-align: right;
+    max-width: 60%;
+}
+
+/* Statistiques des classes */
+.list-statistic {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    padding: 0.5rem;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.stat-empty {
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    padding: 0.5rem 0;
+}
+
+.stat-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.stat-detail:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.stat-label {
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.stat-value {
+    font-weight: 400;
+    text-align: right;
+    max-width: 60%;
+}
+
+/* Créneaux */
+.creneau-day {
+    margin-bottom: 1rem;
+}
+
+.day-title {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 0.5rem;
+}
+
+.creneau-list {
+    list-style: none;
+    padding: 0 0 0 0.75rem;
+    margin: 0;
+}
+
+.creneau-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.creneau-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.creneau-time {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.creneau-info {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    text-align: right;
+}
+
+.creneau-current {
+    background-color: #8bb0f022;
+    border-left: 3px solid var(--navbar-color);
+}
+
+.current-marker {
+    padding: 0.2rem 0.6rem;
+    background-color: var(--navbar-color);
+    color: #fff;
+    font-size: 0.8rem;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
 @keyframes fadeIn {
-    to { opacity: 1; transform: translateY(0); }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Sections Liens Utiles et Historiques */
+.link-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
 .use-link,
 .historic {
     display: flex;
@@ -152,22 +299,22 @@
 .hr {
     border-top: 1px solid var(--text-color);
     opacity: 0.3;
-    margin: 0.5rem 0;
+    margin: 0.75rem 0;
 }
 
-/* Listes communes */
+/* Listes communes pour liens utiles et historiques */
 .use-link-list,
 .historic-list {
     background-color: #1c1d1e55;
     border-radius: 8px;
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     margin: 0;
     list-style: none;
 }
 
 .use-link-list li,
 .historic-list li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .use-link-list li:last-child,
@@ -178,26 +325,25 @@
 .use-link-list a,
 .historic-list a {
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
     color: var(--text-color);
     text-decoration: none;
     font-size: 1rem;
     font-weight: 500;
     border-radius: 6px;
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .use-link-list a:hover,
 .historic-list a:hover {
     background-color: var(--bg-btn);
-    transform: translateX(5px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transform: translateX(4px);
 }
 
 .use-link-list a:focus,
 .historic-list a:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
 /* Icônes pour Liens Utiles */
@@ -211,35 +357,21 @@
     margin-right: 0.5rem;
 }
 
-.use-link-list li:nth-child(3) a::before {
-    content: '\1F465'; /* Groupe d'étudiants */
-    margin-right: 0.5rem;
-}
-
-.use-link-list li:nth-child(4) a::before {
-    content: '\1F4D3'; /* Carnet/infos */
-    margin-right: 0.5rem;
-}
-
 /* Icônes pour Historiques */
 .historic-list li:nth-child(1) a::before {
     content: '\1F4CA'; /* Graphique/absences */
     margin-right: 0.5rem;
 }
 
-.historic-list li:nth-child(2) a::before {
-    content: '\1F4C8'; /* Graphique/stats */
-    margin-right: 0.5rem;
-}
-
 /* Responsive */
 @media screen and (max-width: 768px) {
     .dashboard {
-        max-width: 95%;
-        padding: 3% 0;
+        max-width: 90%;
+        padding: 1.5rem 0;
     }
 
     .dashboard-intro {
+        padding: 0 1rem;
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
@@ -252,7 +384,7 @@
     .user-info,
     .date-today {
         font-size: 0.9rem;
-        padding: 0.35rem 0.7rem;
+        padding: 0.4rem 0.8rem;
     }
 
     .user-info::before,
@@ -261,9 +393,68 @@
     }
 
     .dashboard-container {
-        grid-template-columns: 1fr;
         padding: 1rem;
-        gap: 1.5rem;
+        gap: 1rem;
+    }
+
+    .dashboard-container .statistic {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 1rem;
+    }
+
+    .last-absence,
+    .creneaux,
+    .classe-stat {
+        grid-column: 1 / 2;
+        grid-row: auto;
+    }
+
+    .list-info-absence,
+    .list-statistic {
+        padding: 0.75rem;
+        min-height: 60px;
+    }
+
+    .absence-item,
+    .stat-item {
+        font-size: 0.9rem;
+    }
+
+    .absence-empty,
+    .stat-empty {
+        font-size: 0.85rem;
+    }
+
+    .absence-detail,
+    .stat-detail {
+        padding: 0.2rem 0.4rem;
+    }
+
+    .absence-label,
+    .stat-label {
+        font-size: 0.9rem;
+    }
+
+    .absence-value,
+    .stat-value {
+        font-size: 0.9rem;
+    }
+
+    .list-creneaux {
+        padding: 0.75rem;
+    }
+
+    .creneau-item {
+        font-size: 0.9rem;
+    }
+
+    .creneau-info {
+        font-size: 0.85rem;
+    }
+
+    .current-marker {
+        font-size: 0.75rem;
     }
 
     .use-link h2,
@@ -273,7 +464,7 @@
 
     .use-link-list,
     .historic-list {
-        padding: 0.75rem 1rem;
+        padding: 0.75rem;
     }
 
     .use-link-list a,
@@ -308,6 +499,60 @@
         padding: 0.75rem;
     }
 
+    .list-info-absence,
+    .list-statistic {
+        padding: 0.6rem;
+    }
+
+    .absence-detail,
+    .stat-detail {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+
+    .absence-label,
+    .stat-label {
+        font-size: 0.85rem;
+    }
+
+    .absence-value,
+    .stat-value {
+        font-size: 0.85rem;
+        text-align: left;
+        max-width: 100%;
+    }
+
+    .absence-empty,
+    .stat-empty {
+        font-size: 0.8rem;
+    }
+
+    .list-creneaux {
+        padding: 0.6rem;
+        min-height: 60px;
+    }
+
+    .day-title {
+        font-size: 1rem;
+    }
+
+    .creneau-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .creneau-time,
+    .creneau-info {
+        font-size: 0.85rem;
+    }
+
+    .creneau-info {
+        text-align: left;
+    }
+
     .use-link h2,
     .historic h2 {
         font-size: 1.2rem;
@@ -315,7 +560,7 @@
 
     .use-link-list,
     .historic-list {
-        padding: 0.6rem 0.75rem;
+        padding: 0.6rem;
     }
 
     .use-link-list a,
@@ -330,14 +575,14 @@
     }
 
     .hr {
-        margin: 0.4rem 0;
+        margin: 0.5rem 0;
     }
 }
 
 @media screen and (max-width: 400px) {
     .dashboard {
         max-width: 100%;
-        padding: 4% 0;
+        padding: 1rem 0;
     }
 
     .dashboard-intro h1 {
@@ -357,7 +602,54 @@
 
     .dashboard-container {
         padding: 0.5rem;
-        border-radius: 0;
+        border-radius: 8px;
+    }
+
+    .list-info-absence,
+    .list-statistic {
+        padding: 0.5rem;
+    }
+
+    .absence-item,
+    .stat-item {
+        font-size: 0.8rem;
+    }
+
+    .absence-label,
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    .absence-value,
+    .stat-value {
+        font-size: 0.8rem;
+    }
+
+    .absence-empty,
+    .stat-empty {
+        font-size: 0.75rem;
+    }
+
+    .list-creneaux {
+        padding: 0.5rem;
+    }
+
+    .day-title {
+        font-size: 0.95rem;
+    }
+
+    .creneau-item {
+        font-size: 0.8rem;
+    }
+
+    .creneau-time,
+    .creneau-info {
+        font-size: 0.8rem;
+    }
+
+    .current-marker {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
     }
 
     .use-link h2,

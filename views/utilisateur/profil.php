@@ -99,12 +99,11 @@ if (isset($_SESSION)) {
         <div class="useful-link-section">
             <h3>Liens Utiles</h3>
             <ul>
-                <li><a href="/calendrier">Calendrier</a></li>
-                <li><a href="/liste-eleves">Listes des élèves</a></li>
-                <li><a href="/liste-etudiants">Listes des étudiants</a></li>
+                <li><a href="">Listes des étudiants</a></li>
                 <?php if ($_SESSION['role'] === 'admin'): ?>
                 <li><a href="<?=$urlUser['listeProfesseurs']?>">Liste des professeurs</a></li>
                 <?php endif ?>
+                <li><a href="">Informations supplémentaires</a></li>
             </ul>
         </div>
         <div class="historic-section">
@@ -114,7 +113,6 @@ if (isset($_SESSION)) {
                 <?php if ($_SESSION['role'] === 'admin') :?>
                 <li><a href="<?= $urlUser['justifications']?>">Historiques des justificatifs</a></li>
                 <?php endif ?>
-                <li><a href="/infos-supplementaires">Informations supplémentaires</a></li>
             </ul>
         </div>
     </div>

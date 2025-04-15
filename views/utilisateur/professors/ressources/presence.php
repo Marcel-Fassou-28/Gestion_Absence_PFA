@@ -23,7 +23,7 @@ $listeEtudiant = $currentProfInfo->getCurrentStudentList($cinProf);
 
 $filiere = $currentProfInfo->getCurrentFiliere($cinProf);
 $matiere = $currentProfInfo->getCurrentMatiere($cinProf);
-$classe = $currentProfInfo->getCurrentClasse($cinProf)->getNomClasse();
+$classe = $currentProfInfo->getCurrentClasse($cinProf) ? $currentProfInfo->getCurrentClasse($cinProf)->getNomClasse() : '';
 $creneau = $currentProfInfo->getCurrentCreneau($cinProf);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {

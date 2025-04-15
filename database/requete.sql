@@ -78,15 +78,14 @@ CREATE TABLE Matiere(
 
 -- Table Créneaux
 CREATE TABLE Creneaux (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    jourSemaine ENUM('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'),
     heureDebut TIME NOT NULL,
     heureFin TIME NOT NULL,
     cinProf VARCHAR(20) NOT NULL,
     idMatiere INT NOT NULL,
-    /*idClasse INT NOT NULL,*/
-    CONSTRAINT pk_creneaux PRIMARY KEY (cinProf, idMatiere),
     CONSTRAINT fk_creneaux_prof FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_creneaux_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere) ON UPDATE CASCADE ON DELETE CASCADE
-    /*CONSTRAINT fk_creneaux_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere) ON UPDATE CASCADE ON DELETE CASCADE */
 );
 
 -- Table Professeur
@@ -98,8 +97,6 @@ CREATE TABLE Professeur (
     email VARCHAR(250) NOT NULL UNIQUE,
     CONSTRAINT fk_admin_professeur FOREIGN KEY (cinProf) REFERENCES Utilisateur(cin) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-
 
 -- Table Étudiant
 CREATE TABLE Etudiant (
@@ -137,9 +134,28 @@ CREATE TABLE Justificatif (
 -- Table ListePrésence
 CREATE TABLE ListePresence (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    cinProf VARCHAR(20) NOT NULL,
     date DATE NOT NULL,
-    niveau VARCHAR(50) NOT NULL,
-    idFiliere INT NOT NULL,
+    classe VARCHAR(10) NOT NULL,
     imageJustificatif MEDIUMBLOB,
-    CONSTRAINT fk_liste_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere)
+    CONSTRAINT fk_liste_professeur FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE,
+    CONSTRAINT fk_liste_classe FOREIGN KEY (classe) REFERENCES Classe(nomClasse) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- Table Message
+CREATE TABLE Message (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    objet VARCHAR(250) NOT NULL,
+    contenu TEXT NOT NULL, 
+    idExpediteur VARCHAR(20) NOT NULL, 
+    idDestinataire VARCHAR(20) NOT NULL, 
+    typeDestinataire ENUM('admin', 'etudiant') NOT NULL,
+    lu ENUM('oui', 'non') DEFAULT 'non', 
+
+    CONSTRAINT fk_message_expediteur FOREIGN KEY (idExpediteur) 
+        REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT fk_message_destinataire FOREIGN KEY (idDestinataire) 
+        REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

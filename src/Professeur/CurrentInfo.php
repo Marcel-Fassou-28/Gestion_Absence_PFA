@@ -32,7 +32,9 @@ class CurrentInfo extends Table {
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Filiere::class);
         $result = $query->fetch();
-
+        if (!$result) {
+            return null;
+        }
         return $result;
     }
 
@@ -52,7 +54,9 @@ class CurrentInfo extends Table {
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Matiere::class);
         $result = $query->fetch();
-
+        if (!$result) {
+            return null;
+        }
         return $result;
     }
 
@@ -72,7 +76,9 @@ class CurrentInfo extends Table {
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Classe::class);
         $result = $query->fetch();
-
+        if (!$result) {
+            return null;
+        }
         return $result;
     }
 
@@ -122,8 +128,8 @@ class CurrentInfo extends Table {
      */
     public function getCurrentCreneau(string $cinProf):?Creneaux {
         $query = $this->pdo->prepare('
-            SELECT c.* FROM creneaux c WHERE c.cinProf = :cinProf 
-            AND CURRENT_TIME BETWEEN c.heureDebut AND c.heureFin');
+            SELECT cr.* FROM creneaux cr WHERE cr.cinProf = :cinProf 
+            AND CURRENT_TIME BETWEEN cr.heureDebut AND cr.heureFin');
 
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
