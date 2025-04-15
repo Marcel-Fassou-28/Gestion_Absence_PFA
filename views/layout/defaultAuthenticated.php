@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
     <link rel="stylesheet" href="/css/list_prof/list.css">
+    <link rel="stylesheet" href="/css/list_prof/modifierProf.css">
     <link rel="stylesheet" href="/css/dashbord-etudiant/dashbord-etudiant.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';

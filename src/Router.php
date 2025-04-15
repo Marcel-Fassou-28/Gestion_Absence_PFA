@@ -94,8 +94,9 @@ class Router {
                         'home' => $router->url('administrator-home'),
                         'profil' => $router->url('admin-profil'),
                         'listeProfesseurs' => $router->url('liste_Des_Professeur'),
-                        'justifications' => $router->url('justification')
-                        
+                        'justifications' => $router->url('justification'),
+                        'modification' =>$router->url('modifier_professeur'),
+                        'ajouter' => $router->url('ajouterProf')
                     ];
                     break;
                 case 'professeur':
