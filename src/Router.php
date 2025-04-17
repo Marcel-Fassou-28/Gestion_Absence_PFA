@@ -94,8 +94,9 @@ class Router {
                         'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
                         'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
                         'listeProfesseurs' => $router->url('liste_Des_Professeur'),
-                        'justifications' => $router->url('justification')
-                        
+                        'justifications' => $router->url('justification'),
+                        'modification' =>$router->url('modifier_professeur'),
+                        'ajouter' => $router->url('ajouterProf')
                     ];
                     break;
                 case 'professeur':

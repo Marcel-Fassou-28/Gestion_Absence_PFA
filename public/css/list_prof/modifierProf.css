@@ -1,0 +1,54 @@
+.modif{
+    transform: translateY(90px);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    background: rgba(26, 29, 32, 0.4);
+    border-radius: 12px;
+    margin: 0 15%;
+    align-items: center;
+}
+.modif-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    
+}
+.div-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    width: 100%;
+    padding: 0 5%;
+
+}
+.form-input{
+    text-align: center;
+    width: 90%;
+
+}
+.form-input label{
+    width: 20%;
+    text-align: center;
+}
+.form-input input{
+    text-align: center;
+    width: 60%;
+    border-radius: 5px;
+    border: none;
+    margin: 12px;
+}
+.btn{
+    color: var(--text-color);
+    margin:  12px auto;
+    background-color: var(--navbar-color);
+   
+}
+.btn:hover{
+    color: var(--text-color);
+    margin:  12px auto;
+    background-color: var(--navbar-color);
+   
+}

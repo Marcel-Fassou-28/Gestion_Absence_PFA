@@ -36,6 +36,11 @@ $router
     /* Contenu pour les admins */
     ->match('/my/liste-des-professeurs', 'utilisateur/admin/listeProfesseur','liste_Des_Professeur')
     ->match('/my/justificatif','utilisateur/admin/justifyHistory','justification')
+    ->match('/my/modifier-prof','utilisateur/admin/modifierProf','modifier_professeur')
+    ->match('/my/ajouter-prof','utilisateur/admin/ajouterProf','ajouterProf')
+
+    
+    ->match('/api/matiere_classe', 'api/get_matiere_classe', 'api')
     ->match(  '/my/admin/messagerie', 'utilisateur/admin/messagerie','admin-messagerie')
     
     // Contenu pour les étudiants
