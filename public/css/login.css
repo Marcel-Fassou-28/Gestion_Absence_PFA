@@ -84,3 +84,9 @@
     margin: 5px;
     padding: 0px;
 }
+
+input[type="number"] {
+    -webkit-appearance: textfield; /* Chrome, Safari, Edge */
+    -moz-appearance: textfield;    /* Firefox */
+    appearance: textfield;         /* Standard */
+}

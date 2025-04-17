@@ -32,21 +32,78 @@ class UserTable extends Table {
         return $result ?: null;
     }
 
+    /**
+     * Cette methode permet de trouver un utilisateur par son email
+     * 
+     * @param string $username
+     * @return Utilisateur|null
+     */
+    public function findByEmail(string $email):?Utilisateur {
+        $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE email = :email');
+        $query->execute(['email' => $email]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
+        $result = $query->fetch();
+
+        if ($result === false) {
+            $this->errorMessage = true;
+        }
+        return $result ?: null;
+    }
+
 
     /**
      * Cette methode a pour role de reourner les information d'un utilisateur
      * 
      * @param string $cin
-     * @return object
+     * @return Utilisateur|null
      */
-    public function getIdentification(string $cin):Utilisateur {
+    public function getIdentification(string $cin):?Utilisateur {
         $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE cin = :cin');
         $query->execute(['cin' => $cin]);
 
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
         $result = $query->fetch();
 
-        return $result;
+        return $result ?: null;
+    }
+
+
+    public function codeInsertion(string $code, string $email) {
+        $query = $this->pdo->prepare('
+            UPDATE '. $this->table .' SET codeRecuperation = :code, 
+            dateDerniereReinitialisation = NOW() WHERE email = :email
+        ');
+        $query->execute([
+            'code' => $code, 
+            'email' => $email
+        ]);
+    }
+
+    public function codeReset(string $email) {
+        $query = $this->pdo->prepare('
+            UPDATE '. $this->table .' SET codeRecuperation = " " WHERE email = :email
+        ');
+        $query->execute([
+            'email' => $email
+        ]);
+    }
+
+    public function changePassword(string $password, string $email) {
+        $result = $this->findByEmail($email);
+
+        if ($result !== null && $result->getPassword() != $password ) {
+            $query = $this->pdo->prepare('
+                    UPDATE '. $this->table .' SET password = :password WHERE email = :email
+                ');
+            $query->execute([
+                'password' => password_hash($password, PASSWORD_BCRYPT),
+                'email' => $email
+            ]);
+            return true;
+        }else {
+            return false;
+        }
+        
     }
 
     /**

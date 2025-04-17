@@ -9,8 +9,9 @@ $router = new Router(dirname(__DIR__) . '/views');
 $router
     ->get('/', 'home/index', 'accueil')
     ->match('/login', 'login/login', 'page-connexion')
-    ->get('/login/reset-password', 'utilisateur/recovery/resetPassword', 'forget-password')
-    ->get('/login/reset-password/recover/[*:id]', 'utilisateur/recovery/passwordRecover', 'password-recovery')
+    ->match('/login/resetpassword', 'utilisateur/recovery/resetPassword', 'forget-password')
+    ->match('/login/resetpassword/recover/[*:id]', 'utilisateur/recovery/passwordRecover', 'password-recovery')
+    ->match('/login/recover/authentification/[*:id]', 'utilisateur/recovery/codeAuth', 'code-recuperation' )
 
     /* Lorsque l'utilisateur est connecté */
     ->get('/home/my/[*:role]/[*:id]', 'utilisateur/home','user-home')

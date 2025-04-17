@@ -9,7 +9,7 @@ namespace App\Model;
  * @property string $cinProf
  * @property string $date
  * @property string $classe
- * @property $imageJustificatif
+ * @property string $nomFichierPresence
  */
 class ListePresence {
     /**
@@ -33,16 +33,16 @@ class ListePresence {
     protected $cinProf;
     
     /**
-     * @var $imageJustificatif
+     * @var string $nomFichierPresence
      */
-    protected $imageJustificatif;
+    protected $nomFichierPresence;
 
-    /*public function __construct(int $id, string $date, string $classe, string $cinProf, $imageJustificatif) {
+    /*public function __construct(int $id, string $date, string $classe, string $cinProf, $nomFichierPresence) {
         $this->id = $id;
         $this->date = $date;
         $this->classe = $classe;
         $this->cinProf = $cinProf;
-        $this->imageJustificatif = $imageJustificatif;
+        $this->nomFichierPresence = $nomFichierPresence;
     }*/
 
     /**
@@ -120,18 +120,18 @@ class ListePresence {
     /**
      * Getters
      * 
-     * @return $photo
+     * @return string|null $nomFichierPresence
      */
-    public function getImageJustificatif() {
-        return $this->imageJustificatif;
+    public function getNomFichierPresence():?string {
+        return $this->nomFichierPresence;
     }
 
     /**
      * Setters
      * 
-     * @param string $imageJustificatif
+     * @param string $nomFichierPresence
      */
-    public function setImageJustificatif(string $imageJustificatif) {
-        $this->imageJustificatif = $imageJustificatif;
+    public function setNomFichierPresence(string $nomFichierPresence) {
+        $this->nomFichierPresence = $nomFichierPresence;
     }
 }

@@ -10,6 +10,7 @@ namespace App\Model;
  * @property string $statut
  * @property string $message
  * @property int $idAbsence
+ * @property string $nomFichierJustificatif
  */
 class Justificatif {
 
@@ -19,7 +20,7 @@ class Justificatif {
     protected $idJustificatif;
 
     /**
-     * @var \DateTime $dateSoumission
+     * @var string $dateSoumission
      */
     protected $dateSoumission;
 
@@ -37,6 +38,11 @@ class Justificatif {
      * @var int $idAbsence
      */
     protected $idAbsence;
+
+    /**
+     * @var string $nomFichierJustificatif
+     */
+    protected $nomFichierJustificatif;
 
     /*public function __construct(int $idJustificatif, string $dateSoumission, string $statut, string $message, int $idAbsence) {
         $this->idJustificatif = $idJustificatif;
@@ -134,5 +140,23 @@ class Justificatif {
      */
     public function setIdAbsence(int $idAbsence) {
         $this->idAbsence = $idAbsence;
+    }
+
+    /**
+     * Getters
+     * 
+     * @return string|null
+     */
+    public function getNomFichierJustificatif():?string {
+      return $this->nomFichierJustificatif;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string $value
+     */
+    public function setNomFichierJustificatif(string $value) {
+      $this->nomFichierJustificatif = $value;
     }
 }

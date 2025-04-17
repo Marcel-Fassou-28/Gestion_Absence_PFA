@@ -14,54 +14,66 @@ namespace App\Model;
  * @property string $password
  * @property string $cin
  * @property string $role
- * @property $photo
+ * @property string $codeRecuperation
+ * @property string $dateDerniereReinitialisation
+ * @property string $nomPhoto
  */
 class Utilisateur {
 
     /**
      * @var int $id
      */
-    public $id;
+    private $id;
 
     /**
      * @var string $username
      */
-    public $username;
+    private $username;
 
     /**
      * @var string $nom
      */
-    public $nom;
+    private $nom;
 
     /**
      * @var string $prenom
      */
-    public $prenom;
+    private $prenom;
 
     /**
      * @var string $email
      */
-    public $email;
+    private $email;
 
     /**
      * @var string $password
      */
-    public $password;
+    private $password;
 
     /**
      * @var string $cin
      */
-    public $cin;
+    private $cin;
 
     /**
      * @var string $role
      */
-    public $role;
+    private $role;
 
-    /**
-     * @var $photo
-     */
-    public $photo;
+  /**
+   * @var string $codeRecuperation
+   */
+  private $codeRecuperation;
+
+  /**
+   * @var string $derniereReinitialisation
+   */
+  private $dateDerniereReinitialisation;
+
+  /**
+   * @var string $nomPhoto
+   */
+  private $nomPhoto;
 
     /*public function __construct($id, $username, $nom, $prenom, $email, $password, $cin, $role)
     {
@@ -217,5 +229,59 @@ class Utilisateur {
      */
     public function setCIN(string $cin) {
       $this->cin = $cin;
+    }
+
+    /**
+     * Getters
+     * 
+     * @return string
+     */
+    public function getCodeRecuperation() {
+      return $this->codeRecuperation;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string $value 
+     */
+    public function setCodeRecuperation(string $value) {
+      $this->codeRecuperation = $value;
+    }
+
+    /**
+     * Getters
+     * 
+     * @return string
+     */
+    public function getDateDerniereReinitialisation() {
+      return $this->dateDerniereReinitialisation;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string $value 
+     */
+    public function setDateDerniereReinitialisation(string $value) {
+      $this->dateDerniereReinitialisation = $value;
+    }
+
+    /**
+     * Getters
+     * 
+     * @return string
+     */
+    public function getNomPhoto() {
+      return $this->nomPhoto;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string $value 
+     */
+    public function setNomPhoto(string $value) {
+      $this->nomPhoto = $value;
     }
 }

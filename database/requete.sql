@@ -21,16 +21,9 @@ CREATE TABLE Utilisateur (
     email VARCHAR(250) NOT NULL,
     password VARCHAR(250) NOT NULL,
     role ENUM('admin', 'professeur', 'etudiant') NOT NULL,
-    photo MEDIUMBLOB
-);
-
--- Table RecuperationPassword
-CREATE TABLE RecuperationPassword (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(100) NOT NULL,
-    dateReset TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    validationCode VARCHAR(10) NOT NULL,
-    CONSTRAINT fk_recuperation_user FOREIGN KEY (email) REFERENCES Utilisateur(email)
+    nomPhoto VARCHAR(250),
+    codeRecuperation VARCHAR(10),
+    dateDerniereReinitialisation DATETIME
 );
 
 -- Table des Departements
@@ -128,6 +121,7 @@ CREATE TABLE Justificatif (
     statut ENUM('accepté', 'refusé', 'en attente') DEFAULT 'en attente',
     message TEXT NOT NULL,
     idAbsence INT NOT NULL,
+    nomFichierJustificatif VARCHAR(250),
     CONSTRAINT fk_justificatif_absence FOREIGN KEY (idAbsence) REFERENCES Absence(idAbsence) ON DELETE CASCADE
 );
 
@@ -137,7 +131,7 @@ CREATE TABLE ListePresence (
     cinProf VARCHAR(20) NOT NULL,
     date DATE NOT NULL,
     classe VARCHAR(10) NOT NULL,
-    imageJustificatif MEDIUMBLOB,
+    nomFichierPresence VARCHAR(250),
     CONSTRAINT fk_liste_professeur FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE,
     CONSTRAINT fk_liste_classe FOREIGN KEY (classe) REFERENCES Classe(nomClasse) ON UPDATE CASCADE ON DELETE CASCADE
 );

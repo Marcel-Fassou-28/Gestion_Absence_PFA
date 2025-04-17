@@ -66,6 +66,7 @@ $dateSql = $date->format('Y-m-d H:i:s');
         </section>
         </div>
     </div>
+
     <!-- Boîte modale pour le scanner -->
     <div class="modal-box" id="scanner-modal">
         <div class="modal-box-overlay"></div>

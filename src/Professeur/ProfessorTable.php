@@ -10,9 +10,14 @@ use App\Model\Classe;
 use App\Model\Matiere;
 use App\Model\AbsenceEtudiant;
 
+use App\Model\Utils\InfoAbsenceEtudiant;
+use App\Model\Utils\EtudiantsAbsents;
+
+
 class ProfessorTable extends Table {
 
     private $listeComplete = [];
+    private $infoAbsenceEtudiant = [];
     
 
     /**
@@ -106,25 +111,72 @@ class ProfessorTable extends Table {
         return count($result) > 0 ? $result : null;
     }
 
-    /**
-     * Cette methode permet de retourner la liste des absents liés le professeur en question
+ /**
+     * Cette méthode permet de retourner la liste des absents liés au professeur en question
      * 
      * @param string $cinProf
-     * @return array
+     * @return array|null
      */
-    public function getAbsents(string $cinProf):?array {
+    public function getAbsents(string $cinProf): ?array
+    {
         $query = $this->pdo->prepare('
-            SELECT e.cinEtudiant, e.nom, e.prenom, e.cne, COUNT(a.idAbsence) AS nbrAbsence
-            FROM absence a JOIN etudiant e ON a.cinEtudiant = e.cinEtudiant 
-            JOIN matiere m ON a.idMatiere = m.idMatiere WHERE m.cinProf = :cinProf
+            SELECT e.cinEtudiant, e.nom, e.prenom, e.cne, c.nomClasse, m.nomMatiere,
+            DATE(a.date) AS dateAbsence, cr.heureDebut, cr.heureFin,
+            FLOOR(COUNT(*) OVER (PARTITION BY e.cinEtudiant, m.idMatiere) / 3) AS nombreAbsences
+            FROM Absence a 
+            JOIN Etudiant e ON e.cinEtudiant = a.cinEtudiant
+            JOIN Classe c ON c.idClasse = e.idClasse 
+            JOIN Matiere m ON m.idMatiere = a.idMatiere
+            JOIN Creneaux cr ON cr.idMatiere = m.idMatiere AND cr.cinProf = m.cinProf
+            WHERE m.cinProf = :cinProf 
+            ORDER BY e.nom, e.prenom, m.nomMatiere, dateAbsence
         ');
-
         $query->execute([
             'cinProf' => $cinProf
         ]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, Absents::class);
+
+        $query->setFetchMode(\PDO::FETCH_CLASS, InfoAbsenceEtudiant::class);
         $result = $query->fetchAll();
-        return count($result) > 0 ? $result : null;
+
+        return $this->getInfoAbsenceByStudent($result);
+    }
+
+    /**
+     * Organise les absences par étudiant
+     * 
+     * @param array $infoAbsenceArray
+     * @return array
+     */
+    public function getInfoAbsenceByStudent(array $infoAbsenceArray): array
+    {
+        $this->infoAbsenceEtudiant = [];
+
+        foreach ($infoAbsenceArray as $infoAbsence) {
+            $cin = $infoAbsence->getCinEtudiant();
+            
+            // Créer un nouvel objet seulement si l'étudiant n'existe pas
+            if (!isset($this->infoAbsenceEtudiant[$cin])) {
+                $this->infoAbsenceEtudiant[$cin] = new EtudiantsAbsents(
+                    $infoAbsence->getNom(),
+                    $infoAbsence->getPrenom(),
+                    $infoAbsence->getCne(),
+                    $infoAbsence->getNomClasse(),
+                    $infoAbsence->getNomMatiere(),
+                    $infoAbsence->getNombreAbsences()
+                );
+            }
+            
+            // Ajouter l'absence
+            $absenceKey = $infoAbsence->getDateAbsence() . ' ' . $infoAbsence->getHeureDebut() . '-' . $infoAbsence->getHeureFin();
+            $this->infoAbsenceEtudiant[$cin]->addAbsence($absenceKey);
+        }
+
+        // Trier les absences pour chaque étudiant
+        foreach ($this->infoAbsenceEtudiant as $etudiant) {
+            $etudiant->sortAbsences();
+        }
+
+        return $this->infoAbsenceEtudiant;
     }
 
     public function getFiliere(string $cinProf) :?array {
@@ -140,6 +192,7 @@ class ProfessorTable extends Table {
         return count($result) != 0 ? $result : null;
     }
 
+
     public function getMatiere(string $cinProf) :?array {
         $query = $this->pdo->prepare('
             SELECT DISTINCT m.idMatiere, m.nomMatiere FROM matiere m 
@@ -151,6 +204,7 @@ class ProfessorTable extends Table {
 
         return count($result) != 0 ? $result : null;
     }
+
 
     public function getClasse(string $cinProf): ?array {
         $query = $this->pdo->prepare('
@@ -164,6 +218,7 @@ class ProfessorTable extends Table {
 
         return count($result) != 0 ? $result : null;
     }
+
 
     public function getAllStudentList(array $studentList, array $absenceList):array {
         $this->listeComplete = [];
@@ -199,7 +254,8 @@ class ProfessorTable extends Table {
         return $this->listeComplete;
     }
 
-        /**
+
+    /**
      * Permet de retourner la liste de tous les étudiants et leurs situations d'absence
      * 
      * @param string $cinProf
