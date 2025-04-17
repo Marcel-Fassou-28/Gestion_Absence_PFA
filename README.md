@@ -2,62 +2,69 @@
 Conception d'une application web pour mieux faciliter la gestion des absences,  faciliter le processus de signalement d’absence du côté des élèves et leur suivi.
 
 
-<div class="absence">
-    <div class="intro">
-        <h1>Historique des absences</h1>
+
+
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+use App\Connection;
+use App\UserTable;
+use App\Utils\UtilsInformation;
+
+$pdo = Connection::getPDO();
+$table = new UserTable($pdo);
+$utilsInfo = new UtilsInformation($pdo);
+$user = $table->getIdentification($_SESSION['id_user']);
+
+$date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
+$moisEnFrancais = [
+    'January' => 'Janvier', 'February' => 'Février', 'March' => 'Mars', 'April' => 'Avril',
+    'May' => 'Mai', 'June' => 'Juin', 'July' => 'Juillet', 'August' => 'Août',
+    'September' => 'Septembre', 'October' => 'Octobre', 'November' => 'Novembre', 'December' => 'Décembre'
+];
+$moisAnglais = $date->format('F');
+$dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $date->format('Y');
+$dateSql = $date->format('Y-m-d H:i:s');
+?>
+
+<div class="container dashboard">
+    <div class="dashboard-intro">
+        <h1>Tableau de Bord</h1>
+        <span class="user-info"><?= $_SESSION['role'] === 'etudiant' ? 'Bonjour ' : 'Bonjour Mr. '?> <?= htmlspecialchars($user->getNom()) .' '. htmlspecialchars($user->getPrenom()) ?></span>
+        <span class="date-today"><?= $dateSql ?></span>
     </div>
-    <div class="hr"></div>
-    <div class="absence-container">
-        <form class="professor-info container" method="post" action="">
-            <div class="subject-group">
-                <select id="matiere" name="matiere-prof">
-                    <option name="matiere-prof"  value="matiere">Matière</option>
-                    <?php
-                        foreach($tableMatiere as $subject) {
-                            $selected = ($matiere === $subject->getNomMatiere()) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($subject->getNomMatiere()) . '" ' . $selected . '>' . htmlspecialchars($subject->getNomMatiere()) . '</option>';
-                        }
-                    ?>
-                </select>
-            </div>
-            <div class="level-group">
-                <select id="classe" name="classe-prof" required>
-                    <option name="classe-prof" value="classe">Niveau</option>
-                    <?php
-                        foreach($tableClasse as $classe) {
-                            $selected = ($class === $classe->getNomClasse()) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($classe->getNomClasse()) . '" ' . $selected . '>' . htmlspecialchars($classe->getNomClasse()) . '</option>';
-                        }
-                    ?>
-                </select>
-            </div>
-            <div>
-                <input class="submit-btn" type="submit" name="submit-first" value="Afficher les Etudiants">
-            </div>
-        </form>
-        <?php if ($listeEtudiant[0]->getCNE() != null): ?>
-        <table class="table-container">
-            <thead>
-                <tr>
-                    <th>N°</th>
-                    <th>Matricule</th>
-                    <th>Nom et Prénom</th>
-                    <th>Nombre d'absence</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php $numero = 1; ?>
-                        <?php foreach ($listeEtudiant as $etudiant): ?>
-                            <tr>
-                                <td><?= sprintf("%02d", $numero++) ?></td>
-                                <td><?= htmlspecialchars($etudiant->getCNE())?></td>
-                                <td><?= htmlspecialchars($etudiant->getNom() . ' ' . $etudiant->getPrenom()) ?></td>
-                                <td><?= htmlspecialchars($etudiant->getNbrAbsence())?></td>
-                            </tr>
-                        <?php endforeach; ?>
-            </tbody>
-        </table>
-        <?php else: ?>
-            <div class="alert-absence">Il n'y a pas de personne ayant aumoins une absence</div>
-        <?php endif ?>
+    <div class="dashboard-container">
+        <div class="statistic">
+            <section class="last-absence">
+                <h2>Derniere Absence</h2>
+                <div class="hr"></div>
+                
+            </section>
+            <section class="classe-stat">
+                <h2>Statistic</h2>
+                <div class="hr"></div>
+                    <ul class="list-statistic">
+
+                    </ul>
+            </section>
+            
+        </div>
+        <div class="hr"></div>
+        <div class="link-section">
+            <section class="container use-link">
+                <h2>Liens Utiles</h2>
+                <div class="hr"></div>
+                
+            </section>
+            <section class="container historic">
+                <h2>Historiques</h2>
+                <div class="hr"></div>
+                <ul class="historic-list">
+                    <li><a href="<?= $router->url('etudiant-absences') . '?historic=absence' ?>">Historiques des Absences</a></li>
+                </ul>
+            </section>
+        </div>
+    </div>
 </div>

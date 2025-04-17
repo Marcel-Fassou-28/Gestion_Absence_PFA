@@ -73,7 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
                             <th>Nom et Prénom</th>
                             <th>Nombre d'absences</th>
                             <th>Dates et Créneaux</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,14 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
                                         <?php endforeach; ?>
                                     </ul>
                                 </td>
-                                <td><button class="show-state" data-modal-id="modal-<?= $numero ?>">Voir plus</button></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <div class="action-buttons">
-                    <button class="btn-export">Exporter en PDF</button>
-                </div>
             </div>
         <?php else: ?>
             <p class="no-data">Aucune absence enregistrée.</p>

@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="/css/dashbord/connected.css">
     <link rel="stylesheet" href="/css/list_prof/list.css">
     <link rel="stylesheet" href="/css/list_prof/modifierProf.css">
-    <link rel="stylesheet" href="/css/dashbord-etudiant/dashbord-etudiant.css">
     <link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
