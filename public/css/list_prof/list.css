@@ -1,16 +1,12 @@
-.test{
-    
-    padding: 1px;
-    color: var(--text-color);
 
-}
 .prof-list {
-    margin: 15px 10%;
+    
     padding: 5%;
     display: flex;
     flex-direction: column;
     background-color: var(--bg-section-abstract);
     color: var(--text-color);
+    transform: translateY(50px);
 
 
 }
@@ -49,12 +45,15 @@ hr {
 .prof-table {
     width: 100%;
     text-align: center;
+   
 
 }
+
 
 .heads th{
 
     padding: 10px;
+   
     background-color: var(--navbar-color);
     
 
@@ -73,6 +72,27 @@ hr {
 td {
     background-color: white;
     color: black;
-    padding: 10px;
+    padding: 5px;
     border: solid 1px var(--bg-section-abstract);
+}
+.btns{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+ .btn1,.btn2{
+    color: var(--text-color);
+    border-radius: 12px;
+    padding: 10px;
+    background-color: var(--navbar-color);
+    border: none;
+}
+.btn2{
+    margin-left: 12px;
+    font-weight: 700;
+    background-color: red;
+}
+.btn-ajout{
+    float: right;;
+    margin: 20px 0;
 }

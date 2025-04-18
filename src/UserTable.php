@@ -32,13 +32,41 @@ class UserTable extends Table {
         return $result ?: null;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Cette methode permet de trouver un utilisateur par son email
+     * 
+     * @param string $username
+     * @return Utilisateur|null
+     */
+    public function findByEmail(string $email):?Utilisateur {
+        $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE email = :email');
+        $query->execute(['email' => $email]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
+        $result = $query->fetch();
+
+        if ($result === false) {
+            $this->errorMessage = true;
+        }
+        return $result ?: null;
+    }
+
+
+>>>>>>> 58a9354086fcd6e68d31eef68f9ceab981288b5f
     /**
      * Cette méthode retourne les informations d'un utilisateur à partir de son CIN
      * 
      * @param string $cin
+<<<<<<< HEAD
      * @return Utilisateur
      */
     public function getIdentification(string $cin): Utilisateur {
+=======
+     * @return Utilisateur|null
+     */
+    public function getIdentification(string $cin):?Utilisateur {
+>>>>>>> 58a9354086fcd6e68d31eef68f9ceab981288b5f
         $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE cin = :cin');
         $query->execute(['cin' => $cin]);
 
@@ -85,6 +113,7 @@ class UserTable extends Table {
         return $result ?: null;
     }
 
+<<<<<<< HEAD
     /**
      * Retourne uniquement le nom d'un utilisateur à partir de son ID
      * 
@@ -94,6 +123,45 @@ class UserTable extends Table {
     public function getUserNameById(int $id): string {
         $user = $this->findById($id);
         return $user ? $user->getNom() : 'Inconnu';
+=======
+
+    public function codeInsertion(string $code, string $email) {
+        $query = $this->pdo->prepare('
+            UPDATE '. $this->table .' SET codeRecuperation = :code, 
+            dateDerniereReinitialisation = NOW() WHERE email = :email
+        ');
+        $query->execute([
+            'code' => $code, 
+            'email' => $email
+        ]);
+    }
+
+    public function codeReset(string $email) {
+        $query = $this->pdo->prepare('
+            UPDATE '. $this->table .' SET codeRecuperation = " " WHERE email = :email
+        ');
+        $query->execute([
+            'email' => $email
+        ]);
+    }
+
+    public function changePassword(string $password, string $email) {
+        $result = $this->findByEmail($email);
+
+        if ($result !== null && $result->getPassword() != $password ) {
+            $query = $this->pdo->prepare('
+                    UPDATE '. $this->table .' SET password = :password WHERE email = :email
+                ');
+            $query->execute([
+                'password' => password_hash($password, PASSWORD_BCRYPT),
+                'email' => $email
+            ]);
+            return true;
+        }else {
+            return false;
+        }
+        
+>>>>>>> 58a9354086fcd6e68d31eef68f9ceab981288b5f
     }
 
     /**

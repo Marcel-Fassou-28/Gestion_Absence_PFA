@@ -1,15 +1,24 @@
 <?php return array(
     'root' => array(
-        'name' => 'vendor/app',
+        'name' => '__root__',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'c61e7982d660cde73a2bb9fa2f0be7e8747aa0be',
+        'reference' => 'de59f8d64f5f8be0049182b9fa8f009fb8429046',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'de59f8d64f5f8be0049182b9fa8f009fb8429046',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'altorouter/altorouter' => array(
             'pretty_version' => '2.0.3',
             'version' => '2.0.3.0',
@@ -19,12 +28,12 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'vendor/app' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => 'c61e7982d660cde73a2bb9fa2f0be7e8747aa0be',
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v6.9.3',
+            'version' => '6.9.3.0',
+            'reference' => '2f5c94fe7493efc213f643c23b1b1c249d40f47e',
             'type' => 'library',
-            'install_path' => __DIR__ . '/../../',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

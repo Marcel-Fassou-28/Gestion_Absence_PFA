@@ -91,25 +91,26 @@ class Router {
                 case 'admin':
                     $urlUser = [
                         'dashboard' => $router->url('administrator-dashboard'),
-                        'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
+                        'home' => $router->url('user-home', ['role'=> $_SESSION['role']]),
                         'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
                         'listeProfesseurs' => $router->url('liste_Des_Professeur'),
-                        'justifications' => $router->url('justification')
-                        
+                        'justifications' => $router->url('justification'),
+                        'modification' =>$router->url('modifier_professeur'),
+                        'ajouter' => $router->url('ajouterProf')
                     ];
                     break;
                 case 'professeur':
                     $urlUser = [
-                        'dashboard' => $router->url('professor-dashboard'),
-                        'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
+                        'dashboard' => $router->url('user-dashboard',  ['role'=> $_SESSION['role']]),
+                        'home' => $router->url('user-home', ['role'=> $_SESSION['role']]),
                         'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
                         'listeProfesseurs' => $router->url('liste_Des_Professeur')
                     ];
                     break;
                 case 'etudiant':
                     $urlUser = [
-                        'dashboard' => $this->url('student-dashboard'),
-                        'home' => $this->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
+                        'dashboard' => $this->url('user-dashboard',  ['role'=> $_SESSION['role']]),
+                        'home' => $this->url('user-home', ['role'=> $_SESSION['role']]),
                         'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
                         'listeProfesseurs' => $router->url('liste_Des_Professeur'),
                         'messagerie'=> $router->url('etudiant-messagerie'),
