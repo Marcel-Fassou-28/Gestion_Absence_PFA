@@ -1,5 +1,19 @@
 <?php
 
+use App\Connection;
+use App\Professeur\ProfessorTable;
+use App\Professeur\CurrentInfo;
+use App\Model\ListePresence;
+
+$cinProf = $_SESSION['id_user'];
+$pdo = Connection::getPDO();
+$tableProf = new ProfessorTable($pdo);
+$tableProfCurrent = new CurrentInfo($pdo);
+
+$classe = $tableProfCurrent->getCurrentClasse($cinProf)->getNomClasse();
+$listPresence = new ListePresence();
+
+
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $moisEnFrancais = [
     'January' => 'Janvier', 'February' => 'Février', 'March' => 'Mars', 'April' => 'Avril',
@@ -9,6 +23,41 @@ $moisEnFrancais = [
 $moisAnglais = $date->format('F');
 $dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $date->format('Y');
 $dateSql = $date->format('Y-m-d H:i:s');
+$errorMessage = "";
+$success = null;
+    
+if (!empty($_POST)) {
+    var_dump($_POST);
+    exit();
+
+    $tmpName = $_FILES['absence-list']['tmp_name'];
+    $fileSize = $_FILES['absence-list']['size'];
+
+    $extensionsAutorisees = ['jpg', 'jpeg', 'png'];
+    $extension = strtolower(pathinfo($_FILES['absence-list']['name'], PATHINFO_EXTENSION));
+
+    if (in_array($extension, $extensionsAutorisees) && $fileSize <= 5000000) {
+
+        $nouveauNom = time() .uniqid('presence', true). '.' . $extension;
+        $destination = 'uploads/presence/' . $nouveauNom;
+
+        /**
+        * Definition de la liste d'objet 
+        */
+        $listPresence->setNomFichierPresence($nouveauNom);
+        $listPresence->setCINProf($cinProf);
+        $listPresence->setClasse($classe);
+
+        if($tableProf->sendListPresence($listPresence) && move_uploaded_file($tmpName, $destination)) {
+            $success = 1;
+        } else {
+            $success = 0;
+            $errorMessage = "Erreur lors de l'enregistrement.";
+        }
+    } else {
+        $errorMessage = "Fichier invalide : extension non autorisée ou taille > 5 Mo.";
+    }
+}
 
 ?>
 
@@ -19,7 +68,7 @@ $dateSql = $date->format('Y-m-d H:i:s');
     <div class="hr"></div>
     <div class="action-faire-presence">
         <div class="scanner-sheet">
-            <button class="presence-list" data-modal-id="scanner-modal">
+            <button class="presence-list" onclick="window.location.href='<?= $router->url('add-presence') . '?use-link=student-presence' . '?redirect=1' ?>'" data-modal-id="scanner-modal">
                 Liste de présence
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="scanner-icon">
                     <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
@@ -41,6 +90,9 @@ $dateSql = $date->format('Y-m-d H:i:s');
                 </svg>
             </button>
         </div>
+        <?php if (isset($_GET['success'])): ?>
+            <div class="alert alert-primary">Votre message a été avec succès</div>
+        <?php endif ?>
     </div>
     <div class="documentation">
         <div class="documentation-intro" >
@@ -65,24 +117,5 @@ $dateSql = $date->format('Y-m-d H:i:s');
 
         </section>
         </div>
-    </div>
-    <!-- Boîte modale pour le scanner -->
-    <div class="modal-box" id="scanner-modal">
-        <div class="modal-box-overlay"></div>
-        <form class="modal-box-content" method="post" enctype="multipart/form-data">
-            <h2>Liste de présence</h2>
-            <div class="upload-desktop">
-                <label for="presence-file">Uploader un fichier :</label>
-                <input type="file" id="presence-file" name="absence-list" accept=".pdf,image/*">
-            </div>
-            <div id="upload-mobile">
-                <label for="presence-camera">Prendre une photo :</label>
-                <input type="file" id="presence-camera" name="absence-list" accept="image/*" capture="environment">
-            </div>
-            <div class="modal-buttons">
-                <button type="button" class="btn-modal close-modal">Annuler</button>
-                <button type="submit" class="btn-modal submit-presence">Valider</button>
-            </div>
-        </form>
     </div>
 </div>

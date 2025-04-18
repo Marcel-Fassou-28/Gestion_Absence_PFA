@@ -21,16 +21,9 @@ CREATE TABLE Utilisateur (
     email VARCHAR(250) NOT NULL,
     password VARCHAR(250) NOT NULL,
     role ENUM('admin', 'professeur', 'etudiant') NOT NULL,
-    photo MEDIUMBLOB
-);
-
--- Table RecuperationPassword
-CREATE TABLE RecuperationPassword (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(100) NOT NULL,
-    dateReset TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    validationCode VARCHAR(10) NOT NULL,
-    CONSTRAINT fk_recuperation_user FOREIGN KEY (email) REFERENCES Utilisateur(email)
+    nomPhoto VARCHAR(250),
+    codeRecuperation VARCHAR(10),
+    dateDerniereReinitialisation DATETIME
 );
 
 -- Table des Departements
@@ -128,6 +121,7 @@ CREATE TABLE Justificatif (
     statut ENUM('accepté', 'refusé', 'en attente') DEFAULT 'en attente',
     message TEXT NOT NULL,
     idAbsence INT NOT NULL,
+    nomFichierJustificatif VARCHAR(250),
     CONSTRAINT fk_justificatif_absence FOREIGN KEY (idAbsence) REFERENCES Absence(idAbsence) ON DELETE CASCADE
 );
 
@@ -135,27 +129,26 @@ CREATE TABLE Justificatif (
 CREATE TABLE ListePresence (
     id INT PRIMARY KEY AUTO_INCREMENT,
     cinProf VARCHAR(20) NOT NULL,
-    date DATE NOT NULL,
+    date DATETIME NOT NULL,
     classe VARCHAR(10) NOT NULL,
-    imageJustificatif MEDIUMBLOB,
+    nomFichierPresence VARCHAR(250),
     CONSTRAINT fk_liste_professeur FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE,
     CONSTRAINT fk_liste_classe FOREIGN KEY (classe) REFERENCES Classe(nomClasse) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Table Message
+-- Création de la table Message
 CREATE TABLE Message (
     id INT PRIMARY KEY AUTO_INCREMENT,
     date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     objet VARCHAR(250) NOT NULL,
-    contenu TEXT NOT NULL, 
-    idExpediteur VARCHAR(20) NOT NULL, 
-    idDestinataire VARCHAR(20) NOT NULL, 
+    contenu TEXT NOT NULL,
+    idExpediteur INT NOT NULL,
+    idDestinataire INT NOT NULL,
     typeDestinataire ENUM('admin', 'etudiant') NOT NULL,
-    lu ENUM('oui', 'non') DEFAULT 'non', 
-
+    idMessageParent INT NULL,
     CONSTRAINT fk_message_expediteur FOREIGN KEY (idExpediteur) 
         REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE,
-
     CONSTRAINT fk_message_destinataire FOREIGN KEY (idDestinataire) 
         REFERENCES Utilisateur(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

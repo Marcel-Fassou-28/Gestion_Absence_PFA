@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/css/list_prof/list.css">
     <link rel="stylesheet" href="/css/justificatif\justificatif.css">
     <link rel="stylesheet" href="/css/list_prof/modifierProf.css">
-    <link rel="stylesheet" href="/css/dashbord-etudiant/dashbord-etudiant.css">
+    <link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
     } 
@@ -51,8 +51,8 @@
                 <ul class="profil-pop-up">
                     <li><a href="<?= $urlUser['profil'] . '?user='.$_SESSION['role']?>">Profil</a></li>
                     <li><a href="">Calendrier</a></li>
-                    <li><a href="">Historique</a></li>
-                    <li><a href="">Signaler un problème</a></li>
+                    <li><a href="<?= $urlUser['absence'] ?>">Historique</a></li>
+                    <li><a href="#">Signaler un problème</a></li>
                     <li></li>
                     <li><a href="<?= $router->url('page-deconnexion') ?>">Deconnexion</a></li>
                 </ul>

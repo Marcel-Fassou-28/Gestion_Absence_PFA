@@ -37,7 +37,7 @@ if (isset($_SESSION)) {
     <div class="container-useful">
         <div class="info-section">
             <h3>Vos Informations</h3>
-            <a href="/edit-profile" class="edit-profile">Modifier le profil</a>
+            <a href="" class="edit-profile">Modifier le profil</a>
             <div class="personal-info">
                 <div>
                     <p>Email:</p>

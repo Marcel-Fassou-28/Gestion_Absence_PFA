@@ -39,7 +39,7 @@ if (!empty($_POST)) {
             $_SESSION['id_user'] = $user->getCIN();
             $_SESSION['role'] = $user->getRole();
             $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
-
+            
             header('Location:' . $router->url('user-home', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));
             exit();
         }else {
@@ -52,6 +52,9 @@ if (!empty($_POST)) {
 <div class="login-section">
     <div class="login-container">
         <h2>Se connecter à GAENSAJ</h2>
+        <?php if(isset($_GET['error']) && $_GET['error'] == '1'): ?>
+            Le code de vérification a expiré. Veuillez demander un nouveau code;
+        <?php endif ?>
         <?php if($errorPassword): ?>
         <div class="alert">
             Identifiant ou mot de passe incorrect

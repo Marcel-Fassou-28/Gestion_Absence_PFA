@@ -70,10 +70,7 @@ $currentTime = $date->format('H:i:s');
                             : 'Non spécifié' ?>
                     </span>
                 </div>
-                <div class="absence-detail">
-                    <span class="absence-label">Nombre d'absents :</span>
-                    <span class="absence-value"><?= htmlspecialchars($lastInfoAbsence->getNombreAbsents() ?? 0) ?></span>
-                </div>
+                
             </li>
         <?php else: ?>
             <li class="absence-item absence-empty">

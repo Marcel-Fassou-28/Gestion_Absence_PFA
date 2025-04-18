@@ -768,7 +768,7 @@ padding-bottom: 50px;
 }
 
 .modal-box {
-    display: none;
+    display: block;
     position: fixed;
     top: 0;
     left: 0;
@@ -852,14 +852,6 @@ padding-bottom: 50px;
     opacity: 0.9;
 }
 
-.modal-box.active {
-    display: block;
-}
-
-.modal-box-overlay.active,
-.modal-box-content.active {
-    display: block;
-}
 
 /* Styles spécifiques pour mobile (largeur < 600px) */
 @media screen and (max-width: 600px) {

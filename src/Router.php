@@ -104,10 +104,13 @@ class Router {
                     break;
                 case 'etudiant':
                     $urlUser = [
-                        'dashboard' => $this->url('student-dashboard'),
-                        'home' => $this->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
+                        'dashboard' => $this->url('user-dashboard',  ['role'=> $_SESSION['role']]),
+                        'home' => $this->url('user-home', ['role'=> $_SESSION['role']]),
                         'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
                         
+                        'listeProfesseurs' => $router->url('liste_Des_Professeur'),
+                        'messagerie'=> $router->url('etudiant-messagerie'),
+                        'absence'=>$router->url('etudiant-absences'),
                     ];
                     break;
             }
@@ -119,7 +122,7 @@ class Router {
         require $this->viewPath . DIRECTORY_SEPARATOR . 'layout/'. $layout.'.php';
         return $this;
     }
- 
+
     /**
      * Genere une url qui en paramètre le nom qui lui est attribué
      * @param string $name Nom de l'url donné à la methode get, post, match
