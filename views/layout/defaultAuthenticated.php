@@ -49,8 +49,8 @@
                 <ul class="profil-pop-up">
                     <li><a href="<?= $urlUser['profil'] . '?user='.$_SESSION['role']?>">Profil</a></li>
                     <li><a href="">Calendrier</a></li>
-                    <li><a href="">Historique</a></li>
-                    <li><a href="">Signaler un problème</a></li>
+                    <li><a href="<?= $urlUser['absence'] ?>">Historique</a></li>
+                    <li><a href="#">Signaler un problème</a></li>
                     <li></li>
                     <li><a href="<?= $router->url('page-deconnexion') ?>">Deconnexion</a></li>
                 </ul>

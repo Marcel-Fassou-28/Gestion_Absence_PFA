@@ -1,63 +1,63 @@
-<div class="dashboard-messagerie container">
-    <div>
-        <h2 class="messagerie-intro ">Ma messagerie</h2><div class="hr"></div>
+<?php
+use App\MessageTable;
+use App\UserTable;
+use App\Model\Message;
+
+// Vérifie si l'utilisateur est connecté
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$user = $_SESSION['user'];
+$idUtilisateur = $user['id'];
+$role = $user['role'];
+
+// Récupérer tous les messages pour l'utilisateur
+$messages = $messageTable->getMessages($idUtilisateur, $role);
+
+// Séparer reçus et envoyés
+$messagesRecus = array_filter($messages, fn($m) => $m->getIdDestinataire() == $idUtilisateur);
+$messagesEnvoyes = array_filter($messages, fn($m) => $m->getIdExpediteur() == $idUtilisateur);
+?>
+
+ <div class="messagerie-container">
+        <h2>Messagerie</h2>
+        <a href="nouveau-message.php" class="btn-nouveau-message">Nouveau Message</a>
+
+        <div class="section-messages">
+            <h3>Messages reçus</h3>
+            <?php if (empty($messagesRecus)): ?>
+                <p>Aucun message reçu.</p>
+            <?php else: ?>
+                <ul class="liste-messages">
+                    <?php foreach ($messagesRecus as $message): ?>
+                        <li class="message">
+                            <strong>De :</strong> <?= htmlspecialchars($userTable->getUserNameById($message->getIdExpediteur())) ?><br>
+                            <strong>Objet :</strong> <?= htmlspecialchars($message->getObjet()) ?><br>
+                            <strong>Date :</strong> <?= htmlspecialchars($message->getDate()) ?><br>
+                            <strong>Contenu :</strong> <?= nl2br(htmlspecialchars($message->getContenu())) ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+
+        <div class="section-messages">
+            <h3>Messages envoyés</h3>
+            <?php if (empty($messagesEnvoyes)): ?>
+                <p>Aucun message envoyé.</p>
+            <?php else: ?>
+                <ul class="liste-messages">
+                    <?php foreach ($messagesEnvoyes as $message): ?>
+                        <li class="message">
+                            <strong>À :</strong> <?= htmlspecialchars($userTable->getUserNameById($message->getIdDestinataire())) ?><br>
+                            <strong>Objet :</strong> <?= htmlspecialchars($message->getObjet()) ?><br>
+                            <strong>Date :</strong> <?= htmlspecialchars($message->getDate()) ?><br>
+                            <strong>Contenu :</strong> <?= nl2br(htmlspecialchars($message->getContenu())) ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
     </div>
-    <div class="new-msg-btn">
-        <button type="button" class="btn-nouveau-message">Nouveau message +</button>
-    </div>
-    <div class="new-msg-form"></div>
-        <center>
-        <form class="new-msg">
-            <h2>Envoyer un message</h2>
-            <label for="objet">Objet</label>
-            <input type="text" name="objet">
-            <label for="message">message</label>
-            <textarea name="message"></textarea>
-            <input type="submit" value="Envoyé">
-        </form>
-        </center>
-    <div class="dashboard-container">
-        <table class="msg-table">
-            <tr>
-                <td>
-                    <div class="msg-row">
-                        <span class="msg-text">Justificatif accepté</span>
-                        <button type="button" class="msg-btn">reçus le 08/03/2025 +</button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="msg-row">
-                        <span class="msg-text"></span>
-                        <button type="button" class="msg-btn"></button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="msg-row">
-                        <span class="msg-text"></span>
-                        <button type="button" class="msg-btn"></button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="msg-row">
-                        <span class="msg-text"></span>
-                        <button type="button" class="msg-btn"></button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="msg-row">
-                        <span class="msg-text"></span>
-                        <button type="button" class="msg-btn"></button>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
