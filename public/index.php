@@ -21,6 +21,7 @@ $router
 
     ->get('/my/[*:role]/dashboard', 'utilisateur/dashboard','user-dashboard')
     ->get('/my/profil/[*:role]','utilisateur/profil','user-profil')
+    ->match('/edit/profil/[*:role]/[*:id]', 'utilisateur/editer/editerProfil', 'edit-profil')
 
     /* Contenu pour les profs */
 

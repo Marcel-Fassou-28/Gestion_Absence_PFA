@@ -96,25 +96,15 @@ class UserTable extends Table {
      * @return Utilisateur|null
      */
     
-    public function findById(int $id): ?Utilisateur {
-        $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE id = :id');
-        $query->execute(['id' => $id]);
+    public function findByCin(string $cin): ?Utilisateur {
+        $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE cin = :cin');
+        $query->execute(['cin' => $cin]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
         $result = $query->fetch();
 
         return $result ?: null;
     }
 
-    /**
-     * Retourne uniquement le nom d'un utilisateur à partir de son ID
-     * 
-     * @param int $id
-     * @return string
-     */
-    public function getUserNameById(int $id): string {
-        $user = $this->findById($id);
-        return $user ? $user->getNom() : 'Inconnu';
-    }
     public function codeInsertion(string $code, string $email) {
         $query = $this->pdo->prepare('
             UPDATE '. $this->table .' SET codeRecuperation = :code, 

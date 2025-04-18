@@ -6,22 +6,22 @@ class Message {
     private $date;
     private $objet;
     private $contenu;
-    private $idExpediteur;
-    private $idDestinataire;
+    private $cinExpediteur;
+    private $cinDestinataire;
     private $typeDestinataire;
     private $lu;
-
+    /*
     // Constructeur pour initialiser un message
-    public function __construct($id, $date, $objet, $contenu, $idExpediteur, $idDestinataire, $typeDestinataire, $lu) {
+    public function __construct($id, $date, $objet, $contenu, $cinExpediteur, $cinDestinataire, $typeDestinataire, $lu) {
         $this->id = $id;
         $this->date = $date;
         $this->objet = $objet;
         $this->contenu = $contenu;
-        $this->idExpediteur = $idExpediteur;
-        $this->idDestinataire = $idDestinataire;
+        $this->cinExpediteur = $cinExpediteur;
+        $this->cinDestinataire = $cinDestinataire;
         $this->typeDestinataire = $typeDestinataire;
         $this->lu = $lu;
-    }
+    }*/
 
     // Getter methods
     public function getId() { 
@@ -40,12 +40,12 @@ class Message {
         return $this->contenu; 
     }
 
-    public function getIdExpediteur() { 
-        return $this->idExpediteur; 
+    public function getCinExpediteur() { 
+        return $this->cinExpediteur; 
     }
 
-    public function getIdDestinataire() { 
-        return $this->idDestinataire; 
+    public function getCinDestinataire() { 
+        return $this->cinDestinataire; 
     }
 
     public function getTypeDestinataire() { 
@@ -56,17 +56,38 @@ class Message {
         return $this->lu; 
     }
 
-    // Méthode pour initialiser un message à partir d'un tableau de données
-    public static function fromArray($data) {
-        return new self(
-            $data['id'], 
-            $data['date_envoi'], 
-            $data['objet'], 
-            $data['contenu'], 
-            $data['id_expediteur'], 
-            $data['id_destinataire'], 
-            $data['type_destinataire'], 
-            $data['lu']
-        );
+    // Les setters pour initialiser le msg
+    public function setId($id) { 
+        $this->id=$id; 
     }
+
+    public function setDate($date) { 
+        $this->date=$date; 
+    }
+
+    public function setObjet($objet) { 
+        $this->objet=$objet; 
+    }
+
+    public function setContenu($contenu) { 
+        $this->contenu=$contenu; 
+    }
+
+    public function setCinExpediteur($cinExpediteur) { 
+        $this->cinExpediteur=$cinExpediteur; 
+    }
+
+    public function setCinDestinataire($cinDestinataire) { 
+        $this->cinDestinataire=$cinDestinataire; 
+    }
+
+    public function setTypeDestinataire($typeDestinataire) { 
+        $this->typeDestinataire=$typeDestinataire; 
+    }
+
+    public function setLu($lu) { 
+        $this->lu=$lu; 
+    }
+
+    
 }
