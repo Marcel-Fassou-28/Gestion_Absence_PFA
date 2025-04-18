@@ -10,32 +10,34 @@ $listeJustificatif = $list->getAllJustificatif();
 
 ?>
 
-<div id="interface">
-        <div id="liste">
-            <h1 id="titre">Historiques des justificatifs</h1>
-            <hr>
+<div class="global">
+    <div id="liste">
+        <h1 id="titre">Historiques des justificatifs</h1>
+        <hr>
 
-            <div id="justificatif">
-                <table id="tables">
-                    <thead>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>Date de soumission</th>
-                        <th>Action</th>
-                    </thead>
-                    <?php 
-                       foreach($listeJustificatif as $row){?>
-                       <tr><?php
-                        foreach($row as $col => $val){
-                    
-                            if(!is_integer($col)){
-                        ?>
-                        <td><?= htmlspecialchars($val);}}?></td>
-                        <td><button><a href="">Details</a></button></td>
-                        </tr><?php
+        <div class="list-tri justificatifs">
+            <table class="prof-table">
+                <thead class="heads">
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Date de soumission</th>
+                    <th>Action</th>
+                </thead>
+                <?php
+                foreach ($listeJustificatif as $row) { ?>
+                    <tr><?php
+                    foreach ($row as $col => $val) {
+
+                        if (!is_integer($col)) {
+                            ?>
+                                <td><?= htmlspecialchars($val);
                         }
-                    ?>
-                </table>
-            </div>
+                    } ?></td>
+                        <td><button class="btn1"><a href="">Details</a></button></td>
+                    </tr><?php
+                }
+                ?>
+            </table>
         </div>
     </div>
+</div>

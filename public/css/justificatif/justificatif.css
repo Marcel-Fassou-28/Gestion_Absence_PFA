@@ -1,38 +1,36 @@
 #liste {
     display: flex;
     flex-direction: column;
-    margin: 10px 15% 15px 15%;
+    margin: 10px 10% 15px 10%;
+    padding: 5%;
+    background-color: #1D1C1E90;
+    color: var(--text-color);
+    border-radius: 25px;
 }
 #liste h1{
     margin: 0;
 }
-#liste hr{
-    display:inline;
-    background-color: aqua;
-    height: 1px;
+
+.justificatifs {
+    
+    
     width: 100%;
-    margin:0;
-}
-#justificatif {
-    background-color: #1D1C1E90;
-    padding: 40px;
-    width: 70%;
-    border-radius: 25px;
-    margin-top: 45px;
+    
+  
 }
 #tables{
     border-collapse: collapse;
     width: 100%;
 }
 
- table tr td{
+ /*table tr td{
     border-bottom: solid 1px white;
     text-align: center;
     font-size: medium;
     padding-bottom: 25px;
     padding-top: 20px;
  }
-table tr th {
+/*table tr th {
     border-bottom: solid 1px white;
     text-align: center;
     
@@ -40,7 +38,7 @@ table tr th {
     padding-bottom: 25px;
     padding-top: 20px;
 }
-table tr td button{
+/*table tr td button{
     border-radius: 15px;
     border: none;
     width: 100%;
@@ -49,4 +47,4 @@ table tr td button{
         text-decoration: none;
         color: #000;
     }
-}
+}*/

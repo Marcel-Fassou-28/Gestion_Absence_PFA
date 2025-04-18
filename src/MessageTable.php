@@ -1,46 +1,122 @@
 <?php
+
 namespace App;
+
 use App\Abstract\Table;
+use PDO;
 use App\Model\Message;
 
-class MessageTable extends Table {
-    protected $table = "message";
-    protected $class = Message::class;
+class MessageTable extends Table{
 
-    // Envoyer un message
-    public function envoyerMessage(int $idExpediteur, int $idDestinataire, string $typeDestinataire, string $objet, string $contenu) {
-        $query = $this->pdo->prepare('
-            INSERT INTO message (idExpediteur, idDestinataire, typeDestinataire, objet, contenu)
-            VALUES (:idExpediteur, :idDestinataire, :typeDestinataire, :objet, :contenu)
-        ');
-        $query->execute([
-            'idExpediteur' => $idExpediteur,
-            'idDestinataire' => $idDestinataire,
-            'typeDestinataire' => $typeDestinataire,
-            'objet' => $objet,
-            'contenu' => $contenu
+    /**
+     * Envoie un message :
+     *  - si l'expéditeur est étudiant, on envoie à tous les admins
+     *  - sinon (admin), on envoie au destinataire spécifié
+     */
+    public function envoyerMessage(
+        string $cinExpediteur,
+        string $cinDestinataire,
+        string $typeDestinataire,
+        string $objet,
+        string $contenu
+    ): void {
+        if (empty($objet) || empty($contenu)) {
+            throw new \Exception("L'objet et le contenu ne peuvent pas être vides.");
+        }
+
+        $userTable = new UserTable($this->pdo);
+        $expediteur = $userTable->findByCin($cinExpediteur);
+        if (!$expediteur) {
+            throw new \Exception("L'expéditeur n'existe pas.");
+        }
+
+        // Étudiant → tous les admins
+        if ($expediteur->getRole() === 'etudiant') {
+            $admins = $userTable->getAllAdmins();
+            if (empty($admins)) {
+                throw new \Exception("Aucun administrateur trouvé.");
+            }
+            foreach ($admins as $admin) {
+                $this->insertMessage($cinExpediteur, $admin->getCIN(), 'admin', $objet, $contenu);
+            }
+        }
+        // Admin → un étudiant
+        else {
+            if (!$userTable->findByCin($cinDestinataire)) {
+                throw new \Exception("Le destinataire n'existe pas.");
+            }
+            if (!in_array($typeDestinataire, ['admin', 'etudiant'])) {
+                throw new \Exception("Type de destinataire invalide.");
+            }
+            $this->insertMessage($cinExpediteur, $cinDestinataire, $typeDestinataire, $objet, $contenu);
+        }
+    }
+
+    /** 
+     * Insert avec création de statut de lecture 
+     */
+    private function insertMessage(
+        string $cinExpediteur,
+        string $cinDestinataire,
+        string $typeDestinataire,
+        string $objet,
+        string $contenu,
+        ?int $idMessageParent=null
+    ): void {
+        // 1) Insertion du message
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO message 
+             (objet, contenu, cinExpediteur, cinDestinataire, typeDestinataire)
+             VALUES (:objet, :contenu, :exp, :dest, :type)"
+        );
+        $stmt->execute([
+            'objet'   => $objet,
+            'contenu' => $contenu,
+            'exp'     => $cinExpediteur,
+            'dest'    => $cinDestinataire,
+            'type'    => $typeDestinataire
         ]);
+
     }
 
-    // Récupérer les messages d'un utilisateur
-    public function getMessages(int $idUtilisateur, string $role): array {
-        $query = $this->pdo->prepare('
-            SELECT * FROM message 
-            WHERE (idDestinataire = :id AND typeDestinataire = :role) 
-               OR (idExpediteur = :id)
-            ORDER BY date DESC
-        ');
-        $query->execute(['id' => $idUtilisateur, 'role' => $role]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
-        $result = $query->fetchAll();
-        return $result ?: [];
+    /**
+     * Récupère tous les messages (reçus ou envoyés) pour un utilisateur
+     * et renvoie un tableau d’objets Message
+     */
+    public function getMessages(string $cinUtilisateur, string $role): array
+    {
+        $query = "
+                    SELECT m.*
+        FROM Message m
+        JOIN Utilisateur u ON (m.cinExpediteur = u.cin OR m.cinDestinataire = u.cin)
+        WHERE u.cin =:cin AND u.role = :role
+        ORDER BY m.date DESC
+
+        ";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            'cin' => $cinUtilisateur,
+            'role'   => $role
+        ]);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, Message::class);
+        return $stmt->fetchAll() ?: [];
     }
 
-    // Marquer un message comme lu
-    public function marquerCommeLu(int $idMessage) {
-        $query = $this->pdo->prepare('
-            UPDATE message SET lu = "oui" WHERE id = :id
-        ');
-        $query->execute(['id' => $idMessage]);
+    /**
+     * Marque un message comme lu pour un utilisateur donné
+     */
+    public function marquerCommeLu(int $idMessage, string $cinUtilisateur): void
+    {
+        $stmt = $this->pdo->prepare(
+            "UPDATE Message
+             SET lu = 'oui' 
+             WHERE idMessage = :idMsg 
+             AND cinDestinataire = :cinUser"
+        );
+        $stmt->execute([
+            'idMsg'  => $idMessage,
+            'cinUser' => $cinUtilisateur
+        ]);
     }
 }
