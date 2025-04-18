@@ -37,7 +37,7 @@ if (isset($_SESSION)) {
     <div class="container-useful">
         <div class="info-section">
             <h3>Vos Informations</h3>
-            <a href="" class="edit-profile">Modifier le profil</a>
+            <a href="<?= $router->url('edit-profil', ['role' => $user->getRole(), 'id' =>$user->getCIN()]) . '?edit_profil=1' ?>" target="_blank" class="edit-profile">Modifier le profil</a>
             <div class="personal-info">
                 <div>
                     <p>Email:</p>
