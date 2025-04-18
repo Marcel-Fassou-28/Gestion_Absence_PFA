@@ -32,8 +32,6 @@ class UserTable extends Table {
         return $result ?: null;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Cette methode permet de trouver un utilisateur par son email
      * 
@@ -53,20 +51,13 @@ class UserTable extends Table {
     }
 
 
->>>>>>> 58a9354086fcd6e68d31eef68f9ceab981288b5f
     /**
      * Cette méthode retourne les informations d'un utilisateur à partir de son CIN
      * 
      * @param string $cin
-<<<<<<< HEAD
-     * @return Utilisateur
-     */
-    public function getIdentification(string $cin): Utilisateur {
-=======
      * @return Utilisateur|null
      */
     public function getIdentification(string $cin):?Utilisateur {
->>>>>>> 58a9354086fcd6e68d31eef68f9ceab981288b5f
         $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE cin = :cin');
         $query->execute(['cin' => $cin]);
 
@@ -104,6 +95,7 @@ class UserTable extends Table {
      * @param int $id
      * @return Utilisateur|null
      */
+    
     public function findById(int $id): ?Utilisateur {
         $query = $this->pdo->prepare('SELECT * FROM '. $this->table .' WHERE id = :id');
         $query->execute(['id' => $id]);
@@ -113,7 +105,6 @@ class UserTable extends Table {
         return $result ?: null;
     }
 
-<<<<<<< HEAD
     /**
      * Retourne uniquement le nom d'un utilisateur à partir de son ID
      * 
@@ -123,8 +114,7 @@ class UserTable extends Table {
     public function getUserNameById(int $id): string {
         $user = $this->findById($id);
         return $user ? $user->getNom() : 'Inconnu';
-=======
-
+    }
     public function codeInsertion(string $code, string $email) {
         $query = $this->pdo->prepare('
             UPDATE '. $this->table .' SET codeRecuperation = :code, 
@@ -161,7 +151,6 @@ class UserTable extends Table {
             return false;
         }
         
->>>>>>> 58a9354086fcd6e68d31eef68f9ceab981288b5f
     }
 
     /**
