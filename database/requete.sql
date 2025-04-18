@@ -129,7 +129,7 @@ CREATE TABLE Justificatif (
 CREATE TABLE ListePresence (
     id INT PRIMARY KEY AUTO_INCREMENT,
     cinProf VARCHAR(20) NOT NULL,
-    date DATE NOT NULL,
+    date DATETIME NOT NULL,
     classe VARCHAR(10) NOT NULL,
     nomFichierPresence VARCHAR(250),
     CONSTRAINT fk_liste_professeur FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE,

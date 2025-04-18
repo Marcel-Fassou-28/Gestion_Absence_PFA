@@ -15,7 +15,7 @@ $router
     ->match('/login/recover/authentification/[*:id]', 'utilisateur/recovery/codeAuth', 'code-recuperation' )
 
     /* Lorsque l'utilisateur est connecté */
-    ->get('/home/my/[*:role]/[*:id]', 'utilisateur/home','user-home')
+    ->get('/home/my/[*:role]', 'utilisateur/home','user-home')
 
     ->get('/my/admin/dashboard', 'utilisateur/admin/dashboard','administrator-dashboard')
 
@@ -27,6 +27,7 @@ $router
     ->match('/my/use/professeur/liste-des-presence', 'utilisateur/professors/ressources/listePresence','professor-listePresence')
     ->match('/my/use/professeur/liste-des-presence/presence', 'utilisateur/professors/ressources/presence','professor-presence')
     ->match('/my/use/professeur/liste-des-etudants', 'utilisateur/professors/ressources/listeEtudiant','professor-listeEtudiant')
+    ->match('/my/use/professeur/liste-des-presence/send', 'utilisateur/professors/ressources/addPresence', 'add-presence')
     ->match('/my/historics/professeur/absence', 'utilisateur/professors/historics/absence','historic-absence')
     /* Contenu pour les admins */
     ->match('/my/liste-des-professeurs', 'utilisateur/admin/listeProfesseur','liste_Des_Professeur')

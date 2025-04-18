@@ -95,7 +95,7 @@ class ListePresence {
      * 
      * @param string $classe
      */
-    public function setNiveau(string $classe) {
+    public function setClasse(string $classe) {
         $this->classe = $classe;
     }
 

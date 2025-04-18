@@ -9,7 +9,7 @@ use App\Model\Absents;
 use App\Model\Classe;
 use App\Model\Matiere;
 use App\Model\AbsenceEtudiant;
-
+use App\Model\ListePresence;
 use App\Model\Utils\InfoAbsenceEtudiant;
 use App\Model\Utils\EtudiantsAbsents;
 
@@ -274,6 +274,23 @@ class ProfessorTable extends Table {
         $result = $query->fetchAll();
 
         return $result;
+    }
+
+    public function sendListPresence(ListePresence $list):bool {
+        $query = $this->pdo->prepare('
+            INSERT INTO listepresence(cinProf, classe ,nomFichierPresence) VALUES (:cinProf, :classe, :nomFichierPresence)
+        ');
+        if ($list !== null) {
+            $query->execute([
+                'cinProf' => $list->getCINProf(),
+                'classe' => $list->getClasse(),
+                'nomFichierPresence' => $list->getNomFichierPresence()
+            ]);
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
 
