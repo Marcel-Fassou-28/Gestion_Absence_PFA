@@ -90,14 +90,14 @@ class Router {
             switch ($_SESSION['role']) {
                 case 'admin':
                     $urlUser = [
-                        'dashboard' => $router->url('administrator-dashboard'),
+                        'dashboard' =>$this->url('user-dashboard',  ['role'=> $_SESSION['role']]),
                         'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
                         'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']])
                     ];
                     break;
                 case 'professeur':
                     $urlUser = [
-                        'dashboard' => $router->url('professor-dashboard'),
+                        'dashboard' =>$this->url('user-dashboard',  ['role'=> $_SESSION['role']]),
                         'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
                         'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']])
                     ];
