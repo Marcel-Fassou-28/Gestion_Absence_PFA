@@ -97,11 +97,15 @@ if (isset($_SESSION)) {
             </div>
         <?php endif ?>
         <div class="useful-link-section">
+            
             <h3>Liens Utiles</h3>
-            <ul>
-                <li><a href="">Listes des étudiants</a></li>
+            <ul></ul>
+                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('liste_Des_etudiants');}
+                else {echo $router->url('professor-listeEtudiant') . '?use-link=student-list';} ?>">
+                    Listes des étudiants</a></li>
                 <?php if ($_SESSION['role'] === 'admin'): ?>
-                <li><a href="<?=$urlUser['listeProfesseurs']?>">Liste des professeurs</a></li>
+                <li><a href="<?=$router->url('liste_Des_Professeur')?>">Liste des professeurs</a></li>
+                <li><a href="<?=$router->url('RecapAbsences')?>">Recapitulatif des Absences</a></li>
                 <?php endif ?>
                 <li><a href="">Informations supplémentaires</a></li>
             </ul>
@@ -109,9 +113,10 @@ if (isset($_SESSION)) {
         <div class="historic-section">
             <h3>Historiques</h3>
             <ul>
-                <li><a href="/historique-soumissions">Historiques des soumissions</a></li>
+                
+                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('historikAbscences');}?>">Historiques des soumissions</a></li>
                 <?php if ($_SESSION['role'] === 'admin') :?>
-                <li><a href="<?= $urlUser['justifications']?>">Historiques des justificatifs</a></li>
+                <li><a href="<?=  $router->url('justification');?>">Historiques des justificatifs</a></li>
                 <?php endif ?>
             </ul>
         </div>

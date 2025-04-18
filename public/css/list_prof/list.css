@@ -7,15 +7,42 @@
     background-color: var(--bg-section-abstract);
     color: var(--text-color);
     transform: translateY(50px);
+    
 
 
 }
+.global{
+    padding: 5% 0;
+
+}
+
+.infoA{
+    display: flex;
+    justify-content: space-between;
+    
+}
+.absentet{
+    padding: 5%;
+    background-color: #1D1C1E90;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
+    border-radius: 13px;
+    margin-bottom: 22px;
+    width: 80%;
+    margin-left: 10%;
+}
+    
+    
+
 
 hr {
 
     background-color: white;
     height: 5px;
     border-radius: 10px;
+    width: 90%;
+    margin-left: 5%;
 }
 
 .tri-list {
@@ -41,18 +68,25 @@ hr {
     text-align: center;
 }
 
+.list-tri{
+   padding-top: 15px;
+   
+}
 
 .prof-table {
     width: 100%;
     text-align: center;
+    
    
 
 }
 
 
+
 .heads th{
 
     padding: 10px;
+    color: var(--text-color);
    
     background-color: var(--navbar-color);
     
@@ -73,7 +107,7 @@ td {
     background-color: white;
     color: black;
     padding: 5px;
-    border: solid 1px var(--bg-section-abstract);
+    border: solid 1px var(--navbar-color);
 }
 .btns{
     display: flex;
@@ -83,13 +117,15 @@ td {
  .btn1,.btn2{
     color: var(--text-color);
     border-radius: 12px;
-    padding: 10px;
+    padding: 12px;
     background-color: var(--navbar-color);
     border: none;
+
 }
 .btn2{
-    margin-left: 12px;
+    
     font-weight: 700;
+    margin-left: 12px;
     background-color: red;
 }
 .btn-ajout{

@@ -33,11 +33,15 @@ $router
 
     ->match('/my/logout', 'login/logout', 'page-deconnexion')
     /* Contenu pour les admins */
-    ->match('/my/liste-des-professeurs', 'utilisateur/admin/listeProfesseur','liste_Des_Professeur')
+    ->match('/my/liste-des-professeurs', 'utilisateur/admin/gestionProf/listeProfesseur',name: 'liste_Des_Professeur')
     ->match('/my/justificatif','utilisateur/admin/justifyHistory','justification')
-    ->match('/my/modifier-prof','utilisateur/admin/modifierProf','modifier_professeur')
-    ->match('/my/ajouter-prof','utilisateur/admin/ajouterProf','ajouterProf')
-
+    ->match('/my/modifier-prof','utilisateur/admin/gestionProf/modifierProf','modifier_professeur')
+    ->match('/my/ajouter-prof','utilisateur/admin/gestionProf/ajouterProf','ajouterProf')
+    ->match('/my/ajouter-Etudiant','utilisateur/admin/gestionEtudiant/ajouteretudiant','ajouterEtudiant')
+    ->match('/my/liste-Etudiants','utilisateur/admin/gestionEtudiant/listeEtudiants','liste_Des_etudiants')
+    ->match('/my/modifier-student','utilisateur/admin/gestionEtudiant/modifierEtudiant','modifier-student')
+    ->match('/my/historiques-des-absences','utilisateur/admin/absences\historiquesAbsences','historikAbscences')
+    ->match('/my/recapitulatif-Absences','utilisateur/admin/absences/recapAbsences','RecapAbsences')
     
     ->match('/api/matiere_classe', 'api/get_matiere_classe', 'api')
     ->match(  '/my/admin/messagerie', 'utilisateur/admin/messagerie','admin-messagerie')
