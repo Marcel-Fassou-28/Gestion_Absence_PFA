@@ -1,5 +1,8 @@
+.contains{
+    padding: 10% 0;
+}
 .modif{
-    transform: translateY(90px);
+    
     color: var(--text-color);
     display: flex;
     flex-direction: column;
@@ -7,6 +10,7 @@
     border-radius: 12px;
     margin: 0 15%;
     align-items: center;
+    
 }
 .modif-div{
     display: flex;

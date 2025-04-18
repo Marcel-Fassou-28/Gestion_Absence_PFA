@@ -121,7 +121,7 @@ class Etudiant {
      * 
      * @return string|null
      */
-    public function getCNE(): ?string { 
+    public function getCNE(): ?string {
         return $this->cne; 
     }
 
