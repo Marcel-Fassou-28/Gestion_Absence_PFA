@@ -2,17 +2,11 @@
 
 namespace App;
 
+use App\Abstract\Table;
 use PDO;
 use App\Model\Message;
 
-class MessageTable
-{
-    private PDO $pdo;
-
-    public function __construct(PDO $pdo)
-    {
-        $this->pdo = $pdo;
-    }
+class MessageTable extends Table{
 
     /**
      * Envoie un message :
@@ -20,19 +14,18 @@ class MessageTable
      *  - sinon (admin), on envoie au destinataire spécifié
      */
     public function envoyerMessage(
-        int $idExpediteur,
-        int $idDestinataire,
+        string $cinExpediteur,
+        string $cinDestinataire,
         string $typeDestinataire,
         string $objet,
-        string $contenu,
-        ?int $idMessageParent = null
+        string $contenu
     ): void {
         if (empty($objet) || empty($contenu)) {
             throw new \Exception("L'objet et le contenu ne peuvent pas être vides.");
         }
 
         $userTable = new UserTable($this->pdo);
-        $expediteur = $userTable->findById($idExpediteur);
+        $expediteur = $userTable->findByCin($cinExpediteur);
         if (!$expediteur) {
             throw new \Exception("L'expéditeur n'existe pas.");
         }
@@ -44,18 +37,18 @@ class MessageTable
                 throw new \Exception("Aucun administrateur trouvé.");
             }
             foreach ($admins as $admin) {
-                $this->insertMessage($idExpediteur, $admin->getId(), 'admin', $objet, $contenu, $idMessageParent);
+                $this->insertMessage($cinExpediteur, $admin->getCIN(), 'admin', $objet, $contenu);
             }
         }
         // Admin → un étudiant
         else {
-            if (!$userTable->findById($idDestinataire)) {
+            if (!$userTable->findByCin($cinDestinataire)) {
                 throw new \Exception("Le destinataire n'existe pas.");
             }
             if (!in_array($typeDestinataire, ['admin', 'etudiant'])) {
                 throw new \Exception("Type de destinataire invalide.");
             }
-            $this->insertMessage($idExpediteur, $idDestinataire, $typeDestinataire, $objet, $contenu, $idMessageParent);
+            $this->insertMessage($cinExpediteur, $cinDestinataire, $typeDestinataire, $objet, $contenu);
         }
     }
 
@@ -63,65 +56,46 @@ class MessageTable
      * Insert avec création de statut de lecture 
      */
     private function insertMessage(
-        int $idExpediteur,
-        int $idDestinataire,
+        string $cinExpediteur,
+        string $cinDestinataire,
         string $typeDestinataire,
         string $objet,
         string $contenu,
-        ?int $idMessageParent
+        ?int $idMessageParent=null
     ): void {
         // 1) Insertion du message
         $stmt = $this->pdo->prepare(
             "INSERT INTO message 
-             (date, objet, contenu, idExpediteur, idDestinataire, typeDestinataire, idMessageParent)
-             VALUES (NOW(), :objet, :contenu, :exp, :dest, :type, :parent)"
+             (objet, contenu, cinExpediteur, cinDestinataire, typeDestinataire)
+             VALUES (:objet, :contenu, :exp, :dest, :type)"
         );
         $stmt->execute([
             'objet'   => $objet,
             'contenu' => $contenu,
-            'exp'     => $idExpediteur,
-            'dest'    => $idDestinataire,
-            'type'    => $typeDestinataire,
-            'parent'  => $idMessageParent
+            'exp'     => $cinExpediteur,
+            'dest'    => $cinDestinataire,
+            'type'    => $typeDestinataire
         ]);
 
-        $idMessage = (int)$this->pdo->lastInsertId();
-
-        // 2) Création du statut de lecture
-        $statusStmt = $this->pdo->prepare(
-            "INSERT INTO MessageStatus (idMessage, idUtilisateur, lu, ouvertParAutreAdmin)
-             VALUES (:idMsg, :user, 'non', 'non')"
-        );
-        $statusStmt->execute([
-            'idMsg' => $idMessage,
-            'user'  => $idDestinataire
-        ]);
     }
 
     /**
      * Récupère tous les messages (reçus ou envoyés) pour un utilisateur
      * et renvoie un tableau d’objets Message
      */
-    public function getMessages(int $idUtilisateur, string $role): array
+    public function getMessages(string $cinUtilisateur, string $role): array
     {
         $query = "
-            SELECT m.*,
-                   exp.nom   AS expNom,   exp.prenom   AS expPrenom,
-                   dest.nom  AS destNom,  dest.prenom  AS destPrenom,
-                   ms.lu     AS messageLu,
-                   ms.ouvertParAutreAdmin AS ouvertParAutre
-            FROM message m
-            LEFT JOIN utilisateur exp  ON m.idExpediteur   = exp.id
-            LEFT JOIN utilisateur dest ON m.idDestinataire = dest.id
-            LEFT JOIN MessageStatus ms 
-              ON m.id = ms.idMessage AND ms.idUtilisateur = :idUser
-            WHERE (m.idDestinataire = :idUser AND m.typeDestinataire = :role)
-               OR (m.idExpediteur   = :idUser)
-            ORDER BY m.date DESC
+                    SELECT m.*
+        FROM Message m
+        JOIN Utilisateur u ON (m.cinExpediteur = u.cin OR m.cinDestinataire = u.cin)
+        WHERE u.cin =:cin AND u.role = :role
+        ORDER BY m.date DESC
+
         ";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
-            'idUser' => $idUtilisateur,
+            'cin' => $cinUtilisateur,
             'role'   => $role
         ]);
 
@@ -132,32 +106,17 @@ class MessageTable
     /**
      * Marque un message comme lu pour un utilisateur donné
      */
-    public function marquerCommeLu(int $idMessage, int $idUtilisateur): void
+    public function marquerCommeLu(int $idMessage, string $cinUtilisateur): void
     {
         $stmt = $this->pdo->prepare(
-            "UPDATE MessageStatus 
+            "UPDATE Message
              SET lu = 'oui' 
              WHERE idMessage = :idMsg 
-               AND idUtilisateur = :idUser"
+             AND cinDestinataire = :cinUser"
         );
         $stmt->execute([
             'idMsg'  => $idMessage,
-            'idUser' => $idUtilisateur
+            'cinUser' => $cinUtilisateur
         ]);
-    }
-
-    /**
-     * Renvoie le nom complet (nom + prénom) d’un utilisateur
-     */
-    public function getUserNameById(int $id): string
-    {
-        $stmt = $this->pdo->prepare(
-            "SELECT CONCAT(nom, ' ', prenom) AS fullname 
-             FROM utilisateur 
-             WHERE id = :id"
-        );
-        $stmt->execute(['id' => $id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ? $row['fullname'] : 'Inconnu';
     }
 }
