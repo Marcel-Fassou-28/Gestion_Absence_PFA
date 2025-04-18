@@ -42,8 +42,7 @@ $router
     ->match('/my/recapitulatif-Absences','utilisateur/admin/absences/recapAbsences','RecapAbsences')
     
     ->match('/api/matiere_classe', 'api/get_matiere_classe', 'api')
-    ->match('/my/modifier-prof','utilisateur/admin/modifierProf','modifier_professeur')
-    ->match('/my/ajouter-prof','utilisateur/admin/ajouterProf','ajouterProf')
+
 
     ->match(  '/my/admin/messagerie', 'utilisateur/admin/messagerie','admin-messagerie')
     
