@@ -1,5 +1,10 @@
 <?php 
 
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
+}
+
 use App\Connection;
 use App\UserTable;
 use App\Professeur\ProfessorTable;
@@ -31,7 +36,7 @@ if (isset($_SESSION)) {
 
 <div class="container profil-interface">
     <div class="image-section">
-        <img src="/images/profil.jpg" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
+        <img src="<?= $router->url('serve-photo', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]).'?id_user='.$_SESSION['id_user'] ?>" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
         <h3><?= htmlspecialchars($user->getRole() . ' ' . $user->getNom()) ?></h3>
     </div>
     <div class="container-useful">
@@ -99,21 +104,19 @@ if (isset($_SESSION)) {
         <div class="useful-link-section">
             
             <h3>Liens Utiles</h3>
-            <ul></ul>
-                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('liste_Des_etudiants');}
-                else {echo $router->url('professor-listeEtudiant') . '?use-link=student-list';} ?>">
-                    Listes des étudiants</a></li>
-                <?php if ($_SESSION['role'] === 'admin'): ?>
-                <li><a href="<?=$router->url('liste_Des_Professeur')?>">Liste des professeurs</a></li>
+            <ul>
+            <?php if ($_SESSION['role'] === 'admin'): ?>
                 <li><a href="<?=$router->url('RecapAbsences')?>">Recapitulatif des Absences</a></li>
+                <li><a href="<?=$router->url('liste-professeur')?>">Liste des professeurs</a></li>
                 <?php endif ?>
-                <li><a href="">Informations supplémentaires</a></li>
+                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('liste-etudiants');}
+                else {echo $router->url('liste-etudiants') . '?use-link=student-list';} ?>">
+                    Listes des étudiants</a></li>
             </ul>
         </div>
         <div class="historic-section">
             <h3>Historiques</h3>
             <ul>
-                
                 <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('historikAbscences');}?>">Historiques des soumissions</a></li>
                 <?php if ($_SESSION['role'] === 'admin') :?>
                 <li><a href="<?=  $router->url('justification');?>">Historiques des justificatifs</a></li>

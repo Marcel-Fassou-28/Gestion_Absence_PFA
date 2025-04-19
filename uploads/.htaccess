@@ -1,0 +1,3 @@
+# Bloque l'accès direct via URL
+Order Allow,Deny
+Deny from all

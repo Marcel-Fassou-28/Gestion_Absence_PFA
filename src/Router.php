@@ -84,37 +84,6 @@ class Router {
             session_start();
         }
         
-        $urlUser = [];
-        if (isset($_SESSION['id_user'])) {
-            
-            switch ($_SESSION['role']) {
-                case 'admin':
-                    $urlUser = [
-                        'dashboard' =>$this->url('user-dashboard',  ['role'=> $_SESSION['role']]),
-                        'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
-                        'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']])
-                    ];
-                    break;
-                case 'professeur':
-                    $urlUser = [
-                        'dashboard' =>$this->url('user-dashboard',  ['role'=> $_SESSION['role']]),
-                        'home' => $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]),
-                        'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']])
-                    ];
-                    break;
-                case 'etudiant':
-                    $urlUser = [
-                        'dashboard' => $this->url('user-dashboard',  ['role'=> $_SESSION['role']]),
-                        'home' => $this->url('user-home', ['role'=> $_SESSION['role']]),
-                        'profil' => $router->url('user-profil', ['role'=> $_SESSION['role']]),
-                        
-                        'listeProfesseurs' => $router->url('liste_Des_Professeur'),
-                        'messagerie'=> $router->url('etudiant-messagerie'),
-                        'absence'=>$router->url('etudiant-absences'),
-                    ];
-                    break;
-            }
-        }
         ob_start();
         require $this->viewPath . DIRECTORY_SEPARATOR. $view . '.php';
         $layout = isset($_SESSION['id_user']) ? 'defaultAuthenticated' : 'defaultUnauthenticated';

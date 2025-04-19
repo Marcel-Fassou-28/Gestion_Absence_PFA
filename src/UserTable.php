@@ -140,7 +140,22 @@ class UserTable extends Table {
         }else {
             return false;
         }
-        
+    }
+
+    public function updateUserInformation(Utilisateur $user):bool {
+        $query = $this->pdo->prepare('
+            UPDATE '. $this->table . ' SET username= :username, email= :email WHERE cin= :cin
+        ');
+        if ($user !== null) {
+            $query->execute([
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'cin' => $user->getCIN()
+            ]);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

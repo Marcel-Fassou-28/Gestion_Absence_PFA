@@ -1,61 +1,118 @@
 <?php 
 
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
+}
+
 use App\Connection;
 use App\UserTable;
+use App\Model\Utilisateur;
+use App\Mailer;
 
 
+$pdo = Connection::getPDO();
+$userTable = new UserTable($pdo);
+$mailer = new Mailer();
 
-if (isset($_SESSION)) {
-    $pdo = Connection::getPDO();
-    $table = new UserTable($pdo);
-    $user = $table->getIdentification($_SESSION['id_user']);
+$cinUser = $_SESSION['id_user'];
+$user = $userTable->getIdentification($cinUser);
+$success = null;
+$utilisateur = new Utilisateur();
 
+if(!empty($_POST)) {
+    $email = filter_var($_POST['email'] , FILTER_VALIDATE_EMAIL);
+    $username = trim($_POST['username']);
+    $checkImage = $_POST['delete-image'];
+
+    if($checkImage) {
+        if (!empty($_FILES)) {
+            $tmpName = $_FILES['photo-profil']['tmp_name'];
+            $fileSize = $_FILES['photo-profil']['size'];
+    
+            $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'heic'];
+            $extension = strtolower(pathinfo($_FILES['photo-profil']['name'], PATHINFO_EXTENSION));
+    
+            if (in_array($extension, $extensionsAutorisees) && $fileSize <= 2000000) {
+    
+                $nouveauNom = $_SESSION['role'] . time().'_'.uniqid('profil', true). $cinUser. '.' . $extension;
+                $destination = dirname(__DIR__, 3) .DIRECTORY_SEPARATOR.'uploads' .DIRECTORY_SEPARATOR . 'profil' . DIRECTORY_SEPARATOR . $nouveauNom;
+
+                $photoPath = $user->getNomPhoto() ?: 'avatar.png'; // Photo actuelle ou par défaut
+                $destinationDir = dirname(__DIR__, 3) .DIRECTORY_SEPARATOR. 'public' .DIRECTORY_SEPARATOR. 'uploads'.DIRECTORY_SEPARATOR.'profil' . DIRECTORY_SEPARATOR;
+    
+                if(move_uploaded_file($tmpName, $destination)) {
+                    if ($photoPath !== 'avatar.png' && file_exists($destinationDir . $photoPath)) {
+                        unlink($uploadDir . $photoPath);
+                    }
+
+                    $query = $pdo->prepare('UPDATE utilisateur SET nomPhoto= :nomPhoto WHERE cin= :cin');
+                    $query->execute(['cin' => $user->getCIN(), 'nomPhoto' => $nouveauNom]);
+                    $utilisateur->setNomPhoto($nouveauNom);
+                    $success = 1;
+                } else {
+                    $success = 0;
+                    $errorMessage = "Erreur lors de l'envoi.";
+                }
+            } else {
+                $errorMessage = "Fichier invalide : extension non autorisée ou taille > 2 Mo.";
+            }
+        }
+    }
+   
+    $utilisateur->setUsername($username);
+    $utilisateur->setCIN($cinUser);
+    $utilisateur->setEmail($email);
+
+    if ($email !== $user->getEmail()) {
+        $mailer->emailChangeMail($email, $user->getNom() . ' ' . $user->getPrenom());
+    }
+    $userTable->updateUserInformation($utilisateur) ? $success = 1 : $success = 0;
+    header('location: '. $router->url('user-profil', ['role'=> $_SESSION['role']]).'?user='.$_SESSION['role'] . '?success='. $success);
+    exit();
 }
 
 ?>
 
-
 <div class="container edit-profil-interface">
     <div class="edit-image-section">
-        <img src="/images/profil.jpg" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
+        <img src="<?= $router->url('serve-photo', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]) ?>" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
         <h3><?= htmlspecialchars($user->getRole() . ' ' . $user->getNom()) ?></h3>
     </div>
     <form class="edit-container-useful" method="post" action="" enctype="multipart/form-data">
-        <div class="edit-info-section">
+        <section class="edit-info-section">
             <h2>Vos Informations</h2>
             <div class="edit-personal-info">
-                <div>
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" value="<?= htmlspecialchars($user->getEmail()) ?>" >
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($user->getEmail()) ?>" required>
                 </div>
-                <div>
-                    <label for="username">Username:</label>
-                    <input type="text" name="username" value="<?= htmlspecialchars($user->getUsername()) ?>" name="username">
+                <div class="form-group">
+                    <label for="username">Username :</label>
+                    <input type="text" id="username" name="username" value="<?= htmlspecialchars($user->getUsername()) ?>" required>
                 </div>
             </div>
-        </div>
-        <div class="change-profil-photo">
-            <h3>User Profil</h3>
+        </section>
+        <section class="change-profil-photo">
+            <h2>Photo de Profil</h2>
             <div class="current-photo">
-                <p>Current photo : </p>
-                <div>
-                    <img src="/images/profil.jpg" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
-                    <div>
-                        <input type="checkbox" name="delete-image" id="check-delete">
-                        <label for="check-delete">Supprimer L'image</label>
+                <p>Photo actuelle :</p>
+                <div class="photo-actions">
+                    <img src="<?= $router->url('serve-photo', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]) ?>" alt="Photo de profil actuelle de <?= htmlspecialchars($user->getNom()) ?>">
+                    <div class="delete-photo">
+                        <input type="checkbox" id="delete-image" name="delete-image">
+                        <label for="delete-image">Supprimer l'image</label>
                     </div>
                 </div>
             </div>
             <div class="add-new-photo">
-                <p>New photo : </p>
-                <div>
-                    <input type="file" name="new-photo-profil" id="">
-                </div>
+                <p>Nouvelle photo :</p>
+                <input type="file" name="photo-profil" id="new-photo-profil" accept="image/*" >
             </div>
-        </div>
-        <div>
+        </section>
+        <div class="form-actions">
             <button type="submit" class="update-profil">Mettre à Jour</button>
-            <button type="button" class="cancel-profil">Annuler</button>
+            <button type="button" class="cancel-profil" onclick="window.location.href='<?=$router->url('user-profil', ['role'=> $_SESSION['role']]). '?user='.$_SESSION['role'] ?>'">Annuler</button>
         </div>
     </form>
 </div>

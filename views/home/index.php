@@ -1,3 +1,11 @@
+<?php
+if(isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
+    exit();
+}
+
+?>
+
 <section class="presentation-section">
     <div class="mobil">
         <h2>Bienvenue sur GAENSAJ</h2>
