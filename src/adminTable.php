@@ -391,7 +391,21 @@ class adminTable extends Table
             'cin' => $cin,
             'id' => $matiere]);
         $result = $sql->fetch();
-        return $result['nbreAbsences'];
+        return $result['nbreAbsences'] * 2;
+    }
+
+    public function getPrivateStudentToPastExamByMatiere($matiere):array{
+        $querry = "SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant FROM absence a JOIN 
+        etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
+        ON m.idMatiere = a.idMatiere WHERE a.idMatiere = :id GROUP BY e.nom, e.prenom, e.cinEtudiant
+         HAVING COUNT(a.cinEtudiant)>=4";
+        
+        $sql=$this->pdo->prepare($querry);
+        $sql->execute([
+            'id' => $matiere]);
+        $sql->setFetchMode(\PDO::FETCH_CLASS,$this->classEtudiant);
+        $result = $sql->fetchALL();
+        return count($result) > 0 ? $result : [];
     }
 }
 ?>

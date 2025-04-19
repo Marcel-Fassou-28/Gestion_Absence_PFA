@@ -71,7 +71,7 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
         </form>
     </div>
 
-    <div class="list-tri">
+    <div class="list-tri table-responsive">
         <table class="prof-table">
             <thead class="heads">
                 <tr>
@@ -96,6 +96,7 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
                     <td class="btns">
                         <form method="GET" action="modifier-prof">
                             <input type="hidden" name="cin" value="<?= htmlspecialchars($row->getCIN()); ?>">
+                            <input type="hidden" name="modif" value="<?= 1; ?>">
                             <button class="btn1" type="submit">Modifier</button>
                         </form>
                         <form method="POST" action="modifier-prof">
@@ -109,9 +110,10 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
             }
             ?>
         </table>
-        <form method="POST" action="ajouter-prof">
-            <button class="btn1 btn-ajout" type="submit">Ajouter un Professeur</button>
-        </form>
+        
         
     </div>
+    <form method="POST" action="ajouter-prof?modif=1">
+            <button class="btn1 btn-ajout" type="submit">Ajouter un Professeur</button>
+        </form>
 </div>

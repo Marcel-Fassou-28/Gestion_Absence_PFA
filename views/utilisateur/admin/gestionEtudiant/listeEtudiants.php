@@ -88,6 +88,7 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
                         
                         <form method="GET" action="modifier-student">
                             <input type="hidden" name="cin" value="<?= htmlspecialchars($row->getCIN()); ?>">
+                            <input type="hidden" name="modif" value="<?= 1; ?>">
                             <button class="btn1  " type="submit">Modifier</button>
                         </form>
                         <form method="POST" action="modifier-student">
@@ -101,9 +102,10 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
             }
             ?>
         </table>
-        <form method="POST" action="ajouter-Etudiant">
-            <button class="btn1 btn-ajout" type="submit">Ajouter un Etudiant</button>
-        </form>
+        
         
     </div>
+    <form method="POST" action="ajouter-Etudiant?modif=1">
+            <button class="btn1 btn-ajout" type="submit">Ajouter un Etudiant</button>
+        </form>
 </div>

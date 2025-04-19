@@ -60,7 +60,7 @@ if (!empty($_GET) && isset($_GET['cin'])) {
         $cne = $_POST['cne'];
         $idClasse = $_POST['classe'];
         if ($result->ModifierStudent($newcin, $nom, $prenom, $email, $username, $cne,$idClasse, $oldCin)) {
-            header('Location: liste-Etudiants');
+            header('Location: liste-Etudiants?listprof=1');
             exit;
         } else {
             echo "Erreur lors de la modification du professeur.";
@@ -71,7 +71,7 @@ if (!empty($_GET) && isset($_GET['cin'])) {
 } else if (!empty($_POST) && isset($_POST['cin'])) {
     $cin = $_POST['cin'];
     if ($result->SuprimerStudent($cin)) {
-        header('location: liste-Etudiants');
+        header('location: liste-Etudiants?listprof=1');
         exit;
     } else {
         echo 'Erreur lors de la suppression';

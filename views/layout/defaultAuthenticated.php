@@ -9,13 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
-    <link rel="stylesheet" href="/css/list_prof/list.css">
-    <link rel="stylesheet" href="/css/justificatif\justificatif.css">
-    <link rel="stylesheet" href="/css/list_prof/modifierProf.css">
+    
+    
+    
     <link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
-    } 
+    }
+    if (isset($_GET['modif'])){
+        echo '<link rel="stylesheet" href="/css/list_prof/modifierProf.css">';
+    }
+    if (isset($_GET['listprof'])) {
+        echo '<link rel="stylesheet" href="/css/list_prof/list.css">';
+        if (isset($_GET['justifier'])) {
+            echo '<link rel="stylesheet" href="/css/justificatif/justificatif.css">';
+        }
+    }
     if (isset($_GET['historic'])) {
         echo '<link rel="stylesheet" href="/css/use-link/historic.css">';
     }

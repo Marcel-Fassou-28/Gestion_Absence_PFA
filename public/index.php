@@ -40,6 +40,7 @@ $router
     ->match('/my/modifier-student','utilisateur/admin/gestionEtudiant/modifierEtudiant','modifier-student')
     ->match('/my/historiques-des-absences','utilisateur/admin/absences\historiquesAbsences','historikAbscences')
     ->match('/my/recapitulatif-Absences','utilisateur/admin/absences/recapAbsences','RecapAbsences')
+    ->match('/my/Liste-des-etudiants-privees-pour-examen','utilisateur/admin/absences/etudiantPrivee','etudiantprivee')
     
     ->match('/api/matiere_classe', 'api/get_matiere_classe', 'api')
 

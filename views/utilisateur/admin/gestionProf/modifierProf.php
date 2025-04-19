@@ -10,6 +10,7 @@ if (!empty($_GET) && isset($_GET['cin'])) {
     $prof = $result->getProfByCin($cin);
 
     ?>
+    <div class="contains">
     <div class="modif">
         <h2>Modifier les information puis valider</h2>
         <div class="modif-div">
@@ -38,6 +39,7 @@ if (!empty($_GET) && isset($_GET['cin'])) {
             </form>
         </div>
     </div>
+    </div>
     <?php
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $_POST['username'];
@@ -47,7 +49,7 @@ if (!empty($_GET) && isset($_GET['cin'])) {
         $email = $_POST['email'];
         $oldCin = $prof[0]->getCIN();
         if ($result->ModifierProf($username, $newcin, $nom, $prenom, $email, $oldCin)) {
-            header('Location: liste-des-professeurs');
+            header('Location: liste-des-professeurs?listprof=1');
             exit;
         } else {
             echo "Erreur lors de la modification du professeur.";
@@ -58,7 +60,7 @@ if (!empty($_GET) && isset($_GET['cin'])) {
 } else if (!empty($_POST) && isset($_POST['cin'])) {
     $cin = $_POST['cin'];
     if ($result->SuprimerProf($cin)) {
-        header('location: liste-des-professeurs');
+        header('location: liste-des-professeurs?listprof=1');
         exit;
     } else {
         echo 'Erreur lors de la suppression';
