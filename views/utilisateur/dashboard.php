@@ -268,7 +268,7 @@ $currentTime = $date->format('H:i:s');
                 <h2>Liens Utiles</h2>
                 <div class="hr"></div>
                 <ul class="use-link-list">
-                    <li><a href="<?= $router->url('etudiant-messagerie') ?>">Ma Messagerie</a></li>
+                    <li><a href="<?= $router->url('etudiant-messagerie').'?messagerie=1' ?>">Ma Messagerie</a></li>
                     <li><a href="<?= $router->url('liste-etudiant-classe') ?>">Listes des Etudiants de ma classe</a></li>
                 </ul>
             </section>

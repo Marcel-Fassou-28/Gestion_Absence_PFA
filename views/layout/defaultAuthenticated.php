@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="/css/list_prof/list.css">
     <link rel="stylesheet" href="/css/justificatif\justificatif.css">
     <link rel="stylesheet" href="/css/list_prof/modifierProf.css">
-    <link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
     } 
@@ -24,6 +23,9 @@
     }
     if(isset($_GET['edit_profil'])) {
         echo '<link rel="stylesheet" href="/css/profil/editerProfil.css">';
+    }
+    if(isset($_GET['messagerie'])){
+        echo '<link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">';
     }
     ?>
     <title>Gestion d'Absence</title>

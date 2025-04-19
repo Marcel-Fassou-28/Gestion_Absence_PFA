@@ -113,7 +113,6 @@ if (isset($_SESSION)) {
         <div class="historic-section">
             <h3>Historiques</h3>
             <ul>
-                
                 <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('historikAbscences');}?>">Historiques des soumissions</a></li>
                 <?php if ($_SESSION['role'] === 'admin') :?>
                 <li><a href="<?=  $router->url('justification');?>">Historiques des justificatifs</a></li>
