@@ -105,17 +105,15 @@ if (isset($_SESSION)) {
             
             <h3>Liens Utiles</h3>
             <ul></ul>
-                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('liste_Des_etudiants').'?listprof=1';}
+                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('liste-etudiants').'?listprof=1';}
                 else {echo $router->url('professor-listeEtudiant') . '?use-link=student-list';} ?>">
                     Listes des étudiants</a></li>
                 <?php if ($_SESSION['role'] === 'admin'): ?>
-                <li><a href="<?=$router->url('liste_Des_Professeur').'?listprof=1';?>">Liste des professeurs</a></li>
+                <li><a href="<?=$router->url('liste-professeur').'?listprof=1';?>">Liste des professeurs</a></li>
                 <li><a href="<?=$router->url('RecapAbsences').'?listprof=1'.'&justifier=1';?>">Recapitulatif des Absences</a></li>
             <ul>
             
-                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('liste-etudiants');}
-                else {echo $router->url('liste-etudiants') . '?use-link=student-list';} ?>">
-                    Listes des étudiants</a></li>
+                
             </ul>
         </div>
         <div class="historic-section">
@@ -130,4 +128,5 @@ if (isset($_SESSION)) {
             </ul>
         </div>
     </div>
+    <?php endif?>
 </div>
