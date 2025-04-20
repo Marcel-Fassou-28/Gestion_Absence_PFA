@@ -1,6 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
 }
 
 use App\Connection;
@@ -47,7 +48,10 @@ $dateSql = $date->format('Y-m-d H:i');
 
 $currentDay = ['Monday' => 'Lundi', 'Tuesday' => 'Mardi', 'Wednesday' => 'Mercredi', 'Thursday' => 'Jeudi', 'Friday' => 'Vendredi', 'Saturday' => 'Samedi', 'Sunday' => 'Dimanche'][$date->format('l')];
 $currentTime = $date->format('H:i:s');
+
 ?>
+
+<!-- Section pour professeur -->
 
 <div class="container dashboard">
     <div class="dashboard-intro">
@@ -55,6 +59,7 @@ $currentTime = $date->format('H:i:s');
         <span class="user-info"><?= $_SESSION['role'] === 'etudiant' ? 'Bonjour ' : 'Bonjour Mr. '?> <?= htmlspecialchars($user->getNom()) .' '. htmlspecialchars($user->getPrenom()) ?></span>
         <span class="date-today"><?= $dateSql ?></span>
     </div>
+
     <?php if ($_SESSION['role'] === 'professeur'): ?>
     <div class="dashboard-container">
         <div class="statistic">
@@ -171,11 +176,9 @@ $currentTime = $date->format('H:i:s');
             </section>
         </div>
     </div>
-    <?php endif ?>
-
 
     <!-- Section des etudiants -->
-    <?php if ($_SESSION['role'] === 'etudiant'): ?>
+    <?php elseif ($_SESSION['role'] === 'etudiant'): ?>
         <div class="dashboard-container">
         <div class="statistic">
             <section class="last-absence">
@@ -268,7 +271,7 @@ $currentTime = $date->format('H:i:s');
                 <h2>Liens Utiles</h2>
                 <div class="hr"></div>
                 <ul class="use-link-list">
-                    <li><a href="<?= $router->url('etudiant-messagerie') ?>">Ma Messagerie</a></li>
+                    <li><a href="<?= $router->url('etudiant-messagerie').'?messagerie=1' ?>">Ma Messagerie</a></li>
                     <li><a href="<?= $router->url('liste-etudiant-classe') ?>">Listes des Etudiants de ma classe</a></li>
                 </ul>
             </section>
@@ -276,10 +279,90 @@ $currentTime = $date->format('H:i:s');
                 <h2>Historiques</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
-                    <li><a href="<?= $router->url('etudiant-absences') ?>">Historiques de mes justificatifs</a></li>
+                    <li><a href="<?= $router->url('etudiant-absences') ?>">Historiques de mes Absences</a></li>
+                    <li><a href="<?= $router->url('etudiant-justificatifs') ?>">Justificatifs Soumis</a></li>
                 </ul>
             </section>
         </div>
     </div>
+
+    <!-- Section pour Administrateur -->
+    <?php else: ?>
+        <div class="dashboard-container">
+        <div class="statistic">
+            <section class="last-absence">
+                <h2>Information Générale</h2>
+                <div class="hr"></div>
+                <ul class="list-info-absence">
+                
+                </ul>
+            </section>
+            <section class="creneaux">
+                <h2>Créneaux</h2>
+                <div class="hr"></div>
+                <ul class="list-creneaux">
+                    
+                </ul>
+            </section>
+
+            <section class="classe-stat">
+                <h2>Statistiques</h2>
+                <div class="hr"></div>
+                <ul class="list-statistic">
+                
+                </ul>
+            </section>
+        </div>
+        <div class="hr"></div>
+        <div class="link-section">
+            <section class="container use-link">
+                <h2>Liens Utiles</h2>
+                <div class="hr"></div>
+                <ul class="use-link-list">
+                    <li><a href="<?= $router->url('admin-messagerie') ?>"> Messageries </a></li>
+                    <li><a href="<?= $router->url('justification') ?>">Justificatifs</a></li>
+                    <li><a href="<?= $router->url('historikAbscences') ?>">Absence des Etudiants</a></li>
+                </ul>
+            </section>
+            <section class="container historic">
+                <h2>Gestion du Personnel</h2>
+                <div class="hr"></div>
+                <ul class="historic-list">
+                    <li><a href="<?= $router->url('liste-etudiants') ?>">Gestion des étudiants</a></li>
+                    <li><a href="<?= $router->url('liste-professeur') ?>">Gestion des professeurs</a></li>
+                    <li><a href="<?= $router->url('gestion-creneau') ?>">Gestion des Créneaux</a></li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    
+<style>
+    .use-link-list li:nth-child(1) a::before {
+    content: '\1F4E7'; 
+    margin-right: 0.5rem;
+}
+.use-link-list li:nth-child(2) a::before {
+    content: '\1F5C4'; 
+    margin-right: 0.5rem;
+}
+.use-link-list li:nth-child(3) a::before {
+    content: '\1F464'; 
+    margin-right: 0.5rem;
+}
+
+
+.historic-list li:nth-child(1) a::before {
+    content: '\1F393'; 
+    margin-right: 0.5rem;
+}
+.historic-list li:nth-child(2) a::before {
+    content: '\1F4C8'; 
+    margin-right: 0.5rem;
+}
+.historic-list li:nth-child(3) a::before {
+    content: '\1F4C5'; 
+    margin-right: 0.5rem;
+}
+</style>
     <?php endif ?>
 </div>

@@ -1,5 +1,22 @@
+<?php 
+
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
+}
+
+use App\Connection;
+use App\UserTable;
+
+$pdo = Connection::getPDO();
+$cin = $_SESSION['id_user'];
+$tableUser = new UserTable($pdo);
+$user = $tableUser->getIdentification($cin);
+
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +27,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashbord/connected.css">
     
-    
-    
     <link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">
+    <link rel="stylesheet" href="/css/list_prof/list.css">
+    <link rel="stylesheet" href="/css/justificatif/justificatif.css">
+    <link rel="stylesheet" href="/css/list_prof/modifierProf.css">
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
     }
@@ -34,6 +52,9 @@
     if(isset($_GET['edit_profil'])) {
         echo '<link rel="stylesheet" href="/css/profil/editerProfil.css">';
     }
+    if(isset($_GET['messagerie'])){
+        echo '<link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">';
+    }
     ?>
     <title>Gestion d'Absence</title>
 </head>
@@ -44,26 +65,38 @@
             <span></span>
             <span></span>
         </button>
-        <a href="<?= $urlUser['home'] ?>" class="nav-icon" aria-label="site icon & home page" aria-current="page">
+        <a href="<?= $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]) ?>" class="nav-icon" aria-label="site icon & home page" aria-current="page">
             <span>GAENSAJ</span>
         </a>
         <div class="main-navlink">
             <ul class="navlink-container">
-                <li><a href="<?= $urlUser['home'] ?>" aria-current="page">Accueil</a></li>
-                <li><a href="<?= $urlUser['dashboard'] ?>">Dashboard</a></li>
+                <li><a href="<?= $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]) ?>" aria-current="page">Accueil</a></li>
+                <li><a href="<?= $router->url('user-dashboard',  ['role'=> $_SESSION['role']]) ?>">Dashboard</a></li>
             </ul>
             <div class="profil">
                 <a class="profil-img">
-                    <img  src="/images/profil.jpg" alt="profil">
+                    <img  src="<?= $router->url('serve-photo', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]) ?>" alt="profil">
                 </a>
                 <button class="show-menu" type="button">
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="profil-pop-up">
-                    <li><a href="<?= $urlUser['profil'] . '?user='.$_SESSION['role']?>">Profil</a></li>
-                    <li><a href="">Calendrier</a></li>
-                    <li><a href="<?php ($_SESSION['role'] === 'etudiant') ? $urlUser['absence'] : '';?>">Historique</a></li>
+                    <li><a href="<?= $router->url('user-profil', ['role'=> $_SESSION['role']]) . '?user='.$_SESSION['role']?>">Profil</a></li>
+
+                <?php if ($_SESSION['role'] === 'etudiant'): ?>
+                        <li><a href="<?= $router->url('etudiant-absences')?>">Mes Absences</a></li>
+                        <li><a href="<?= $router->url('etudiant-messagerie') ?>">Messagerie</a></li>
+                    <?php elseif($_SESSION['role'] === 'admin'): ?>
+                        <li><a href="<?= $router->url('historikAbscences') ?>">Absences des Etudiants</a></li>
+                        <li><a href="<?= $router->url('admin-messagerie') ?>">Messagerie</a></li>
+
+                    <?php else: ?>
+                        <li><a href="<?= $router->url('historic-absence') . '?historic=absence' ?>">Historique des Absences</a></li>
+                        <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list' ?>">Liste des Etudiants</a></li>
+
+                <?php endif ?>
+
                     <li><a href="#">Signaler un problème</a></li>
                     <li></li>
                     <li><a href="<?= $router->url('page-deconnexion') ?>">Deconnexion</a></li>
@@ -75,8 +108,10 @@
         <?= $content ?>
     </main>
     <footer>
+        <div class="left-side"></div>
+        <div class="right-side"></div>
     </footer>
-    <script src="/js/script.js"></script>
+    <script src="/js/scriptConnected.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

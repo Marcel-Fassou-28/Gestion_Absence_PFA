@@ -1,4 +1,8 @@
 <?php
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
+}
 
 use App\Professeur\ProfessorTable;
 use App\Professeur\CurrentInfo;

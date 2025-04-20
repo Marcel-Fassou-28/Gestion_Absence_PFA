@@ -1,5 +1,10 @@
 <?php 
 
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
+}
+
 use App\Connection;
 use App\UserTable;
 use App\Professeur\ProfessorTable;
@@ -31,7 +36,7 @@ if (isset($_SESSION)) {
 
 <div class="container profil-interface">
     <div class="image-section">
-        <img src="/images/profil.jpg" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
+        <img src="<?= $router->url('serve-photo', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]).'?id_user='.$_SESSION['id_user'] ?>" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
         <h3><?= htmlspecialchars($user->getRole() . ' ' . $user->getNom()) ?></h3>
     </div>
     <div class="container-useful">
@@ -106,8 +111,11 @@ if (isset($_SESSION)) {
                 <?php if ($_SESSION['role'] === 'admin'): ?>
                 <li><a href="<?=$router->url('liste_Des_Professeur').'?listprof=1';?>">Liste des professeurs</a></li>
                 <li><a href="<?=$router->url('RecapAbsences').'?listprof=1'.'&justifier=1';?>">Recapitulatif des Absences</a></li>
-                <?php endif ?>
-                <li><a href="">Informations supplémentaires</a></li>
+            <ul>
+            
+                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('liste-etudiants');}
+                else {echo $router->url('liste-etudiants') . '?use-link=student-list';} ?>">
+                    Listes des étudiants</a></li>
             </ul>
         </div>
         <div class="historic-section">

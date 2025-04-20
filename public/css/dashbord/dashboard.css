@@ -673,3 +673,32 @@
         font-size: 0.8rem;
     }
 }
+
+/*
+.use-link-list li:nth-child(1) a::before {
+    content: '\1F4E7'; 
+    margin-right: 0.5rem;
+}
+.use-link-list li:nth-child(2) a::before {
+    content: '\1F5C4'; 
+    margin-right: 0.5rem;
+}
+.use-link-list li:nth-child(3) a::before {
+    content: '\1F464'; 
+    margin-right: 0.5rem;
+}
+
+
+.historic-list li:nth-child(1) a::before {
+    content: '\1F393'; 
+    margin-right: 0.5rem;
+}
+.historic-list li:nth-child(2) a::before {
+    content: '\1F4C8'; 
+    margin-right: 0.5rem;
+}
+.historic-list li:nth-child(3) a::before {
+    content: '\1F4C5'; 
+    margin-right: 0.5rem;
+}
+*/
