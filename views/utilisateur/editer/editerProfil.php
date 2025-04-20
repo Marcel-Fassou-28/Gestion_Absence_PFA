@@ -39,11 +39,11 @@ if(!empty($_POST)) {
                 $destination = dirname(__DIR__, 3) .DIRECTORY_SEPARATOR.'uploads' .DIRECTORY_SEPARATOR . 'profil' . DIRECTORY_SEPARATOR . $nouveauNom;
 
                 $photoPath = $user->getNomPhoto() ?: 'avatar.png'; // Photo actuelle ou par défaut
-                $destinationDir = dirname(__DIR__, 3) .DIRECTORY_SEPARATOR. 'public' .DIRECTORY_SEPARATOR. 'uploads'.DIRECTORY_SEPARATOR.'profil' . DIRECTORY_SEPARATOR;
+                $destinationDir = dirname(__DIR__, 3) .DIRECTORY_SEPARATOR. 'uploads'.DIRECTORY_SEPARATOR.'profil' . DIRECTORY_SEPARATOR;
     
                 if(move_uploaded_file($tmpName, $destination)) {
-                    if ($photoPath !== 'avatar.png' && file_exists($destinationDir . $photoPath)) {
-                        unlink($uploadDir . $photoPath);
+                    if ($photoPath != 'avatar.png' && file_exists($destinationDir . $photoPath)) {
+                        unlink($destinationDir . $photoPath);
                     }
 
                     $query = $pdo->prepare('UPDATE utilisateur SET nomPhoto= :nomPhoto WHERE cin= :cin');

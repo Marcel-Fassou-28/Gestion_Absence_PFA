@@ -241,5 +241,5 @@ class InfoAbsenceEtudiant {
     public function setNombreAbsences(int $nombreAbsences): void
     {
         $this->nombreAbsences = $nombreAbsences;
-    }
+    } 
 }

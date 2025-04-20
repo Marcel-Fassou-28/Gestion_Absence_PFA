@@ -25,10 +25,6 @@ $listeClasse = $list->getAll("classe", "classClasse");
                         $listeEtudiant = $list->getPrivateStudentToPastExamByMatiere($mat->getIdMatiere());
                         if (!empty($listeEtudiant)) {
                             ?>
-
-                            
-
-
                             <div class="global">
                                 <div id="liste">
                                     <h1 id="titre">liste des etudiants</h1>
