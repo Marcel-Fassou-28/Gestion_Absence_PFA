@@ -92,7 +92,7 @@ class Absents {
     }
 
     /**
-     * Setters
+     * Setters *
      * 
      * @param string $prenom
      */

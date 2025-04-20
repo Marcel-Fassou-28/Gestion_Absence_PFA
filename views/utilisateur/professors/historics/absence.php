@@ -6,6 +6,9 @@ if(!isset($_SESSION['id_user'])) {
 
 use App\Professeur\ProfessorTable;
 use App\Connection;
+use App\Model\Utils\InfoAbsenceEtudiant;
+use App\Model\Absents;
+use App\Model\Utils\EtudiantsAbsents;
 
 $pdo = Connection::getPDO();
 $professeurTable = new ProfessorTable($pdo);
@@ -78,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
                     <tbody>
                         <?php $numero = 1; ?>
                         <?php foreach ($listeEtudiant as $cin => $etudiant): ?>
+                            <?php if ($etudiant instanceof EtudiantsAbsents) : ?>
                             <tr>
                                 <td><?= sprintf("%02d", $numero++) ?></td>
                                 <td><?= htmlspecialchars($cin) ?></td>
@@ -92,6 +96,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
                                     </ul>
                                 </td>
                             </tr>
+                            <?php else: ?>
+                                <tr>
+                                <td><?= sprintf("%02d", $numero++) ?></td>
+                                <td><?= htmlspecialchars($cin) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getCne()) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getNom() . ' ' . $etudiant->getPrenom()) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getNbrAbsence()) ?></td>
+                                <td>
+                                    <ul class="absences-list">
+                                        <?php foreach ($etudiant->getAbsences() as $absence): ?>
+                                            <li><?= htmlspecialchars(formatAbsence($absence)) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <?php endif ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
