@@ -42,7 +42,7 @@ $router
     ->match('/my/administration/liste-Etudiants','utilisateur/admin/gestionEtudiant/listeEtudiants','liste-etudiants')
     ->match('/my/administration/modifier-student','utilisateur/admin/gestionEtudiant/modifierEtudiant','modifier-student')
 
-    ->match('/my/administration/gestion/creneaux', 'utilisateur/admin/creneaux/creneau', 'gestion-creneau')
+    ->match('/my/administration/gestion/creneaux', 'utilisateur/admin/gestionCreneaux/listCreneau', 'gestion-creneau')
     ->match('/my/Liste-des-etudiants-privees-pour-examen','utilisateur/admin/absences/etudiantPrivee','etudiantprivee')
     ->match('/my/administration/historiques-des-absences','utilisateur/admin/absences/historiquesAbsences','historikAbscences')
     ->match('/my/administration/recapitulatif-Absences','utilisateur/admin/absences/recapAbsences','RecapAbsences')

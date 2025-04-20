@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 }
 
 ?>
-
+ 
 <div class="presence">
     <div class="intro">
         <h1>Liste des Présences</h1>
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
-                </table>
+                </table> 
                 <div>
                     <input class="btn-presence" type="submit" name="submit" value="Valider et Envoyer">
                 </div>

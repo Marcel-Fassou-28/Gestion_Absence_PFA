@@ -294,14 +294,14 @@ $currentTime = $date->format('H:i:s');
                 <h2>Information Générale</h2>
                 <div class="hr"></div>
                 <ul class="list-info-absence">
-                
+    <!-- Information générale sur le nombre d'etudiants, inscrit, présent, notifications -->
                 </ul>
             </section>
             <section class="creneaux">
-                <h2>Créneaux</h2>
+                <h2>Dernière Absence Effectuée</h2>
                 <div class="hr"></div>
                 <ul class="list-creneaux">
-                    
+    <!-- Les 5 à 10 dernières Absences Effectuées -->
                 </ul>
             </section>
 
@@ -309,7 +309,7 @@ $currentTime = $date->format('H:i:s');
                 <h2>Statistiques</h2>
                 <div class="hr"></div>
                 <ul class="list-statistic">
-                
+    <!-- Statistique Général -->
                 </ul>
             </section>
         </div>

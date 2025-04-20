@@ -8,42 +8,81 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
     header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
     exit();
 }
-
+ 
 use App\Admin\adminTable;
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+$date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
+$dateSql = $date->format('Y-m-d H:i');
+
 /*<a href="<?= $urlUser['modification']; ?>">modifier</a>*/
 use App\Connection;
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
 $listeId = $list->getAbsenceMatiere();
+$listeMatiere = $list->getMatiereById($listeId[0]['idMatiere']);
 
-foreach ($listeId as $id):
+$listeClasse = $list->getClassById($listeMatiere[0]->getIdClasse());
+
+$listeEtudiant = $list->getAbsenceAllStudentByMatiere($listeId[0]['idMatiere'], $listeId[0]['date']);
+/*foreach ($listeId as $id):
     $listeMatiere = $list->getMatiereById($id['idMatiere']);
 
     $listeClasse = $list->getClassById($listeMatiere[0]->getIdClasse());
 
     $listeEtudiant = $list->getAbsenceAllStudentByMatiere($id['idMatiere'], $id['date']);
-    ?>
-    <div class="global">
-        <div class="absentet">
-            <h1> Liste Des Abscences</h1>
+    */?>
+    <div class="prof-list">
+    <div class="intro-prof-list">
+        <h1> Liste Des Absences</h1>
+        <div class="date-group">
+            <span><?= htmlspecialchars($dateSql) ?></span>
+        </div>
+        <div class="form-ajout">
+                    <a href="" class="btn-ajout btn">Etudiant Privée de Passer l'Examen</a>
+                </div>
+    </div>
+    <div class="hr"></div>
+    <div class="form-tri-container">
+        <form action="" class="tri-list container" method="POST">
+        <div class="list-classe">
+            <select name="classe" id="tri">
+                <option value="defaut">Classe</option>
+                <!-- Ensemble des classes tiré de la base de données -- -->
+            </select>
+        </div>
+        <div class="list-classe">
+            <select name="classe" id="tri">
+                <option value="defaut">Matiere</option>
+                <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
+            </select>
+        </div>
+        <div class="submit-group">
+            <input class="submit-btn" type="submit" value="Trier" name="submit">
+            </div>
+        </form>
+        <!--<div class="absentet">
             <div class="infoA">
             <pre><p>Classe:<?= $listeClasse[0]->getNomClasse(); ?>
             </p></pre>
             <pre><p>Matiere:<?= $listeMatiere[0]->getNomMatiere(); ?>
             </p></pre>
             </div>
-            <hr>
-            <div class="list-tri">
-                <table class="prof-table">
-                    <thead class="heads">
+            <hr>-->
+<div>
+            <div class="list-tri-table">
+                <table>
+                    <thead>
                         <tr>
                             <th>N°</th>
+                            <th>CIN</th>
+                            <th>CNE</th>
                             <th>Nom</th>
                             <th>Prenom</th>
+                            <th>Nombre d'Absences</th>
                         </tr>
                     </thead>
                     <?php
@@ -51,14 +90,15 @@ foreach ($listeId as $id):
                     foreach ($listeEtudiant as $row) { ?>
                         <tr>
                             <td><?= ++$nbreProf; ?></td>
+                            <td>CIN</td> 
+                            <td>CNE</td>
                             <td><?= htmlspecialchars($row->getNom()); ?></td>
                             <td><?= htmlspecialchars($row->getPrenom()); ?></td>
+                            <td>1</td>
                         </tr><?php
                     }
                     ?>
                 </table>
             </div>
-
         </div>
     </div>
-<?php endforeach; ?>

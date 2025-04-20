@@ -18,6 +18,9 @@ use App\Connection;
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
+$date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
+$dateSql = $date->format('Y-m-d H:i');
+
 $listeDepart = $list->getAll("departement", "classDepartement");
 $listeFiliere = $list->getAll("filiere", "classFiliere");
 $listeClasse = $list->getAll("classe", "classClasse");
@@ -39,15 +42,28 @@ if (isset($_POST['filiere']) && $_POST['filiere'] !== 'defaut') {
 if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
     $classe = $_POST['classe'];
     $listeProf = $list->getProfByClass($classe);
-}
+} 
 ?>
 <div class="prof-list">
-    <h1> Liste Des Professeurs</h1>
-    <hr>
-    <div class="form-tri">
-        <form action="" class="tri-list" method="POST">
+    <div class="intro-prof-list">
+        <h1> Liste Des Professeurs</h1>
+        <div class="date-group">
+            <span><?= htmlspecialchars($dateSql) ?></span>
+        </div>
+        <div class="form-ajout">
+            <!-- Privilègier les liens et non les formulaires -- -->
+            <!--<form  method="POST" action="ajouter-prof?modif=1">
+                <button class="btn-ajout" type="submit">Ajouter un Professeur</button>
+            </form> -->
+            <a href="" class="btn-ajout">Ajouter un Professeur</a>
+        </div>
+    </div>
+    <div class="hr"></div>
+    <div class="form-tri-container">
+        <form action="" class="tri-list container" method="POST">
+            <div class="list-departement">
             <select name="departement" id="tri" onchange="this.form.submit()">
-                <option value="defaut">tous les departement</option>
+                <option value="defaut">Département</option>
                 <?php
                 foreach ($listeDepart as $row) { ?>
                     <option value="<?= htmlspecialchars($row->getNomDepartement()); ?>" <?= (isset($_POST['departement']) && $_POST['departement'] === $row->getNomDepartement() ? 'selected' : ''); ?>>
@@ -56,8 +72,10 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
                 }
                 ?>
             </select>
+            </div>
+            <div class="list-filiere">
             <select name="filiere" id="tri" onchange="this.form.submit()">
-                <option value="defaut">toutes les filieres</option>
+                <option value="defaut">Filières</option>
                 <?php
                 foreach ($listeFiliere as $row) { ?>
                     <option value="<?= htmlspecialchars($row->getNomFiliere()); ?>" <?= (isset($_POST['filiere']) && $_POST['filiere'] === $row->getNomFiliere() ? 'selected' : ''); ?>>
@@ -66,8 +84,10 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
                 }
                 ?>
             </select>
+            </div>
+            <div class="list-classe">
             <select name="classe" id="tri">
-                <option value="defaut">toutes les classe</option>
+                <option value="defaut">Classe</option>
                 <?php
                 foreach ($listeClasse as $row) { ?>
                     <option value="<?= htmlspecialchars($row->getNomClasse()); ?>" <?= (isset($_POST['classe']) && $_POST['classe'] === $row->getNomClasse() ? 'selected' : ''); ?>>
@@ -76,53 +96,49 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
                 }
                 ?>
             </select>
-            <input type="submit" value="Trier" name="submit">
+            </div>
+            <div class="submit-group">
+            <input class="submit-btn" type="submit" value="Trier" name="submit">
+            </div>
+
         </form>
     </div>
-
-    <div class="list-tri table-responsive">
-        <table class="prof-table">
-            <thead class="heads">
+    <div class="list-tri-table">
+        <table>
+            <thead>
                 <tr>
                     <th>N°</th>
                     <th>Nom</th>
                     <th>Prenom</th>
-                    <?php
-                    echo "<th>CIN</th>"; ?>
+                    <th>CIN</th>
                     <th>Email</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <?php
-            foreach ($listeProf as $row) { ?>
+            <tbody>
+            <?php foreach ($listeProf as $row) { ?>
                 <tr>
                     <td><?= ++$nbreProf; ?></td>
-                    <td><?= htmlspecialchars($row->getNom()); ?></td>
-                    <td><?= htmlspecialchars($row->getPrenom()); ?></td>
-                    <?php
-                    echo "<td>" . htmlspecialchars($row->getCIN()) . "</td>"; ?>
-                    <td><?= htmlspecialchars($row->getEmail()); ?></td>
+                    <td><?= htmlspecialchars($row->getNom()) ?></td>
+                    <td><?= htmlspecialchars($row->getPrenom()) ?></td>
+                    <td><?= htmlspecialchars($row->getCIN()) ?></td>
+                    <td><?= htmlspecialchars($row->getEmail()) ?></td>
                     <td class="btns">
-                        <form method="GET" action="modifier-prof">
-                            <input type="hidden" name="cin" value="<?= htmlspecialchars($row->getCIN()); ?>">
-                            <input type="hidden" name="modif" value="<?= 1; ?>">
+                        <a href="" class="btn1">Modifier</a>
+                        <a href="" class="btn2">Supprimer</a>
+                        <!--<form method="GET" action="modifier-prof">
+                            <input type="hidden" name="cin" value="/ htmlspecialchars($row->getCIN()); ?>">
+                            <input type="hidden" name="modif" value="<= 1; ?>">
                             <button class="btn1" type="submit">Modifier</button>
                         </form>
                         <form method="POST" action="modifier-prof">
-                            <input type="hidden" name="cin" value="<?= htmlspecialchars($row->getCIN()); ?>">
+                            <input type="hidden" name="cin" value="<= htmlspecialchars($row->getCIN()); ?>">
                             <button class="btn2" type="submit">supprimer </button>
-                        </form>
-
+                        </form>-->
                     </td>
-
-                </tr><?php
-            }
-            ?>
+                </tr>
+            <?php } ?>
+            </tbody>
         </table>
-        
-        
     </div>
-    <form method="POST" action="ajouter-prof?modif=1">
-            <button class="btn1 btn-ajout" type="submit">Ajouter un Professeur</button>
-        </form>
 </div>
