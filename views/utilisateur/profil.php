@@ -104,29 +104,28 @@ if (isset($_SESSION)) {
         <div class="useful-link-section">
             
             <h3>Liens Utiles</h3>
-            <ul></ul>
-                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('liste-etudiants').'?listprof=1';}
-                else {echo $router->url('professor-listeEtudiant') . '?use-link=student-list';} ?>">
-                    Listes des étudiants</a></li>
-                <?php if ($_SESSION['role'] === 'admin'): ?>
-                <li><a href="<?=$router->url('liste-professeur').'?listprof=1';?>">Liste des professeurs</a></li>
-                <li><a href="<?=$router->url('RecapAbsences').'?listprof=1'.'&justifier=1';?>">Recapitulatif des Absences</a></li>
             <ul>
-            
-                
+                <?php if ($_SESSION['role'] === 'admin'): ?>
+                    <li><a href="<?= $router->url('liste-etudiants').'?listprof=1'?>">Listes des étudiants</a></li>
+                <?php elseif($_SESSION['role'] === 'professeur'): ?>
+                    <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list'?>">Listes des étudiants</a></li>
+                <?php endif ?>
+
+                <?php if ($_SESSION['role'] === 'admin'): ?>
+                <li><a href="<?=$router->url('liste-professeur').'?listprof=1'?>">Liste des professeurs</a></li>
+                <li><a href="<?=$router->url('RecapAbsences').'?listprof=1'.'&justifier=1'?>">Recapitulatif des Absences</a></li>
+                <?php endif ?>
             </ul>
         </div>
         <div class="historic-section">
             <h3>Historiques</h3>
             <ul>
-                
                 <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('historikAbscences').'?listprof=1';}?>">Historiques des soumissions</a></li>
                 <?php if ($_SESSION['role'] === 'admin') :?>
-                <li><a href="<?=  $router->url('justification').'?listprof=1'.'&justifier=1';?>">Historiques des justificatifs</a></li>
-                <li><a href="<?=  $router->url('etudiantprivee').'?listprof=1'.'&justifier=1';?>">Liste des eudiants Prives d'examen</a></li>
+                    <li><a href="<?=  $router->url('justification').'?listprof=1'.'&justifier=1';?>">Historiques des justificatifs</a></li>
+                    <li><a href="<?=  $router->url('etudiantprivee').'?listprof=1'.'&justifier=1';?>">Liste des etudiants Privés d'examen</a></li>
                 <?php endif ?>
             </ul>
         </div>
     </div>
-    <?php endif?>
 </div>

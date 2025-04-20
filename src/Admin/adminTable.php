@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace App\Admin;
 
 
 use App\Abstract\Table;
@@ -38,14 +38,15 @@ class adminTable extends Table
     protected $classMatiere = Matiere::class;
     protected $classUser = Utilisateur::class;
 
-
-
     /**
-     * cette fonction d'avoir la liste de tous les elements
+     * cette Méthode d'avoir la liste de tous les elements d'une table
+     * En passant le nom de la table en paramètre
+     *  
      * @param string $table
+     * @param mixed $class
      * @return array
      */
-    public function getAll(string $table, $class): array
+    public function getAll(string $table, mixed $class): array
     {
         $query = $this->pdo->prepare("SELECT * FROM $table");
         $query->execute();
@@ -53,107 +54,155 @@ class adminTable extends Table
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
+
+    /**
+     * Cette méthode permet de récuperer les noms des filières à travers le département
+     * 
+     * @param string $departement
+     * @return array
+     */
     public function fieldsByDepartement(string $departement): array
     {
         $query = $this->pdo->prepare('
-        SELECT DISTINCT f.nomFiliere FROM ' .
-            $this->tableFiliere . ' f JOIN ' . $this->tableDepartement . ' d 
-        ON d.idDepartement = f.idDepartement WHERE d.nomDepartement = :departement');
+            SELECT DISTINCT f.nomFiliere FROM ' . $this->tableFiliere . ' f JOIN ' . $this->tableDepartement . ' d 
+            ON d.idDepartement = f.idDepartement WHERE d.nomDepartement = :departement
+        ');
         $query->execute(['departement' => $departement]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classFiliere);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
+
+    /**
+     * Cette méthode permet de recuperer les classe à travers le nom de leur filière
+     * 
+     * @param string $filiere
+     * @return array
+     */
     public function classByFields(string $filiere): array
     {
         $query = $this->pdo->prepare('
-        SELECT DISTINCT c.nomClasse FROM '
-            . $this->tableClasse . ' c JOIN '
-            . $this->tableFiliere . ' f ON 
-        f.idFiliere = c.idFiliere  WHERE f.nomFiliere = :filiere');
+            SELECT DISTINCT c.nomClasse FROM '. $this->tableClasse . ' c JOIN '. $this->tableFiliere . ' f ON 
+            f.idFiliere = c.idFiliere  WHERE f.nomFiliere = :filiere
+        ');
         $query->execute(['filiere' => $filiere]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classClasse);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
-    public function getprofByDepartement(string $depart): array
+
+    /**
+     * Cette méthode permet d'obtenir les informations de tous les professeurs qui
+     * evolue dans un département
+     * 
+     * @param string $departement
+     * @return array
+     */
+    public function getprofByDepartement(string $departement): array
     {
         $query = $this->pdo->prepare('
-    SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' .
-            $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
-    p ON m.cinProf = p.cinProf JOIN ' . $this->tableFiliere . '
-    f ON m.idFiliere = f.idFiliere JOIN ' . $this->tableDepartement . '
-    d ON f.idDepartement = d.idDepartement WHERE  
-    d.nomDepartement = :departement');
-        $query->execute(['departement' => $depart]);
+            SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' . $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
+            p ON m.cinProf = p.cinProf JOIN ' . $this->tableFiliere . ' f ON m.idFiliere = f.idFiliere JOIN ' . $this->tableDepartement . '
+            d ON f.idDepartement = d.idDepartement WHERE d.nomDepartement = :departement
+        ');
+
+        $query->execute(['departement' => $departement]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classProf);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
 
+    /**
+     * Cette méthode permet d'obtenir la liste des professeurs par
+     * qui évolue dans une filière
+     * 
+     * @param string $filiere
+     * @return array
+     */
     public function getProfByFiliere(string $filiere): array
     {
         $query = $this->pdo->prepare('
-        SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' .
-            $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
-        p ON m.cinProf = p.cinProf JOIN ' . $this->tableFiliere . '
-        f ON m.idFiliere = f.idFiliere WHERE  
-        f.nomFiliere = :filiere');
+            SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' .$this->tableMatiere . ' m JOIN ' . $this->tableProf . '
+            p ON m.cinProf = p.cinProf JOIN ' . $this->tableFiliere . ' f ON m.idFiliere = f.idFiliere WHERE  
+            f.nomFiliere = :filiere
+        ');
         $query->execute(['filiere' => $filiere]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classProf);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
 
+    /**
+     * Cette méthode permet d'obtenir la liste des étudiants par filière
+     * 
+     * @param string $filiere
+     * @return array
+     */
     public function getStudentByFiliere(string $filiere): array
     {
         $query = $this->pdo->prepare('
-        SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email FROM ' .
-            $this->tableClasse . ' c JOIN ' . $this->tableEtudiant . '
-        e ON e.idClasse = c.idClasse JOIN ' . $this->tableFiliere .
-            ' f ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :filiere ORDER BY e.nom ASC ');
+            SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email FROM ' .
+            $this->tableClasse . ' c JOIN ' . $this->tableEtudiant . ' e ON e.idClasse = c.idClasse JOIN ' . $this->tableFiliere .
+            ' f ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :filiere ORDER BY e.nom ASC 
+        ');
         $query->execute(['filiere' => $filiere]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
+
+
+    /**
+     * Cette méthode permet d'obtenir la liste des infos des profs par le nom
+     * de leur classes
+     * 
+     * @param string $class
+     * @param array
+     */
     public function getProfByClass(string $class): array
     {
         $query = $this->pdo->prepare('
-        SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' .
-            $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
-        p ON m.cinProf = p.cinProf JOIN ' . $this->tableClasse . '
-         c ON m.idClasse = c.idClasse WHERE c.nomClasse = :class');
+            SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' . $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
+            p ON m.cinProf = p.cinProf JOIN ' . $this->tableClasse . ' c ON m.idClasse = c.idClasse WHERE c.nomClasse = :class
+        ');
         $query->execute(['class' => $class]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classProf);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
 
+    /**
+     * Cette méthode permet d'obtenir la liste des étudiants par classe
+     * 
+     * @param string $class
+     * @return array
+     */
     public function getStudentByClass(string $class): array
     {
         $query = $this->pdo->prepare('
-        SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email FROM ' .
-            $this->tableClasse . ' c JOIN ' . $this->tableEtudiant . '
-        e ON e.idClasse = c.idClasse WHERE c.nomClasse = :class ORDER BY e.nom ASC ');
+            SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email FROM ' .
+            $this->tableClasse . ' c JOIN ' . $this->tableEtudiant . ' e ON e.idClasse = c.idClasse WHERE 
+            c.nomClasse = :class ORDER BY e.nom ASC 
+        ');
         $query->execute(['class' => $class]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
+
 
     public function getAllJustificatif(): array
     {
         $query = $this->pdo->prepare('
-        SELECT e.nom as nom,e.prenom as prenom, j.dateSoumission as 
-        Date_Soumission FROM ' . $this->tableAbsence . ' a JOIN '
-        . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence'
-        . ' JOIN ' . $this->tableEtudiant . ' e ON e.cinEtudiant = a.cinEtudiant
-        ORDER BY e.nom,e.prenom DESC');
+            SELECT e.nom as nom,e.prenom as prenom, j.dateSoumission as Date_Soumission FROM ' . $this->tableAbsence . ' a JOIN '
+            . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence' . ' JOIN ' . $this->tableEtudiant . ' e ON e.cinEtudiant = a.cinEtudiant
+            ORDER BY e.nom,e.prenom DESC
+        ');
         $query->execute();
         $result = $query->fetchALL();
         return count($result) != 0 ? $result : [];
     }
+
 
     public function getProfByCin(string $cin): array
     {
@@ -163,6 +212,8 @@ class adminTable extends Table
         $result = $query->fetchALL();
         return count($result) ? $result : [];
     }
+
+
     public function getStudentByCin(string $cin): array
     {
         $query = $this->pdo->prepare('SELECT * FROM ' . $this->tableEtudiant . ' WHERE cinEtudiant = :cin ');
@@ -207,6 +258,7 @@ class adminTable extends Table
             return false;
         }
     }
+
     public function SuprimerProf($cin): bool
     {
         try {
@@ -309,6 +361,7 @@ class adminTable extends Table
         }
     }
 
+
     public function SuprimerStudent($cin): bool
     {
         try {
@@ -327,6 +380,7 @@ class adminTable extends Table
             return false;
         }
     }
+
 
     public function getAbsenceMatiere(): array
     {
@@ -347,6 +401,8 @@ class adminTable extends Table
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
     }
+
+
     public function getClassById($id): array
     {
         $sql = $this->pdo->prepare('SELECT nomClasse FROM ' . $this->tableClasse . ' WHERE idClasse = :id ');

@@ -10,7 +10,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-use App\adminTable;
+use App\Admin\adminTable;
 use App\connection;
 
 $pdo = Connection::getPDO();

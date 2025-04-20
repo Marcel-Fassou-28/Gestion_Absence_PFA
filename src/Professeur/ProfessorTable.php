@@ -205,7 +205,13 @@ class ProfessorTable extends Table {
         return count($result) != 0 ? $result : null;
     }
 
-
+    /**
+     * Cette methode permet de recupérer les informations sur la classe enseignée
+     * par un professeur
+     * 
+     * @param string $cinProf
+     * @return array
+     */
     public function getClasse(string $cinProf): ?array {
         $query = $this->pdo->prepare('
             SELECT DISTINCT c.idClasse, c.nomClasse, c.idNiveau, c.idFiliere 
@@ -220,6 +226,15 @@ class ProfessorTable extends Table {
     }
 
 
+    /**
+     * Cette méthode permet de regrouper les informations d'absence des étudiants
+     * aux etudiant
+     * 
+     * @param array $studentList
+     * @param array $absenceList
+     * 
+     * @return array $listComplete Association entre les infos d'absence et les étudiants
+     */
     public function getAllStudentList(array $studentList, array $absenceList):array {
         $this->listeComplete = [];
         foreach ($studentList as $etudiant) {
@@ -276,6 +291,12 @@ class ProfessorTable extends Table {
         return $result;
     }
 
+    /**
+     * Cette méthode permet d'envoyer les informations de présence des étudiants
+     * 
+     * @param ListePresence $list
+     * @return bool Si la requete a bien été exécuté ou pas
+     */
     public function sendListPresence(ListePresence $list):bool {
         $query = $this->pdo->prepare('
             INSERT INTO listepresence(cinProf, classe ,nomFichierPresence) VALUES (:cinProf, :classe, :nomFichierPresence)

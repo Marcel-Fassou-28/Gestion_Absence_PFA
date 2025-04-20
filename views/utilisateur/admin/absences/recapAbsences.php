@@ -10,7 +10,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 
 use App\Connection;
-use App\adminTable;
+use App\Admin\adminTable;
 
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);

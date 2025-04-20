@@ -1,7 +1,7 @@
 <?php
 namespace APP;
 use App\Connection;
-use App\adminTable;
+use App\Admin\adminTable;
 
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
