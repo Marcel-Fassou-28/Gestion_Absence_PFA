@@ -1,4 +1,165 @@
+main {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
 
+/* Style du conteneur principal */
+.prof-list {
+    max-width: 90%;
+    margin: 0 auto;
+    background-color: #1c1d1e88;
+    border-radius: 10px;
+    padding: 2%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.intro-prof-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2%;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.intro-prof-list h1 {
+    color: var(--text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* Groupe de date */
+.date-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.date-group span {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 550;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: opacity 0.2s ease;
+}
+
+
+.date-group span:hover {
+    opacity: 0.9;
+}
+
+.date-group span:first-child::before {
+    content: '\1F4C5'; /* Icône calendrier */
+    font-size: 1rem;
+}
+
+.date-group span:last-child::before {
+    content: '\1F551'; /* Icône horloge */
+    font-size: 1rem;
+}
+
+.hr {
+    border-top: 1px solid var(--text-color);
+    opacity: 0.3;
+    margin: 1rem 0;
+}
+
+.form-tri-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2%;
+}
+
+.tri-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 1.5rem 0;
+}
+
+.list-departement select,
+.list-filiere select ,
+.list-classe select {
+    width: 100%;
+    padding: 10px 15px;
+    font-weight: 550;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.list-departement select:hover,
+.list-filiere select:hover ,
+.list-classe select:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.list-departement select:focus,
+.list-filiere select:focus ,
+.list-classe select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Bouton de soumission */
+.submit-group {
+    display: flex;
+    justify-content: center;
+}
+
+.submit-btn {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+
+/*
 .prof-list {
     
     padding: 5%;
@@ -7,14 +168,11 @@
     background-color: var(--bg-section-abstract);
     color: var(--text-color);
     transform: translateY(50px);
-    
+     
 
 
-}
-.global{
-    padding: 5% 0;
+}*/
 
-}
 
 .infoA{
     display: flex;
@@ -34,7 +192,7 @@
 }
     
     
-
+/*
 
 hr {
 
@@ -72,7 +230,80 @@ hr {
    padding-top: 15px;
    
 }
+*/
 
+.list-tri-table-justificatif {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.list-tri-table-justificatif table {
+    width: 100%;
+    background-color: var(--text-color);
+    border-collapse: collapse;
+    border-radius: 0px 0px 0 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.list-tri-table-justificatif thead tr th {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.list-tri-table-justificatif tbody tr td {
+    padding: 8px;
+    border-bottom: 1px solid var(--navbar-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+
+.list-tri-table {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.list-tri-table table {
+    width: 100%;
+    background-color: var(--text-color);
+    border-collapse: collapse;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.list-tri-table thead tr th {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.list-tri-table thead tr th {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.list-tri-table tbody tr td {
+    padding: 8px;
+    border: 1px solid var(--navbar-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+}
+/*
 .prof-table {
     width: 100%;
     text-align: center;
@@ -108,27 +339,199 @@ td {
     color: black;
     padding: 5px;
     border: solid 1px var(--navbar-color);
-}
-.btns{
+}*/
+
+.btns {
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
- .btn1,.btn2{
+
+.btn1, .btn2{
     color: var(--text-color);
-    border-radius: 12px;
-    padding: 12px;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-weight: 600;
     background-color: var(--navbar-color);
     border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 
 }
+
+.btn1:hover, .btn2:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-ajout:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
 .btn2{
-    
-    font-weight: 700;
     margin-left: 12px;
     background-color: red;
 }
+
 .btn-ajout{
-    float: right;;
-    margin: 8% 0;
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+    display: block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-ajout:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-ajout:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+
+/* Styles pour mobile */
+@media screen and (max-width: 768px) {
+    .prof-list {
+        max-width: 95%;
+        padding: 3%;
+    }
+
+    .intro-prof-list {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 2%;
+        gap: 12px;
+    }
+
+    .intro-prof-list h1 {
+        font-size: 1.6rem;
+    }
+
+    .date-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .date-group span {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+        max-width: 200px;
+    }
+
+    .form-tri-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 0 2%;
+    }
+
+    .list-classe select,
+    .list-departement select,
+    .list-filiere select {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        background-position: right 8px center;
+    }
+
+    .submit-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        max-width: 250px;
+    }
+
+    .list-tri-table table {
+        font-size: 0.85rem;
+    }
+
+    .list-tri-table thead tr th,
+    .list-tri-table tbody tr td {
+        padding: 6px;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    .intro-prof-list h1 {
+        font-size: 1.4rem;
+    }
+
+    .date-group span {
+        font-size: 0.85rem;
+        padding: 4px 8px;
+        max-width: 180px;
+    }
+
+    .list-classe select,
+    .list-departement select,
+    .list-filiere select {
+        font-size: 0.85rem;
+        padding: 7px 10px;
+        background-position: right 7px center;
+    }
+
+    .submit-btn {
+        padding: 7px 14px;
+        font-size: 0.85rem;
+        max-width: 220px;
+    }
+
+    .list-tri-table table {
+        min-width: 700px;
+    }
+}
+
+
+@media screen and (max-width: 400px) {
+    .prof-list {
+        max-width: 100%;
+        border-radius: 0;
+        padding: 4%;
+    }
+
+    .intro-prof-list h1 {
+        font-size: 1.2rem;
+    }
+
+    .date-group span {
+        font-size: 0.8rem;
+        padding: 3px 6px;
+        max-width: 150px;
+    }
+
+    .list-departement select,
+    .list-classe select,
+    .list-filiere select {
+        font-size: 0.8rem;
+        padding: 6px 8px;
+        background-position: right 6px center;
+    }
+
+    .submit-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        max-width: 200px;
+    }
+
+    .list-tri-table table {
+        font-size: 0.8rem;
+    }
+
+    .list-tri-table thead tr th,
+    .list-tri-table tbody tr td {
+        padding: 4px;
+    }
 }

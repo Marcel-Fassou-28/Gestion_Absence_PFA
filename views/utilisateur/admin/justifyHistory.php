@@ -16,21 +16,48 @@ $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
 $listeJustificatif = $list->getAllJustificatif();
+$date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
+$dateSql = $date->format('Y-m-d H:i');
 
 ?>
 
 
 
-<div class="global">
-    <div id="liste">
-        <h1 id="titre">Historiques des justificatifs</h1>
-        <hr>
+<div class="prof-list">
+<div class="intro-prof-list">
+        <h1> Historique des Justificatifs</h1>
+        <div class="date-group">
+            <span><?= htmlspecialchars($dateSql) ?></span>
+        </div>
+    </div>
+    <div class="hr"></div>
+    <div class="form-tri-container">
+    <form action="" class="tri-list container" method="POST">
+        <div class="list-classe">
+            <select name="classe" id="tri">
+                <option value="defaut">Classe</option>
+                <!-- Ensemble des classes tiré de la base de données -- -->
+            </select>
+        </div>
+        <div class="list-classe">
+            <select name="classe" id="tri">
+                <option value="defaut">Matiere</option>
+                <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
+            </select>
+        </div>
+        <div class="submit-group">
+            <input class="submit-btn" type="submit" value="Trier" name="submit">
+            </div>
+        </form>
+    </div>
+    <div class="list-tri-table-justificatif">
 
-        <div class="list-tri justificatifs">
-            <table class="prof-table">
-                <thead class="heads">
+            <table>
+                <thead>
+                    <th>N°</th>
                     <th>Nom</th>
                     <th>Prenom</th>
+                    <th>CNE</th>
                     <th>Date de soumission</th>
                     <th>Action</th>
                 </thead>

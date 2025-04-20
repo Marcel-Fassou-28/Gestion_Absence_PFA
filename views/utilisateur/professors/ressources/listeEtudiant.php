@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         $listeComplete = $professeurTable->getAllStudentList($listeEtudiants, $listAbsents);
     }
 }
-?>
+?> 
 
 <div class="presence">
     <div class="intro">
