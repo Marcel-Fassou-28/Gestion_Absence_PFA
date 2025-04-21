@@ -41,6 +41,11 @@ $result = new adminTable($pdo);
                 <label for="password">Password</label>
                 <input type="text" name="password" value="" required>
             </div>
+            <div class="form-input">
+                <label for="matiere">Matiere</label>
+                
+                <input type="checkbox" name="password" value="mat1" required>
+            </div>
             <button type="submit" class="btn">Ajouter Prof</button>
         </form>
     </div>
