@@ -109,6 +109,8 @@ if (isset($_SESSION)) {
                     <li><a href="<?= $router->url('liste-etudiants').'?listprof=1&p=0'?>">Listes des étudiants</a></li>
                 <?php elseif($_SESSION['role'] === 'professeur'): ?>
                     <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list'?>">Listes des étudiants</a></li>
+                <?php elseif($_SESSION['role'] === 'etudiant'): ?>
+                    <li><a href="<?= $router->url('etudiant-messagerie').'?messagerie=1'?>">Ma messagerie</a></li>
                 <?php endif ?>
 
                 <?php if ($_SESSION['role'] === 'admin'): ?>

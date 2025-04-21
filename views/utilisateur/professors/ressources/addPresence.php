@@ -22,7 +22,7 @@ if (!empty($_POST)) {
     $tmpName = $_FILES['absence-list']['tmp_name'];
     $fileSize = $_FILES['absence-list']['size'];
 
-    $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'heic'];
+    $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'heic','pdf'];
     $extension = strtolower(pathinfo($_FILES['absence-list']['name'], PATHINFO_EXTENSION));
 
     if (in_array($extension, $extensionsAutorisees) && $fileSize <= 5000000) {

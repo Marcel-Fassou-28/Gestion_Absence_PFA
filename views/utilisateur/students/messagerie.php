@@ -24,9 +24,9 @@ $messagesEnvoyes = array_filter($messages, fn($m) => $m->getCinExpediteur() == $
 
 ?>
 
- <div class="dashboard-messagerie container">
+ <div class="dshb-messagerie container">
     <div>
-        <h2 class="messagerie-intro">Messagerie</h2>
+        <h2 class="messagerie-intro">MESSAGERIE</h2><div class="underline"></div>
     </div>
     <div class="new-msg-btn">
     <button type="button" class="btn-nouveau-message">Nouveau message +</button>
@@ -44,8 +44,9 @@ $messagesEnvoyes = array_filter($messages, fn($m) => $m->getCinExpediteur() == $
                 </form>
                 </center>
         </div>
-        <div class="dashboard-container">
-            <h3 class="messagerie-intro ">Messages reçus</h3>
+        <div class="conteneur-messagerie">
+            <h3 class="messagerie-intro ">Messages reçus</h3><div class="hr"></div>
+            <div class="msg">
             <?php if (empty($messagesRecus)): ?>
                 <p>Aucun message reçu.</p>
             <?php else: ?>
@@ -57,13 +58,15 @@ $messagesEnvoyes = array_filter($messages, fn($m) => $m->getCinExpediteur() == $
                             <strong>Date :</strong> <?= htmlspecialchars($message->getDate()) ?><br>
                             <strong>Contenu :</strong> <?= nl2br(htmlspecialchars($message->getContenu())) ?>
                         </li>
+                        <hr>
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>
+            </div>
         </div>
 
-        <div class="dashboard-container">
-            <h3 class="messagerie-intro ">Messages envoyés</h3>
+        <div class="conteneur-messagerie">
+            <h3 class="messagerie-intro ">Messages envoyés</h3><div class="hr"></div>
             <?php if (empty($messagesEnvoyes)): ?>
                 <p>Aucun message envoyé.</p>
             <?php else: ?>
@@ -75,6 +78,7 @@ $messagesEnvoyes = array_filter($messages, fn($m) => $m->getCinExpediteur() == $
                             <strong>Date :</strong> <?= htmlspecialchars($message->getDate()) ?><br>
                             <strong>Contenu :</strong> <?= nl2br(htmlspecialchars($message->getContenu())) ?>
                         </li>
+                        <hr>
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>

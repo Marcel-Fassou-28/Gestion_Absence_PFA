@@ -130,7 +130,7 @@ class EtudiantsAbsents {
      * @return int|null
      */
     public function getNombreAbsences(): ?int {
-        return $this->nombreAbsences;
+        return $this->nombreAbsences; 
     }
 
     /**

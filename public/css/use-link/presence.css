@@ -239,6 +239,7 @@ padding-bottom: 50px;
     padding: 8px;
     border: 1px solid var(--navbar-color);
     font-weight: 500;
+    color: black;
 }
 
 .table-container tbody tr td button {
