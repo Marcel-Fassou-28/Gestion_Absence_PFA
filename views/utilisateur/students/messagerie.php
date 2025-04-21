@@ -26,7 +26,7 @@ $messagesEnvoyes = array_filter($messages, fn($m) => $m->getCinExpediteur() == $
 
  <div class="dshb-messagerie container">
     <div>
-        <h2 class="messagerie-intro">Messagerie</h2><div class="underline"></div>
+        <h2 class="messagerie-intro">MESSAGERIE</h2><div class="underline"></div>
     </div>
     <div class="new-msg-btn">
     <button type="button" class="btn-nouveau-message">Nouveau message +</button>

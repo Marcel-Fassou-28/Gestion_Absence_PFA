@@ -16,9 +16,9 @@
     margin: 25px auto;
     padding: 25px;
     border-radius: 20px;
-    background-color: var(--bg-section-abstract);
+    background-color: #1c1d1e90;
     width: 80%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.543);
 }
 
 .messagerie-intro{
@@ -33,14 +33,14 @@
     display: flex;
     align-items: right;
     justify-content: right;
-    margin-top: 5px;
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 .new-msg-btn button{
     border-radius: 15px;
-    background-color: var(--bg-btn);
+    background-color: #8bb0f0;
     color:var(--text-color);
-    padding: 5px 8px;
+    padding: 8px 10px;
     font-style: sans-serif;
     border: none;
     cursor: pointer;
