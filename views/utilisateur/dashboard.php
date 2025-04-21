@@ -4,11 +4,13 @@ if(!isset($_SESSION['id_user'])) {
     exit();
 }
 
+use App\Admin\StatisticAdmin;
 use App\Connection;
 use App\UserTable;
 use App\Utils\UtilsInformation;
 use App\Model\Utils\LastAbsence;
 use App\EtudiantTable;
+use App\Model\Utils\Admin\InformationActifs;
 use App\Model\Utils\Etudiant\DerniereAbsenceEtudiant;
 
 $pdo = Connection::getPDO();
@@ -34,6 +36,15 @@ if ($_SESSION['role'] === 'etudiant') {
     $creneauProfesseurs = $etudiantInfo->getAllCreneauxProf($cin);
     $infoEtudiant = $etudiantInfo->getInfoGeneralEtudiant($cin);
     $absenceParMatiere = $etudiantInfo->getStatistiqueAbsenceEtudiant($cin);
+}
+
+if ($_SESSION['role'] === 'admin') {
+    $adminTable = new StatisticAdmin($pdo);
+
+    $statisticFiliere = $adminTable->getStatisticFiliere();
+    $infoGeneral = $adminTable->getInformationGenerale();
+    $derniereAbsencesEffectue = $adminTable->getLastAbsenceSend();
+    $listPresence = $adminTable->getIfAbsenceByFile();
 }
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -294,22 +305,85 @@ $currentTime = $date->format('H:i:s');
                 <h2>Information Générale</h2>
                 <div class="hr"></div>
                 <ul class="list-info-absence">
-    <!-- Information générale sur le nombre d'etudiants, inscrit, présent, notifications -->
+                <?php if ($infoGeneral instanceof InformationActifs): ?>
+            <li class="absence-item">
+                <div class="absence-detail">
+                    <span class="absence-label">Nombre Total Inscrit :</span>
+                    <span class="absence-value"><?= htmlspecialchars($infoGeneral->getTotalInscrits() ?? 'Non spécifiée') ?></span>
+                </div>
+                <div class="absence-detail">
+                    <span class="absence-label">Nombre Total Absents :</span>
+                    <span class="absence-value"><?= htmlspecialchars($infoGeneral->getTotalAbsents() ?? 'Non spécifiée') ?></span>
+                </div>
+                <div class="absence-detail">
+                    <span class="absence-label">Professeurs Actuellement Actifs: </span>
+                    <span class="absence-value"><?= htmlspecialchars($infoGeneral->getProfesseursActifsActuellement() ?? 'Non spécifiée') ?></span>
+                </div> 
+                <div class="absence-detail">
+                    <span class="absence-label">Professeurs Actuellement Absents: </span>
+                    <span class="absence-value"><?= htmlspecialchars($infoGeneral->getProfesseursAbsentsActuellement() ?? 'Non spécifiée') ?></span>
+                </div>
+                <div class="absence-detail">
+                    <span class="absence-label">Presence Effectuée en Classe: </span>
+                    <span class="absence-value"><?= htmlspecialchars( $listPresence->getNombreListesSoumisesAujourdHui() == 0 ? 'Aucun fichier Emit' : $listPresence->getNombreListesSoumisesAujourdHui() . '🔔')  ?></span>
+                </div>                  
+            </li>
+        <?php else: ?>
+            <li class="absence-item absence-empty">
+                <span>Aucune information Disponible.</span>
+            </li>
+        <?php endif; ?>
                 </ul>
             </section>
             <section class="creneaux">
                 <h2>Dernière Absence Effectuée</h2>
                 <div class="hr"></div>
                 <ul class="list-creneaux">
-    <!-- Les 5 à 10 dernières Absences Effectuées -->
+                <?php foreach ($derniereAbsencesEffectue as $class): ?>
+                        <li class="creneau-day">
+                            <span class="day-title"><?= htmlspecialchars($class->getNomClasse()) ?></span>
+                            <ul class="creneau-list">
+                                    <li class="creneau-item">
+                                        <span class="creneau-time">
+                                            <?=htmlspecialchars($class->getNomMatiere())?>
+                                        </span>
+                                        <span class="creneau-info">
+                                            <?= "Nombre d'Absent:"  ?>
+                                            <?= htmlspecialchars($class->getNombreAbsents() ?? 'Non spécifiée') ?>
+                                        </span>
+                                    </li>
+                            </ul>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </section>
 
             <section class="classe-stat">
-                <h2>Statistiques</h2>
+                <h2>Statistiques des Filières</h2>
                 <div class="hr"></div>
                 <ul class="list-statistic">
-    <!-- Statistique Général -->
+                <?php if (!empty($statisticFiliere) && is_array($statisticFiliere)): ?>
+                        <?php foreach ($statisticFiliere as $stat): ?>
+                            <li class="stat-item">
+                                <div class="stat-detail">
+                                    <span class="stat-label">Filière :</span>
+                                    <span class="stat-value"><?= htmlspecialchars($stat->getNomFiliere() ?? 'Non spécifiée') ?></span>
+                                </div>
+                                <div class="stat-detail">
+                                    <span class="stat-label">Effectif Total :</span>
+                                    <span class="stat-value"><?= htmlspecialchars($stat->getTotalEtudiants() ?? 0) ?></span>
+                                </div>
+                                <div class="stat-detail">
+                                    <span class="stat-label">Nombre d'Absents :</span>
+                                    <span class="stat-value"><?= htmlspecialchars($stat->getTotalAbsences() ?? 0) ?></span>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li class="stat-item stat-empty">
+                            <span>Aucune statistique disponible.</span>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </section>
         </div>
