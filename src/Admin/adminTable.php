@@ -46,9 +46,17 @@ class adminTable extends Table
      * @param mixed $class
      * @return array
      */
-    public function getAll(string $table, mixed $class): array
+    public function getAll(string $table,mixed $class,int $line = 0,int $offset = 0): array
     {
-        $query = $this->pdo->prepare("SELECT * FROM $table");
+        $sql = "SELECT * FROM $table";
+        if ( in_array($table,['etudiant','rofesseur','utilisateur'])){
+            $sql .= " ORDER BY nom ,prenom DESC";
+        }
+        if ($line !== 0){
+            $sql .= " LIMIT ". $line . " OFFSET ".$offset;
+        }
+        
+        $query = $this->pdo->prepare($sql);
         $query->execute();
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->$class);
         $result = $query->fetchAll();
@@ -98,14 +106,18 @@ class adminTable extends Table
      * @param string $departement
      * @return array
      */
-    public function getprofByDepartement(string $departement): array
+    public function getprofByDepartement(string $departement,int $line = 0,int $offset = 0): array
     {
-        $query = $this->pdo->prepare('
+        $sql ='
             SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' . $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
             p ON m.cinProf = p.cinProf JOIN ' . $this->tableFiliere . ' f ON m.idFiliere = f.idFiliere JOIN ' . $this->tableDepartement . '
             d ON f.idDepartement = d.idDepartement WHERE d.nomDepartement = :departement
-        ');
-
+        ';
+        
+        if ($line !== 0){
+            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+        }
+        $query = $this->pdo->prepare($sql);
         $query->execute(['departement' => $departement]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classProf);
         $result = $query->fetchAll();
@@ -119,13 +131,17 @@ class adminTable extends Table
      * @param string $filiere
      * @return array
      */
-    public function getProfByFiliere(string $filiere): array
+    public function getProfByFiliere(string $filiere,int $line = 0,int $offset = 0): array
     {
-        $query = $this->pdo->prepare('
+        $sql ='
             SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' .$this->tableMatiere . ' m JOIN ' . $this->tableProf . '
             p ON m.cinProf = p.cinProf JOIN ' . $this->tableFiliere . ' f ON m.idFiliere = f.idFiliere WHERE  
             f.nomFiliere = :filiere
-        ');
+        ';
+        if ($line !== 0){
+            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+        }
+        $query = $this->pdo->prepare($sql);
         $query->execute(['filiere' => $filiere]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classProf);
         $result = $query->fetchAll();
@@ -138,13 +154,18 @@ class adminTable extends Table
      * @param string $filiere
      * @return array
      */
-    public function getStudentByFiliere(string $filiere): array
+    public function getStudentByFiliere(string $filiere,int $line = 0,int $offset = 0): array
     {
-        $query = $this->pdo->prepare('
-            SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email FROM ' .
-            $this->tableClasse . ' c JOIN ' . $this->tableEtudiant . ' e ON e.idClasse = c.idClasse JOIN ' . $this->tableFiliere .
-            ' f ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :filiere ORDER BY e.nom ASC 
-        ');
+        $sql = "SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email 
+        FROM " . $this->tableClasse . " c JOIN " . $this->tableEtudiant . 
+        " e ON e.idClasse = c.idClasse JOIN " . $this->tableFiliere .
+        " f ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :filiere ORDER BY e.nom ASC ";
+        
+
+        if ($line !== 0){
+            $sql .= " LIMIT ".$line . " OFFSET ". $offset;
+        }
+        $query = $this->pdo->prepare($sql);
         $query->execute(['filiere' => $filiere]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
         $result = $query->fetchAll();
@@ -159,12 +180,16 @@ class adminTable extends Table
      * @param string $class
      * @param array
      */
-    public function getProfByClass(string $class): array
+    public function getProfByClass(string $class,int $line = 0,int $offset = 0): array
     {
-        $query = $this->pdo->prepare('
+        $sql = '
             SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' . $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
             p ON m.cinProf = p.cinProf JOIN ' . $this->tableClasse . ' c ON m.idClasse = c.idClasse WHERE c.nomClasse = :class
-        ');
+        ';
+        if ($line !== 0){
+            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+        }
+        $query = $this->pdo->prepare($sql);
         $query->execute(['class' => $class]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classProf);
         $result = $query->fetchAll();
@@ -177,13 +202,17 @@ class adminTable extends Table
      * @param string $class
      * @return array
      */
-    public function getStudentByClass(string $class): array
+    public function getStudentByClass(string $class,int $line = 0,int $offset = 0): array
     {
-        $query = $this->pdo->prepare('
+        $sql = '
             SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email FROM ' .
             $this->tableClasse . ' c JOIN ' . $this->tableEtudiant . ' e ON e.idClasse = c.idClasse WHERE 
             c.nomClasse = :class ORDER BY e.nom ASC 
-        ');
+        ';
+        if ($line !== 0){
+            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+        }
+        $query = $this->pdo->prepare($sql);
         $query->execute(['class' => $class]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
         $result = $query->fetchAll();
@@ -462,6 +491,16 @@ class adminTable extends Table
         $sql->setFetchMode(\PDO::FETCH_CLASS,$this->classEtudiant);
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
+    }
+
+    /**
+     * cette fonction permet generer une url avec comme un formulaire soumit avec get
+     * @param mixed $col
+     * @param mixed $val
+     * @return string
+     */
+    public  function test($col,$val):string{
+        return http_build_query(array_merge($_GET,[$col => $val]));
     }
 }
 ?>

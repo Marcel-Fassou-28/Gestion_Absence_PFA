@@ -159,21 +159,6 @@ main {
 }
 
 
-/*
-.prof-list {
-    
-    padding: 5%;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--bg-section-abstract);
-    color: var(--text-color);
-    transform: translateY(50px);
-     
-
-
-}*/
-
-
 .infoA{
     display: flex;
     justify-content: space-between;
@@ -190,47 +175,6 @@ main {
     width: 80%;
     margin-left: 10%;
 }
-    
-    
-/*
-
-hr {
-
-    background-color: white;
-    height: 5px;
-    border-radius: 10px;
-    width: 90%;
-    margin-left: 5%;
-}
-
-.tri-list {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-#tri {
-    width: 25%;
-    height: 50px;
-    border-radius: 10px;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.tri-list input {
-    border-radius: 10px;
-
-    border: none;
-    height: 50px;
-    width: 10%;
-    text-align: center;
-}
-
-.list-tri{
-   padding-top: 15px;
-   
-}
-*/
 
 .list-tri-table-justificatif {
     overflow-x: auto;
@@ -303,43 +247,6 @@ hr {
     font-size: 0.95rem;
     color: #333;
 }
-/*
-.prof-table {
-    width: 100%;
-    text-align: center;
-    
-   
-
-}
-
-
-
-.heads th{
-
-    padding: 10px;
-    color: var(--text-color);
-   
-    background-color: var(--navbar-color);
-    
-
-}
-
-.heads tr th:first-child {
-    border-radius: 10px 0 0 0;
-}
-
-.heads tr th:last-child {
-    border-radius: 0 10px 0 0;
-}
-
-
-
-td {
-    background-color: white;
-    color: black;
-    padding: 5px;
-    border: solid 1px var(--navbar-color);
-}*/
 
 .btns {
     display: flex;
@@ -400,6 +307,10 @@ td {
 .btn-ajout:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.page{
+    background-color: var(--bg-btn);
 }
 
 

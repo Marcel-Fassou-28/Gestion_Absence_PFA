@@ -328,8 +328,8 @@ $currentTime = $date->format('H:i:s');
                 <h2>Gestion du Personnel</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
-                    <li><a href="<?= $router->url('liste-etudiants') ?>">Gestion des étudiants</a></li>
-                    <li><a href="<?= $router->url('liste-professeur') ?>">Gestion des professeurs</a></li>
+                    <li><a href="<?= $router->url('liste-etudiants').'?listprof=1&p=0' ?>">Gestion des étudiants</a></li>
+                    <li><a href="<?= $router->url('liste-professeur').'?listprof=1&p=0'?>">Gestion des professeurs</a></li>
                     <li><a href="<?= $router->url('gestion-creneau') ?>">Gestion des Créneaux</a></li>
                 </ul>
             </section>

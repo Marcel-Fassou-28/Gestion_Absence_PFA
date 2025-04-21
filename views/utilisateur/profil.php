@@ -106,13 +106,13 @@ if (isset($_SESSION)) {
             <h3>Liens Utiles</h3>
             <ul>
                 <?php if ($_SESSION['role'] === 'admin'): ?>
-                    <li><a href="<?= $router->url('liste-etudiants').'?listprof=1'?>">Listes des étudiants</a></li>
+                    <li><a href="<?= $router->url('liste-etudiants').'?listprof=1&p=0'?>">Listes des étudiants</a></li>
                 <?php elseif($_SESSION['role'] === 'professeur'): ?>
                     <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list'?>">Listes des étudiants</a></li>
                 <?php endif ?>
 
                 <?php if ($_SESSION['role'] === 'admin'): ?>
-                <li><a href="<?=$router->url('liste-professeur').'?listprof=1'?>">Liste des professeurs</a></li>
+                <li><a href="<?=$router->url('liste-professeur').'?listprof=1&p=0'?>">Liste des professeurs</a></li>
                 <li><a href="<?=$router->url('RecapAbsences').'?listprof=1'.'&justifier=1'?>">Recapitulatif des Absences</a></li>
                 <?php endif ?>
             </ul>
