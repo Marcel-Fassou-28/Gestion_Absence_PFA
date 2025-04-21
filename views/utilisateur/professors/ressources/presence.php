@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         <div class="date-group">
            <span><?= $dateDuJour ?></span>
            <span>Créneau :  <?= $creneau->getHeureDebut() . ' - ' . $creneau->getHeureFin() ?></span>
-        </div>
+        </div> 
     </div>
     <div class="hr"></div>
     <div class="presence-container">

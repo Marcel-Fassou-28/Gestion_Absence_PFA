@@ -31,19 +31,34 @@ class ListePresence {
      * @var string $cinProf
      */
     protected $cinProf;
+
+    /**
+     * @var string $nomPrenom
+     */
+    protected $nomPrenom;
     
     /**
      * @var string $nomFichierPresence
      */
     protected $nomFichierPresence;
 
-    /*public function __construct(int $id, string $date, string $classe, string $cinProf, $nomFichierPresence) {
+    /*public function __construct(int $id, string $date, string $classe, string $cinProf, $nomFichierPresence, $nomPrenom) {
         $this->id = $id;
         $this->date = $date;
         $this->classe = $classe;
         $this->cinProf = $cinProf;
         $this->nomFichierPresence = $nomFichierPresence;
+        $this->nomPrenom = $nomPrenom;
     }*/
+
+    /**
+     * Getters
+     * 
+     * @return string $nomPrenom
+     */
+    public function getNomPrenom():?string {
+        return $this->nomPrenom;
+    }
 
     /**
      * Getters

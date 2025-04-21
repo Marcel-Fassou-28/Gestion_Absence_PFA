@@ -395,6 +395,7 @@ $currentTime = $date->format('H:i:s');
                 <ul class="use-link-list">
                     <li><a href="<?= $router->url('admin-messagerie') ?>"> Messageries </a></li>
                     <li><a href="<?= $router->url('justification') ?>">Justificatifs</a></li>
+                    <li><a href="<?= $router->url('liste-presence-soumis')?>">Liste de Presence Soumis</a></li>
                     <li><a href="<?= $router->url('historikAbscences') ?>">Absence des Etudiants</a></li>
                 </ul>
             </section>
@@ -421,6 +422,11 @@ $currentTime = $date->format('H:i:s');
 }
 .use-link-list li:nth-child(3) a::before {
     content: '\1F464'; 
+    margin-right: 0.5rem;
+}
+
+.use-link-list li:nth-child(4) a::before {
+    content: '\1F4C8'; 
     margin-right: 0.5rem;
 }
 

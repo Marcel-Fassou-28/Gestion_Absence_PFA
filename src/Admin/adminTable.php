@@ -13,6 +13,7 @@ use App\Model\Matiere;
 use App\Model\Utilisateur;
 
 use App\Model\Justificatif;
+use App\Model\ListePresence;
 use App\Professeur\ProfessorTable;
 
 class adminTable extends Table
@@ -462,6 +463,23 @@ class adminTable extends Table
         $sql->setFetchMode(\PDO::FETCH_CLASS,$this->classEtudiant);
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
+    }
+
+    /**
+     * Cette méthode est défini pour recuperer la liste de tous les fichiers d'absence
+     * soumis dans les classes
+     * 
+     * @return array
+     */
+    public function getAllFichierListPresence():array {
+        $query = $this->pdo->prepare('
+            SELECT lp.*, CONCAT(p.nom ," ", p.prenom) as nomPrenom FROM listepresence lp JOIN professeur p ON lp.cinProf = p.cinProf ORDER BY date DESC
+        ');
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, ListePresence::class);
+        $result = $query->fetchAll();
+
+        return $result ?? [];
     }
 }
 ?>
