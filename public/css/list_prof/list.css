@@ -93,6 +93,14 @@ main {
     margin: 1.5rem 0;
 }
 
+.list-departement select option,
+.list-filiere select option,
+.list-classe select option{
+   color: #333;
+   font-size: 1rem;
+   font-weight: 600;
+}
+
 .list-departement select,
 .list-filiere select ,
 .list-classe select {
@@ -176,46 +184,6 @@ main {
     margin-left: 10%;
 }
     
-    
-/*
-
-hr {
-
-    background-color: white;
-    height: 5px;
-    border-radius: 10px;
-    width: 90%;
-    margin-left: 5%;
-}
-
-.tri-list {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-#tri {
-    width: 25%;
-    height: 50px;
-    border-radius: 10px;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.tri-list input {
-    border-radius: 10px;
-
-    border: none;
-    height: 50px;
-    width: 10%;
-    text-align: center;
-}
-
-.list-tri{
-   padding-top: 15px;
-   
-}
-*/
 .presence-container-file {
     display: flex;
     flex-direction: column;
@@ -259,35 +227,6 @@ hr {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
-
-.submit-btn {
-    background-color: var(--navbar-color);
-    color: var(--text-color);
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    max-width: 300px;
-    margin: 10px auto;
-    display: block;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.submit-btn:hover {
-    background-color: var(--bg-btn);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.submit-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
-}
 
 .presence-file {
     display: flex;

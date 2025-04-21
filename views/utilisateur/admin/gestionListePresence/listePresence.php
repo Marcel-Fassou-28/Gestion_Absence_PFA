@@ -68,8 +68,8 @@ $listeFichierPresence = $tableAdmin->getAllFichierListPresence();
                         <td><?= htmlspecialchars($row->getDate()) ?></td>
                         <td><?= htmlspecialchars($row->getClasse()) ?></td>
                         <td>
-                            <a class="btn1" href="<?= $router->url('liste-presence-soumis-details') . '?file='. $row->getNomFichierPresence() ?>">Voir details</a>
-                            <a class="btn2" href="<?= $router->url('liste-presence-soumis-delete'). '?file='. $row->getNomFichierPresence() ?>">Supprimer</a>
+                            <a class="btn1" href="<?= $router->url('liste-presence-soumis-details') . '?file='. $row->getNomFichierPresence() . '&listprof=1&p=0' ?>">Voir details</a>
+                            <a class="btn2" href="<?= $router->url('liste-presence-soumis-delete'). '?file='. $row->getNomFichierPresence() . '?listprof=1&p=0'?>">Supprimer</a>
                         </td>
                     </tr>
                 <?php } ?>
