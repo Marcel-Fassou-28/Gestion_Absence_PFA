@@ -18,30 +18,64 @@ use App\Connection;
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
+//variable pour la gestion de la pagination
+$line = 20;
+$offset = $_GET['p'] * $line;
+
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
+//variable n pour compter le nombre total de ligne extraite de la fonction getALL()
+$n = count($list->getAll("departement", "classDepartement"));
 $listeDepart = $list->getAll("departement", "classDepartement");
 $listeFiliere = $list->getAll("filiere", "classFiliere");
 $listeClasse = $list->getAll("classe", "classClasse");
 $listeProf = $list->getAll("professeur", "classProf");
-$nbreProf = 0;
 
-if (isset($_POST['departement']) && $_POST['departement'] !== 'defaut') {
-    $departement = $_POST['departement'];
+// utilisation de la variable de session pour gerer la pagination lors du tri 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $_SESSION['filiere'] = $_POST['filiere'];
+    $_SESSION['classe'] = $_POST['classe'];
+    $_SESSION['departement'] = $_POST['departement'];
+}
+
+//affichage des etudiants sans tri
+if ( (empty( $_POST)) || ($_SESSION['departement'] === 'defaut' && $_SESSION['filiere'] === 'defaut' && $_SESSION['classe'] === 'defaut'  )) {
+    $listeProf = $list->getAll("professeur", "classProf" , $line, $offset);
+}
+
+// tri si le departement  est choisit
+if ((isset($_POST['departement']) && $_POST['departement'] !== 'defaut')  || (isset($_SESSION['departement']) && $_SESSION['departement'] !== 'defaut')) {
+    $departement = $_SESSION['departement'];
+    if (isset($_POST['departement']) && !isset($_POST['filiere']) && !isset($_POST['classe'])){
+        $_SESSION['filiere'] = 'defaut';
+        $_SESSION['classe'] = 'defaut';
+    }
+    $n = count($list->getprofByDepartement("departement"));
     $listeFiliere = $list->fieldsByDepartement($departement);
-    $listeProf = $list->getprofByDepartement($departement);
+    $listeProf = $list->getprofByDepartement($departement,$line,$offset);
 }
 
-if (isset($_POST['filiere']) && $_POST['filiere'] !== 'defaut') {
-    $filiere = $_POST['filiere'];
+// tri si la filiere est choisit
+if ((isset($_POST['filiere']) && $_POST['filiere'] !== 'defaut') || (isset($_SESSION['filiere']) && $_SESSION['filiere'] !== 'defaut')) {
+    $filiere = $_SESSION['filiere'];
+    if (isset($_POST['filiere']) && !isset($_POST['classe'])){
+        
+        $_SESSION['classe'] = 'defaut';
+    }
+    $n =count( $list->getProfByFiliere($filiere));
     $listeClasse = $list->classByFields($filiere);
-    $listeProf = $list->getProfByFiliere($filiere);
+    $listeProf = $list->getProfByFiliere($filiere,$line,$offset);
 }
 
-if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
-    $classe = $_POST['classe'];
-    $listeProf = $list->getProfByClass($classe);
+if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSION['classe']) && $_SESSION['classe']!== 'defaut')) {
+    if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut')
+    {
+        $_SESSION['classe'] = $_POST['classe'];
+    }
+    $classe = $_SESSION['classe'];
+    $n = count($list->getProfByClass($classe));
+    $listeProf = $list->getProfByClass($classe,$line,$offset);
 } 
 ?>
 <div class="prof-list">
@@ -51,11 +85,7 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
         <div class="form-ajout">
-            <!-- Privilègier les liens et non les formulaires -- -->
-            <!--<form  method="POST" action="ajouter-prof?modif=1">
-                <button class="btn-ajout" type="submit">Ajouter un Professeur</button>
-            </form> -->
-            <a href="" class="btn-ajout">Ajouter un Professeur</a>
+            <a href="<?= $router->url('ajouterProf').'?modifier=1';?>" class="btn-ajout">Ajouter un Professeur</a>
         </div>
     </div>
     <div class="hr"></div>
@@ -66,7 +96,7 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
                 <option value="defaut">Département</option>
                 <?php
                 foreach ($listeDepart as $row) { ?>
-                    <option value="<?= htmlspecialchars($row->getNomDepartement()); ?>" <?= (isset($_POST['departement']) && $_POST['departement'] === $row->getNomDepartement() ? 'selected' : ''); ?>>
+                    <option value="<?= htmlspecialchars($row->getNomDepartement()); ?>" <?= (((isset($_POST['departement']) && $_POST['departement'] === $row->getNomDepartement()) || (isset($_SESSION['departement']) && $_SESSION['departement'] === $row->getNomDepartement())) ? 'selected' : ''); ?>>
                         <?= htmlspecialchars($row->getNomDepartement()); ?>
                     </option><?php
                 }
@@ -78,7 +108,7 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
                 <option value="defaut">Filières</option>
                 <?php
                 foreach ($listeFiliere as $row) { ?>
-                    <option value="<?= htmlspecialchars($row->getNomFiliere()); ?>" <?= (isset($_POST['filiere']) && $_POST['filiere'] === $row->getNomFiliere() ? 'selected' : ''); ?>>
+                    <option value="<?= htmlspecialchars($row->getNomFiliere()); ?>" <?= (((isset($_POST['filiere']) && $_POST['filiere'] === $row->getNomFiliere()) || (isset($_SESSION['filiere']) && $_SESSION['filiere'] === $row->getNomFiliere() )) ? 'selected' : ''); ?>>
                         <?= htmlspecialchars($row->getNomFiliere()); ?>
                     </option><?php
                 }
@@ -90,7 +120,7 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
                 <option value="defaut">Classe</option>
                 <?php
                 foreach ($listeClasse as $row) { ?>
-                    <option value="<?= htmlspecialchars($row->getNomClasse()); ?>" <?= (isset($_POST['classe']) && $_POST['classe'] === $row->getNomClasse() ? 'selected' : ''); ?>>
+                    <option value="<?= htmlspecialchars($row->getNomClasse()); ?>" <?= (((isset($_POST['classe']) && $_POST['classe'] === $row->getNomClasse())|| (isset($_SESSION['classe'])&& $_SESSION['classe'] === $row->getNomClasse())) ? 'selected' : ''); ?>>
                         <?= htmlspecialchars($row->getNomClasse()); ?>
                     </option><?php
                 }
@@ -118,27 +148,29 @@ if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut') {
             <tbody>
             <?php foreach ($listeProf as $row) { ?>
                 <tr>
-                    <td><?= ++$nbreProf; ?></td>
+                    <td><?= ++$offset; ?></td>
                     <td><?= htmlspecialchars($row->getNom()) ?></td>
                     <td><?= htmlspecialchars($row->getPrenom()) ?></td>
                     <td><?= htmlspecialchars($row->getCIN()) ?></td>
                     <td><?= htmlspecialchars($row->getEmail()) ?></td>
                     <td class="btns">
-                        <a href="" class="btn1">Modifier</a>
-                        <a href="" class="btn2">Supprimer</a>
-                        <!--<form method="GET" action="modifier-prof">
-                            <input type="hidden" name="cin" value="/ htmlspecialchars($row->getCIN()); ?>">
-                            <input type="hidden" name="modif" value="<= 1; ?>">
-                            <button class="btn1" type="submit">Modifier</button>
-                        </form>
-                        <form method="POST" action="modifier-prof">
-                            <input type="hidden" name="cin" value="<= htmlspecialchars($row->getCIN()); ?>">
-                            <button class="btn2" type="submit">supprimer </button>
-                        </form>-->
+                        <a href="<?= $router->url('modifier-professeur').'?modifier=1'.'&cin='.$row->getCIN();?>" class="btn1">Modifier</a>
+                        <a href="<?= $router->url('modifier-professeur').'?cin='.$row->getCIN();?>" class="btn2">Supprimer</a>
+                        
                     </td>
                 </tr>
             <?php } ?>
             </tbody>
         </table>
     </div>
+    <?php
+    // variable pour compter le nombre de page 
+    //pour aficher le nombre total de page avec ou sans tri 
+    $nbrpage = ceil($n / $line);
+    //boucle d'affichage des numero de page 
+    for ( $i = 0; $i <$nbrpage; ){?>
+
+        <a href="?<?= $list->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page': '';?>"><?=++$i?></a><?php
+    }
+    ?>
 </div>

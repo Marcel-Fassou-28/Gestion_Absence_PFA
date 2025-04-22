@@ -4,6 +4,11 @@ if(!isset($_SESSION['id_user'])) {
     exit();
 }
 
+if (isset($_SESSION['role']) && $_SESSION['role'] !== 'etudiant') {
+    header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
+    exit();
+}
+
 use App\MessageTable;
 use App\UserTable;
 use App\Model\Message;

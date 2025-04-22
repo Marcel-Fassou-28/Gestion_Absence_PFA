@@ -16,6 +16,7 @@ $router
 
     /* Pour servir les images de profil */
     ->get('/my/profil/[*:role]/[*:id]', 'proxy/photo', 'serve-photo')
+    ->get('/my/profil/serve-file', 'proxy/presence', 'serve-presence')
 
     /* Lorsque l'utilisateur est connecté */
     ->get('/home/my/[*:role]', 'utilisateur/home','user-home')
@@ -43,6 +44,11 @@ $router
     ->match('/my/administration/modifier-student','utilisateur/admin/gestionEtudiant/modifierEtudiant','modifier-student')
 
     ->match('/my/administration/gestion/creneaux', 'utilisateur/admin/gestionCreneaux/listCreneau', 'gestion-creneau')
+
+    ->match('/my/administration/gestion/liste-presence', 'utilisateur/admin/gestionListePresence/listePresence', 'liste-presence-soumis')
+    ->match('/my/administration/gestion/liste-presence/voir-details', 'utilisateur/admin/gestionListePresence/supprimer', 'liste-presence-soumis-delete')
+    ->match('/my/administration/gestion/liste-presence/delete', 'utilisateur/admin/gestionListePresence/voirDetails', 'liste-presence-soumis-details')
+
     ->match('/my/Liste-des-etudiants-privees-pour-examen','utilisateur/admin/absences/etudiantPrivee','etudiantprivee')
     ->match('/my/administration/historiques-des-absences','utilisateur/admin/absences/historiquesAbsences','historikAbscences')
     ->match('/my/administration/recapitulatif-Absences','utilisateur/admin/absences/recapAbsences','RecapAbsences')

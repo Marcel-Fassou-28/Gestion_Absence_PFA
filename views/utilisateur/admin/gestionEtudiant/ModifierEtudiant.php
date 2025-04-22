@@ -14,7 +14,7 @@ use App\connection;
 
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
-if (!empty($_GET) && isset($_GET['cin'])) {
+if (!empty($_GET) && isset($_GET['modifier'])) {
     $cin = $_GET['cin'];
 
     $prof = $result->getProfByCin($cin);
@@ -78,8 +78,8 @@ if (!empty($_GET) && isset($_GET['cin'])) {
     }
 
 
-} else if (!empty($_POST) && isset($_POST['cin'])) {
-    $cin = $_POST['cin'];
+} else {
+    $cin = $_GET['cin'];
     if ($result->SuprimerStudent($cin)) {
         header('location: liste-Etudiants?listprof=1');
         exit;

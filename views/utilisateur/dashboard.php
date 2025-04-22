@@ -394,17 +394,18 @@ $currentTime = $date->format('H:i:s');
                 <div class="hr"></div>
                 <ul class="use-link-list">
                     <li><a href="<?= $router->url('admin-messagerie') ?>"> Messageries </a></li>
-                    <li><a href="<?= $router->url('justification') ?>">Justificatifs</a></li>
-                    <li><a href="<?= $router->url('historikAbscences') ?>">Absence des Etudiants</a></li>
+                    <li><a href="<?= $router->url('justification'). '?listprof=1&p=0' ?>">Justificatifs</a></li>
+                    <li><a href="<?= $router->url('liste-presence-soumis') . '?listprof=1&p=0'?>">Liste de Presence Soumis</a></li>
+                    <li><a href="<?= $router->url('historikAbscences') .'?listprof=1&p=0' ?>">Absence des Etudiants</a></li>
                 </ul>
             </section>
             <section class="container historic">
                 <h2>Gestion du Personnel</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
-                    <li><a href="<?= $router->url('liste-etudiants') ?>">Gestion des étudiants</a></li>
-                    <li><a href="<?= $router->url('liste-professeur') ?>">Gestion des professeurs</a></li>
-                    <li><a href="<?= $router->url('gestion-creneau') ?>">Gestion des Créneaux</a></li>
+                    <li><a href="<?= $router->url('liste-etudiants').'?listprof=1&p=0' ?>">Gestion des étudiants</a></li>
+                    <li><a href="<?= $router->url('liste-professeur').'?listprof=1&p=0'?>">Gestion des professeurs</a></li>
+                    <li><a href="<?= $router->url('gestion-creneau').'?listprof=1&p=0' ?>">Gestion des Créneaux</a></li>
                 </ul>
             </section>
         </div>
@@ -421,6 +422,11 @@ $currentTime = $date->format('H:i:s');
 }
 .use-link-list li:nth-child(3) a::before {
     content: '\1F464'; 
+    margin-right: 0.5rem;
+}
+
+.use-link-list li:nth-child(4) a::before {
+    content: '\1F4C8'; 
     margin-right: 0.5rem;
 }
 
