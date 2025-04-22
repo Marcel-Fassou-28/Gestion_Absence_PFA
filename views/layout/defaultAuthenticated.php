@@ -112,7 +112,7 @@ $user = $tableUser->getIdentification($cin);
         
         <div class="footer-container">
         <div class="footer-brand">
-        <h2>GAENSAJ</h2>
+        <h2 class="footer-title">GAENSAJ</h2>
         <p>Plateforme de gestion d'absence de l'ENSAJ</p>
         </div>
         <div class="footer-links">

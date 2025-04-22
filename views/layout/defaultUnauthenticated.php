@@ -47,7 +47,7 @@ if(isset($_SESSION['id_user'])) {
         <p>Plateforme de gestion d'absence de l'ENSAJ</p>
         </div>
         <div class="footer-links">
-        <a href="<?= $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]) ?>">Accueil</a>
+        <a href="<?= $router->url('user-home') ?>">Accueil</a>
         <a href="#">À propos</a>
         <a href="#">Contact</a>
         <a href="#">Support</a>
