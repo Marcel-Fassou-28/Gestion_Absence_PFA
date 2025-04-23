@@ -10,6 +10,9 @@ namespace App\Model;
  * @property string $heureFin
  * @property string $cinProf
  * @property int $idMatiere
+ * @property string $nomMatiere
+ * @property string $nomProf
+ * @property string $prenomProf
  */
 class Creneaux {
 
@@ -39,17 +42,41 @@ class Creneaux {
     private $cinProf;
 
     /**
+     * @var string $nomProf
+     */
+    private $nomProf;
+
+        /**
+     * @var string $prenomProf
+     */
+    private $prenomProf;
+
+    /**
+     * @var string $nomMatiere
+     */
+    private $nomMatiere;
+
+    /**
+     * @var string $nomClasse
+     */
+    private $nomClasse;
+
+    /**
      * @var int $idMatiere
      */
     private $idMatiere;
 
-    /*public function __construct(int $id, string $jourSemaine,string $heureDebut,string $heureFin,string $cinProf,int $idMatiere)
+    /*public function __construct(int $id, string $jourSemaine,string $heureDebut,string $heureFin,string $cinProf,int $idMatiere, string $nomMatiere, string $nomProf, string $nomClasse, string $prenomProf)
     {
         $this->id = $id;
         $this->jourSemaine = $jourSemaine;
         $this->heureDebut = $heureDebut;
         $this->heureFin = $heureFin;
         $this->cinProf = $cinProf;
+        $this->nomProf = $nomProf;
+        $this->prenomProf = $prenomProf;
+        $this->nomMatiere = $nomMatiere;
+        $this->nomClasse = $nomClasse;
         $this->idMatiere = $idMatiere;
     }*/
 
@@ -160,5 +187,33 @@ class Creneaux {
      */
     public function setIdMatiere(int $idMatiere) {
         $this->idMatiere = $idMatiere;
+    }
+
+    public function getNomProf() {
+      return $this->nomProf;
+    }
+    public function setNomProf($value) {
+      $this->nomProf = $value;
+    }
+
+    public function getPrenomProf() {
+        return $this->prenomProf;
+      }
+      public function setPrenomProf($value) {
+        $this->prenomProf = $value;
+      }
+
+    public function getNomMatiere() {
+      return $this->nomMatiere;
+    }
+    public function setNomMatiere($value) {
+      $this->nomMatiere = $value;
+    }
+
+    public function getNomClasse() {
+      return $this->nomClasse;
+    }
+    public function setNomClasse($value) {
+      $this->nomClasse = $value;
     }
 }

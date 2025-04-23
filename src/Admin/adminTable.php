@@ -9,11 +9,13 @@ use App\Model\Classe;
 use App\Model\Etudiant;
 use App\Model\Professeur;
 use App\Model\Absence;
+use App\Model\Creneaux;
 use App\Model\Matiere;
 use App\Model\Utilisateur;
 
 use App\Model\Justificatif;
 use App\Model\ListePresence;
+use App\Model\Utils\Etudiant\UtilisateurEtudiant;
 use App\Professeur\ProfessorTable;
 
 class adminTable extends Table
@@ -243,6 +245,22 @@ class adminTable extends Table
         return count($result) ? $result : [];
     }
 
+    /**
+     * Permet de recuperer les informations d'un professeur à travers son cin
+     * 
+     * @param string $cin
+     * @return Utilisateur
+     */
+    public function getProfesseurByCIN(string $cin):?Utilisateur
+    {
+        $query = $this->pdo->prepare('SELECT * FROM ' . $this->tableUser . ' WHERE cin = :cin ');
+        $query->execute(['cin' => $cin]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->classUser);
+        $result = $query->fetch();
+
+        return $result ? $result : null;
+    }
+
 
     public function getStudentByCin(string $cin): array
     {
@@ -251,6 +269,24 @@ class adminTable extends Table
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
         $result = $query->fetchALL();
         return count($result) ? $result : [];
+    }
+
+    /**
+     * Cette methode permet de retourner un etudiant et sa classe
+     * 
+     * @param string $cin
+     * @return UtilisateurEtudiant
+     */
+    public function getStudentInfoByCIN(string $cin):?UtilisateurEtudiant
+    {
+        $query = $this->pdo->prepare(
+            'SELECT u.*, e.cne, c.nomClasse FROM utilisateur u JOIN '. $this->tableEtudiant . ' e ON u.cin = e.cinEtudiant
+            JOIN classe c ON c.idClasse = e.idClasse WHERE cinEtudiant = :cin ');
+        $query->execute(['cin' => $cin]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, UtilisateurEtudiant::class);
+        $result = $query->fetch();
+
+        return $result ? $result : null;
     }
 
     // les prochaines fonction sont destinees a la gestion des prof et des etudiants
@@ -310,13 +346,13 @@ class adminTable extends Table
     public function AddProfUser($cin, $nom, $prenom, $email, $username, $password, $role): bool
     {
         $sql1 = 'INSERT INTO ' . $this->tableProf . ' (cinProf, nom, prenom, email) VALUES (?,?,?,?)';
-        $sql2 = 'INSERT INTO ' . $this->tableUser . ' (username, cin, nom, prenom, email, password,role) VALUES (?,?,?,?,?,?,?)';
+        $sql2 = 'INSERT INTO ' . $this->tableUser . ' (username, cin, nom, prenom, email, password,role, nomPhoto) VALUES (?,?,?,?,?,?,?, ?)';
         try { {
                 $this->pdo->beginTransaction();
                 $query = $this->pdo->prepare($sql1);
                 $query->execute([$cin, $nom, $prenom, $email]);
                 $query = $this->pdo->prepare($sql2);
-                $query->execute([$username, $cin, $nom, $prenom, $email, $password, $role]);
+                $query->execute([$username, $cin, $nom, $prenom, $email, $password, $role, 'avatar.png']);
                 $this->pdo->commit();
                 return true;
             }
@@ -520,5 +556,25 @@ class adminTable extends Table
     public  function test($col,$val):string{
         return http_build_query(array_merge($_GET,[$col => $val]));
     }
+
+    /**
+     * Cette méthode permet d'afficher tous les créneaux
+     * 
+     * @return array
+     */
+    public function getAllCreneaux():?array {
+        $query = $this->pdo->prepare('
+            SELECT C.jourSemaine, C.heureDebut, C.heureFin, C.id, P.nom as nomProf, P.prenom as prenomProf, Cl.nomClasse, M.nomMatiere
+            FROM Creneaux C JOIN Professeur P ON C.cinProf = P.cinProf JOIN Matiere M ON C.idMatiere = M.idMatiere
+            JOIN Classe Cl ON M.idClasse = Cl.idClasse ORDER BY 
+            FIELD(C.jourSemaine, \'Lundi\', \'Mardi\', \'Mercredi\', \'Jeudi\', \'Vendredi\', \'Samedi\'), C.heureDebut;
+        ');
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
+        $result = $query->fetchAll();
+
+        return $result ?? [];
+    }
+
 }
 ?>

@@ -83,6 +83,11 @@ class Router {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+
+        if (str_starts_with($view, 'API/')) {
+            require $this->viewPath . DIRECTORY_SEPARATOR . $view . '.php';
+            return $this;
+        }
         
         ob_start();
         require $this->viewPath . DIRECTORY_SEPARATOR. $view . '.php';

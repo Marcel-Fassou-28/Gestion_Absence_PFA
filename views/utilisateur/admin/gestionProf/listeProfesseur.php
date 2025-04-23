@@ -79,51 +79,69 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
 } 
 ?>
 <div class="prof-list">
+<?php if (isset($_GET['success_prof']) && $_GET['success_prof'] == '1'): ?>
+        <div class="alert alert-success">Professeur ajouté avec succès</div>
+    <?php elseif(isset($_GET['success_prof']) && $_GET['success_prof'] == '0'): ?>
+        <div class="alert alert-danger">Cette opération n'a pas pu être Effectué</div>
+    <?php else: ?><?php endif ?>
+
+        <?php if (isset($_GET['modifie_success']) && $_GET['modifie_success'] == '1'): ?>
+        <div class="alert alert-success">Informations du professeur modifié avec succès</div>
+    <?php elseif(isset($_GET['modifie_success']) && $_GET['modifie_success'] == '0'): ?>
+        <div class="alert alert-danger">Cette opération n'a pas pu être Effectué</div>
+    <?php else: ?><?php endif ?>
+
+        <?php if (isset($_GET['delete_success']) && $_GET['delete_success'] == '1'): ?>
+        <div class="alert alert-success">Informations du professeur supprimé avec succès</div>
+    <?php elseif(isset($_GET['delete_success']) && $_GET['delete_success'] == '0'): ?>
+        <div class="alert alert-danger">Cette opération n'a pas pu être Effectué</div>
+    <?php else: ?><?php endif ?>
+
     <div class="intro-prof-list">
         <h1> Liste Des Professeurs</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
         <div class="form-ajout">
-            <a href="<?= $router->url('ajouterProf').'?modifier=1';?>" class="btn-ajout">Ajouter un Professeur</a>
+            <a href="<?= $router->url('ajouterProf').'?listprof=1&p=0&modifier=1';?>" class="btn-ajout">Ajouter un Professeur</a>
         </div>
     </div>
     <div class="hr"></div>
     <div class="form-tri-container">
         <form action="" class="tri-list container" method="POST">
             <div class="list-departement">
-            <select name="departement" id="tri" onchange="this.form.submit()">
-                <option value="defaut">Département</option>
+            <select name="departement" id="tri-departement" onchange="this.form.submit()">
+                <option value="">Département</option>
                 <?php
-                foreach ($listeDepart as $row) { ?>
+                /*foreach ($listeDepart as $row) { ?>
                     <option value="<?= htmlspecialchars($row->getNomDepartement()); ?>" <?= (((isset($_POST['departement']) && $_POST['departement'] === $row->getNomDepartement()) || (isset($_SESSION['departement']) && $_SESSION['departement'] === $row->getNomDepartement())) ? 'selected' : ''); ?>>
                         <?= htmlspecialchars($row->getNomDepartement()); ?>
                     </option><?php
-                }
+                }*/
                 ?>
             </select>
             </div>
             <div class="list-filiere">
-            <select name="filiere" id="tri" onchange="this.form.submit()">
-                <option value="defaut">Filières</option>
+            <select name="filiere" id="tri-filiere" onchange="this.form.submit()">
+                <option value="">Filières</option>
                 <?php
-                foreach ($listeFiliere as $row) { ?>
+                /*foreach ($listeFiliere as $row) { ?>
                     <option value="<?= htmlspecialchars($row->getNomFiliere()); ?>" <?= (((isset($_POST['filiere']) && $_POST['filiere'] === $row->getNomFiliere()) || (isset($_SESSION['filiere']) && $_SESSION['filiere'] === $row->getNomFiliere() )) ? 'selected' : ''); ?>>
                         <?= htmlspecialchars($row->getNomFiliere()); ?>
                     </option><?php
-                }
+                }*/
                 ?>
             </select>
             </div>
             <div class="list-classe">
-            <select name="classe" id="tri">
-                <option value="defaut">Classe</option>
+            <select name="classe" id="tri-classe">
+                <option value="">Classe</option>
                 <?php
-                foreach ($listeClasse as $row) { ?>
+                /*foreach ($listeClasse as $row) { ?>
                     <option value="<?= htmlspecialchars($row->getNomClasse()); ?>" <?= (((isset($_POST['classe']) && $_POST['classe'] === $row->getNomClasse())|| (isset($_SESSION['classe'])&& $_SESSION['classe'] === $row->getNomClasse())) ? 'selected' : ''); ?>>
                         <?= htmlspecialchars($row->getNomClasse()); ?>
                     </option><?php
-                }
+                }*/
                 ?>
             </select>
             </div>
@@ -154,8 +172,8 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
                     <td><?= htmlspecialchars($row->getCIN()) ?></td>
                     <td><?= htmlspecialchars($row->getEmail()) ?></td>
                     <td class="btns">
-                        <a href="<?= $router->url('modifier-professeur').'?modifier=1'.'&cin='.$row->getCIN();?>" class="btn1">Modifier</a>
-                        <a href="<?= $router->url('modifier-professeur').'?cin='.$row->getCIN();?>" class="btn2">Supprimer</a>
+                        <a href="<?= $router->url('modifier-professeur').'?listprof=1&p=0&modifier=1&cin='.$row->getCIN()?>" class="btn1">Modifier</a>
+                        <a href="<?= $router->url('supprimer-professeur').'?listprof=1&p=0&modifier=1&cin='.$row->getCIN()?>" class="btn2">Supprimer</a>
                         
                     </td>
                 </tr>
@@ -174,3 +192,66 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
     }
     ?>
 </div>
+<script>
+    const apiUrl = "<?= $router->url('api-liste-departement')?>";
+    document.addEventListener("DOMContentLoaded", () => {
+        const departementSelect = document.querySelector("#tri-departement");
+        const filiereSelect = document.querySelector('#tri-filiere');
+        const classeSelect = document.querySelector('#tri-classe');
+
+        fetch(apiUrl) // ← à adapter selon ton routeur
+        .then(res => res.json())
+        .then(data => {
+        console.log(data);
+        data.forEach(departement => {
+            const option = document.createElement("option");
+            option.value = departement.nomDepartement;
+            option.textContent = departement.nomDepartement;
+            departementSelect.appendChild(option);
+        });
+
+      // Changement de département → charger filières
+        departementSelect.addEventListener("change", () => {
+            const nomDep = departementSelect.value;
+            filiereSelect.innerHTML = '<option value="">Filières</option>';
+            classeSelect.innerHTML = '<option value="">Classes</option>';
+            filiereSelect.disabled = true;
+            classeSelect.disabled = true;
+
+            if (nomDep) {
+            const selectedDep = data.find(dep => dep.nomDepartement == nomDep);
+            selectedDep.filieres.forEach(filiere => {
+                const option = document.createElement("option");
+                option.value = filiere.nomFiliere;
+                option.textContent = filiere.nomFiliere;
+                filiereSelect.appendChild(option);
+            });
+            filiereSelect.disabled = false;
+            }
+        });
+
+        // Changement de filière → charger classes
+        filiereSelect.addEventListener("change", () => {
+            const nomDep = departementSelect.value;
+            const nomFiliere = filiereSelect.value;
+            classeSelect.innerHTML = '<option value="">Classe</option>';
+            classeSelect.disabled = true;
+
+            if (nomDep && nomFiliere) {
+            const selectedDep = data.find(dep => dep.nomDepartement == nomDep);
+            const selectedFiliere = selectedDep.filieres.find(fil => fil.nomFiliere == nomFiliere);
+            selectedFiliere.classes.forEach(classe => {
+                const option = document.createElement("option");
+                option.value = classe.nomClasse;
+                option.textContent = classe.nomClasse;
+                classeSelect.appendChild(option);
+            });
+            classeSelect.disabled = false;
+            }
+        });
+        })
+        .catch(err => {
+        console.error("Erreur chargement données :", err);
+        });
+    });
+</script>

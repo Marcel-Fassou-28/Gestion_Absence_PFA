@@ -36,12 +36,14 @@ $router
     ->match('/my/administration/justificatif','utilisateur/admin/justifyHistory','justification')
 
     ->match('/my/administration/modifier-prof','utilisateur/admin/gestionProf/modifierProf','modifier-professeur')
+    ->match('/my/administration/supprimer-prof','utilisateur/admin/gestionProf/supprimerProf','supprimer-professeur')
     ->match('/my/administration/ajouter-prof','utilisateur/admin/gestionProf/ajouterProf','ajouterProf')
     ->match('/my/administration/liste-des-professeurs', 'utilisateur/admin/gestionProf/listeProfesseur', 'liste-professeur')
 
-    ->match('/my/administration/ajouter-Etudiant','utilisateur/admin/gestionEtudiant/ajouteretudiant','ajouter-etudiant')
+    ->match('/my/administration/ajouter-Etudiant','utilisateur/admin/gestionEtudiant/ajouterEtudiant','ajouter-etudiant')
     ->match('/my/administration/liste-Etudiants','utilisateur/admin/gestionEtudiant/listeEtudiants','liste-etudiants')
     ->match('/my/administration/modifier-student','utilisateur/admin/gestionEtudiant/modifierEtudiant','modifier-student')
+    ->match('/my/administration/supprimer-etudiant','utilisateur/admin/gestionEtudiant/supprimerEtudiant','supprimer-student')
 
     ->match('/my/administration/gestion/creneaux', 'utilisateur/admin/gestionCreneaux/listCreneau', 'gestion-creneau')
 
@@ -55,6 +57,11 @@ $router
     
 
     ->match(  '/my/administration/messagerie', 'utilisateur/admin/messagerie','admin-messagerie')
+
+    /* Gestion des creneaux */
+    ->match('/my/administration/gestion_creneaux/delete', 'utilisateur/admin/gestionCreneaux/supprimerCreneaux', 'supprimer-creneaux')
+    ->match('/my/administration/gestion_creneaux/ajouter', 'utilisateur/admin/gestionCreneaux/ajouterCreneaux', 'ajouter-creneaux')
+    ->match('/my/administration/gestion_creneaux/modifier', 'utilisateur/admin/gestionCreneaux/modifierCreneau', 'modifier-creneaux')
     
     // Contenu pour les étudiants
     ->match(  '/my/etudiant/messagerie', 'utilisateur/students/messagerie','etudiant-messagerie')
@@ -63,7 +70,12 @@ $router
     ->match('/my/etudiant/historique/justificatif', 'utilisateur/students/historique/justificatifs','etudiant-justificatifs')
 
 
-
+    /* API */
+    ->match('/my/api/liste-fichier-presence', 'API/API_fichier_liste_presence', 'api-liste-classe')
+    ->match('/my/api/liste-creneaux', 'API/API_liste_creneaux', 'api-liste-filiere')
+    ->match('/my/api/liste-professeur', 'API/API_liste_pour_prof', 'api-liste-departement')
+    ->match('/my/api/professeur/select-classe-matiere', 'API/Professeur/API_list_absence', 'api-prof-liste-clm')
+    ->match('/my/api/professeur/select-classe-etudiant', 'API/Professeur/API_list_etudiant', 'api-prof-liste-etud')
 
     ->run();
     

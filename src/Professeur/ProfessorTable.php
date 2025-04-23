@@ -99,6 +99,16 @@ class ProfessorTable extends Table {
             FROM absence a JOIN etudiant e ON a.cinEtudiant = e.cinEtudiant JOIN matiere m ON a.idMatiere = m.idMatiere
             JOIN classe c ON e.idClasse = c.idClasse WHERE m.cinProf = :cinProf AND m.idClasse = :idClasse AND m.idMatiere = :idMatiere
             GROUP BY e.cinEtudiant, e.nom, e.cne ORDER BY nbrAbsence DESC
+
+            /*SELECT e.cinEtudiant, e.nom, e.prenom, e.cne, c.nomClasse, m.nomMatiere,
+            DATE(a.date) AS dateAbsence, cr.heureDebut, cr.heureFin
+            FROM Absence a 
+            JOIN Etudiant e ON e.cinEtudiant = a.cinEtudiant
+            JOIN Classe c ON c.idClasse = e.idClasse 
+            JOIN Matiere m ON m.idMatiere = a.idMatiere
+            JOIN Creneaux cr ON cr.idMatiere = m.idMatiere AND cr.cinProf = m.cinProf
+            WHERE m.cinProf = :cinProf 
+            ORDER BY e.nom, e.prenom, m.nomMatiere, dateAbsence*/
         ');
 
         $query->execute([
@@ -111,7 +121,7 @@ class ProfessorTable extends Table {
         return count($result) > 0 ? $result : null;
     }
 
- /**
+    /**
      * Cette méthode permet de retourner la liste des absents liés au professeur en question
      * 
      * @param string $cinProf
@@ -121,8 +131,7 @@ class ProfessorTable extends Table {
     {
         $query = $this->pdo->prepare('
             SELECT e.cinEtudiant, e.nom, e.prenom, e.cne, c.nomClasse, m.nomMatiere,
-            DATE(a.date) AS dateAbsence, cr.heureDebut, cr.heureFin,
-            FLOOR(COUNT(*) OVER (PARTITION BY e.cinEtudiant, m.idMatiere) / 3) AS nombreAbsences
+            DATE(a.date) AS dateAbsence, cr.heureDebut, cr.heureFin
             FROM Absence a 
             JOIN Etudiant e ON e.cinEtudiant = a.cinEtudiant
             JOIN Classe c ON c.idClasse = e.idClasse 
@@ -149,7 +158,7 @@ class ProfessorTable extends Table {
      */
     public function getInfoAbsenceByStudent(array $infoAbsenceArray): array
     {
-        $this->infoAbsenceEtudiant = [];
+        /*$this->infoAbsenceEtudiant = [];
 
         foreach ($infoAbsenceArray as $infoAbsence) {
             $cin = $infoAbsence->getCinEtudiant();
@@ -176,7 +185,70 @@ class ProfessorTable extends Table {
             $etudiant->sortAbsences();
         }
 
+        return $this->infoAbsenceEtudiant;*/
+
+        $this->infoAbsenceEtudiant = [];
+
+        foreach ($infoAbsenceArray as $infoAbsence) {
+            $cin = $infoAbsence->getCinEtudiant();
+
+            // Créer une entrée s'il n'y en a pas encore
+            if (!isset($this->infoAbsenceEtudiant[$cin])) {
+                $this->infoAbsenceEtudiant[$cin] = new EtudiantsAbsents(
+                    $infoAbsence->getNom(),
+                    $infoAbsence->getPrenom(),
+                    $infoAbsence->getCne(),
+                    $infoAbsence->getNomClasse(),
+                    $infoAbsence->getNomMatiere()
+                );
+            }
+
+            // Ajout de l'absence à la liste
+            $absenceKey = $infoAbsence->getDateAbsence() . ' ' . $infoAbsence->getHeureDebut() . '-' . $infoAbsence->getHeureFin();
+            $this->infoAbsenceEtudiant[$cin]->addAbsence($absenceKey);
+        }
+
+        // Trie les absences par étudiant
+        foreach ($this->infoAbsenceEtudiant as $etudiant) {
+            $etudiant->sortAbsences();
+        }
+
         return $this->infoAbsenceEtudiant;
+    }
+
+    /**
+     * Cette méthode permet de retourner la liste des absents liés au professeur en question
+     * by classe et by par matiere
+     * 
+     * @param string $cinProf
+     * @param int $idClass
+     * @param int $idMatiere
+     * 
+     * @return array|null
+     */
+    public function getAbsentsByMatiereClasse(string $cinProf, int $idClass, int $idMatiere): ?array
+    {
+        $query = $this->pdo->prepare('
+            SELECT e.cinEtudiant, e.nom, e.prenom, e.cne, c.nomClasse, m.nomMatiere,
+            DATE(a.date) AS dateAbsence, cr.heureDebut, cr.heureFin
+            FROM Absence a 
+            JOIN Etudiant e ON e.cinEtudiant = a.cinEtudiant
+            JOIN Classe c ON c.idClasse = e.idClasse 
+            JOIN Matiere m ON m.idMatiere = a.idMatiere
+            JOIN Creneaux cr ON cr.idMatiere = m.idMatiere AND cr.cinProf = m.cinProf
+            WHERE m.cinProf = :cinProf AND (e.idClasse = :idClasse AND m.idMatiere = :idMatiere) 
+            ORDER BY e.nom, e.prenom, m.nomMatiere, dateAbsence
+        ');
+        $query->execute([
+            'cinProf' => $cinProf,
+            'idClasse' => $idClass,
+            'idMatiere' => $idMatiere
+        ]);
+
+        $query->setFetchMode(\PDO::FETCH_CLASS, InfoAbsenceEtudiant::class);
+        $result = $query->fetchAll();
+
+        return $this->getInfoAbsenceByStudent($result);
     }
 
     public function getFiliere(string $cinProf) :?array {

@@ -11,6 +11,7 @@ namespace App\Model;
  * @property string $prenom
  * @property string $cne
  * @property string $email
+ * @property string $nomClasse
  * @property int $idClasse
  */
 class Etudiant {
@@ -28,6 +29,11 @@ class Etudiant {
      * @var string $prenom
      */
     protected $prenom;
+
+    /**
+     * @var string $nomClasse
+     */
+    protected $nomClasse;
     
     /**
      * @var string $cne
@@ -52,12 +58,13 @@ class Etudiant {
     /**
      * Constructeur
      */
-    /*public function __construct(int $idEtudiant, string $nom, string $prenom, string $cne, string $cinEtudiant, string $email, int $idClasse) {
+    /*public function __construct(int $idEtudiant, string $nom, string $prenom, string $cne, string $cinEtudiant, string $email, int $idClasse, string) {
         $this->idEtudiant = $idEtudiant;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->cne = $cne;
         $this->email = $email;
+        $this->nomClasse = $nomClasse;
         $this->cinEtudiant = $cinEtudiant;
         $this->idClasse = $idClasse;
     }*/
@@ -186,5 +193,12 @@ class Etudiant {
      */
     public function setIdClasse(int $idClasse) {
         $this->idClasse = $idClasse; 
+    }
+
+    public function getNomClasse() {
+      return $this->nomClasse;
+    }
+    public function setNomClasse($value) {
+      $this->nomClasse = $value;
     }
 }

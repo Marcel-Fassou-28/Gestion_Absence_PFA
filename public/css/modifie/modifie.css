@@ -1,0 +1,90 @@
+.form-modifie-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2%;
+    background-color: var(--text-color);
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: .5rem;
+    align-items: flex-start;
+}
+
+.creneau-modifie {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin: 2rem auto;
+    gap: 1.5rem;
+}
+
+.edit-creneau-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.edit-creneau-section > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #333;
+    }
+
+    input {
+        width: 90%;
+        color: #333;
+    }
+}
+
+.submit-group-creneau {
+    display: flex;
+    justify-content: center;
+}
+
+.submit-btn-creneau {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn-creneau:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn-creneau:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+@media screen and (max-width: 768px) {
+    .form-modifie-container {
+        width: 95%;
+    }
+    .creneau-modifie {
+        width: 100%;
+    }
+    .edit-creneau-section > div label {
+        font-size: 0.9;
+    }
+}
