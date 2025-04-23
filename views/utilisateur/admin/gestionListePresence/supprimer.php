@@ -22,6 +22,7 @@ if (file_exists($filePath)) {
     $query = $pdo->prepare('DELETE FROM listePresence WHERE nomFichierPresence = :file');
     $query->execute(['file' => $filename]);
     $success = 1;
+    
     header('location: ' . $router->url('liste-presence-soumis') .'?listprof=1&p=0&success='.$success);
     exit();
     

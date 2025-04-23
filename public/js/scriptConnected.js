@@ -124,6 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+delteBtn = document.querySelectorAll('#delete');
+if (delteBtn) {
+    delteBtn.forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert("Voulez vous supprimer cet employé ?");
+        })
+    });
+}
+
 // Pour ouvrire le formulaire du message
 document.addEventListener("DOMContentLoaded", function() {
     const btn = document.querySelector(".btn-nouveau-message"); // bonne classe

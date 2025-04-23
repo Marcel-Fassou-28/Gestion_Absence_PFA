@@ -25,6 +25,15 @@ $listeFichierPresence = $tableAdmin->getAllFichierListPresence();
 
 
 <div class="prof-list">
+    <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
+       <div class="alert alert-success">
+        Liste de presence supprimer avec succès
+       </div>
+    <?php elseif (isset($_GET['success']) && $_GET['success'] == '0'): ?>
+        <div class="alert alert-danger">
+        Votre opération n'a pas etre effectuée
+       </div>
+        <?php else: ?><?php endif ?>
 <div class="intro-prof-list">
         <h1>Fichiers de Listes de Presence</h1>
         <div class="date-group">
@@ -68,7 +77,7 @@ $listeFichierPresence = $tableAdmin->getAllFichierListPresence();
                         <td><?= htmlspecialchars($row->getClasse()) ?></td>
                         <td>
                             <a class="btn1" href="<?= $router->url('liste-presence-soumis-details') . '?file='. $row->getNomFichierPresence() . '&listprof=1&p=0' ?>">Voir details</a>
-                            <a class="btn2" href="<?= $router->url('liste-presence-soumis-delete'). '?file='. $row->getNomFichierPresence() . '?listprof=1&p=0'?>">Supprimer</a>
+                            <a class="btn2" id="delete" href="<?= $router->url('liste-presence-soumis-delete'). '?file='. $row->getNomFichierPresence() . '&listprof=1&p=0'?>">Supprimer</a>
                         </td>
                     </tr>
                 <?php } ?>
@@ -78,6 +87,7 @@ $listeFichierPresence = $tableAdmin->getAllFichierListPresence();
 </div>
 
 <script>
+
     const apiUrl = "<?= $router->url('api-liste-classe')?>";
     fetch(apiUrl)
         .then(response => response.json())

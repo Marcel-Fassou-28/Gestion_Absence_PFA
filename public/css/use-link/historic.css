@@ -195,7 +195,6 @@ main {
     padding: 10px;
     font-weight: 600;
     font-size: 1rem;
-    text-transform: uppercase;
 }
 
 .table-container tbody tr td {
@@ -327,6 +326,7 @@ main {
     .table-container thead tr th,
     .table-container tbody tr td {
         padding: 6px;
+        font-size: 0.85rem;
     }
 
     .absences-list li {

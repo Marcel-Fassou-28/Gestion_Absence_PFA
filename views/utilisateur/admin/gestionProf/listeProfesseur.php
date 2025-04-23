@@ -173,7 +173,7 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
                     <td><?= htmlspecialchars($row->getEmail()) ?></td>
                     <td class="btns">
                         <a href="<?= $router->url('modifier-professeur').'?listprof=1&p=0&modifier=1&cin='.$row->getCIN()?>" class="btn1">Modifier</a>
-                        <a href="<?= $router->url('supprimer-professeur').'?listprof=1&p=0&modifier=1&cin='.$row->getCIN()?>" class="btn2">Supprimer</a>
+                        <a id="delete" href="<?= $router->url('supprimer-professeur').'?listprof=1&p=0&modifier=1&cin='.$row->getCIN()?>" class="btn2">Supprimer</a>
                         
                     </td>
                 </tr>

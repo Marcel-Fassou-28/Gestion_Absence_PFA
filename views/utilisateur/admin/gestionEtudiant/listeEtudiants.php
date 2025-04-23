@@ -151,7 +151,7 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
                     <td><?= htmlspecialchars($row->getEmail()); ?></td>
                     <td class="btns">
                         <a href="<?= $router->url('modifier-student') . '?listprof=1&modifier=1&cin=' . $row->getCIN(); ?>" class="btn1">Modifier</a>
-                        <a href="<?= $router->url('supprimer-student') . '?listprof=1&cin=' . $row->getCIN(); ?>" class="btn2">Supprimer</a>
+                        <a id="delete" href="<?= $router->url('supprimer-student') . '?listprof=1&cin=' . $row->getCIN(); ?>" class="btn2">Supprimer</a>
                     </td>
                 </tr><?php
             }
@@ -173,6 +173,7 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
     ?>
 </div>
 <script>
+    
     const apiUrl = "<?= $router->url('api-liste-filiere')?>";
     document.addEventListener("DOMContentLoaded", () => {
         const filiereSelect = document.querySelector('#tri-filiere');

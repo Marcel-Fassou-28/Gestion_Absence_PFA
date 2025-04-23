@@ -290,7 +290,6 @@ main {
     padding: 10px;
     font-weight: 600;
     font-size: 1rem;
-    text-transform: uppercase;
 }
 
 .list-tri-table-justificatif tbody tr td {
@@ -322,7 +321,6 @@ main {
     padding: 10px;
     font-weight: 600;
     font-size: 1rem;
-    text-transform: uppercase;
 }
 
 .list-tri-table thead tr th {
@@ -331,7 +329,6 @@ main {
     padding: 10px;
     font-weight: 600;
     font-size: 1rem;
-    text-transform: uppercase;
 }
 
 .list-tri-table tbody tr td {
@@ -465,6 +462,7 @@ main {
     .list-tri-table thead tr th,
     .list-tri-table tbody tr td {
         padding: 6px;
+        font-size: 0.85rem;
     }
 }
 

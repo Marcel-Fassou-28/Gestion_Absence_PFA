@@ -95,7 +95,7 @@ $numero = 1;
                         <td><?= htmlspecialchars($creneau->getNomMatiere()) ?></td>
                         <td>
                             <a href="<?= $router->url('modifier-creneaux'). '?listprof=1&p=0&id_creneau='.$creneau->getID() ?>" class="btn1">Modifier</a>
-                            <a href="<?= $router->url('supprimer-creneaux') .'?listprof=1&p=0&id_creneau='.$creneau->getID() ?>" class="btn2">Supprimer</a>
+                            <a id="delete" href="<?= $router->url('supprimer-creneaux') .'?listprof=1&p=0&id_creneau='.$creneau->getID() ?>" class="btn2">Supprimer</a>
                         </td>
                     </tr>
                 <?php endforeach ?>
