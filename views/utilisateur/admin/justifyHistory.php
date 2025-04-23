@@ -12,13 +12,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\Connection;
 use App\Admin\adminTable;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $_SESSION['classe'] = $_POST['classe'];
-    $_SESSION['matiere'] = $_POST['matiere'];
-}
-
-$line = 1;
+$line = 20;
 $offset = $_GET['p'] * $line;
 
 $pdo = Connection::getPDO();
@@ -32,25 +26,23 @@ $listeMatiere = $list->getAll("matiere", "classMatiere");
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
-if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSION['classe']) && $_SESSION['classe'] !== 'defaut')) {
-    $classe = $_SESSION['classe'];
-    if (isset($_POST['classe']) && !isset($_POST['matiere'])) {
+if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut')) {
+    $classe = $_POST['classe'];
+    
 
-        $_SESSION['matiere'] = 'defaut';
-    }
     $listeMatiere = $list->getMatiereByClass($classe);
     $idClasse = $list->getIdClasseByClasseName($classe);
     $listeJustificatif = $list->getAllJustificatif($line,$offset,0,$idClasse);
     $n = count($list->getAllJustificatif(idClasse:$idClasse));
 
 }
-if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SESSION['matiere']) && $_SESSION['matiere'] !== 'defaut')) {
-    if (isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') {
-        $_SESSION['matiere'] = $_POST['matiere'];
-    }
-    $matiere = $_SESSION['matiere'];
+
+if ((isset($_POST['Matiere']) && $_POST['Matiere'] !== 'defaut') ) {
+    
+
+    $matiere = $_POST['Matiere'];
     $idMatiere = $list->getIdMatiereByName($matiere);
-    $listeJustificatif = $list->getAllJustificatif($line,$offset,$idMatiere);
+    
     $n = count($list->getAllJustificatif(0,0,$idMatiere));
 }
 ?>
@@ -69,12 +61,12 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SES
     <form action="" class="tri-list container" method="POST">
         <div class="list-classe">
             <select name="classe" id="tri-classe">
-                <option value="">Classe</option>
+                <option value="defaut">Classe</option>
                 <!-- Ensemble des classes tiré de la base de données -- -->
             </select>
         </div>
         <div class="list-classe">
-            <select name="classe" id="tri-matiere">
+            <select name="Matiere" id="tri-matiere">
                 <option value="defaut">Matiere</option>
                 <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
             </select>
@@ -150,7 +142,7 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SES
 
         classeSelect.addEventListener('change', function () {
         const selectedId = this.value;
-        matiereSelect.innerHTML = '<option value="">Matiere</option>';
+        matiereSelect.innerHTML = '<option value="defaut">Matiere</option>';
 
         if (selectedId && classesData[selectedId]) {
             matiereSelect.disabled = false;

@@ -13,34 +13,20 @@ $line = 1;
 $offset = $_GET['p'] * $line;
 $n = 0;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $_SESSION['classe'] = $_POST['classe'];
-    $_SESSION['matiere'] = $_POST['matiere'];
-}
-
-$listeClasse = $list->getAll("classe", "classClasse");
-$listeMatiere = $list->getAll("matiere", "classMatiere");
-
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
-if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSION['classe']) && $_SESSION['classe'] !== 'defaut')) {
-    $classe = $_SESSION['classe'];
-    if (isset($_POST['classe']) && !isset($_POST['matiere'])) {
-
-        $_SESSION['matiere'] = 'defaut';
-    }
+if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut')) {
+    $classe = $_POST['classe'];
+   
     $listeMatiere = $list->getMatiereByClass($classe);
     $idClasse = $list->getIdClasseByClasseName($classe);
     
 
 }
-if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SESSION['matiere']) && $_SESSION['matiere'] !== 'defaut')) {
-    if (isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') {
-        $_SESSION['matiere'] = $_POST['matiere'];
-    }
-    $matiere = $_SESSION['matiere'];
+if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
+    
+    $matiere = $_POST['matiere'];
     $idMatiere = $list->getIdMatiereByName($matiere);
     $listeEtudiant = $list->getPrivateStudentToPastExamByMatiere($idMatiere,$line,$offset);
     
@@ -59,27 +45,15 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SES
     <div class="form-tri-container">
         <form action="" class="tri-list container" method="POST">
             <div class="list-classe">
-                <select name="classe" id="tri">
+                <select name="classe" id="tri-classe">
                     <option value="defaut">Classe</option>
-                    <?php
-                    foreach ($listeClasse as $row) { ?>
-                        <option value="<?= htmlspecialchars($row->getNomClasse()); ?>" <?= (((isset($_POST['classe']) && $_POST['classe'] === $row->getNomClasse()) || (isset($_SESSION['classe']) && $_SESSION['classe'] === $row->getNomClasse())) ? 'selected' : ''); ?>>
-                            <?= htmlspecialchars($row->getNomClasse()); ?>
-                        </option><?php
-                    }
-                    ?>
+                    
                 </select>
             </div>
             <div class="list-classe">
-                <select name="matiere" id="tri">
+                <select name="matiere" id="tri-matiere">
                     <option value="defaut">Matiere</option>
-                    <?php
-                    foreach ($listeMatiere as $rows) { ?>
-                        <option value="<?= htmlspecialchars($rows->getNomMatiere()); ?>" <?= (((isset($_POST['matiere']) && $_POST['matiere'] === $rows->getNomMatiere()) || (isset($_SESSION['matiere']) && $_SESSION['matiere'] === $rows->getNomMatiere())) ? 'selected' : ''); ?>>
-                            <?= htmlspecialchars($rows->getNomMatiere()); ?>
-                        </option><?php
-                    }
-                    ?>
+                    
                     <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
                 </select>
             </div>
@@ -92,7 +66,7 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SES
     <?php if (empty($listeEtudiant) || !isset($listeEtudiant)):
                 echo " <h1> Aucun etudiants !!!</h1>";
             else:?>
-            
+            <h3>Matiere: <?= $matiere?></h3>
         <table>
             <thead>
                 <th>N°</th>
@@ -128,3 +102,44 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SES
     ?>
 </div>
 </div>
+
+<script>
+        const apiUrl = "<?= $router->url('api-liste-classe') ?>";
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+
+                const classeSelect = document.querySelector('#tri-classe');
+                const matiereSelect = document.querySelector('#tri-matiere');
+
+                const classesData = {};
+                data.forEach(classe => {
+                    const option = document.createElement('option');
+                    option.value = classe.nomClasse;
+                    option.textContent = classe.nomClasse;
+                    
+                    classeSelect.appendChild(option);
+
+                    classesData[classe.nomClasse] = classe.matieres;
+                });
+
+                classeSelect.addEventListener('change', function () {
+                    const selectedId = this.value;
+                    matiereSelect.innerHTML = '<option value="defaut" selected >matiere</option>';
+
+                    if (selectedId && classesData[selectedId]) {
+                        matiereSelect.disabled = false;
+                        classesData[selectedId].forEach(matiere => {
+                            const option = document.createElement('option');
+                            option.value = matiere.nomMatiere;
+                            option.textContent = matiere.nomMatiere;
+                            
+                            matiereSelect.appendChild(option);
+                        });
+                    } else {
+                        matiereSelect.disabled = true;
+                    }
+                });
+            })
+            .catch(error => console.error('Erreur de chargement des classes/matières :', error));
+    </script>

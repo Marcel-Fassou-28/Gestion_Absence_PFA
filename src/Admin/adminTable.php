@@ -119,7 +119,7 @@ class adminTable extends Table
         return count($result) >0 ? $result : [];
     }
 
-    public function findClassByMatiere($matiere):string{
+    public function findClassByMatiere($matiere):?string{
         $sql = '
         SELECT c.nomClasse as nom FROM matiere m JOIN classe c
          ON m.idClasse = c.idClasse WHERE m.nomMatiere = :nom
@@ -291,7 +291,7 @@ class adminTable extends Table
      * @param mixed $name
      * @return int
      */
-    public function getIdClasseByClasseName($name):int{
+    public function getIdClasseByClasseName($name):?int{
         $sql = $this->pdo->prepare('
             SELECT idClasse FROM classe where nomClasse = :classe
             ');
@@ -305,7 +305,7 @@ class adminTable extends Table
      * @param mixed $name
      * @return int
      */
-    public function getIdMatiereByName($name):int{
+    public function getIdMatiereByName($name):?int{
         $sql = $this->pdo->prepare('
             SELECT idMatiere FROM matiere where nomMatiere = :matiere
             ');
