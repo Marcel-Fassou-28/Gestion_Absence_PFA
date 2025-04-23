@@ -64,31 +64,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             <div class="filiere-group">
                 <select id="filiere" name="filiere-prof" required>
                     <option value="">Filière</option>
-                    <?php foreach($tableFiliere as $mejor): ?>
-                        <option value="<?= htmlspecialchars($mejor->getNomFiliere()) ?>" <?= $filiere === $mejor->getNomFiliere() ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($mejor->getNomFiliere()) ?>
-                        </option>
-                    <?php endforeach ?>
+                    
+                </select>
+            </div>
+            <div class="level-group">
+                <select id="classe" name="classe-prof" required>
+                    <option name="classe-prof" value="" >Classe</option>
+                    
                 </select>
             </div>
             <div class="subject-group">
                 <select id="matiere" name="matiere-prof" required>
                     <option name="matiere-prof"  value="">Matière</option>
-                    <?php foreach($tableMatiere as $subject): ?>
-                        <option value="<?= htmlspecialchars($subject->getNomMatiere()) ?>" <?= $matiere === $subject->getNomMatiere() ? 'selected' : ''?>>
-                            <?= htmlspecialchars($subject->getNomMatiere()) ?>
-                        </option>
-                    <?php endforeach ?>
-                </select>
-            </div>
-            <div class="level-group">
-                <select id="classe" name="classe-prof" required>
-                    <option name="classe-prof" value="" >Niveau</option>
-                    <?php foreach($tableClasse as $classe): ?>
-                        <option value="<?= htmlspecialchars($classe->getNomClasse()) ?>" <?= $class === $classe->getNomClasse() ? 'selected' : ''?>>
-                            <?= htmlspecialchars($classe->getNomClasse()) ?>
-                        </option> 
-                    <?php endforeach ?>
+                    
                 </select>
             </div>
             <div>
@@ -157,3 +145,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         </div>
     <?php endif ?>
 </div>
+
+
+<script>
+    const apiUrl = "<?= $router->url('api-prof-liste-etud') . '?cinProf='.$cinProf?>";
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            const filiereSelect = document.querySelector('#filiere');
+            const classeSelect = document.querySelector('#classe');
+            const matiereSelect = document.querySelector('#matiere');
+
+            const filiereData = {};
+
+            // Remplir le select de filières
+            data.forEach(filiere => {
+            const option = document.createElement('option');
+            option.value = filiere.nomFiliere;
+            option.textContent = filiere.nomFiliere;
+            filiereSelect.appendChild(option);
+
+            filiereData[filiere.nomFiliere] = filiere.classes;
+            });
+
+            // Lorsqu’on change de filière
+            filiereSelect.addEventListener('change', function () {
+            const selectedFiliere = this.value;
+            classeSelect.innerHTML = '<option value="">Classe</option>';
+            matiereSelect.innerHTML = '<option value="">Matière</option>';
+            matiereSelect.disabled = true;
+
+            if (selectedFiliere && filiereData[selectedFiliere]) {
+                classeSelect.disabled = false;
+                console.log('dfsf');
+
+                filiereData[selectedFiliere].forEach(classe => {
+                const option = document.createElement('option');
+                option.value = classe.nomClasse;
+                option.textContent = classe.nomClasse;
+                classeSelect.appendChild(option);
+                });
+            } else {
+                classeSelect.disabled = true;
+            }
+            });
+
+            // Lorsqu’on change de classe
+            classeSelect.addEventListener('change', function () {
+            const selectedFiliere = filiereSelect.value;
+            const selectedClasse = this.value;
+            matiereSelect.innerHTML = '<option value="">Matière</option>';
+
+            const classeList = filiereData[selectedFiliere] || [];
+            const selectedClasseObj = classeList.find(cl => cl.nomClasse === selectedClasse);
+
+            if (selectedClasseObj && selectedClasseObj.matieres.length > 0) {
+                matiereSelect.disabled = false;
+
+                selectedClasseObj.matieres.forEach(matiere => {
+                const option = document.createElement('option');
+                option.value = matiere.nomMatiere;
+                option.textContent = matiere.nomMatiere;
+                matiereSelect.appendChild(option);
+                });
+            } else {
+                matiereSelect.disabled = true;
+            }
+            });
+        })
+        .catch(error => console.error('Erreur de chargement :', error));
+</script>

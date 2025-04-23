@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
 
     $idMatiere = array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
     $idClasse = array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class)[array_key_first(array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class))]->getIDClasse();
-    $listeEtudiant = $professeurTable->getNbrAbsence($cinProf, $idClasse , $idMatiere);
+    $listeEtudiant = $professeurTable->getAbsentsByMatiereClasse($cinProf, $idClasse , $idMatiere);
 }
 ?>
 <div class="absence">
@@ -39,25 +39,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
     <div class="hr"></div>
     <div class="absence-container">
         <form class="professor-info container" method="post" action="">
-            <div class="subject-group">
-                <select id="matiere" name="matiere-prof" required>
-                    <option value="">Sélectionner une matière</option>
+            <div class="level-group">
+                <select id="tri-classe" name="classe-prof" required>
+                    <option value="">Sélectionner une classe</option>
                     <?php
-                    foreach ($tableMatiere as $subject) {
-                        $selected = ($matiere === $subject->getNomMatiere()) ? 'selected' : '';
-                        echo '<option value="' . htmlspecialchars($subject->getNomMatiere()) . '" ' . $selected . '>' . htmlspecialchars($subject->getNomMatiere()) . '</option>';
-                    }
+                    /*foreach ($tableClasse as $classe) {
+                        $selected = ($class === $classe->getNomClasse()) ? 'selected' : '';
+                        echo '<option value="' . htmlspecialchars($classe->getNomClasse()) . '" ' . $selected . '>' . htmlspecialchars($classe->getNomClasse()) . '</option>';
+                    }*/
                     ?>
                 </select>
             </div>
-            <div class="level-group">
-                <select id="classe" name="classe-prof" required>
-                    <option value="">Sélectionner une classe</option>
+            <div class="subject-group">
+                <select id="tri-matiere" name="matiere-prof" required>
+                    <option value="">Sélectionner une matière</option>
                     <?php
-                    foreach ($tableClasse as $classe) {
-                        $selected = ($class === $classe->getNomClasse()) ? 'selected' : '';
-                        echo '<option value="' . htmlspecialchars($classe->getNomClasse()) . '" ' . $selected . '>' . htmlspecialchars($classe->getNomClasse()) . '</option>';
-                    }
+                    /*foreach ($tableMatiere as $subject) {
+                        $selected = ($matiere === $subject->getNomMatiere()) ? 'selected' : '';
+                        echo '<option value="' . htmlspecialchars($subject->getNomMatiere()) . '" ' . $selected . '>' . htmlspecialchars($subject->getNomMatiere()) . '</option>';
+                    }*/
                     ?>
                 </select>
             </div>
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
                     <tbody>
                         <?php $numero = 1; ?>
                         <?php foreach ($listeEtudiant as $cin => $etudiant): ?>
-                            <?php if ($etudiant instanceof EtudiantsAbsents) : ?>
+                            
                             <tr>
                                 <td><?= sprintf("%02d", $numero++) ?></td>
                                 <td><?= htmlspecialchars($cin) ?></td>
@@ -96,22 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
                                     </ul>
                                 </td>
                             </tr>
-                            <?php else: ?>
-                                <tr>
-                                <td><?= sprintf("%02d", $numero++) ?></td>
-                                <td><?= htmlspecialchars($cin) ?></td>
-                                <td><?= htmlspecialchars($etudiant->getCne()) ?></td>
-                                <td><?= htmlspecialchars($etudiant->getNom() . ' ' . $etudiant->getPrenom()) ?></td>
-                                <td><?= htmlspecialchars($etudiant->getNbrAbsence()) ?></td>
-                                <td>
-                                    <ul class="absences-list">
-                                        <?php foreach ($etudiant->getAbsences() as $absence): ?>
-                                            <li><?= htmlspecialchars(formatAbsence($absence)) ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <?php endif ?>
+                            
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -131,3 +116,43 @@ function formatAbsence($absence) {
     return "$date, $time";
 }
 ?>
+
+
+<script>
+    const apiUrl = "<?= $router->url('api-prof-liste-clm') . '?cinProf='.$cinProf?>";
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+
+        const classeSelect = document.querySelector('#tri-classe');
+        const matiereSelect = document.querySelector('#tri-matiere');
+
+        const classesData = {};
+        data.forEach(classe => {
+        const option = document.createElement('option');
+        option.value = classe.nomClasse;
+        option.textContent = classe.nomClasse;
+        classeSelect.appendChild(option);
+
+        classesData[classe.nomClasse] = classe.matieres;
+        });
+
+        classeSelect.addEventListener('change', function () {
+        const selectedId = this.value;
+        matiereSelect.innerHTML = '<option value="">Matiere</option>';
+
+        if (selectedId && classesData[selectedId]) {
+            matiereSelect.disabled = false;
+            classesData[selectedId].forEach(matiere => {
+            const option = document.createElement('option');
+            option.value = matiere.nomMatiere;
+            option.textContent = matiere.nomMatiere;
+            matiereSelect.appendChild(option);
+            });
+        } else {
+            matiereSelect.disabled = true;
+        }
+        });
+    })
+    .catch(error => console.error('Erreur de chargement des classes/matières :', error));
+</script>

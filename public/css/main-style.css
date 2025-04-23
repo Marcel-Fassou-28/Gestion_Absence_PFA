@@ -83,9 +83,3 @@ nav{
 }
 
 
-footer {
-    position: relative;
-    width: 100%;
-    min-height: 25vh;
-    background-color: var(--text-color);
-}

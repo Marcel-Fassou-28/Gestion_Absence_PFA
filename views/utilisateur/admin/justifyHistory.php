@@ -66,34 +66,21 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SES
     </div>
     <div class="hr"></div>
     <div class="form-tri-container">
-        <form action="" class="tri-list container" method="POST">
-            <div class="list-classe">
-                <select name="classe" id="tri">
-                    <option value="defaut">Classe</option>
-                    <?php
-                    foreach ($listeClasse as $row) { ?>
-                        <option value="<?= htmlspecialchars($row->getNomClasse()); ?>" <?= (((isset($_POST['classe']) && $_POST['classe'] === $row->getNomClasse()) || (isset($_SESSION['classe']) && $_SESSION['classe'] === $row->getNomClasse())) ? 'selected' : ''); ?>>
-                            <?= htmlspecialchars($row->getNomClasse()); ?>
-                        </option><?php
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="list-classe">
-                <select name="matiere" id="tri">
-                    <option value="defaut">Matiere</option>
-                    <?php
-                    foreach ($listeMatiere as $rows) { ?>
-                        <option value="<?= htmlspecialchars($rows->getNomMatiere()); ?>" <?= (((isset($_POST['matiere']) && $_POST['matiere'] === $rows->getNomMatiere()) || (isset($_SESSION['matiere']) && $_SESSION['matiere'] === $rows->getNomMatiere())) ? 'selected' : ''); ?>>
-                            <?= htmlspecialchars($rows->getNomMatiere()); ?>
-                        </option><?php
-                    }
-                    ?>
-                    <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
-                </select>
-            </div>
-            <div class="submit-group">
-                <input class="submit-btn" type="submit" value="Trier" name="submit">
+    <form action="" class="tri-list container" method="POST">
+        <div class="list-classe">
+            <select name="classe" id="tri-classe">
+                <option value="">Classe</option>
+                <!-- Ensemble des classes tiré de la base de données -- -->
+            </select>
+        </div>
+        <div class="list-classe">
+            <select name="classe" id="tri-matiere">
+                <option value="defaut">Matiere</option>
+                <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
+            </select>
+        </div>
+        <div class="submit-group">
+            <input class="submit-btn" type="submit" value="Trier" name="submit">
             </div>
         </form>
     </div>
@@ -141,3 +128,42 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut') || (isset($_SES
     ?>
 </div>
 </div>
+
+<script>
+    const apiUrl = "<?= $router->url('api-liste-classe')?>";
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+
+        const classeSelect = document.querySelector('#tri-classe');
+        const matiereSelect = document.querySelector('#tri-matiere');
+
+        const classesData = {};
+        data.forEach(classe => {
+        const option = document.createElement('option');
+        option.value = classe.nomClasse;
+        option.textContent = classe.nomClasse;
+        classeSelect.appendChild(option);
+
+        classesData[classe.nomClasse] = classe.matieres;
+        });
+
+        classeSelect.addEventListener('change', function () {
+        const selectedId = this.value;
+        matiereSelect.innerHTML = '<option value="">Matiere</option>';
+
+        if (selectedId && classesData[selectedId]) {
+            matiereSelect.disabled = false;
+            classesData[selectedId].forEach(matiere => {
+            const option = document.createElement('option');
+            option.value = matiere.nomMatiere;
+            option.textContent = matiere.nomMatiere;
+            matiereSelect.appendChild(option);
+            });
+        } else {
+            matiereSelect.disabled = true;
+        }
+        });
+    })
+    .catch(error => console.error('Erreur de chargement des classes/matières :', error));
+</script>

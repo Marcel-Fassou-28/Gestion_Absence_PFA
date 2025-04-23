@@ -120,6 +120,13 @@ padding-bottom: 50px;
     background-position: right 10px center;
 }
 
+.filiere-group select option,
+.subject-group select option,
+.level-group select option {
+    color: #333;
+    font-weight: 600;
+}
+
 .filiere-group select:hover,
 .subject-group select:hover,
 .level-group select:hover {

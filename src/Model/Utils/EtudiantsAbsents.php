@@ -41,9 +41,9 @@ class EtudiantsAbsents {
     protected $nomMatiere;
 
     /**
-     * @var int $nombreAbsences
+     * @var int|null $nombreAbsences
      */
-    protected $nombreAbsences;
+    protected $nombreAbsences = null;
 
     /**
      * @var array $absences
@@ -58,7 +58,7 @@ class EtudiantsAbsents {
      * @param string $cne
      * @param string $nomClasse
      * @param string $nomMatiere
-     * @param int $nombreAbsences
+     * @param int|null $nombreAbsences
      * @param array $absences
      */
     public function __construct(
@@ -67,7 +67,7 @@ class EtudiantsAbsents {
         string $cne,
         string $nomClasse,
         string $nomMatiere,
-        int $nombreAbsences,
+        int $nombreAbsences = 0,
         array $absences = []
     ) {
         $this->nom = $nom;
@@ -129,8 +129,8 @@ class EtudiantsAbsents {
      * 
      * @return int|null
      */
-    public function getNombreAbsences(): ?int {
-        return $this->nombreAbsences; 
+    public function getNombreAbsences() {
+        return count($this->absences);
     }
 
     /**
@@ -210,10 +210,13 @@ class EtudiantsAbsents {
      * 
      * @param string $absence
      */
-    public function addAbsence(string $absence): void {
+    /*public function addAbsence(string $absence): void {
         if (!in_array($absence, $this->absences)) {
             $this->absences[] = $absence;
         }
+    }*/
+    public function addAbsence($absence) {
+        $this->absences[] = $absence;
     }
 
     /**
