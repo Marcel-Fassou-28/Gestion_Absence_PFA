@@ -32,6 +32,9 @@ $listeFiliere = $list->getAll("filiere", "classFiliere");
 $listeClasse = $list->getAll("classe", "classClasse");
 $listeProf = $list->getAll("professeur", "classProf");
 
+$_SESSION['classe'] = '';
+$_SESSION['matiere'] = '';
+
 // utilisation de la variable de session pour gerer la pagination lors du tri 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['filiere'] = $_POST['filiere'];

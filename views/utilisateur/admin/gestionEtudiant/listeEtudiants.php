@@ -27,6 +27,8 @@ $listeClasse = $list->getAll("classe", "classClasse");
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
+
+
 // utilisation de la variable de session pour gerer la pagination lors du tri 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['filiere'] = $_POST['filiere'];

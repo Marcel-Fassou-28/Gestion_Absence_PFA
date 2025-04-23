@@ -88,7 +88,7 @@ $user = $tableUser->getIdentification($cin);
                         <li><a href="<?= $router->url('etudiant-absences')?>">Mes Absences</a></li>
                         <li><a href="<?= $router->url('etudiant-messagerie') ?>">Messagerie</a></li>
                     <?php elseif($_SESSION['role'] === 'admin'): ?>
-                        <li><a href="<?= $router->url('historikAbscences') ?>">Absences des Etudiants</a></li>
+                        <li><a href="<?= $router->url('historikAbscences') .'?listprof=1&p=0' ?>">Absences des Etudiants</a></li>
                         <li><a href="<?= $router->url('admin-messagerie') ?>">Messagerie</a></li>
 
                     <?php else: ?>
