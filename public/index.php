@@ -75,6 +75,12 @@ $router
     ->match('/my/administration/gestion-matiere/modifie', 'utilisateur/admin/gestionCours/modifierMatiere', 'liste-matiere-modifie')
     ->match('/my/administration/gestion-matiere/ajouter', 'utilisateur/admin/gestionCours/ajouterMatiere', 'liste-matiere-ajouter')
 
+    /* gestion des administrateur */
+    ->match('/my/administration/gestion-admin', 'utilisateur/admin/gestionAdmin/listeAdmin', 'liste-des-admin')
+    ->match('/my/administration/gestion-admin/supprimer', 'utilisateur/admin/gestionAdmin/supprimerAdmin', 'admin-delete')
+    ->match('/my/administration/gestion-admin/modifie', 'utilisateur/admin/gestionAdmin/modifierAdmin', 'admin-modifie')
+    ->match('/my/administration/gestion-admin/ajouter', 'utilisateur/admin/gestionAdmin/ajouterAdmin', 'admin-ajouter')
+
     /* API */
     ->match('/my/api/liste-fichier-presence', 'API/API_fichier_liste_presence', 'api-liste-classe')
     ->match('/my/api/liste-creneaux', 'API/API_liste_creneaux', 'api-liste-filiere')

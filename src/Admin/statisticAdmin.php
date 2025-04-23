@@ -4,6 +4,7 @@
 namespace App\Admin;
 
 use App\Abstract\Table;
+use App\Model\Administrateur;
 use App\Model\Utils\Admin\DerniereAbsences;
 use App\Model\Utils\Admin\InformationActifs;
 use App\Model\Utils\Admin\ListPresenceStat;
@@ -176,6 +177,23 @@ class StatisticAdmin extends Table {
             'nomClasse' => $nomClasse
         ]);
         $query->setFetchMode(\PDO::FETCH_CLASS, MatiereProf::class);
+        $result = $query->fetchAll();
+
+        return $result;
+    }
+
+
+    /**
+     * Cette méthode renvoi la liste de tous les administrateurs du site
+     * 
+     * @return array
+     */
+    public function getAllAdministrateur():array {
+        $query = $this->pdo->prepare('
+            SELECT * FROM administrateur
+        ');
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
         $result = $query->fetchAll();
 
         return $result;

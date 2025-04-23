@@ -397,16 +397,17 @@ $currentTime = $date->format('H:i:s');
                     <li><a href="<?= $router->url('justification'). '?listprof=1&p=0' ?>">Justificatifs</a></li>
                     <li><a href="<?= $router->url('liste-presence-soumis') . '?listprof=1&p=0'?>">Liste de Presence Soumis</a></li>
                     <li><a href="<?= $router->url('historikAbscences') .'?listprof=1&p=0' ?>">Absence des Etudiants</a></li>
+                    <li><a href="<?= $router->url('liste-matiere-admin').'?matiere=1&p=0'?>">Gestion des Matieres et des Cours</a></li>
                 </ul>
             </section>
             <section class="container historic">
-                <h2>Gestion du Personnel et des cours</h2>
+                <h2>Gestion du Personnel</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
                     <li><a href="<?= $router->url('liste-etudiants').'?listprof=1&p=0' ?>">Gestion des étudiants</a></li>
                     <li><a href="<?= $router->url('liste-professeur').'?listprof=1&p=0'?>">Gestion des professeurs</a></li>
+                    <li><a href="<?= $router->url('liste-des-admin').'?admin=1&p=0'?>">Gestion des Administrateurs</a></li>
                     <li><a href="<?= $router->url('gestion-creneau').'?listprof=1&p=0' ?>">Gestion des Créneaux</a></li>
-                    <li><a href="<?= $router->url('liste-matiere-admin').'?matiere=1&p=0'?>">Gestion des Matieres et des Cours</a></li>
                 </ul>
             </section>
         </div>
@@ -440,12 +441,16 @@ $currentTime = $date->format('H:i:s');
     content: '\1F4C8'; 
     margin-right: 0.5rem;
 }
-.historic-list li:nth-child(3) a::before {
+.historic-list li:nth-child(4) a::before {
     content: '\1F4C5'; 
     margin-right: 0.5rem;
 }
-.historic-list li:nth-child(4) a::before {
+.historic-list li:nth-child(3) a::before {
     content: '\1F464'; 
+    margin-right: 0.5rem;
+}
+.use-link-list li:nth-child(5) a::before {
+    content: '\1F393'; 
     margin-right: 0.5rem;
 }
 </style>
