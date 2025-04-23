@@ -101,6 +101,36 @@ class adminTable extends Table
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
+    /**
+     * cette fonction permet de recuperer
+     * la liste des matieres en fonction d'une classe precise
+     * @param mixed $class
+     * @return void
+     */
+    public function getMatiereByClass($class):array {
+        $sql = 'SELECT m.nomMatiere FROM ' . $this->tableMatiere .
+        ' m JOIN '. $this->tableClasse. ' c ON 
+        m.idClasse = c.idClasse WHERE c.nomClasse = :nom ';
+        $query = $this->pdo->prepare($sql);
+
+        $query->execute(['nom' => $class]);
+        $query->setFetchMode(\PDO:: FETCH_CLASS,$this->classMatiere);
+        $result = $query->fetchALL();
+        return count($result) >0 ? $result : [];
+    }
+
+    public function findClassByMatiere($matiere):?string{
+        $sql = '
+        SELECT c.nomClasse as nom FROM matiere m JOIN classe c
+         ON m.idClasse = c.idClasse WHERE m.nomMatiere = :nom
+        ';
+
+        $query = $this->pdo->prepare($sql);
+        $query->execute(['nom' => $matiere]);
+        $query->setFetchMode(\PDO::FETCH_ASSOC);
+        return $query->fetch()['nom'];
+
+    }
 
     /**
      * Cette méthode permet d'obtenir les informations de tous les professeurs qui
@@ -223,16 +253,66 @@ class adminTable extends Table
     }
 
 
-    public function getAllJustificatif(): array
+    public function getAllJustificatif($line = 0,$offset = 0,$idMatiere = 0,$idClasse = 0): array
     {
-        $query = $this->pdo->prepare('
-            SELECT e.nom as nom,e.prenom as prenom, j.dateSoumission as Date_Soumission FROM ' . $this->tableAbsence . ' a JOIN '
-            . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence' . ' JOIN ' . $this->tableEtudiant . ' e ON e.cinEtudiant = a.cinEtudiant
-            ORDER BY e.nom,e.prenom DESC
-        ');
+        $sql = ' 
+        SELECT e.nom as nom,e.prenom as prenom , e.cne as cne, j.dateSoumission as Date_Soumission ,j.idJustificatif as id FROM ' . $this->tableAbsence . ' a JOIN '
+        . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence' . ' JOIN ' . $this->tableEtudiant . ' e ON e.cinEtudiant = a.cinEtudiant ';
+
+        if ($idClasse != 0 || $idMatiere != 0){
+            $sql .= ' WHERE ';
+            if ($idClasse != 0 && $idMatiere == 0){
+                $sql .= ' e.idClasse = '. $idClasse;
+            }
+            else if ($idMatiere != 0 && $idClasse == 0){
+                $sql .= ' a.idMatiere = '. $idMatiere;
+            }
+            else{
+                $sql .= ' e.idClasse = '. $idClasse .
+                ' AND a.idMatiere = '. $idMatiere;
+            }
+        }
+
+        $sql .= ' ORDER BY j.dateSoumission DESC';
+        
+        if ($line !== 0){
+            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+        }
+        
+        $query = $this->pdo->prepare($sql);
         $query->execute();
+        $query->setFetchMode(\PDO::FETCH_ASSOC);
         $result = $query->fetchALL();
         return count($result) != 0 ? $result : [];
+    }
+
+    /**
+     * trouver l'id de la classe a l'aide de son nom 
+     * @param mixed $name
+     * @return int
+     */
+    public function getIdClasseByClasseName($name):?int{
+        $sql = $this->pdo->prepare('
+            SELECT idClasse FROM classe where nomClasse = :classe
+            ');
+        $sql->execute(['classe' => $name]);
+        $sql->setFetchMode(\PDO::FETCH_ASSOC);
+        return $sql->fetch()['idClasse'];
+    }
+
+    /**
+     * trouver l'id de la matiere a l'aide de son nom
+     * @param mixed $name
+     * @return int
+     */
+    public function getIdMatiereByName($name):?int{
+        $sql = $this->pdo->prepare('
+            SELECT idMatiere FROM matiere where nomMatiere = :matiere
+            ');
+         
+        $sql->execute(['matiere' => $name]);
+        $sql->setFetchMode(\PDO::FETCH_ASSOC);
+        return $sql->fetch()['idMatiere'];
     }
 
 
@@ -399,9 +479,16 @@ class adminTable extends Table
                 nom = :nom, prenom = :prenom, email = :email,cne = :cne, idClasse = :idClasse WHERE cinEtudiant = :oldcin';
             $sql2 = 'UPDATE ' . $this->tableUser . ' SET username = :username, 
                 cin = :newcin, nom = :nom, prenom = :prenom, email = :email WHERE cin = :oldcin';
+            
+            $sql3 = 'UPDATE ' . $this->tableAbsence . ' 
+            SET cinEtudiant = :newcin WHERE cinEtudiant = :oldcin';
             $query = $this->pdo->prepare($sql2);
             $query->execute($param);
-            echo "etudiant modifier";
+
+            $query = $this->pdo->prepare($sql3);
+            $query->execute(['oldcin' => $oldCin,
+                            'newcin' => $newcin]);
+            
 
 
             $query = $this->pdo->prepare($sql1);
@@ -434,9 +521,12 @@ class adminTable extends Table
             $this->pdo->beginTransaction();
             $sql1 = 'DELETE FROM ' . $this->tableEtudiant . ' WHERE cinEtudiant = :cin';
             $sql2 = 'DELETE FROM ' . $this->tableUser . ' WHERE cin = :cin';
+            $sql3 = 'DELETE FROM ' . $this->tableAbsence . ' WHERE cinEtudiant = :cin';
             $query = $this->pdo->prepare($sql1);
             $query->execute(['cin' => $cin]);
             $query = $this->pdo->prepare($sql2);
+            $query->execute(['cin' => $cin]);
+            $query = $this->pdo->prepare($sql3);
             $query->execute(['cin' => $cin]);
 
             $this->pdo->commit();
@@ -448,6 +538,10 @@ class adminTable extends Table
     }
 
 
+    /**
+     * retourne l'id de la matiere et la date a laquelle les absences en cette matiere ont ete soumis
+     * @return array
+     */
     public function getAbsenceMatiere(): array
     {
         $sql = $this->pdo->prepare('SELECT DISTINCT idMatiere,date FROM ' . $this->tableAbsence .
@@ -459,6 +553,11 @@ class adminTable extends Table
 
     }
 
+    /**
+     * trouver le nom de la matiere par son id 
+     * @param mixed $id
+     * @return array
+     */
     public function getMatiereById($id): array
     {
         $sql = $this->pdo->prepare('SELECT nomMatiere,idClasse FROM ' . $this->tableMatiere . ' WHERE idMatiere = :id ');
@@ -502,8 +601,15 @@ class adminTable extends Table
         return count($result) > 0 ? $result : [];
     }
 
+    /**
+     * retourne le nombre d'absence  en heure d'un etudiant dans une matiere
+     * @param mixed $cin
+     * @param mixed $matiere
+     * @return int
+     */
     public function getAbsenceStudentByMatiere($cin,$matiere){
-        $querry = "SELECT COUNT(a.cinEtudiant) as nbreAbsences FROM absence a JOIN 
+        $querry = "
+        SELECT COUNT(e.cinEtudiant) as nbreAbsences FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
         ON m.idMatiere = a.idMatiere WHERE a.cinEtudiant =:cin AND 
         a.idMatiere = :id";
@@ -516,12 +622,23 @@ class adminTable extends Table
         return $result['nbreAbsences'] * 2;
     }
 
-    public function getPrivateStudentToPastExamByMatiere($matiere):array{
-        $querry = "SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant FROM absence a JOIN 
+    /**
+     * cette fonction permet d'avoir la liste des etudiant 
+     * privees de passer l'exam dans une matiere
+     * @param mixed $matiere
+     * @return array
+     */
+    public function getPrivateStudentToPastExamByMatiere($matiere,int $line = 0,int $offset = 0):array{
+        $querry = "
+        SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant,
+         e.cne as cne FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
         ON m.idMatiere = a.idMatiere WHERE a.idMatiere = :id GROUP BY e.nom, e.prenom, e.cinEtudiant
          HAVING COUNT(a.cinEtudiant)>=4";
         
+         if ($line !== 0){
+            $querry .= " LIMIT ".$line . " OFFSET " . $offset;
+        }
         $sql=$this->pdo->prepare($querry);
         $sql->execute([
             'id' => $matiere]);

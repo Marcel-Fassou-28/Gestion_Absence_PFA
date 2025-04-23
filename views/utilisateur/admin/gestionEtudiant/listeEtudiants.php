@@ -20,67 +20,63 @@ $line = 20;
 $offset = $_GET['p'] * $line;
 //variable n pour compter le nombre total de ligne extraite de la fonction getALL()
 $n = count($list->getAll("etudiant", "classEtudiant"));
-$listeDepart = $list->getAll("departement", "classDepartement");
-$listeFiliere = $list->getAll("filiere", "classFiliere");
-$listeClasse = $list->getAll("classe", "classClasse");
+
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
-// utilisation de la variable de session pour gerer la pagination lors du tri 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $_SESSION['filiere'] = $_POST['filiere'];
-    $_SESSION['classe'] = $_POST['classe'];
-}
 
-//affichage des etudiants sans tri
-if ( (empty( $_POST)) || ($_SESSION['filiere'] === 'defaut' && $_SESSION['classe'] === 'defaut'  )) {
-    $filiere = '';
-    $listeEtudiant = $list->getAll("etudiant", "classEtudiant", $line, $offset);
+
+// utilisation de la variable de get pour gerer la pagination lors du tri 
+if (isset($_GET['filiere']) && !isset($_POST['filiere']) && empty($_POST)) {
+    $_POST['filiere'] = $_GET['filiere'];
 }
+if (isset($_GET['classe']) && !isset($_POST['classe']) && empty($_POST)) {
+    $_POST['classe'] = $_GET['classe'];
+}
+//affichage des etudiants sans tri
+$listeEtudiant = $list->getAll("etudiant", "classEtudiant", $line, $offset);
+
 // tri si la filiere est choisit
-if ((isset($_POST['filiere']) && $_POST['filiere'] !== 'defaut') || (isset($_SESSION['filiere']) && $_SESSION['filiere'] !== 'defaut')) {
-    $filiere = $_SESSION['filiere'];
-    if (isset($_POST['filiere']) && !isset($_POST['classe'])){
+if (isset($_POST['filiere'])) {
+    if ($_POST['filiere'] !== 'defaut') {
+        $filiere = $_POST['filiere'];
         
-        $_SESSION['classe'] = 'defaut';
+        $n = count($list->getStudentByFiliere($filiere));
+        $listeEtudiant = $list->getStudentByFiliere($filiere, $line, $offset);
     }
-    $classe = $_SESSION['classe'];
-    
-    $listeClasse = $list->classByFields($filiere);
-    $n = count($list->getStudentByFiliere($filiere));
-    $listeEtudiant = $list->getStudentByFiliere($filiere, $line, $offset);
+    $_GET['filiere'] = $_POST['filiere'];
 }
 
 // tri par classe si une classe est choisit
-if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSION['classe']) && $_SESSION['classe']!== 'defaut')) {
-    if (isset($_POST['classe']) && $_POST['classe'] !== 'defaut')
-    {
-        $_SESSION['classe'] = $_POST['classe'];
-    }
-    $classe = $_SESSION['classe'];
+if (isset($_POST['classe'])) {
+    if ($_POST['classe'] !== 'defaut') {
+        $classe = $_POST['classe'];
 
-    $n= count($list->getStudentByClass($classe));
-    $listeEtudiant = $list->getStudentByClass($classe, $line, $offset);
+        $n = count($list->getStudentByClass($classe));
+        $listeEtudiant = $list->getStudentByClass($classe, $line, $offset);
+    }
+    $_GET['classe'] = $_POST['classe'];
+
 }
 
 ?>
 <div class="prof-list">
-<?php if (isset($_GET['success_etudiant']) && $_GET['success_etudiant'] == '1'): ?>
+    <?php if (isset($_GET['success_etudiant']) && $_GET['success_etudiant'] == '1'): ?>
         <div class="alert alert-success">Etudiant ajouté avec succès</div>
-    <?php elseif(isset($_GET['success_etudiant']) && $_GET['success_etudiant'] == '0'): ?>
+    <?php elseif (isset($_GET['success_etudiant']) && $_GET['success_etudiant'] == '0'): ?>
         <div class="alert alert-danger">Cette opération n'a pas pu être Effectué</div>
     <?php else: ?><?php endif ?>
 
-        <?php if (isset($_GET['success_modifie']) && $_GET['success_modifie'] == '1'): ?>
+    <?php if (isset($_GET['success_modifie']) && $_GET['success_modifie'] == '1'): ?>
         <div class="alert alert-success">Les Informations de l'étudiant ont été modifiés avec succès</div>
-    <?php elseif(isset($_GET['success_modifie']) && $_GET['success_modifie'] == '0'): ?>
+    <?php elseif (isset($_GET['success_modifie']) && $_GET['success_modifie'] == '0'): ?>
         <div class="alert alert-danger">Cette opération n'a pas pu être Effectué</div>
     <?php else: ?><?php endif ?>
 
-        <?php if (isset($_GET['success_delete']) && $_GET['success_delete'] == '1'): ?>
-        <div class="alert alert-success">Les Informations de l'étudiant supprimées  avec succès</div>
-    <?php elseif(isset($_GET['success_delete']) && $_GET['success_delete'] == '0'): ?>
+    <?php if (isset($_GET['success_delete']) && $_GET['success_delete'] == '1'): ?>
+        <div class="alert alert-success">Les Informations de l'étudiant supprimées avec succès</div>
+    <?php elseif (isset($_GET['success_delete']) && $_GET['success_delete'] == '0'): ?>
         <div class="alert alert-danger">Cette opération n'a pas pu être Effectué</div>
     <?php else: ?><?php endif ?>
 
@@ -90,7 +86,8 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
         <div class="form-ajout">
-            <a href="<?= $router->url('ajouter-etudiant') . '?listprof=1&add=1' ?>" class="btn-ajout">Ajouter un Etudiant</a>
+            <a href="<?= $router->url('ajouter-etudiant') . '?listprof=1&add=1' ?>" class="btn-ajout">Ajouter un
+                Etudiant</a>
         </div>
     </div>
     <div class="hr"></div>
@@ -98,25 +95,14 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
         <form action="" class="tri-list container" method="POST">
             <div class="list-filiere">
                 <select name="filiere" id="tri-filiere" onchange="this.form.submit()">
-                    <option value="">Filières</option>
-                    <?php
-                    /*foreach ($listeFiliere as $row) { ?>
-                        <option value="<?= htmlspecialchars($row->getNomFiliere()); ?>" <?= (((isset($_POST['filiere']) && $_POST['filiere'] === $row->getNomFiliere()) || (isset($_SESSION['filiere']) && $_SESSION['filiere'] === $row->getNomFiliere() )) ? 'selected' : ''); ?>>
-                            <?= htmlspecialchars($row->getNomFiliere()); ?>
-                        </option><?php
-                    }*/
-                    ?>
+                    <option value="defaut">Filières</option>
+
                 </select>
             </div>
             <div class="list-classe">
                 <select name="classe" id="tri-classe">
-                    <option value="">Classe</option>
+                    <option value="defaut">Classe</option>
                     <?php
-                    /*foreach ($listeClasse as $row) { ?>
-                        <option value="<?= htmlspecialchars($row->getNomClasse()); ?>" <?= (((isset($_POST['classe']) && $_POST['classe'] === $row->getNomClasse())|| (isset($_SESSION['classe'])&& $_SESSION['classe'] === $row->getNomClasse())) ? 'selected' : ''); ?>>
-                            <?= htmlspecialchars($row->getNomClasse()); ?>
-                        </option><?php
-                    }*/
                     ?>
                 </select>
             </div>
@@ -141,8 +127,10 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
                 </tr>
             </thead>
             <?php
+
             foreach ($listeEtudiant as $row) { ?>
                 <tr>
+
                     <td><?= ++$offset; ?></td>
                     <td><?= htmlspecialchars($row->getNom()); ?></td>
                     <td><?= htmlspecialchars($row->getPrenom()); ?></td>
@@ -150,8 +138,15 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
                     <td> <?= htmlspecialchars($row->getCNE()); ?></td>
                     <td><?= htmlspecialchars($row->getEmail()); ?></td>
                     <td class="btns">
+<<<<<<< HEAD
                         <a href="<?= $router->url('modifier-student') . '?listprof=1&modifier=1&cin=' . $row->getCIN(); ?>" class="btn1">Modifier</a>
                         <a id="delete" href="<?= $router->url('supprimer-student') . '?listprof=1&cin=' . $row->getCIN(); ?>" class="btn2">Supprimer</a>
+=======
+                        <a href="<?= $router->url('modifier-student') . '?listprof=1&modifier=1&cin=' . $row->getCIN(); ?>"
+                            class="btn1">Modifier</a>
+                        <a href="<?= $router->url('supprimer-student') . '?listprof=1&cin=' . $row->getCIN(); ?>"
+                            class="btn2">Supprimer</a>
+>>>>>>> cb0c1f9242ce0745003bc880800ad886fb251c4f
                     </td>
                 </tr><?php
             }
@@ -166,9 +161,9 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
     //pour aficher le nombre total de page avec ou sans tri 
     $nbrpage = ceil($n / $line);
     //boucle d'affichage des numero de page 
-    for ( $i = 0; $i <$nbrpage; ){?>
+    for ($i = 0; $i < $nbrpage; ) { ?>
 
-        <a href="?<?= $list->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page': '';?>"><?=++$i?></a><?php
+        <a href="?<?= $list->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
     }
     ?>
 </div>
@@ -179,7 +174,10 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
         const filiereSelect = document.querySelector('#tri-filiere');
         const classeSelect = document.querySelector('#tri-classe');
 
-        fetch(apiUrl) 
+
+
+
+        fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -187,13 +185,15 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
                     const option = document.createElement("option");
                     option.value = filiere.nomFiliere;
                     option.textContent = filiere.nomFiliere;
+
                     filiereSelect.appendChild(option);
                 });
 
                 filiereSelect.addEventListener("change", () => {
                     const selectedName = filiereSelect.value;
-                    classeSelect.innerHTML = '<option value="">Classe</option>';
+                    classeSelect.innerHTML = '<option value="defaut">Classe</option>';
                     classeSelect.disabled = true;
+
 
                     if (selectedName) {
                         const filiere = data.find(f => f.nomFiliere == selectedName);
@@ -201,15 +201,17 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut') || (isset($_SESSI
                             const option = document.createElement("option");
                             option.value = classe.nomClasse;
                             option.textContent = classe.nomClasse;
+
                             classeSelect.appendChild(option);
                         });
+
                         classeSelect.disabled = false;
                     }
                 });
+
             })
             .catch(error => {
                 console.error("Erreur chargement filières/classes :", error);
             });
     });
 </script>
-
