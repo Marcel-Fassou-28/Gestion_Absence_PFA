@@ -39,7 +39,25 @@ if(isset($_SESSION['id_user'])) {
     <main>
         <?= $content ?>
     </main>
-    <footer></footer>
+    <footer class="footer">
+        <div class="left-side"></div>
+        <div class="footer-container">
+        <div class="footer-brand">
+        <h2>GAENSAJ</h2>
+        <p>Plateforme de gestion d'absence de l'ENSAJ</p>
+        </div>
+        <div class="footer-links">
+        <a href="<?= $router->url('user-home') ?>">Accueil</a>
+        <a href="#">À propos</a>
+        <a href="#">Contact</a>
+        <a href="#">Support</a>
+        </div>
+        <div class="footer-rights">
+        <p>&copy; 2025 GAENSAJ - Tous droits réservés.</p>
+        </div>
+        </div>
+        <div class="right-side"></div>
+    </footer>
     <script src="/js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

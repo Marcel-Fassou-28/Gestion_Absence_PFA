@@ -108,8 +108,25 @@ $user = $tableUser->getIdentification($cin);
     <main>
         <?= $content ?>
     </main>
-    <footer>
+    <footer class="footer">
         <div class="left-side"></div>
+        
+        <div class="footer-container">
+        <div class="footer-brand">
+        <h2 class="footer-title">GAENSAJ</h2>
+        <p>Plateforme de gestion d'absence de l'ENSAJ</p>
+        </div>
+        <div class="footer-links">
+        <a href="<?= $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]) ?>">Accueil</a>
+      <a href="#">À propos</a>
+      <a href="#">Contact</a>
+      <a href="#">Support</a>
+        </div>
+        <div class="footer-rights">
+      <p>&copy; 2025 GAENSAJ - Tous droits réservés.</p>
+        </div>
+    </div>
+
         <div class="right-side"></div>
     </footer>
     <script src="/js/scriptConnected.js"></script>
