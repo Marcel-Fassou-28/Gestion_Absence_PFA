@@ -69,6 +69,11 @@ $router
     ->match('/my/etudiant/historique/absence', 'utilisateur/students/historique/absences','etudiant-absences')
     ->match('/my/etudiant/historique/justificatif', 'utilisateur/students/historique/justificatifs','etudiant-justificatifs')
 
+    /* gestion des matieres... */
+    ->match('/my/administration/gestion-matiere', 'utilisateur/admin/gestionCours/listeMatiere', 'liste-matiere-admin')
+    ->match('/my/administration/gestion-matiere/supprimer', 'utilisateur/admin/gestionCours/supprimerMatiere', 'liste-matiere-delete')
+    ->match('/my/administration/gestion-matiere/modifie', 'utilisateur/admin/gestionCours/modifierMatiere', 'liste-matiere-modifie')
+    ->match('/my/administration/gestion-matiere/ajouter', 'utilisateur/admin/gestionCours/ajouterMatiere', 'liste-matiere-ajouter')
 
     /* API */
     ->match('/my/api/liste-fichier-presence', 'API/API_fichier_liste_presence', 'api-liste-classe')

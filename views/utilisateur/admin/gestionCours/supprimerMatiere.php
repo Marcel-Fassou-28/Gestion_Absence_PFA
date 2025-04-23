@@ -15,16 +15,15 @@ use App\Connection;
 $pdo = Connection::getPDO();
 $success = null;
 
-$creneau = $_GET['id_creneau'];
-if (isset($creneau)) {
-    $query = $pdo->prepare('DELETE FROM creneaux WHERE id = :id_creneau');
-    $query->execute(['id_creneau' => $creneau]);
+$matiere = $_GET['id_matiere'];
+if (isset($matiere)) {
+    $query = $pdo->prepare('DELETE FROM matiere WHERE idMatiere = :idMatiere');
+    $query->execute(['idMatiere' => $matiere]);
     $success = 1;
-    header('location:' . $router->url('gestion-creneau') .'?listprof=1&p=0&success_delete='.$success);
+    header('location:' . $router->url('liste-matiere-admin') .'?matiere=1&p=0&success_delete='.$success);
     exit();
 } else {
     $success = 0;
-    header('location:' . $router->url('gestion-creneau') .'?listprof=1&p=0&success_delete='.$success);
+    header('location:' . $router->url('liste-matiere-admin') .'?matiere=1&p=0&success_delete='.$success);
     exit();
 }
-

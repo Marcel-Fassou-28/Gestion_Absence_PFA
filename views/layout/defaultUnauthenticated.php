@@ -67,7 +67,7 @@ if(isset($_SESSION['id_user'])) {
                 
                 <h2 class="footer-title">GAENSAJ</h2>
             </a>
-            <p>Plateforme de gestion d'absences de GAENSAJ</p>
+            <p>Plateforme de gestion d'absences GAENSAJ</p>
         </div>
         <div class="footer-links">
             <h3 class="footer-section-title">Liens utiles</h3>

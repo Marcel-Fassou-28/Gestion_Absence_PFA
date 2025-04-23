@@ -400,12 +400,13 @@ $currentTime = $date->format('H:i:s');
                 </ul>
             </section>
             <section class="container historic">
-                <h2>Gestion du Personnel</h2>
+                <h2>Gestion du Personnel et des cours</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
                     <li><a href="<?= $router->url('liste-etudiants').'?listprof=1&p=0' ?>">Gestion des étudiants</a></li>
                     <li><a href="<?= $router->url('liste-professeur').'?listprof=1&p=0'?>">Gestion des professeurs</a></li>
                     <li><a href="<?= $router->url('gestion-creneau').'?listprof=1&p=0' ?>">Gestion des Créneaux</a></li>
+                    <li><a href="<?= $router->url('liste-matiere-admin').'?matiere=1&p=0'?>">Gestion des Matieres et des Cours</a></li>
                 </ul>
             </section>
         </div>
@@ -441,6 +442,10 @@ $currentTime = $date->format('H:i:s');
 }
 .historic-list li:nth-child(3) a::before {
     content: '\1F4C5'; 
+    margin-right: 0.5rem;
+}
+.historic-list li:nth-child(4) a::before {
+    content: '\1F464'; 
     margin-right: 0.5rem;
 }
 </style>
