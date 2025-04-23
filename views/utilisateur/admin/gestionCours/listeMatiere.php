@@ -54,7 +54,7 @@ if(!empty($_POST) && $_POST['submit-first'] == 'Trier') {
     <?php endif ?>
 
     <div class="intro-prof-matiere">
-        <h1> Liste Des Créneaux</h1>
+        <h1> Liste Des Matières</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>

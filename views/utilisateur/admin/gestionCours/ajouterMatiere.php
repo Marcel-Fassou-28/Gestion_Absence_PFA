@@ -11,7 +11,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 
 use App\connection;
-use App\Model\Matiere;
+use App\Model\Classe;
+use App\Model\Filiere;
 use App\Model\Professeur;
 
 $pdo = Connection::getPDO();
@@ -21,33 +22,31 @@ $add = null;
 $error = 0;
 
 if (!empty($_POST)) {
-    $heureDebut = $_POST['heuredebut'];
-    $heureFin = $_POST['heurefin'];
-    $jourSemaine = $_POST['joursemaine'];
-    $nomClasse = $_POST['classe'];
-    $nomMatiere = $_POST['matiere'];
-    $nomProf = $_POST['nomprof'];
-    $prenomProf = $_POST['prenomprof'];
+    $nomMatiere = $_POST['nomMatiere'];
+    $nomClasse = $_POST['nomClasse'];
+    $cinProf = $_POST['cinProf'];
+    $nomProf = $_POST['nomProf'];
+    $prenomProf = $_POST['prenomProf'];
 
-    $query = $pdo->prepare('SELECT * FROM matiere WHERE nomMatiere = :nomMatiere');
-    $query->execute(['nomMatiere' => $nomMatiere]);
-    $query->setFetchMode(\PDO::FETCH_CLASS, Matiere::class);
-    $matiere = $query->fetch();
+    $query = $pdo->prepare('SELECT * FROM classe WHERE nomClasse = :nomClasse');
+    $query->execute(['nomClasse' => $nomClasse]);
+    $query->setFetchMode(\PDO::FETCH_CLASS, Classe::class);
+    $classe = $query->fetch();
 
-    $query1 = $pdo->prepare('SELECT * FROM professeur WHERE nom = :nomProf AND prenom = :prenomProf');
-    $query1->execute(['nomProf' => $nomProf, 'prenomProf' => $prenomProf]);
+    $query1 = $pdo->prepare('SELECT * FROM professeur WHERE nom = :nomProf AND prenom = :prenomProf AND cinProf = :cinProf');
+    $query1->execute(['nomProf' => $nomProf, 'prenomProf' => $prenomProf, 'cinProf' => $cinProf]);
     $query1->setFetchMode(\PDO::FETCH_CLASS, Professeur::class);
     $professeur = $query1->fetch();
 
-    if (($matiere && $matiere->getNomMatiere() === $nomMatiere) && ($professeur && $professeur->getNom() == $nomProf && $professeur->getPrenom() == $prenomProf)) {
-        $query2 = $pdo->prepare('INSERT INTO creneaux(jourSemaine, heureDebut, heureFin, cinProf, idMatiere) VALUES (?, ?, ?, ?, ?)');
+    if ($classe && $professeur) {
+        $query2 = $pdo->prepare('INSERT INTO matiere(cinProf, nomMatiere, idFiliere , idClasse) VALUES (?, ?, ?, ?)');
         try {
-            $query2->execute([$jourSemaine, $heureDebut, $heureFin, $professeur->getCIN(), $matiere->getIdMatiere()]);
+            $query2->execute([$cinProf, $nomMatiere, $classe->getIdFiliere(), $classe->getIDClasse()]);
             $success = 1;
         } catch(PDOException $e) {
             $add = 0;
         }
-        header('location:' . $router->url('gestion-creneau') .'?listprof=1&p=0&add='.$add);
+        header('location:' . $router->url('liste-matiere-admin') .'?matiere=1&p=0&add='.$add);
         exit();
 
     }else {
@@ -63,7 +62,7 @@ if (!empty($_POST)) {
             Veuillez verifier que le CIN fourni et/ou la matière indiquée existent bels et bien
         </div>
     <?php endif ?>
-    <div class="intro-prof-list">
+    <div class="intro-prof-matiere">
         <h1> Ajouter un créneau</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
@@ -75,27 +74,27 @@ if (!empty($_POST)) {
             <section class="edit-matiere-section">
                 <div>
                     <label for="nomMatiere">Matiere</label>
-                    <input type="text" name="nomMatiere" id="nomMatiere" value="<?= htmlspecialchars($result->getNomMatiere()) ?>">
+                    <input type="text" name="nomMatiere" id="nomMatiere" value="">
                 </div>
                 <div>
                     <label for="nomClasse">Classe</label>
-                    <input type="text" name="nomClasse" id="nomClasse" value="<?= htmlspecialchars($result->getNomClasse()) ?>" placeholder="Exemple : IITE-1....">
+                    <input type="text" name="nomClasse" id="nomClasse" value="" placeholder="Exemple : IITE-1....">
                 </div>
                 <div>
                     <label for="cinProf">CIN Prof</label>
-                    <input type="text" name="cinProf" id="cinProf" value="<?= htmlspecialchars($result->getCinProf()) ?>">
+                    <input type="text" name="cinProf" id="cinProf" value="">
                 </div>
                 <div>
                     <label for="nomProf">Nom du Professeur</label>
-                    <input type="text" name="nomProf" id="nomProf" value="<?= htmlspecialchars($result->getNomProf()) ?>">
+                    <input type="text" name="nomProf" id="nomProf" value="">
                 </div>
                 <div>
                     <label for="prenomProf">Prenom du Professeur</label>
-                    <input type="text" name="prenomProf" id="prenomProf" value="<?= htmlspecialchars($result->getPrenomProf()) ?>">
+                    <input type="text" name="prenomProf" id="prenomProf" value="">
                 </div>
             </section>
             <section class="submit-group-matiere">
-                <button type="submit" class="submit-btn-matiere">Modifier</button>
+                <button type="submit" class="submit-btn-matiere">Ajouter</button>
                 <button class="btn2" onclick="window.location.href='<?=$router->url('liste-matiere-admin'). '?modifie=1&p=0' ?>'">Annuler</button>
             </section>
 
