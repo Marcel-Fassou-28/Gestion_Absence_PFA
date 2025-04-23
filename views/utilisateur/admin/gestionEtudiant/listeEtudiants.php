@@ -138,15 +138,8 @@ if (isset($_POST['classe'])) {
                     <td> <?= htmlspecialchars($row->getCNE()); ?></td>
                     <td><?= htmlspecialchars($row->getEmail()); ?></td>
                     <td class="btns">
-<<<<<<< HEAD
                         <a href="<?= $router->url('modifier-student') . '?listprof=1&modifier=1&cin=' . $row->getCIN(); ?>" class="btn1">Modifier</a>
                         <a id="delete" href="<?= $router->url('supprimer-student') . '?listprof=1&cin=' . $row->getCIN(); ?>" class="btn2">Supprimer</a>
-=======
-                        <a href="<?= $router->url('modifier-student') . '?listprof=1&modifier=1&cin=' . $row->getCIN(); ?>"
-                            class="btn1">Modifier</a>
-                        <a href="<?= $router->url('supprimer-student') . '?listprof=1&cin=' . $row->getCIN(); ?>"
-                            class="btn2">Supprimer</a>
->>>>>>> cb0c1f9242ce0745003bc880800ad886fb251c4f
                     </td>
                 </tr><?php
             }
