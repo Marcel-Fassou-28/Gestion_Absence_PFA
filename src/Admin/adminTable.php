@@ -386,6 +386,7 @@ class adminTable extends Table
                 nom = :nom, prenom = :prenom, email = :email WHERE cinProf = :oldcin';
             $sql2 = 'UPDATE ' . $this->tableUser . ' SET username = :username, 
                 cin = :newcin, nom = :nom, prenom = :prenom, email = :email WHERE cin = :oldcin';
+            $sql3 = 'UPDATE matiere SET cinProf = :newcin WHERE cinProf = :oldcin';
             $query = $this->pdo->prepare($sql1);
             $query->execute([
                 'newcin' => $newcin,
@@ -396,6 +397,9 @@ class adminTable extends Table
             ]);
             $query = $this->pdo->prepare($sql2);
             $query->execute($param);
+
+            $query2 = $this->pdo->prepare($sql3);
+            $query2->execute(['newcin' => $newcin, 'oldcin' => $oldCin]);
 
             $this->pdo->commit();
             return true;

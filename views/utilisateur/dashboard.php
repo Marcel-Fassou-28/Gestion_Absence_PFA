@@ -408,6 +408,7 @@ $currentTime = $date->format('H:i:s');
                     <li><a href="<?= $router->url('liste-professeur').'?listprof=1&p=0'?>">Gestion des professeurs</a></li>
                     <li><a href="<?= $router->url('liste-des-admin').'?admin=1&p=0'?>">Gestion des Administrateurs</a></li>
                     <li><a href="<?= $router->url('gestion-creneau').'?listprof=1&p=0' ?>">Gestion des Créneaux</a></li>
+                    <li><a href="<?= $router->url('gestion-classe').'?classe=1&p=0' ?>">Gestion des Classes</a></li>
                 </ul>
             </section>
         </div>
@@ -447,6 +448,10 @@ $currentTime = $date->format('H:i:s');
 }
 .historic-list li:nth-child(3) a::before {
     content: '\1F464'; 
+    margin-right: 0.5rem;
+}
+.historic-list li:nth-child(5) a::before {
+    content: '\1F4C5'; 
     margin-right: 0.5rem;
 }
 .use-link-list li:nth-child(5) a::before {

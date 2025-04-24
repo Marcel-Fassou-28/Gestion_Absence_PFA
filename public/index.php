@@ -78,8 +78,13 @@ $router
     /* gestion des administrateur */
     ->match('/my/administration/gestion-admin', 'utilisateur/admin/gestionAdmin/listeAdmin', 'liste-des-admin')
     ->match('/my/administration/gestion-admin/supprimer', 'utilisateur/admin/gestionAdmin/supprimerAdmin', 'admin-delete')
-    ->match('/my/administration/gestion-admin/modifie', 'utilisateur/admin/gestionAdmin/modifierAdmin', 'admin-modifie')
+    ->match('/my/administration/gestion-admin/modifier', 'utilisateur/admin/gestionAdmin/modifierAdmin', 'admin-modifie')
     ->match('/my/administration/gestion-admin/ajouter', 'utilisateur/admin/gestionAdmin/ajouterAdmin', 'admin-ajouter')
+
+    /* gestion des administrateur */
+    ->match('/my/administration/gestion-classe', 'utilisateur/admin/gestionClasses/listeClasse', 'gestion-classe')
+    ->match('/my/administration/gestion-classe/supprimer', 'utilisateur/admin/gestionClasses/supprimerClasse', 'classe-delete')
+    ->match('/my/administration/gestion-classe/modifie', 'utilisateur/admin/gestionClasses/modifierClasse', 'classe-modifie')
 
     /* API */
     ->match('/my/api/liste-fichier-presence', 'API/API_fichier_liste_presence', 'api-liste-classe')
@@ -87,6 +92,7 @@ $router
     ->match('/my/api/liste-professeur', 'API/API_liste_pour_prof', 'api-liste-departement')
     ->match('/my/api/professeur/select-classe-matiere', 'API/Professeur/API_list_absence', 'api-prof-liste-clm')
     ->match('/my/api/professeur/select-classe-etudiant', 'API/Professeur/API_list_etudiant', 'api-prof-liste-etud')
+    ->match('/my/api-admin/select-niveau-filiere', 'API/Admin/API_fichier_liste_classe', 'api-admin-niveau-filiere')
 
     ->run();
     

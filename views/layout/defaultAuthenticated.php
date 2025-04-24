@@ -38,7 +38,7 @@ $user = $tableUser->getIdentification($cin);
     if (isset($_GET['modifier'])){
         echo '<link rel="stylesheet" href="/css/list_prof/modifierProf.css">';
     }
-    if (isset($_GET['matiere']) || isset($_GET['admin'])) {
+    if (isset($_GET['matiere']) || isset($_GET['admin']) || isset($_GET['classe'])) {
         echo '<link rel="stylesheet" href="/css/matiere/list-matiere.css">';
         echo '<link rel="stylesheet" href="/css/matiere/modifie-matiere.css">';
     }

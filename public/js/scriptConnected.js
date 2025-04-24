@@ -128,7 +128,7 @@ delteBtn = document.querySelectorAll('#delete');
 if (delteBtn) {
     delteBtn.forEach(btn => {
         btn.addEventListener('click', () => {
-            alert("Voulez vous supprimer cet employé ?");
+            alert("Vous allez supprimer cet element");
         })
     });
 }

@@ -66,7 +66,7 @@ CREATE TABLE Matiere(
     idClasse INT NOT NULL,
     CONSTRAINT fk_matiere_professeur FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_matiere_filiere FOREIGN KEY (idFiliere) REFERENCES Filiere(idFiliere) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_matiere_classe FOREIGN KEY (idClasse) REFERENCES Classe(idClasse)
+    CONSTRAINT fk_matiere_classe FOREIGN KEY (idClasse) REFERENCES Classe(idClasse) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Table Créneaux
@@ -110,8 +110,8 @@ CREATE TABLE Absence (
     date DATETIME NOT NULL,
     cinEtudiant VARCHAR(50) NOT NULL,
     idMatiere INT NOT NULL,
-    CONSTRAINT fk_absence_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere),
-    CONSTRAINT fk_absence_etudiant FOREIGN KEY (cinEtudiant) REFERENCES Etudiant(cinEtudiant)
+    CONSTRAINT fk_absence_matiere FOREIGN KEY (idMatiere) REFERENCES Matiere(idMatiere) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_absence_etudiant FOREIGN KEY (cinEtudiant) REFERENCES Etudiant(cinEtudiant) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Table Justificatif

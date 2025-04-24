@@ -5,6 +5,8 @@ namespace App\Admin;
 
 use App\Abstract\Table;
 use App\Model\Administrateur;
+use App\Model\Classe;
+use App\Model\Utils\Admin\ClasseFiliere;
 use App\Model\Utils\Admin\DerniereAbsences;
 use App\Model\Utils\Admin\InformationActifs;
 use App\Model\Utils\Admin\ListPresenceStat;
@@ -194,6 +196,100 @@ class StatisticAdmin extends Table {
         ');
         $query->execute();
         $query->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
+        $result = $query->fetchAll();
+
+        return $result;
+    }
+
+    /**
+     * Cette méthode renvoi la liste de toutes les classes de l'etablissement
+     * 
+     * @return array
+     */
+    public function getAllClasses():array {
+        $query = $this->pdo->prepare('
+            SELECT c.*, n.nomNiveau, f.nomFiliere FROM niveau n JOIN classe c ON n.idNiveau = c.idNiveau 
+            JOIN filiere f ON f.idFiliere = c.idFiliere 
+        ');
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, ClasseFiliere::class);
+        $result = $query->fetchAll();
+
+        return $result;
+    }
+
+    /**
+     * Cette méthode renvoi la liste de toutes les classes de l'etablissement
+     * à travers l'année et/ou la filiere
+     * 
+     * @param string $niveau
+     * @param string $filiere
+     * @return array
+     */
+    public function getAllClassesByLevelFiliere(string $niveau = "", string $filiere = ""):array {
+        if(!empty ($niveau)) {
+            $query = $this->pdo->prepare('
+                SELECT c.*, n.nomNiveau, f.nomFiliere FROM niveau n JOIN classe c ON n.idNiveau = c.idNiveau 
+                JOIN filiere f ON f.idFiliere = c.idFiliere WHERE n.nomNiveau = :nomNiveau
+           ');
+           $query->execute(['nomNiveau' => $niveau]);
+
+        } elseif(!empty($filiere)) {
+            $query = $this->pdo->prepare('
+                SELECT c.*, n.nomNiveau, f.nomFiliere FROM niveau n JOIN classe c ON n.idNiveau = c.idNiveau 
+                JOIN filiere f ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :nomFiliere
+            ');
+            $query->execute(['nomFiliere' => $filiere]);
+
+        } elseif(!empty($niveau) && !empty($filiere)) {
+            $query = $this->pdo->prepare('
+                SELECT c.*, n.nomNiveau, f.nomFiliere FROM niveau n JOIN classe c ON n.idNiveau = c.idNiveau 
+                JOIN filiere f ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :nomFiliere AND n.nomNiveau = :nomNiveau
+            ');
+            $query->execute(['nomFiliere' => $filiere, 'nomNiveau' => $niveau]);
+
+        } else {
+            $query = $this->pdo->prepare('
+                SELECT c.*, n.nomNiveau, f.nomFiliere FROM niveau n JOIN classe c ON n.idNiveau = c.idNiveau 
+                JOIN filiere f ON f.idFiliere = c.idFiliere 
+            ');
+            $query->execute();
+        }
+        $query->setFetchMode(\PDO::FETCH_CLASS, ClasseFiliere::class);
+        $result = $query->fetchAll();
+
+        return $result;
+    }
+
+    /**
+     * Cette méthode permet de retourner la liste des filieres
+     * 
+     * @return array
+     */
+    public function getListeFiliere():?array {
+
+        $query = $this->pdo->prepare('
+            SELECT nomFiliere FROM filiere
+        ');
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, ClasseFiliere::class);
+        $result = $query->fetchAll();
+
+        return $result;
+    }
+
+    /**
+     * Cette méthode permet de retourner la liste des niveau
+     * 
+     * @return array
+     */
+    public function getListeNiveau():?array {
+
+        $query = $this->pdo->prepare('
+            SELECT nomNiveau FROM niveau
+        ');
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, ClasseFiliere::class);
         $result = $query->fetchAll();
 
         return $result;
