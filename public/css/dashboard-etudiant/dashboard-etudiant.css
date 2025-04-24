@@ -227,3 +227,45 @@ p{
     border: none;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+.btn-soumettre{
+    background-color: #8bb0f0;
+
+}
+.btn-soumettre:hover{
+    background-color: var(--bg-btn);
+}
+.date-input-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.date-picker {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    color: black;
+}
+
+.date-picker:focus {
+    border-color:none;
+}
+
+.btn-filtrer {
+    padding: 8px 16px;
+    background-color: #8bb0f0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-filtrer:hover {
+    background-color: var(--bg-btn);
+}
