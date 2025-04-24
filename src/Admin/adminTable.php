@@ -96,7 +96,7 @@ class adminTable extends Table
      * cette methode permet de recuperer l'id d'un departement
      *  a partir de son nom
      * @param mixed $name
-     * @return void
+     * @return int|null
      */
     public function getIdDepartementByName(string $name): ?int
     {
