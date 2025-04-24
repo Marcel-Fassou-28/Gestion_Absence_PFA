@@ -74,7 +74,13 @@ $router
     ->match('/my/administration/gestion-matiere/supprimer', 'utilisateur/admin/gestionCours/supprimerMatiere', 'liste-matiere-delete')
     ->match('/my/administration/gestion-matiere/modifie', 'utilisateur/admin/gestionCours/modifierMatiere', 'liste-matiere-modifie')
     ->match('/my/administration/gestion-matiere/ajouter', 'utilisateur/admin/gestionCours/ajouterMatiere', 'liste-matiere-ajouter')
-
+  
+    /* gestion des filiere... */
+    ->match('/my/administration/gestion-filiere', 'utilisateur/admin/gestionFiliere/listeFiliere', 'liste-filiere-admin')
+    ->match('/my/administration/gestion-filiere/supprimer', 'utilisateur/admin/gestionFiliere/supprimerFiliere', 'liste-filiere-delete')
+    ->match('/my/administration/gestion-filiere/modifie', 'utilisateur/admin/gestionFiliere/modifierFiliere', 'liste-filiere-modifie')
+    ->match('/my/administration/gestion-filiere/ajouter', 'utilisateur/admin/gestionFiliere/ajouterFiliere', 'liste-filiere-ajouter')
+    
     /* API */
     ->match('/my/api/liste-fichier-presence', 'API/API_fichier_liste_presence', 'api-liste-classe')
     ->match('/my/api/liste-creneaux', 'API/API_liste_creneaux', 'api-liste-filiere')

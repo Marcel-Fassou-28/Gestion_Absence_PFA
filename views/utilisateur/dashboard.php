@@ -407,6 +407,7 @@ $currentTime = $date->format('H:i:s');
                     <li><a href="<?= $router->url('liste-professeur').'?listprof=1&p=0'?>">Gestion des professeurs</a></li>
                     <li><a href="<?= $router->url('gestion-creneau').'?listprof=1&p=0' ?>">Gestion des Créneaux</a></li>
                     <li><a href="<?= $router->url('liste-matiere-admin').'?matiere=1&p=0'?>">Gestion des Matieres et des Cours</a></li>
+                    <li><a href="<?= $router->url('liste-filiere-admin').'?listprof=1&p=0'?>">Gestion des filiere</a></li>
                 </ul>
             </section>
         </div>
