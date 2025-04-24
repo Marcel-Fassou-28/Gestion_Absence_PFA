@@ -16,25 +16,32 @@ function encodindCIN($cin) {
     return  hash_hmac('sha256', $cin, $secretKey);
 }
 
-if (isset($_SESSION)) {
-    $pdo = Connection::getPDO();
-    $table = new UserTable($pdo);
-    $academic = new ProfessorTable($pdo);
-    $student = new EtudiantTable($pdo);
-    $studentFiliere = $student->getFiliere($_SESSION['id_user']);
+$pdo = Connection::getPDO();
+$table = new UserTable($pdo);
+$academic = new ProfessorTable($pdo);
+$student = new EtudiantTable($pdo);
+$studentFiliere = $student->getFiliere($_SESSION['id_user']);
 
-    $user = $table->getIdentification($_SESSION['id_user']);
-    $academic_info = [
-        'matiere' => $academic->getMatiere($_SESSION['id_user']),
-        'filiere' => $academic->getFiliere($_SESSION['id_user'])
-    ];
-
-}
+$user = $table->getIdentification($_SESSION['id_user']);
+$academic_info = [
+    'matiere' => $academic->getMatiere($_SESSION['id_user']),
+    'filiere' => $academic->getFiliere($_SESSION['id_user'])
+];
 
 ?>
 
 
 <div class="container profil-interface">
+    <?php if(isset($_GET['success']) && $_GET['success'] == '1'): ?>
+        <div class="alert alert-success">
+            Vos informations ont été changée avec succès
+        </div>
+    <?php elseif (isset($_GET['success']) && $_GET['success'] == '0') : ?>
+        <div class="alert alert-danger">
+            Vos informations n'ont pas pu etre changer avec succès
+        </div>
+    <?php endif ?>
+    
     <div class="image-section">
         <img src="<?= $router->url('serve-photo', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]).'?id_user='.$_SESSION['id_user'] ?>" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
         <h3><?= htmlspecialchars($user->getRole() . ' ' . $user->getNom()) ?></h3>

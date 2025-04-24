@@ -14,6 +14,7 @@ $tableProf = new ProfessorTable($pdo);
 $tableProfCurrent = new CurrentInfo($pdo);
 
 $classe = $tableProfCurrent->getCurrentClasse($cinProf)->getNomClasse();
+$matiere = $tableProfCurrent->getCurrentMatiere($cinProf)->getNomMatiere();
 $listPresence = new ListePresence();
 $success = null;
 
@@ -22,7 +23,7 @@ if (!empty($_POST)) {
     $tmpName = $_FILES['absence-list']['tmp_name'];
     $fileSize = $_FILES['absence-list']['size'];
 
-    $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'heic','pdf'];
+    $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'heic'];
     $extension = strtolower(pathinfo($_FILES['absence-list']['name'], PATHINFO_EXTENSION));
 
     if (in_array($extension, $extensionsAutorisees) && $fileSize <= 5000000) {
@@ -36,6 +37,7 @@ if (!empty($_POST)) {
         $listPresence->setNomFichierPresence($nouveauNom);
         $listPresence->setCINProf($cinProf);
         $listPresence->setClasse($classe);
+        $listPresence->setMatiere($matiere);
 
         if(move_uploaded_file($tmpName, $destination) && $tableProf->sendListPresence($listPresence)) {
             $success = 1;

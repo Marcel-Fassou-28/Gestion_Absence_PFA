@@ -538,3 +538,64 @@ main {
         padding: 4px;
     }
 }
+
+.select-nbr-annee {
+    width: 90%;
+    padding: 10px 15px;
+    font-weight: 550;
+    border: 1px solid #333;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    appearance: none;
+}
+
+.select-nbr-annee option{
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.select-nbr-annee:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.select-nbr-annee:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.btn-show-file {
+    width: 90%;
+    margin-bottom: .5rem;
+
+    button {
+        width: 100%;
+        background-color: var(--navbar-color);
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        padding: 7px 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+        background-color: var(--bg-btn);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    button:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    }
+    
+}
+
+.presence-file-show-img {
+    display: none;
+}

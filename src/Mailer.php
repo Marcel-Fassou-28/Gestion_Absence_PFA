@@ -100,7 +100,7 @@ class Mailer {
             $this->mailer->send();
             return true;
         } catch (Exception $e) {
-            throw new Exception('Échec de l’envoi de l’email : ' . $this->mailer->ErrorInfo);
+            return false;
 
         } finally {
             // Réinitialiser les destinataires pour éviter les envois multiples
@@ -167,15 +167,14 @@ class Mailer {
             $this->mailer->send();
             return true;
         } catch (Exception $e) {
-            throw new Exception('Échec de l’envoi de l’email : ' . $this->mailer->ErrorInfo);
+            return false;
         } finally {
             // Réinitialiser les destinataires
             $this->mailer->clearAddresses();
         }
     }
 
-    public function emailChangeMail(string $destinataire, string $name):bool {
-        $confirmationLink = "";
+    public function emailChangeMail(string $destinataire, string $name, string $confirmationLink):bool {
         try {
             // Définir le destinataire
             $this->mailer->addAddress($destinataire);
@@ -229,7 +228,74 @@ class Mailer {
             $this->mailer->send();
             return true;
         } catch (Exception $e) {
-            throw new Exception('Échec de l’envoi de l’email : ' . $this->mailer->ErrorInfo);
+            return false;
+        } finally {
+            // Réinitialiser les destinataires
+            $this->mailer->clearAddresses();
+        }
+    }
+
+
+    /**
+     * Envoie un email de notification pour confirmer le changement de mot de passe
+     *
+     * @param string $destinataire Email du destinataire
+     * @param string $name Nom de l'utilisateur
+     * @return bool Retourne true si l'envoi réussit, false sinon
+     * @throws Exception Si l'email est invalide ou l'envoi échoue
+     */
+    public function emailChangedConfirmationMail(string $destinataire, string $name): bool
+    {
+
+        try {
+            // Définir le destinataire
+            $this->mailer->addAddress($destinataire);
+
+            // Définir le sujet
+            $this->mailer->Subject = 'Votre email a été modifié';
+
+            // Corps HTML
+            $this->mailer->Body = '
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Arial, sans-serif; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px #1c1d1e33;">
+                <tr>
+                    <td align="center" bgcolor="#363753" style="padding: 30px 20px; background: linear-gradient(180deg, #363753 0%, #1c1d1e 100%);">
+                        <h1 style="color: #ffffff; font-size: 26px; font-weight: 600; margin: 0; letter-spacing: 0.5px;">Mot de passe modifié</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 40px 25px;">
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                            Bonjour ' . htmlspecialchars($name) . ',
+                            <br><br>
+                            Nous vous informons que l\'email associé à votre compte a été modifié avec succès.
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                            Si vous avez effectué cette modification, aucune action n’est nécessaire. Si vous pensez que cette modification n’a pas été initiée par vous, veuillez contacter notre support immédiatement à <a href="mailto:projetpfa2025.hmc@gmail.com" style="color: #8bb0f0; text-decoration: underline; font-weight: 500;">support@gaensaj.com</a>.
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 14px; line-height: 22px; margin: 20px 0 0; opacity: 0.8;">
+                            Cordialement,<br>
+                            L’équipe de GAENSAJ
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" bgcolor="#363753" style="padding: 15px; background-color: #363753;">
+                        <p style="color: #ffffff; font-size: 12px; line-height: 18px; margin: 0; opacity: 0.7;">
+                            Vous avez reçu cet email car l\'email de votre compte a été modifié.<br>
+                            © 2025 GAENSAJ. Tous droits réservés.
+                        </p>
+                    </td>
+                </tr>
+            </table>';
+
+            // Corps texte brut
+            $this->mailer->AltBody = 'Bonjour ' . htmlspecialchars($name) . ',\n\nNous vous informons que l\'email associé à votre compte a été modifié avec succès.\n\nSi vous avez effectué cette modification, aucune action n’est nécessaire. Si vous pensez que cette modification n’a pas été initiée par vous, veuillez contacter notre support immédiatement à support@gaensaj.com.\n\nCordialement,\nL’équipe de GAENSAJ';
+
+            // Envoyer l'email
+            $this->mailer->send();
+            return true;
+        } catch (Exception $e) {
+            return false;
         } finally {
             // Réinitialiser les destinataires
             $this->mailer->clearAddresses();

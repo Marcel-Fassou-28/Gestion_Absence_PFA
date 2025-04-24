@@ -88,3 +88,12 @@
         font-size: 0.9;
     }
 }
+
+#cinContainer {
+    width: 100%;
+
+}
+
+#cinContainer > div {
+    width: 100%;
+}

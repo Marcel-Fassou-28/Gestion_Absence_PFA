@@ -397,6 +397,7 @@ $currentTime = $date->format('H:i:s');
                     <li><a href="<?= $router->url('justification'). '?listprof=1&p=0' ?>">Justificatifs</a></li>
                     <li><a href="<?= $router->url('liste-presence-soumis') . '?listprof=1&p=0'?>">Liste de Presence Soumis</a></li>
                     <li><a href="<?= $router->url('historikAbscences') .'?listprof=1&p=0' ?>">Absence des Etudiants</a></li>
+                    <li><a href="<?= $router->url('gestion-creneau').'?listprof=1&p=0' ?>">Gestion des Créneaux</a></li>
                     <li><a href="<?= $router->url('liste-matiere-admin').'?matiere=1&p=0'?>">Gestion des Matieres et des Cours</a></li>
                 </ul>
             </section>
@@ -407,9 +408,8 @@ $currentTime = $date->format('H:i:s');
                     <li><a href="<?= $router->url('liste-etudiants').'?listprof=1&p=0' ?>">Gestion des étudiants</a></li>
                     <li><a href="<?= $router->url('liste-professeur').'?listprof=1&p=0'?>">Gestion des professeurs</a></li>
                     <li><a href="<?= $router->url('liste-des-admin').'?admin=1&p=0'?>">Gestion des Administrateurs</a></li>
-                    <li><a href="<?= $router->url('gestion-creneau').'?listprof=1&p=0' ?>">Gestion des Créneaux</a></li>
                     <li><a href="<?= $router->url('gestion-classe').'?classe=1&p=0' ?>">Gestion des Classes</a></li>
-                    <li><a href="<?= $router->url('liste-filiere-admin').'?listprof=1&p=0'?>">Gestion des filiere</a></li>
+                    <li><a href="<?= $router->url('liste-filiere-admin').'?listprof=1&p=0'?>">Gestion des filières</a></li>
                 </ul>
             </section>
         </div>
@@ -440,11 +440,11 @@ $currentTime = $date->format('H:i:s');
     margin-right: 0.5rem;
 }
 .historic-list li:nth-child(2) a::before {
-    content: '\1F4C8'; 
+    content: "\1F9D1\200D\1F3EB"; 
     margin-right: 0.5rem;
 }
 .historic-list li:nth-child(4) a::before {
-    content: '\1F4C5'; 
+    content: "\1F5C2"; 
     margin-right: 0.5rem;
 }
 .historic-list li:nth-child(3) a::before {
@@ -452,11 +452,15 @@ $currentTime = $date->format('H:i:s');
     margin-right: 0.5rem;
 }
 .historic-list li:nth-child(5) a::before {
-    content: '\1F4C5'; 
+    content: '\1F4DA'; 
     margin-right: 0.5rem;
 }
 .use-link-list li:nth-child(5) a::before {
     content: '\1F393'; 
+    margin-right: 0.5rem;
+}
+.use-link-list li:nth-child(6) a::before {
+    content: "\1F4DA"; 
     margin-right: 0.5rem;
 }
 </style>

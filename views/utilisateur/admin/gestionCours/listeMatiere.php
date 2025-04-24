@@ -9,6 +9,9 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
     exit();
 }
 
+$line = 20;
+$offset = $_GET['p'] * $line;
+
 use App\Connection;
 use App\Admin\StatisticAdmin;
 
@@ -25,13 +28,14 @@ if(!empty($_POST) && $_POST['submit-first'] == 'Trier') {
     $classes = $_POST['classe'] ?? '';
 
     if($filieres != '') {
-        $allMatiere = $adminTable->getAllMatiereByFilieres($filieres);
+        $allMatiere = $adminTable->getAllMatiereByFilieres($filieres, $line, $offset);
 
     } elseif($filieres != '' && $classes != '') {
-        $allMatiere = $adminTable->getAllMatiereByFilieresClasses($filieres, $classes);
+        $allMatiere = $adminTable->getAllMatiereByFilieresClasses($filieres, $classes, $line, $offset);
     }
 }
 
+$n = count($allMatiere);
 ?>
 <div class="prof-list">
 
@@ -114,6 +118,16 @@ if(!empty($_POST) && $_POST['submit-first'] == 'Trier') {
 
         </table>
     </div>
+    <?php
+    // variable pour compter le nombre de page 
+    //pour aficher le nombre total de page avec ou sans tri 
+    $nbrpage = ceil($n / $line);
+    //boucle d'affichage des numero de page 
+    for ($i = 0; $i < $nbrpage; ) { ?>
+
+        <a href="?<?= $adminTable->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
+    }
+    ?>
 </div>
 
 <script>

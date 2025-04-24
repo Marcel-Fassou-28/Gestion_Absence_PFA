@@ -9,6 +9,7 @@ namespace App\Model;
  * @property string $cinProf
  * @property string $date
  * @property string $classe
+ * @property string $matiere
  * @property string $nomFichierPresence
  */
 class ListePresence {
@@ -26,6 +27,11 @@ class ListePresence {
      * @var string $classe
      */
     protected $classe;
+
+    /**
+     * @var string $matiere
+     */
+    protected $matiere;
     
     /**
      * @var string $cinProf
@@ -148,5 +154,12 @@ class ListePresence {
      */
     public function setNomFichierPresence(string $nomFichierPresence) {
         $this->nomFichierPresence = $nomFichierPresence;
+    }
+
+    public function getMatiere() {
+      return $this->matiere;
+    }
+    public function setMatiere($value) {
+      $this->matiere = $value;
     }
 }

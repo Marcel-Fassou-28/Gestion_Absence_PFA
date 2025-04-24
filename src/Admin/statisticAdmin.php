@@ -16,6 +16,18 @@ use App\Model\Utils\Admin\MatiereProf;
 class StatisticAdmin extends Table {
 
     /**
+     * Cette methode permet generer une url avec comme un formulaire soumit avec get
+     * 
+     * @param mixed $col
+     * @param mixed $val
+     * @return string
+     */
+    public function test($col, $val): string
+    {
+        return http_build_query(array_merge($_GET, [$col => $val]));
+    }
+
+    /**
      * Cette méthode renvoi les statistiques des différentes filières
      * Enseignées à l'école (Nom filière, Effectifs, Nom d'Absents)
      * 
@@ -142,14 +154,25 @@ class StatisticAdmin extends Table {
      * à travers le nom d'une filiere
      * 
      * @param string $nomFiliere
+     * @param int $line Pour la pagination
+     * @param int $offset Pour la pagination
      * @return array
      */
-    public function getAllMatiereByFilieres(string $nomFiliere):?array {
-        $query = $this->pdo->prepare('
+    public function getAllMatiereByFilieres(string $nomFiliere, int $line = 0,int $offset= 0):?array {
+        if($line !== 0) {
+            $query = $this->pdo->prepare('
             SELECT m.idMatiere ,m.nomMatiere, p.cinProf, p.nom as nomProf, p.prenom as prenomProf, c.nomClasse FROM professeur p 
             JOIN matiere m ON m.cinProf = p.cinProf JOIN classe c ON m.idClasse = c.idClasse JOIN 
-            filiere f  ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :nomFiliere
+            filiere f  ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :nomFiliere LIMIT '. $line . ' OFFSET ' . $offset . ' 
         ');
+        } else {
+            $query = $this->pdo->prepare('
+            SELECT m.idMatiere ,m.nomMatiere, p.cinProf, p.nom as nomProf, p.prenom as prenomProf, c.nomClasse FROM professeur p 
+            JOIN matiere m ON m.cinProf = p.cinProf JOIN classe c ON m.idClasse = c.idClasse JOIN 
+            filiere f  ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :nomFiliere 
+        ');
+        }
+
         $query->execute([
             'nomFiliere' => $nomFiliere
         ]);
@@ -165,15 +188,26 @@ class StatisticAdmin extends Table {
      * 
      * @param string $nomFiliere
      * @param string $nomClasse
+     * @param int $line Pour la pagination
+     * @param int $offset Pour la pagination
      * @return array
      */
-    public function getAllMatiereByFilieresClasses(string $nomFiliere, string $nomClasse):?array {
+    public function getAllMatiereByFilieresClasses(string $nomFiliere, string $nomClasse, int $line , int $offset):?array {
+        if ($line !== 0) {
+            $query = $this->pdo->prepare('
+            SELECT m.idMatiere ,m.nomMatiere, p.cinProf, p.nom as nomProf, p.prenom as prenomProf, c.nomClasse 
+            FROM filiere f JOIN classe c ON f.idFiliere = c.idFiliere 
+            JOIN matiere m ON c.idClasse = m.idClasse JOIN professeur p ON m.cinProf = p.cinProf 
+            WHERE f.nomFiliere = :nomFiliere AND c.nomClasse = :nomClasse LIMIT ' . $line . ' OFFSET ' . $offset . ' 
+        ');
+        } else {
         $query = $this->pdo->prepare('
             SELECT m.idMatiere ,m.nomMatiere, p.cinProf, p.nom as nomProf, p.prenom as prenomProf, c.nomClasse 
             FROM filiere f JOIN classe c ON f.idFiliere = c.idFiliere 
             JOIN matiere m ON c.idClasse = m.idClasse JOIN professeur p ON m.cinProf = p.cinProf 
             WHERE f.nomFiliere = :nomFiliere AND c.nomClasse = :nomClasse
         ');
+        }
         $query->execute([
             'nomFiliere' => $nomFiliere,
             'nomClasse' => $nomClasse
