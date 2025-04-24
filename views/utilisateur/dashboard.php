@@ -409,6 +409,7 @@ $currentTime = $date->format('H:i:s');
                     <li><a href="<?= $router->url('liste-des-admin').'?admin=1&p=0'?>">Gestion des Administrateurs</a></li>
                     <li><a href="<?= $router->url('gestion-creneau').'?listprof=1&p=0' ?>">Gestion des Créneaux</a></li>
                     <li><a href="<?= $router->url('gestion-classe').'?classe=1&p=0' ?>">Gestion des Classes</a></li>
+                    <li><a href="<?= $router->url('liste-filiere-admin').'?listprof=1&p=0'?>">Gestion des filiere</a></li>
                 </ul>
             </section>
         </div>
