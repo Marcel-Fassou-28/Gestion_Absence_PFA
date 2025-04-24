@@ -46,6 +46,7 @@ if (!empty($_POST)) {
             $errorMessage = "Erreur lors de l'envoi.";
         }
     } else {
+        $success = 0;
         $errorMessage = "Fichier invalide : extension non autorisée ou taille > 5 Mo.";
     }
 }

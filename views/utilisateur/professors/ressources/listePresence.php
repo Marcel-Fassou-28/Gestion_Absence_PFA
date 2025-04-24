@@ -29,7 +29,7 @@ $dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $
 $dateSql = $date->format('Y-m-d H:i:s');
 $errorMessage = "";
 $success = null;
-    
+/*    
 if (!empty($_POST)) {
     var_dump($_POST);
     exit();
@@ -45,10 +45,10 @@ if (!empty($_POST)) {
         $nouveauNom = time() .uniqid('presence', true). '.' . $extension;
         $destination = 'uploads/presence/' . $nouveauNom;
 
-        /**
+        *//**
         * Definition de la liste d'objet 
         */
-        $listPresence->setNomFichierPresence($nouveauNom);
+        /*$listPresence->setNomFichierPresence($nouveauNom);
         $listPresence->setCINProf($cinProf);
         $listPresence->setClasse($classe);
 
@@ -62,10 +62,19 @@ if (!empty($_POST)) {
         $errorMessage = "Fichier invalide : extension non autorisée ou taille > 5 Mo.";
     }
 }
-
+*/
 ?>
 
 <div class="presence">
+    <?php if(isset($_GET['success']) && $_GET['success'] == '1'): ?>
+        <div class="alert alert-success">
+            Votre fichier à été emis avec success
+        </div>
+    <?php elseif (isset($_GET['success']) && $_GET['success'] == '0'): ?>
+        <div class="alert alert-danger">
+            Votre fichier n'a pas été émis
+        </div>
+    <?php else: ?><?php endif ?>
     <div class="intro">
         <h1>Faire la présence</h1>
     </div>

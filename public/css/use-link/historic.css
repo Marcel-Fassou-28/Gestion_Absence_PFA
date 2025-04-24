@@ -106,6 +106,12 @@ main {
     margin: 1.5rem 0;
 }
 
+.subject-group select option,
+.level-group select option {
+    color: #333;
+    font-weight: 600;
+}
+
 .subject-group select,
 .level-group select {
     width: 100%;
@@ -189,7 +195,6 @@ main {
     padding: 10px;
     font-weight: 600;
     font-size: 1rem;
-    text-transform: uppercase;
 }
 
 .table-container tbody tr td {
@@ -321,6 +326,7 @@ main {
     .table-container thead tr th,
     .table-container tbody tr td {
         padding: 6px;
+        font-size: 0.85rem;
     }
 
     .absences-list li {

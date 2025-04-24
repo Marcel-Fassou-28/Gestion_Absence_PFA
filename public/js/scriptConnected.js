@@ -123,12 +123,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+delteBtn = document.querySelectorAll('#delete');
+if (delteBtn) {
+    delteBtn.forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert("Vous allez supprimer cet element");
+        })
+    });
+}
+
 // Pour ouvrire le formulaire du message
 document.addEventListener("DOMContentLoaded", function() {
     const btn = document.querySelector(".btn-nouveau-message"); // bonne classe
     const form = document.querySelector(".new-msg"); 
 
-    btn.addEventListener("click", function () {
+    btn.addEventListener('click', function () {
         if (form.style.display === "none" || form.style.display === "") {
             form.style.display = "flex"; 
         } else {

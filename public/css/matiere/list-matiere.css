@@ -1,0 +1,562 @@
+main {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+/* Style du conteneur principal */
+.prof-list {
+    max-width: 90%;
+    margin: 0 auto;
+    background-color: #1c1d1e88;
+    border-radius: 10px;
+    padding: 2%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.intro-prof-matiere {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2%;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.intro-prof-matiere h1 {
+    color: var(--text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* Groupe de date */
+.date-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.date-group span {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 550;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: opacity 0.2s ease;
+}
+
+
+.date-group span:hover {
+    opacity: 0.9;
+}
+
+.date-group span:first-child::before {
+    content: '\1F4C5'; /* Icône calendrier */
+    font-size: 1rem;
+}
+
+.date-group span:last-child::before {
+    content: '\1F551'; /* Icône horloge */
+    font-size: 1rem;
+}
+
+.hr {
+    border-top: 1px solid var(--text-color);
+    opacity: 0.3;
+    margin: 1rem 0;
+}
+
+.form-tri-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2%;
+}
+
+.tri-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 1.5rem 0;
+}
+
+.list-departement select option,
+.list-filiere select option,
+.list-classe select option{
+   color: #333;
+   font-size: 1rem;
+   font-weight: 600;
+}
+
+.list-departement select,
+.list-filiere select ,
+.list-classe select {
+    width: 100%;
+    padding: 10px 15px;
+    font-weight: 550;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.list-departement select:hover,
+.list-filiere select:hover ,
+.list-classe select:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.list-departement select:focus,
+.list-filiere select:focus ,
+.list-classe select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Bouton de soumission */
+.submit-group {
+    display: flex;
+    justify-content: center;
+}
+
+.submit-btn {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+   
+.presence-container-file {
+    display: flex;
+    flex-direction: column;
+}
+
+.professor-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 0 3%;
+    margin: 1.5rem 0;
+}
+
+.prof-group,
+.classe-group,
+.dateprof-group {
+    display: flex;
+    justify-content: center;
+}
+
+.prof-group span,
+.dateprof-group span,
+.classe-group span {
+    background-color: #fff;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    max-width: 200px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.prof-group span:hover,
+.dateprof-group span:hover,
+.classe-group span:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+
+.presence-file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--text-color);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 86%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.presence-file-show {
+    width: 100%;
+    max-width: 1000px; /* Taille maximale de l'image */
+}
+
+.presence-file-show img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain; /* Affiche l'image entière sans la couper */
+    max-height: 750px; /* Hauteur maximale pour éviter les images trop grandes */
+}
+
+
+@media (max-width: 768px) {
+    .presence-file {
+        padding: 15px;
+    }
+
+    .presence-file-show {
+        max-width: 100%;
+    }
+
+    .presence-file-show img {
+        max-height: 500px; /* Réduit la hauteur sur mobile */
+    }
+}
+
+.list-tri-table-justificatif {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.list-tri-table-justificatif table {
+    width: 100%;
+    background-color: var(--text-color);
+    border-collapse: collapse;
+    border-radius: 0px 0px 0 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.list-tri-table-justificatif thead tr th {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.list-tri-table-justificatif tbody tr td {
+    padding: 15px;
+    border-bottom: 1px solid var(--navbar-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+
+.list-tri-table {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.list-tri-table table {
+    width: 100%;
+    background-color: var(--text-color);
+    border-collapse: collapse;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.list-tri-table thead tr th {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.list-tri-table thead tr th {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.list-tri-table tbody tr td {
+    padding: 8px;
+    border: 1px solid var(--navbar-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.btn1, .btn2{
+    color: var(--text-color);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-weight: 600;
+    background-color: var(--navbar-color);
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+.btn1:hover, .btn2:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-ajout:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.btn2{
+    margin-left: 12px;
+    background-color: red;
+}
+
+.btn-ajout{
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+    display: block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-ajout:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-ajout:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.page{
+    background-color: var(--bg-btn);
+}
+
+
+/* Styles pour mobile */
+@media screen and (max-width: 768px) {
+    .prof-list {
+        max-width: 95%;
+        padding: 3%;
+    }
+
+    .intro-prof-matiere {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 2%;
+        gap: 12px;
+    }
+
+    .intro-prof-matiere h1 {
+        font-size: 1.6rem;
+    }
+
+    .date-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .date-group span {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+        max-width: 200px;
+    }
+
+    .form-tri-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 0 2%;
+    }
+
+    .list-classe select,
+    .list-departement select,
+    .list-filiere select {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        background-position: right 8px center;
+    }
+
+    .submit-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        max-width: 250px;
+    }
+
+    .list-tri-table table {
+        font-size: 0.85rem;
+    }
+
+    .list-tri-table thead tr th,
+    .list-tri-table tbody tr td {
+        padding: 6px;
+        font-size: 0.85rem;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    .intro-prof-matiere h1 {
+        font-size: 1.4rem;
+    }
+
+    .date-group span {
+        font-size: 0.85rem;
+        padding: 4px 8px;
+        max-width: 180px;
+    }
+
+    .list-classe select,
+    .list-departement select,
+    .list-filiere select {
+        font-size: 0.85rem;
+        padding: 7px 10px;
+        background-position: right 7px center;
+    }
+
+    .submit-btn {
+        padding: 7px 14px;
+        font-size: 0.85rem;
+        max-width: 220px;
+    }
+
+    .list-tri-table table {
+        min-width: 700px;
+    }
+}
+
+
+@media screen and (max-width: 400px) {
+    .prof-list {
+        max-width: 100%;
+        border-radius: 0;
+        padding: 4%;
+    }
+
+    .intro-prof-matiere h1 {
+        font-size: 1.2rem;
+    }
+
+    .date-group span {
+        font-size: 0.8rem;
+        padding: 3px 6px;
+        max-width: 150px;
+    }
+
+    .list-departement select,
+    .list-classe select,
+    .list-filiere select {
+        font-size: 0.8rem;
+        padding: 6px 8px;
+        background-position: right 6px center;
+    }
+
+    .submit-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        max-width: 200px;
+    }
+
+    .list-tri-table table {
+        font-size: 0.8rem;
+    }
+
+    .list-tri-table thead tr th,
+    .list-tri-table tbody tr td {
+        padding: 4px;
+    }
+}
+
+.select-filiere option{
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+}
+
+.select-niveau option {
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+}
+
+.select-filiere, .select-niveau {
+    width: 100%;
+    padding: 10px 15px;
+    font-weight: 550;
+    border: none;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.select-filiere:hover,
+.select-niveau:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.select-filiere:focus,
+.select-niveau:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}

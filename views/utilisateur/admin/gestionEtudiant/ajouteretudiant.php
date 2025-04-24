@@ -12,10 +12,104 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Admin\adminTable;
 use App\connection;
+use App\Model\Classe;
 
+$date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
+$dateSql = $date->format('Y-m-d H:i');
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
+$success_etudiant = null;
+$error = 0;
+
+if (!empty($_POST)) {
+    $role = 'etudiant';
+    $cinEtudiant = $_POST['cin'];
+    $nomEtudiant = $_POST['nom'];
+    $prenomEtudiant = $_POST['prenom'];
+    $emailEtudiant = $_POST['email'];
+    $cneEtudiant = $_POST['cne'];
+
+    $classe = $_POST['classe'];
+    $query = $pdo->prepare('SELECT * FROM classe WHERE nomClasse = :nomClasse');
+    $query->execute(['nomClasse' => $classe]);
+    $query->setFetchMode(\PDO::FETCH_CLASS, Classe::class);
+    $output = $query->fetch();
+
+    if ($output) {
+        $idClasse = $output->getIDClasse();
+        $username = $cinEtudiant . '.' . $nomEtudiant;
+        $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+
+        if ($result->AddStudentUser($cinEtudiant, $nomEtudiant, $prenomEtudiant,  $emailEtudiant, $username, $password, $cne, $idClasse, $role)) {
+            $success_etudiant = 1;
+        } else {
+            $success_etudiant = 0;
+        }
+        header('location: ' . $router->url('liste-etudiants').'?listprof=1&p=0&success_etudiant='. $success_etudiant);
+        exit();
+    }else {
+        $error = 1;
+    }
+
+}
 ?>
+
+
+<div class="prof-list">
+    <?php if ($error === 1): ?>
+        <div class="alert alert-danger">
+            Entrer un nom de classe valide comme IITE-1, CCN-1, ISIC-1, AP-1, etc...
+        </div>
+    <?php endif ?>
+    <div class="intro-prof-list">
+        <h1> Ajouter un professeur</h1>
+        <div class="date-group">
+            <span><?= htmlspecialchars($dateSql) ?></span>
+        </div>
+    </div>
+    <div class="hr"></div>
+    <div class="form-modifie-container">
+        <form action="" class="creneau-modifie container" method="POST">
+            <section class="edit-creneau-section">
+                <div>
+                    <label for="cin">CIN</label>
+                    <input type="text" name="cin" value="" required>
+                </div>
+                <div>
+                    <label for="cne">CNE</label>
+                    <input type="text" name="cne" value="" required>
+                </div>
+                <div>
+                    <label for="classe">Classe</label>
+                    <input type="text" name="classe" value="" placeholder="Exemple: IITE-1" required>
+                </div>
+                <div>
+                    <label for="nom">Nom</label>
+                <input type="text" name="nom" value="" required>
+                </div>
+                <div>
+                    <label for="prenom">Prenom</label>
+                    <input type="text" name="prenom" value="" required>
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" value="" required>
+                </div>
+                <div>
+                    <label for="password">Password par Defaut</label>
+                    <input type="text" name="password" value="" required>
+                </div>
+            </section>
+            <section class="submit-group-creneau">
+                <button type="submit" class="submit-btn-creneau">Ajouter</button>
+                <button class="btn2" onclick= "window.location.href='<?= $router->url('liste-etudiants').'?listprof=1&p=0' ?>'">Annuler</button>
+            </section>
+
+        </form>
+    </div>
+</div>
+
+<!--
 <div class="contains">
 <div class="modif">
     <h2>Entrez les information puis valider</h2>
@@ -54,23 +148,4 @@ $result = new adminTable($pdo);
         </form>
     </div>
 </div>
-</div>
-<?php
-if (!empty($_POST)) {
-    $role = 'etudiant';
-    $cin = $_POST['cin'];
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $email = $_POST['email'];
-    $cne = $_POST['cne'];
-    $idClasse = $_POST['classe'];
-    $username = $cin . '.' . $nom;
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-    if ($result->AddStudentUser($cin, $nom, $prenom,  $email, $username, $password, $cne, $idClasse, $role)) {
-        header('Location: liste-Etudiants');
-        exit;
-    } else {
-        echo "Erreur lors de l'ajout du professeur.";
-    }
-
-}
+</div> -->

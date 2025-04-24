@@ -9,11 +9,13 @@ use App\Model\Classe;
 use App\Model\Etudiant;
 use App\Model\Professeur;
 use App\Model\Absence;
+use App\Model\Creneaux;
 use App\Model\Matiere;
 use App\Model\Utilisateur;
 
 use App\Model\Justificatif;
 use App\Model\ListePresence;
+use App\Model\Utils\Etudiant\UtilisateurEtudiant;
 use App\Professeur\ProfessorTable;
 
 class adminTable extends Table
@@ -47,16 +49,19 @@ class adminTable extends Table
      * @param mixed $class
      * @return array
      */
-    public function getAll(string $table,mixed $class,int $line = 0,int $offset = 0): array
+    public function getAll(string $table, mixed $class, int $line = 0, int $offset = 0): array
     {
         $sql = "SELECT * FROM $table";
-        if ( in_array($table,['etudiant','rofesseur','utilisateur'])){
+        if (in_array($table, ['etudiant', 'professeur', 'utilisateur'])) {
             $sql .= " ORDER BY nom ,prenom DESC";
         }
-        if ($line !== 0){
-            $sql .= " LIMIT ". $line . " OFFSET ".$offset;
+        if ($line !== 0) {
+            $sql .= " LIMIT " . $line . " OFFSET " . $offset;
         }
-        
+        if ($table === "departement") {
+            $sql .= " ORDER BY nomDepartement ASC";
+        }
+
         $query = $this->pdo->prepare($sql);
         $query->execute();
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->$class);
@@ -70,16 +75,59 @@ class adminTable extends Table
      * @param string $departement
      * @return array
      */
-    public function fieldsByDepartement(string $departement): array
+    public function fieldsByDepartement(string $departement, int $line = 0, int $offset = 0): array
     {
-        $query = $this->pdo->prepare('
-            SELECT DISTINCT f.nomFiliere FROM ' . $this->tableFiliere . ' f JOIN ' . $this->tableDepartement . ' d 
+        $query = '
+            SELECT DISTINCT f.nomFiliere,f.alias, f.idFiliere FROM ' . $this->tableFiliere . ' f JOIN ' . $this->tableDepartement . ' d 
             ON d.idDepartement = f.idDepartement WHERE d.nomDepartement = :departement
-        ');
-        $query->execute(['departement' => $departement]);
-        $query->setFetchMode(\PDO::FETCH_CLASS, $this->classFiliere);
-        $result = $query->fetchAll();
+            ORDER BY f.nomFiliere
+        ';
+        if ($line !== 0) {
+            $query .= ' LIMIT ' . $line . ' OFFSET ' . $offset;
+        }
+        $sql = $this->pdo->prepare($query);
+        $sql->execute(['departement' => $departement]);
+        $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classFiliere);
+        $result = $sql->fetchAll();
         return count($result) != 0 ? $result : [];
+    }
+
+    /**
+     * cette methode permet de recuperer l'id d'un departement
+     *  a partir de son nom
+     * @param mixed $name
+     * @return int|null
+     */
+    public function getIdDepartementByName(string $name): ?int
+    {
+        $sql = $this->pdo->prepare('
+        SELECT idDepartement FROM departement 
+        WHERE nomDepartement = :nomDepart
+        ');
+        $sql->execute(['nomDepart' => $name]);
+        $sql->setFetchMode(\PDO::FETCH_ASSOC);
+        $result = $sql->fetch();
+        return empty($result) ? null : $result['idDepartement'];
+
+    }
+
+    /**
+     * cette methode permet de recuperer l'id d'un departement
+     *  a partir de son nom
+     * @param mixed $name
+     * @return void
+     */
+    public function getIdFiliereByName(string $name): ?int
+    {
+        $sql = $this->pdo->prepare('
+        SELECT idFiliere FROM Filiere 
+        WHERE nomFiliere = :nomDepart
+        ');
+        $sql->execute(['nomDepart' => $name]);
+        $sql->setFetchMode(\PDO::FETCH_ASSOC);
+        $result = $sql->fetch();
+        return empty($result) ? null : $result['idFiliere'];
+
     }
 
     /**
@@ -91,13 +139,45 @@ class adminTable extends Table
     public function classByFields(string $filiere): array
     {
         $query = $this->pdo->prepare('
-            SELECT DISTINCT c.nomClasse FROM '. $this->tableClasse . ' c JOIN '. $this->tableFiliere . ' f ON 
+            SELECT DISTINCT c.nomClasse FROM ' . $this->tableClasse . ' c JOIN ' . $this->tableFiliere . ' f ON 
             f.idFiliere = c.idFiliere  WHERE f.nomFiliere = :filiere
         ');
         $query->execute(['filiere' => $filiere]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classClasse);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
+    }
+    /**
+     * cette fonction permet de recuperer
+     * la liste des matieres en fonction d'une classe precise
+     * @param mixed $class
+     * @return void
+     */
+    public function getMatiereByClass($class): array
+    {
+        $sql = 'SELECT m.nomMatiere FROM ' . $this->tableMatiere .
+            ' m JOIN ' . $this->tableClasse . ' c ON 
+        m.idClasse = c.idClasse WHERE c.nomClasse = :nom ';
+        $query = $this->pdo->prepare($sql);
+
+        $query->execute(['nom' => $class]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->classMatiere);
+        $result = $query->fetchALL();
+        return count($result) > 0 ? $result : [];
+    }
+
+    public function findClassByMatiere($matiere): ?string
+    {
+        $sql = '
+        SELECT c.nomClasse as nom FROM matiere m JOIN classe c
+         ON m.idClasse = c.idClasse WHERE m.nomMatiere = :nom
+        ';
+
+        $query = $this->pdo->prepare($sql);
+        $query->execute(['nom' => $matiere]);
+        $query->setFetchMode(\PDO::FETCH_ASSOC);
+        return $query->fetch()['nom'];
+
     }
 
     /**
@@ -107,16 +187,16 @@ class adminTable extends Table
      * @param string $departement
      * @return array
      */
-    public function getprofByDepartement(string $departement,int $line = 0,int $offset = 0): array
+    public function getprofByDepartement(string $departement, int $line = 0, int $offset = 0): array
     {
-        $sql ='
+        $sql = '
             SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' . $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
             p ON m.cinProf = p.cinProf JOIN ' . $this->tableFiliere . ' f ON m.idFiliere = f.idFiliere JOIN ' . $this->tableDepartement . '
             d ON f.idDepartement = d.idDepartement WHERE d.nomDepartement = :departement
         ';
-        
-        if ($line !== 0){
-            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+
+        if ($line !== 0) {
+            $sql .= ' LIMIT ' . $line . ' OFFSET ' . $offset;
         }
         $query = $this->pdo->prepare($sql);
         $query->execute(['departement' => $departement]);
@@ -132,15 +212,15 @@ class adminTable extends Table
      * @param string $filiere
      * @return array
      */
-    public function getProfByFiliere(string $filiere,int $line = 0,int $offset = 0): array
+    public function getProfByFiliere(string $filiere, int $line = 0, int $offset = 0): array
     {
-        $sql ='
-            SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' .$this->tableMatiere . ' m JOIN ' . $this->tableProf . '
+        $sql = '
+            SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' . $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
             p ON m.cinProf = p.cinProf JOIN ' . $this->tableFiliere . ' f ON m.idFiliere = f.idFiliere WHERE  
             f.nomFiliere = :filiere
         ';
-        if ($line !== 0){
-            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+        if ($line !== 0) {
+            $sql .= ' LIMIT ' . $line . ' OFFSET ' . $offset;
         }
         $query = $this->pdo->prepare($sql);
         $query->execute(['filiere' => $filiere]);
@@ -155,16 +235,16 @@ class adminTable extends Table
      * @param string $filiere
      * @return array
      */
-    public function getStudentByFiliere(string $filiere,int $line = 0,int $offset = 0): array
+    public function getStudentByFiliere(string $filiere, int $line = 0, int $offset = 0): array
     {
         $sql = "SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email 
-        FROM " . $this->tableClasse . " c JOIN " . $this->tableEtudiant . 
-        " e ON e.idClasse = c.idClasse JOIN " . $this->tableFiliere .
-        " f ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :filiere ORDER BY e.nom ASC ";
-        
+        FROM " . $this->tableClasse . " c JOIN " . $this->tableEtudiant .
+            " e ON e.idClasse = c.idClasse JOIN " . $this->tableFiliere .
+            " f ON f.idFiliere = c.idFiliere WHERE f.nomFiliere = :filiere ORDER BY e.nom ASC ";
 
-        if ($line !== 0){
-            $sql .= " LIMIT ".$line . " OFFSET ". $offset;
+
+        if ($line !== 0) {
+            $sql .= " LIMIT " . $line . " OFFSET " . $offset;
         }
         $query = $this->pdo->prepare($sql);
         $query->execute(['filiere' => $filiere]);
@@ -181,14 +261,14 @@ class adminTable extends Table
      * @param string $class
      * @param array
      */
-    public function getProfByClass(string $class,int $line = 0,int $offset = 0): array
+    public function getProfByClass(string $class, int $line = 0, int $offset = 0): array
     {
         $sql = '
             SELECT DISTINCT p.idProf,p.cinProf,p.nom,p.prenom,p.email FROM ' . $this->tableMatiere . ' m JOIN ' . $this->tableProf . '
             p ON m.cinProf = p.cinProf JOIN ' . $this->tableClasse . ' c ON m.idClasse = c.idClasse WHERE c.nomClasse = :class
         ';
-        if ($line !== 0){
-            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+        if ($line !== 0) {
+            $sql .= ' LIMIT ' . $line . ' OFFSET ' . $offset;
         }
         $query = $this->pdo->prepare($sql);
         $query->execute(['class' => $class]);
@@ -203,15 +283,15 @@ class adminTable extends Table
      * @param string $class
      * @return array
      */
-    public function getStudentByClass(string $class,int $line = 0,int $offset = 0): array
+    public function getStudentByClass(string $class, int $line = 0, int $offset = 0): array
     {
         $sql = '
             SELECT DISTINCT e.idEtudiant,e.cinEtudiant,e.cne,e.nom,e.prenom,e.email FROM ' .
             $this->tableClasse . ' c JOIN ' . $this->tableEtudiant . ' e ON e.idClasse = c.idClasse WHERE 
             c.nomClasse = :class ORDER BY e.nom ASC 
         ';
-        if ($line !== 0){
-            $sql .= ' LIMIT '.$line . ' OFFSET ' . $offset;
+        if ($line !== 0) {
+            $sql .= ' LIMIT ' . $line . ' OFFSET ' . $offset;
         }
         $query = $this->pdo->prepare($sql);
         $query->execute(['class' => $class]);
@@ -221,16 +301,66 @@ class adminTable extends Table
     }
 
 
-    public function getAllJustificatif(): array
+    public function getAllJustificatif($line = 0, $offset = 0, $idMatiere = 0, $idClasse = 0): array
     {
-        $query = $this->pdo->prepare('
-            SELECT e.nom as nom,e.prenom as prenom, j.dateSoumission as Date_Soumission FROM ' . $this->tableAbsence . ' a JOIN '
-            . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence' . ' JOIN ' . $this->tableEtudiant . ' e ON e.cinEtudiant = a.cinEtudiant
-            ORDER BY e.nom,e.prenom DESC
-        ');
+        $sql = ' 
+        SELECT e.nom as nom,e.prenom as prenom , e.cne as cne, j.dateSoumission as Date_Soumission ,j.idJustificatif as id FROM ' . $this->tableAbsence . ' a JOIN '
+            . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence' . ' JOIN ' . $this->tableEtudiant . ' e ON e.cinEtudiant = a.cinEtudiant ';
+
+        if ($idClasse != 0 || $idMatiere != 0) {
+            $sql .= ' WHERE ';
+            if ($idClasse != 0 && $idMatiere == 0) {
+                $sql .= ' e.idClasse = ' . $idClasse;
+            } else if ($idMatiere != 0 && $idClasse == 0) {
+                $sql .= ' a.idMatiere = ' . $idMatiere;
+            } else {
+                $sql .= ' e.idClasse = ' . $idClasse .
+                    ' AND a.idMatiere = ' . $idMatiere;
+            }
+        }
+
+        $sql .= ' ORDER BY j.dateSoumission DESC';
+
+        if ($line !== 0) {
+            $sql .= ' LIMIT ' . $line . ' OFFSET ' . $offset;
+        }
+
+        $query = $this->pdo->prepare($sql);
         $query->execute();
+        $query->setFetchMode(\PDO::FETCH_ASSOC);
         $result = $query->fetchALL();
         return count($result) != 0 ? $result : [];
+    }
+
+    /**
+     * trouver l'id de la classe a l'aide de son nom 
+     * @param mixed $name
+     * @return int
+     */
+    public function getIdClasseByClasseName($name): ?int
+    {
+        $sql = $this->pdo->prepare('
+            SELECT idClasse FROM classe where nomClasse = :classe
+            ');
+        $sql->execute(['classe' => $name]);
+        $sql->setFetchMode(\PDO::FETCH_ASSOC);
+        return $sql->fetch()['idClasse'];
+    }
+
+    /**
+     * trouver l'id de la matiere a l'aide de son nom
+     * @param mixed $name
+     * @return int
+     */
+    public function getIdMatiereByName($name): ?int
+    {
+        $sql = $this->pdo->prepare('
+            SELECT idMatiere FROM matiere where nomMatiere = :matiere
+            ');
+
+        $sql->execute(['matiere' => $name]);
+        $sql->setFetchMode(\PDO::FETCH_ASSOC);
+        return $sql->fetch()['idMatiere'];
     }
 
 
@@ -243,6 +373,22 @@ class adminTable extends Table
         return count($result) ? $result : [];
     }
 
+    /**
+     * Permet de recuperer les informations d'un professeur à travers son cin
+     * 
+     * @param string $cin
+     * @return Utilisateur
+     */
+    public function getProfesseurByCIN(string $cin): ?Utilisateur
+    {
+        $query = $this->pdo->prepare('SELECT * FROM ' . $this->tableUser . ' WHERE cin = :cin ');
+        $query->execute(['cin' => $cin]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->classUser);
+        $result = $query->fetch();
+
+        return $result ? $result : null;
+    }
+
 
     public function getStudentByCin(string $cin): array
     {
@@ -251,6 +397,25 @@ class adminTable extends Table
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
         $result = $query->fetchALL();
         return count($result) ? $result : [];
+    }
+
+    /**
+     * Cette methode permet de retourner un etudiant et sa classe
+     * 
+     * @param string $cin
+     * @return UtilisateurEtudiant
+     */
+    public function getStudentInfoByCIN(string $cin): ?UtilisateurEtudiant
+    {
+        $query = $this->pdo->prepare(
+            'SELECT u.*, e.cne, c.nomClasse FROM utilisateur u JOIN ' . $this->tableEtudiant . ' e ON u.cin = e.cinEtudiant
+            JOIN classe c ON c.idClasse = e.idClasse WHERE cinEtudiant = :cin '
+        );
+        $query->execute(['cin' => $cin]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, UtilisateurEtudiant::class);
+        $result = $query->fetch();
+
+        return $result ? $result : null;
     }
 
     // les prochaines fonction sont destinees a la gestion des prof et des etudiants
@@ -270,6 +435,7 @@ class adminTable extends Table
                 nom = :nom, prenom = :prenom, email = :email WHERE cinProf = :oldcin';
             $sql2 = 'UPDATE ' . $this->tableUser . ' SET username = :username, 
                 cin = :newcin, nom = :nom, prenom = :prenom, email = :email WHERE cin = :oldcin';
+            $sql3 = 'UPDATE matiere SET cinProf = :newcin WHERE cinProf = :oldcin';
             $query = $this->pdo->prepare($sql1);
             $query->execute([
                 'newcin' => $newcin,
@@ -280,6 +446,9 @@ class adminTable extends Table
             ]);
             $query = $this->pdo->prepare($sql2);
             $query->execute($param);
+
+            $query2 = $this->pdo->prepare($sql3);
+            $query2->execute(['newcin' => $newcin, 'oldcin' => $oldCin]);
 
             $this->pdo->commit();
             return true;
@@ -310,13 +479,13 @@ class adminTable extends Table
     public function AddProfUser($cin, $nom, $prenom, $email, $username, $password, $role): bool
     {
         $sql1 = 'INSERT INTO ' . $this->tableProf . ' (cinProf, nom, prenom, email) VALUES (?,?,?,?)';
-        $sql2 = 'INSERT INTO ' . $this->tableUser . ' (username, cin, nom, prenom, email, password,role) VALUES (?,?,?,?,?,?,?)';
+        $sql2 = 'INSERT INTO ' . $this->tableUser . ' (username, cin, nom, prenom, email, password,role, nomPhoto) VALUES (?,?,?,?,?,?,?, ?)';
         try { {
                 $this->pdo->beginTransaction();
                 $query = $this->pdo->prepare($sql1);
                 $query->execute([$cin, $nom, $prenom, $email]);
                 $query = $this->pdo->prepare($sql2);
-                $query->execute([$username, $cin, $nom, $prenom, $email, $password, $role]);
+                $query->execute([$username, $cin, $nom, $prenom, $email, $password, $role, 'avatar.png']);
                 $this->pdo->commit();
                 return true;
             }
@@ -363,9 +532,18 @@ class adminTable extends Table
                 nom = :nom, prenom = :prenom, email = :email,cne = :cne, idClasse = :idClasse WHERE cinEtudiant = :oldcin';
             $sql2 = 'UPDATE ' . $this->tableUser . ' SET username = :username, 
                 cin = :newcin, nom = :nom, prenom = :prenom, email = :email WHERE cin = :oldcin';
+
+            $sql3 = 'UPDATE ' . $this->tableAbsence . ' 
+            SET cinEtudiant = :newcin WHERE cinEtudiant = :oldcin';
             $query = $this->pdo->prepare($sql2);
             $query->execute($param);
-            echo "etudiant modifier";
+
+            $query = $this->pdo->prepare($sql3);
+            $query->execute([
+                'oldcin' => $oldCin,
+                'newcin' => $newcin
+            ]);
+
 
 
             $query = $this->pdo->prepare($sql1);
@@ -398,9 +576,12 @@ class adminTable extends Table
             $this->pdo->beginTransaction();
             $sql1 = 'DELETE FROM ' . $this->tableEtudiant . ' WHERE cinEtudiant = :cin';
             $sql2 = 'DELETE FROM ' . $this->tableUser . ' WHERE cin = :cin';
-            $query = $this->pdo->prepare($sql1);
+            $sql3 = 'DELETE FROM ' . $this->tableAbsence . ' WHERE cinEtudiant = :cin';
+            $query = $this->pdo->prepare($sql3);
             $query->execute(['cin' => $cin]);
             $query = $this->pdo->prepare($sql2);
+            $query->execute(['cin' => $cin]);
+            $query = $this->pdo->prepare($sql1);
             $query->execute(['cin' => $cin]);
 
             $this->pdo->commit();
@@ -410,8 +591,110 @@ class adminTable extends Table
             return false;
         }
     }
+    /**
+     * cette methode permet d'ajouter une filiere 
+     * et de creer le nombre de creer le nombre de classe qui permetra de completer 
+     * les annes d'etude de la filiere
+     * @param string $nom nom de la fliere
+     * @param string $alias alias de la filiere
+     * @param int $departement departement auquel sera associer la filiere
+     * @return bool
+     */
+    public function addFiliere(int $idFiliere, string $nom, string $alias, int $departement, $AnneeEtude): bool
+    {
+        try {
+            $this->pdo->beginTransaction();
+            $sql = "
+            INSERT INTO filiere (nomFiliere, alias,idDepartement)
+            Values(?,?,?)";
+            $query = $this->pdo->prepare($sql);
+            $query->execute([$nom, $alias, $departement]);
+
+            for ($i = 1; $i <= $AnneeEtude; $i++):
+                $sql = "
+                INSERT INTO classe (nomClasse, idNiveau,idFiliere)
+                VALUES (?,?,?)";
+                $query = $this->pdo->prepare($sql);
+                $query->execute([$alias . "-" . $i, $i, $idFiliere]);
+            endfor;
+
+            $this->pdo->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function SuprimerFiliere($idFiliere): bool
+    {
+        try {
+            $this->pdo->beginTransaction();
+
+            $sql2 = 'DELETE FROM ' . $this->tableClasse . ' WHERE idFiliere = :id';
+            $sql1 = 'DELETE FROM ' . $this->tableMatiere . ' WHERE idFiliere = :id';
+            $sql3 = 'DELETE FROM ' . $this->tableFiliere . ' WHERE idFiliere = :id';
+            $query1 = $this->pdo->prepare($sql1);
+            $query1->execute(['id' => $idFiliere]);
+            $query2 = $this->pdo->prepare($sql2);
+            $query2->execute(['id' => $idFiliere]);
+            $query = $this->pdo->prepare($sql3);
+            $query->execute(['id' => $idFiliere]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            echo $e->getMessage();
+            return false;
+        }
+    }
+    public function modifierFiliere(int $idFiliere, string $nomfiliere, $oldnomFiliere, string $alias, int $departement): bool
+    {
+        $param = [
+            'id' => $idFiliere,
+            'nomfiliere' => $nomfiliere,
+            'alias' => $alias,
+            'departement' => $departement
+        ];
+        try {
+            $nbreClasse = count($this->classByFields($oldnomFiliere));
+            $this->pdo->beginTransaction();
+
+            for ($i = 1; $i <= $nbreClasse; $i++):
+                $sql2 = 'UPDATE ' . $this->tableClasse . ' SET nomClasse = :nomClasse  Where idFiliere = :id';
+                $query = $this->pdo->prepare($sql2);
+                $query->execute([
+                    'nomClasse' => $alias . "-" . $i,
+                    'id' => $idFiliere
+                ]);
+            endfor;
+
+            $sql3 = 'UPDATE ' . $this->tableFiliere . ' SET nomFiliere = :nomfiliere,
+             alias = :alias, idDepartement = :departement Where idFiliere = :id';
+
+            $query = $this->pdo->prepare($sql3);
+            $query->execute($param);
 
 
+
+
+
+            $this->pdo->commit();
+            return true;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            $this->pdo->rollBack();
+            return false;
+        }
+    }
+
+
+    /**
+     * retourne l'id de la matiere et la date a laquelle les absences en cette matiere ont ete soumis
+     * @return array
+     */
     public function getAbsenceMatiere(): array
     {
         $sql = $this->pdo->prepare('SELECT DISTINCT idMatiere,date FROM ' . $this->tableAbsence .
@@ -423,6 +706,11 @@ class adminTable extends Table
 
     }
 
+    /**
+     * trouver le nom de la matiere par son id 
+     * @param mixed $id
+     * @return array
+     */
     public function getMatiereById($id): array
     {
         $sql = $this->pdo->prepare('SELECT nomMatiere,idClasse FROM ' . $this->tableMatiere . ' WHERE idMatiere = :id ');
@@ -433,6 +721,27 @@ class adminTable extends Table
     }
 
 
+    /**
+     * trouver les infos de la filiere par son id 
+     * @param mixed $id
+     * @return array
+     */
+    public function getFieldsById($id): array
+    {
+        $sql = $this->pdo->prepare('SELECT * FROM ' . $this->tableFiliere . ' WHERE idFiliere = :id ');
+        $sql->execute(['id' => $id]);
+        $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classFiliere);
+        $result = $sql->fetchALL();
+        return count($result) > 0 ? $result : [];
+    }
+    public function getDepartementById($id): array
+    {
+        $sql = $this->pdo->prepare('SELECT * FROM ' . $this->tableDepartement . ' WHERE idDepartement = :id ');
+        $sql->execute(['id' => $id]);
+        $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classDepartement);
+        $result = $sql->fetchALL();
+        return count($result) > 0 ? $result : [];
+    }
     public function getClassById($id): array
     {
         $sql = $this->pdo->prepare('SELECT nomClasse FROM ' . $this->tableClasse . ' WHERE idClasse = :id ');
@@ -456,40 +765,63 @@ class adminTable extends Table
         return count($result) > 0 ? $result : [];
     }
 
-    
-    public function getAllMatiereByclass($class):array{
+
+    public function getAllMatiereByclass($class): array
+    {
         $querry = "SELECT * FROM matiere WHERE idClasse = :id ORDER BY nomMatiere";
-        $sql=$this->pdo->prepare($querry);
+        $sql = $this->pdo->prepare($querry);
         $sql->execute(['id' => $class]);
         $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classMatiere);
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
     }
 
-    public function getAbsenceStudentByMatiere($cin,$matiere){
-        $querry = "SELECT COUNT(a.cinEtudiant) as nbreAbsences FROM absence a JOIN 
+    /**
+     * retourne le nombre d'absence  en heure d'un etudiant dans une matiere
+     * @param mixed $cin
+     * @param mixed $matiere
+     * @return int
+     */
+    public function getAbsenceStudentByMatiere($cin, $matiere)
+    {
+        $querry = "
+        SELECT COUNT(e.cinEtudiant) as nbreAbsences FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
         ON m.idMatiere = a.idMatiere WHERE a.cinEtudiant =:cin AND 
         a.idMatiere = :id";
-        
-        $sql=$this->pdo->prepare($querry);
+
+        $sql = $this->pdo->prepare($querry);
         $sql->execute([
             'cin' => $cin,
-            'id' => $matiere]);
+            'id' => $matiere
+        ]);
         $result = $sql->fetch();
         return $result['nbreAbsences'] * 2;
     }
 
-    public function getPrivateStudentToPastExamByMatiere($matiere):array{
-        $querry = "SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant FROM absence a JOIN 
+    /**
+     * cette fonction permet d'avoir la liste des etudiant 
+     * privees de passer l'exam dans une matiere
+     * @param mixed $matiere
+     * @return array
+     */
+    public function getPrivateStudentToPastExamByMatiere($matiere, int $line = 0, int $offset = 0): array
+    {
+        $querry = "
+        SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant,
+         e.cne as cne FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
         ON m.idMatiere = a.idMatiere WHERE a.idMatiere = :id GROUP BY e.nom, e.prenom, e.cinEtudiant
          HAVING COUNT(a.cinEtudiant)>=4";
-        
-        $sql=$this->pdo->prepare($querry);
+
+        if ($line !== 0) {
+            $querry .= " LIMIT " . $line . " OFFSET " . $offset;
+        }
+        $sql = $this->pdo->prepare($querry);
         $sql->execute([
-            'id' => $matiere]);
-        $sql->setFetchMode(\PDO::FETCH_CLASS,$this->classEtudiant);
+            'id' => $matiere
+        ]);
+        $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
     }
@@ -500,7 +832,8 @@ class adminTable extends Table
      * 
      * @return array
      */
-    public function getAllFichierListPresence():array {
+    public function getAllFichierListPresence(): array
+    {
         $query = $this->pdo->prepare('
             SELECT lp.*, CONCAT(p.nom ," ", p.prenom) as nomPrenom FROM listepresence lp JOIN professeur p ON lp.cinProf = p.cinProf ORDER BY date DESC
         ');
@@ -510,15 +843,37 @@ class adminTable extends Table
 
         return $result ?? [];
     }
-    
+
     /*
      * cette fonction permet generer une url avec comme un formulaire soumit avec get
      * @param mixed $col
      * @param mixed $val
      * @return string
      */
-    public  function test($col,$val):string{
-        return http_build_query(array_merge($_GET,[$col => $val]));
+    public function test($col, $val): string
+    {
+        return http_build_query(array_merge($_GET, [$col => $val]));
     }
+
+    /**
+     * Cette méthode permet d'afficher tous les créneaux
+     * 
+     * @return array
+     */
+    public function getAllCreneaux(): ?array
+    {
+        $query = $this->pdo->prepare('
+            SELECT C.jourSemaine, C.heureDebut, C.heureFin, C.id, P.nom as nomProf, P.prenom as prenomProf, Cl.nomClasse, M.nomMatiere
+            FROM Creneaux C JOIN Professeur P ON C.cinProf = P.cinProf JOIN Matiere M ON C.idMatiere = M.idMatiere
+            JOIN Classe Cl ON M.idClasse = Cl.idClasse ORDER BY 
+            FIELD(C.jourSemaine, \'Lundi\', \'Mardi\', \'Mercredi\', \'Jeudi\', \'Vendredi\', \'Samedi\'), C.heureDebut;
+        ');
+        $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
+        $result = $query->fetchAll();
+
+        return $result ?? [];
+    }
+
 }
 ?>

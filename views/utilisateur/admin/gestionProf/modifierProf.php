@@ -11,95 +11,79 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 
 use App\Admin\adminTable;
-use App\Professeur\ProfessorTable;
-use App\connection;
+use App\Connection;
 
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
-$gen = new professorTable($pdo);
-if (!empty($_GET) && isset($_GET['modifier'])) {
-    $cin = $_GET['cin'];
 
-    $prof = $result->getProfByCin($cin);
-    $mat = $gen->getMatiere($cin);
-    $reste = $result->getAll("matiere", 'classMatiere');
+$date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
+$dateSql = $date->format('Y-m-d H:i');
+$modifie_sucess = null;
 
-    ?>
-    <div class="contains">
-        <div class="modif">
-            <h2>Modifier les information puis valider</h2>
-            <div class="modif-div">
-                <form method="POST" class="div-form" action="">
-                    <div class="form-input">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" value="<?= $prof[0]->getUsername(); ?>">
-                    </div>
-                    <div class="form-input">
-                        <label for="cin">CIN</label>
-                        <input type="text" name="cin" value="<?= $prof[0]->getCIN(); ?>">
-                    </div>
-                    <div class="form-input">
-                        <label for="nom">Nom</label>
-                        <input type="text" name="nom" value="<?= $prof[0]->getNom(); ?>">
-                    </div>
-                    <div class="form-input">
-                        <label for="prenom">Prenom</label>
-                        <input type="text" name="prenom" value="<?= $prof[0]->getPrenom(); ?>">
-                    </div>
-                    <div class="form-input">
-                        <label for="email">Email</label>
-                        <input type="text" name="email" value="<?= $prof[0]->getEmail(); ?>">
-                    </div>
-                    <div class="form-input">
-                        
-                        
-                        <?php $i =0; foreach($mat as $m): ?>
-                            <label for="matiere">Matiere<?=++$i?></label><br>
-                            <select name="Mat[]" id="">
-                                <option value="<?= $m->getNomMatiere();?>" ><?= $m->getNomMatiere();?></option>
-                                <?php foreach ($reste as $mats):
-                                    if ($mats->getNomMatiere() !== $m->getNomMatiere() ):
-                                    ?>
-                                    
-                                    <option value="<?= $mats->getNomMatiere();?>" ><?= $mats->getNomMatiere();?></option>
-                                    <?php endif;
-                                    endforeach?>
+$cinProf = $_GET['cin'];
+if (isset($cinProf)) {
+    $prof = $result->getProfesseurByCIN($cinProf);
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = $_POST['username'];
+        $cinProf = $_POST['cin'];
+        $nomProf = $_POST['nom'];
+        $prenomProf = $_POST['prenom'];
+        $emailProf = $_POST['email'];
+        $oldCinProf = $prof->getCIN();
 
-                            </select><br>
-                        <?php endforeach?>
-                    </div>
-                    
-                    <input type="submit" class="btn" value="Sauvegarder">
-                </form>
-            </div>
+        if ($result->ModifierProf($username, $cinProf, $nomProf, $prenomProf, $emailProf, $oldCinProf)) {
+            $modifie_sucess = 1;
+        } else {
+            $modifie_sucess = 0;
+        }
+        header('location: '.$router->url('liste-professeur').'?listprof=1&p=0&modifie_success='.$modifie_sucess);
+        exit();
+    }
+} else {
+    header('location: '.$router->url('liste-professeur').'?listprof=1&p=0&modifie_success='.$modifie_sucess);
+    exit();
+}
+
+?>
+
+<div class="prof-list">
+    <div class="intro-prof-list">
+        <h1>Modifier les Informations d'un professeur</h1>
+        <div class="date-group">
+            <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
     </div>
-    <?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        var_dump($_POST);
-        $username = $_POST['username'];
-        $newcin = $_POST['cin'];
-        $nom = $_POST['nom'];
-        $prenom = $_POST['prenom'];
-        $email = $_POST['email'];
-        $oldCin = $prof[0]->getCIN();
-        if ($result->ModifierProf($username, $newcin, $nom, $prenom, $email, $oldCin)) {
-            //header('Location: liste-des-professeurs?listprof=1');
-            //exit;
-        } else {
-            echo "Erreur lors de la modification du professeur.";
-        }
-    }
+    <div class="hr"></div>
+    <div class="form-modifie-container">
+        <form action="" class="creneau-modifie container" method="POST">
+            <section class="edit-creneau-section">
+                <div>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" value="<?= htmlspecialchars($prof->getUsername()) ?>">
+                </div>
+                <div>
+                    <label for="cin">CIN</label>
+                    <input type="text" name="cin" value="<?= htmlspecialchars($prof->getCIN()) ?>">
+                </div>
+                <div>
+                    <label for="nom">Nom</label>
+                    <input type="text" name="nom" value="<?= htmlspecialchars($prof->getNom()) ?>">
+                </div>
+                <div>
+                    <label for="prenom">Prenom</label>
+                    <input type="text" name="prenom" value="<?= htmlspecialchars($prof->getPrenom()) ?>">
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" value="<?= htmlspecialchars($prof->getEmail()) ?>">
+                </div>
+            </section>
+            <section class="submit-group-creneau">
+                <button type="submit" class="submit-btn-creneau">Modifier</button>
+                <button class="btn2" onclick= "window.location.href='<?= $router->url('liste-professeur').'?listprof=1&p=0' ?>'">Annuler</button>
+            </section>
 
-
-} else {
-    $cin = $_GET['cin'];
-    if ($result->SuprimerProf($cin)) {
-        header('location: liste-des-professeurs?listprof=1');
-        exit;
-    } else {
-        echo 'Erreur lors de la suppression';
-    }
-}
-?>
+        </form>
+    </div>
+</div>
