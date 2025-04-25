@@ -85,10 +85,13 @@ if (isset($_POST['soumettre_justificatif'])) {
     if ($fichier['error'] === UPLOAD_ERR_OK) {
         $nomTemp = $fichier['tmp_name'];
         $nomFinal = uniqid() . '_' . basename($fichier['name']);
-        $dossier = $_SERVER['DOCUMENT_ROOT'] . '/uploads/justificatif/';
+
+        //  Corrigé : chemin correct vers /uploads/justificatif/
+        $dossier = dirname(__DIR__, 4) . '/uploads/justificatif/';
         if (!is_dir($dossier)) {
             mkdir($dossier, 0777, true);
         }
+
         move_uploaded_file($nomTemp, $dossier . $nomFinal);
 
         $stmt = $pdo->prepare("
@@ -101,6 +104,7 @@ if (isset($_POST['soumettre_justificatif'])) {
             'nomFichier' => $nomFinal
         ]);
 
+        //  Redirection pour éviter double soumission
         header('Location: ' . $_SERVER['PHP_SELF']);
         exit;
 
@@ -108,4 +112,4 @@ if (isset($_POST['soumettre_justificatif'])) {
         echo "<script>alert('Erreur lors du téléchargement du fichier.');</script>";
     }
 }
-?>
+
