@@ -24,8 +24,6 @@ $idFiliere = $_GET['id'];
 if (isset($idFiliere)) {
     $filiere = $result->getFieldsById($idFiliere);
     $Departement = $result->getDepartementById($filiere[0]->getIDDepartement());
-    var_dump($filiere);
-    var_dump($Departement);
     $oldfiliere = $filiere[0]->getNomFiliere();
     $nomDepartement = $Departement[0]->getNomDepartement();
     

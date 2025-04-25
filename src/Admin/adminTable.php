@@ -332,6 +332,16 @@ class adminTable extends Table
         return count($result) != 0 ? $result : [];
     }
 
+    public function getinfoJustificatifById($id)
+    {
+        $sql = $this->pdo->prepare("
+        SELECT * FROM justificatif WHERE idJustificatif =:id;
+        ");
+        $sql->execute(['id' => $id]);
+        $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classJustificatif);
+        return $sql->fetch();
+    }
+
     /**
      * trouver l'id de la classe a l'aide de son nom 
      * @param mixed $name
@@ -788,7 +798,8 @@ class adminTable extends Table
         SELECT COUNT(e.cinEtudiant) as nbreAbsences FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
         ON m.idMatiere = a.idMatiere WHERE a.cinEtudiant =:cin AND 
-        a.idMatiere = :id";
+        a.idMatiere = :id AND a.idAbsence NOT IN 
+        (SELECT idAbsence FROM justificatif WHERE statut = 'accepté')";
 
         $sql = $this->pdo->prepare($querry);
         $sql->execute([
@@ -807,12 +818,14 @@ class adminTable extends Table
      */
     public function getPrivateStudentToPastExamByMatiere($matiere, int $line = 0, int $offset = 0): array
     {
+        "SELECT idAbsence FROM justificatif WHERE statut = 'accepté'";
         $querry = "
         SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant,
          e.cne as cne FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
-        ON m.idMatiere = a.idMatiere WHERE a.idMatiere = :id GROUP BY e.nom, e.prenom, e.cinEtudiant
-         HAVING COUNT(a.cinEtudiant)>=4";
+        ON m.idMatiere = a.idMatiere WHERE a.idMatiere = :id AND a.idAbsence NOT IN 
+        (SELECT idAbsence FROM justificatif WHERE statut = 'accepté')
+        GROUP BY e.nom, e.prenom, e.cinEtudiant HAVING COUNT(a.cinEtudiant)>=4";
 
         if ($line !== 0) {
             $querry .= " LIMIT " . $line . " OFFSET " . $offset;
@@ -824,6 +837,49 @@ class adminTable extends Table
         $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
+    }
+
+    /**
+     * cette methoodde permet de justifier une ou plusieurs absence d'un etudiant
+     *  entre deux date donnee
+     * @param int $id l'identifiant du justificatif pour mettre le satatut a acepte
+     * @param string $cinEtudiant cin de l'etudiant pour supprimer les absence de l'etudiant
+     * @param string $date1 date de debut de validite du justificatif
+     * @param string $date2 date de fin de validite du justificatif
+     * @return bool
+     */
+    public function justifierAbscence(int $id, string $cinEtudiant, string $date1, string $date2): bool
+    {
+
+        try {
+            $this->pdo->beginTransaction();
+            $query = "UPDATE justificatif SET statut = 'accepté' WHERE idJustificatif
+             = :id AND idAbsence 
+            IN (SELECT idAbsence FROM absence WHERE cinEtudiant = :cinEtudiant
+             AND DATE(date) BETWEEN :date1 AND :date2)";
+
+            $querrry = "DELETE FROM absence WHERE cinEtudiant = :cinEtudiant  AND DATE(date) BETWEEN :date1 AND :date2";
+            $sql = $this->pdo->prepare($query);
+            $sql->execute([
+                'id' => $id,
+                'cinEtudiant' => $cinEtudiant,
+                'date1' => $date1,
+                'date2' => $date2
+            ]);
+
+            $sql = $this->pdo->prepare($querrry);
+            $sql->execute([
+                'cinEtudiant' => $cinEtudiant,
+                'date1' => $date1,
+                'date2' => $date2
+            ]);
+            $this->pdo->commit();
+            return true;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+
     }
 
     /**
@@ -874,6 +930,8 @@ class adminTable extends Table
 
         return $result ?? [];
     }
+
+
 
 }
 ?>

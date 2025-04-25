@@ -122,7 +122,7 @@ CREATE TABLE Justificatif (
     message TEXT NOT NULL,
     idAbsence INT NOT NULL,
     nomFichierJustificatif VARCHAR(250),
-    CONSTRAINT fk_justificatif_absence FOREIGN KEY (idAbsence) REFERENCES Absence(idAbsence) ON DELETE CASCADE
+    CONSTRAINT fk_justificatif_absence FOREIGN KEY (idAbsence) REFERENCES Absence(idAbsence) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- Table ListePrésence

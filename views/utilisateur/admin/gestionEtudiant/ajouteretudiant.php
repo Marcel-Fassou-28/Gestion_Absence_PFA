@@ -22,6 +22,7 @@ $success_etudiant = null;
 $error = 0;
 
 if (!empty($_POST)) {
+    var_dump($_POST);
     $role = 'etudiant';
     $cinEtudiant = $_POST['cin'];
     $nomEtudiant = $_POST['nom'];
@@ -40,7 +41,7 @@ if (!empty($_POST)) {
         $username = $cinEtudiant . '.' . $nomEtudiant;
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-        if ($result->AddStudentUser($cinEtudiant, $nomEtudiant, $prenomEtudiant,  $emailEtudiant, $username, $password, $cne, $idClasse, $role)) {
+        if ($result->AddStudentUser($cinEtudiant, $nomEtudiant, $prenomEtudiant,  $emailEtudiant, $username, $password, $cneEtudiant, $idClasse, $role)) {
             $success_etudiant = 1;
         } else {
             $success_etudiant = 0;
@@ -62,7 +63,7 @@ if (!empty($_POST)) {
         </div>
     <?php endif ?>
     <div class="intro-prof-list">
-        <h1> Ajouter un professeur</h1>
+        <h1> Ajouter un etudiant</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>

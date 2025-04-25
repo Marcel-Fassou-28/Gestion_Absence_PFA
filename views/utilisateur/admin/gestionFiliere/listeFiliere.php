@@ -59,9 +59,9 @@ if (isset($_POST['departement'])) {
         <div class="alert alert-danger">Cette opération n'a pas pu être Effectué</div>
     <?php else: ?><?php endif ?>
 
-    <?php if (isset($_GET['success_modifie']) && $_GET['success_modifie'] == '1'): ?>
+    <?php if (isset($_GET['modifie_success']) && $_GET['modifie_success'] == '1'): ?>
         <div class="alert alert-success">Les Informations de la filiere ont été modifiés avec succès</div>
-    <?php elseif (isset($_GET['success_modifie']) && $_GET['success_modifie'] == '0'): ?>
+    <?php elseif (isset($_GET['modifie_success']) && $_GET['modifie_success'] == '0'): ?>
         <div class="alert alert-danger">Cette opération n'a pas pu être Effectué</div>
     <?php else: ?><?php endif ?>
 

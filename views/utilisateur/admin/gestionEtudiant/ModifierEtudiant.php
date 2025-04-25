@@ -67,7 +67,7 @@ if (isset($cinEtudiant)) {
         </div>
     <?php endif ?>
     <div class="intro-prof-list">
-        <h1> Ajouter un Etudiant</h1>
+        <h1> Modifier  Etudiant</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
@@ -106,7 +106,7 @@ if (isset($cinEtudiant)) {
                 </div>
             </section>
             <section class="submit-group-creneau">
-                <button type="submit" class="submit-btn-creneau">Ajouter</button>
+                <button type="submit" class="submit-btn-creneau">sauvegarder</button>
                 <button class="btn2" onclick= "window.location.href='<?= $router->url('liste-etudiants').'?listprof=1&p=0' ?>'">Annuler</button>
             </section>
 

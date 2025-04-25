@@ -42,7 +42,7 @@ if ((isset($_POST['Matiere']) && $_POST['Matiere'] !== 'defaut') ) {
 
     $matiere = $_POST['Matiere'];
     $idMatiere = $list->getIdMatiereByName($matiere);
-    
+    $listeJustificatif = $list->getAllJustificatif(0,0,$idMatiere);
     $n = count($list->getAllJustificatif(0,0,$idMatiere));
 }
 ?>
@@ -88,6 +88,7 @@ if ((isset($_POST['Matiere']) && $_POST['Matiere'] !== 'defaut') ) {
                 <th>Action</th>
             </thead>
             <?php
+          
             foreach ($listeJustificatif as $row): ?>
                 <tr>
                     <td><?= ++$offset; ?></td>
@@ -97,10 +98,14 @@ if ((isset($_POST['Matiere']) && $_POST['Matiere'] !== 'defaut') ) {
                         if ($col !== 'id'):
                             ?>
 
-                            <td><?= htmlspecialchars($val);
+                            <td><?= htmlspecialchars($val);?></td>
+
+                        <?php 
+                        else:
+                            $value = $val;
                         endif;
-                    endforeach ?></td>
-                    <td><a href="" class="btn1">Details</a></td>
+                    endforeach ?>
+                    <td><a href="<?= ( isset($value))?$router->url('detail_justificatif').'?listprof=1'.'&idjustificatif='. $value:"";?>" class="btn1">Details</a></td>
                 </tr><?php
 
             endforeach

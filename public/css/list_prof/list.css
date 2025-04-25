@@ -404,6 +404,35 @@ main {
     background-color: var(--bg-btn);
 }
 
+.btn-download-pdf{
+    text-align: center;
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 25%;
+    max-width: 200px;
+    margin: 20px auto;
+    display: block;
+    float: right;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+.liste-vide{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--text-color);
+    background-color: var(--bg-section-abstract);
+    height: 100px;
+    border-radius: 12px;
+
+}
 
 /* Styles pour mobile */
 @media screen and (max-width: 768px) {
