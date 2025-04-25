@@ -175,14 +175,14 @@ $currentTime = $date->format('H:i:s');
                 <div class="hr"></div>
                 <ul class="use-link-list">
                     <li><a href="<?= $router->url('professor-listePresence') . '?use-link=student-presence' ?>">Effectuer la Présence</a></li>
-                    <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list' ?>">Listes des Etudiants</a></li>
+                    <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list&p=0' ?>">Listes des Etudiants</a></li>
                 </ul>
             </section>
             <section class="container historic">
                 <h2>Historiques</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
-                    <li><a href="<?= $router->url('historic-absence') . '?historic=absence' ?>">Historiques des Absences</a></li>
+                    <li><a href="<?= $router->url('historic-absence') . '?historic=absence&p=0' ?>">Historiques des Absences</a></li>
                 </ul>
             </section>
         </div>
@@ -290,8 +290,8 @@ $currentTime = $date->format('H:i:s');
                 <h2>Historiques</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
-                    <li><a href="<?= $router->url('etudiant-absences') ?>">Historiques de mes Absences</a></li>
-                    <li><a href="<?= $router->url('etudiant-justificatifs') ?>">Justificatifs Soumis</a></li>
+                    <li><a href="<?= $router->url('etudiant-absences'). '?p=0' ?>">Historiques de mes Absences</a></li>
+                    <li><a href="<?= $router->url('etudiant-justificatifs') . '?p=0' ?>">Justificatifs Soumis</a></li>
                 </ul>
             </section>
         </div>

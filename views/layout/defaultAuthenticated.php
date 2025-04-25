@@ -100,8 +100,8 @@ $user = $tableUser->getIdentification($cin);
                         <li><a href="<?= $router->url('admin-messagerie') ?>">Messagerie</a></li>
 
                     <?php else: ?>
-                        <li><a href="<?= $router->url('historic-absence') . '?historic=absence' ?>">Historique des Absences</a></li>
-                        <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list' ?>">Liste des Etudiants</a></li>
+                        <li><a href="<?= $router->url('historic-absence') . '?historic=absence&p=0' ?>">Historique des Absences</a></li>
+                        <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list&p=0' ?>">Liste des Etudiants</a></li>
 
                 <?php endif ?>
 

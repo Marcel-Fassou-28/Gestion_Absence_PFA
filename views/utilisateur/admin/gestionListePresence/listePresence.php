@@ -105,8 +105,7 @@ $n = count($listeFichierPresence);
             </table>
         </div>
         <?php
-    // variable pour compter le nombre de page 
-    //pour aficher le nombre total de page avec ou sans tri 
+ 
     $nbrpage = ceil($n / $line);
     //boucle d'affichage des numero de page 
     for ($i = 0; $i < $nbrpage; ) { ?>

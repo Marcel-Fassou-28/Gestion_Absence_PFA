@@ -1073,3 +1073,34 @@ padding-bottom: 50px;
         font-size: 1.1rem;
     }
 }
+
+.submit-group-hictoric {
+    padding: 5px;
+}
+
+.btn1 {
+    color: var(--text-color);
+    border-radius: 7px;
+    padding: 5px 10px;
+    font-weight: 600;
+    background-color: var(--navbar-color);
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    
+    text-align: center;
+}
+
+.btn1:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.level-group {
+    width: 100%;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 10px 20px;
+}

@@ -115,14 +115,14 @@ $academic_info = [
                 <?php if ($_SESSION['role'] === 'admin'): ?>
                     <li><a href="<?= $router->url('liste-etudiants').'?listprof=1&p=0'?>">Listes des étudiants</a></li>
                 <?php elseif($_SESSION['role'] === 'professeur'): ?>
-                    <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list'?>">Listes des étudiants</a></li>
+                    <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list&p=0'?>">Listes des étudiants</a></li>
                 <?php elseif($_SESSION['role'] === 'etudiant'): ?>
                     <li><a href="<?= $router->url('etudiant-messagerie').'?messagerie=1'?>">Ma messagerie</a></li>
                 <?php endif ?>
 
                 <?php if ($_SESSION['role'] === 'admin'): ?>
                 <li><a href="<?=$router->url('liste-professeur').'?listprof=1&p=0'?>">Liste des professeurs</a></li>
-                <li><a href="<?=$router->url('RecapAbsences').'?listprof=1'.'&justifier=1'?>">Recapitulatif des Absences</a></li>
+                <li><a href="<?=$router->url('RecapAbsences').'?listprof=1&justifier=1&p=0'?>">Recapitulatif des Absences</a></li>
                 <?php endif ?>
             </ul>
         </div>
@@ -131,8 +131,8 @@ $academic_info = [
             <ul>
                 <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('historikAbscences').'?listprof=1';}?>">Historiques des soumissions</a></li>
                 <?php if ($_SESSION['role'] === 'admin') :?>
-                    <li><a href="<?=  $router->url('justification').'?listprof=1'.'&justifier=1';?>">Historiques des justificatifs</a></li>
-                    <li><a href="<?=  $router->url('etudiantprivee').'?listprof=1'.'&justifier=1';?>">Liste des etudiants Privés d'examen</a></li>
+                    <li><a href="<?=  $router->url('justification').'?listprof=1&justifier=1&p=0';?>">Historiques des justificatifs</a></li>
+                    <li><a href="<?=  $router->url('etudiantprivee').'?listprof=1&justifier=1&p=0';?>">Liste des etudiants Privés d'examen</a></li>
                 <?php endif ?>
             </ul>
         </div>
