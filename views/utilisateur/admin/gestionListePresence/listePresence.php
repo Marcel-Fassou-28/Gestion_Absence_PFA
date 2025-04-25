@@ -55,7 +55,7 @@ $n = count($listeFichierPresence);
         Votre opération n'a pas etre effectuée
        </div>
         <?php else: ?><?php endif ?>
-<div class="intro-prof-list">
+    <div class="intro-prof-list">
         <h1>Fichiers de Listes de Presence</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>

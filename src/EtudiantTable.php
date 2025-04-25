@@ -30,7 +30,7 @@ class EtudiantTable extends Table {
      * Cette méthode permet de retourner la filiere d'un etudiant
      * 
      * @param string $cinEtudiant
-     * @return object
+     * @return object|null
      */
     public function getFiliere(string $cinEtudiant):?Filiere {
         $query = $this->pdo->prepare('
@@ -40,8 +40,10 @@ class EtudiantTable extends Table {
         $query->execute(['cinEtudiant' => $cinEtudiant]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classFiliere);
         $result = $query->fetch();
-
-        return $result ?? null;
+        if (!$result) {
+            return null;
+        }
+        return $result;
     }
 
     /**
@@ -60,7 +62,10 @@ class EtudiantTable extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, \App\Model\Departement::class);
         $result = $query->fetch();
 
-        return $result ?? null;
+        if (!$result) {
+            return null;
+        }
+        return $result;
     }
 
     /**
@@ -121,7 +126,10 @@ class EtudiantTable extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, DerniereAbsenceEtudiant::class);
 
         $result = $query->fetch();
-        return $result ?? null;
+        if (!$result) {
+            return null;
+        }
+        return $result;
     }
 
     /**
