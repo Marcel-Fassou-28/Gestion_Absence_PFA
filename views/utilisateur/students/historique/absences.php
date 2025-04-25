@@ -84,32 +84,39 @@ if (isset($_POST['soumettre_justificatif'])) {
 
     if ($fichier['error'] === UPLOAD_ERR_OK) {
         $nomTemp = $fichier['tmp_name'];
-        $nomFinal = uniqid() . '_' . basename($fichier['name']);
+        $extension = strtolower(pathinfo($fichier['name'], PATHINFO_EXTENSION));
+        $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'pdf'];
 
-        //  Corrigé : chemin correct vers /uploads/justificatif/
-        $dossier = dirname(__DIR__, 4) . '/uploads/justificatif/';
-        if (!is_dir($dossier)) {
-            mkdir($dossier, 0777, true);
+        if (in_array($extension, $extensionsAutorisees)) {
+
+            $timestamp = time();
+            $nomFinal = 'justificatif_' . $timestamp . '_' . $cinEtudiant . '_' . $idAbsence . '.' . $extension;
+
+            $dossier = dirname(__DIR__, 4) . '/uploads/justificatif/';
+            if (!is_dir($dossier)) {
+                mkdir($dossier, 0777, true);
+            }
+
+            if (move_uploaded_file($nomTemp, $dossier . $nomFinal)) {
+                $stmt = $pdo->prepare("
+                    INSERT INTO Justificatif (dateSoumission, statut, message, idAbsence, nomFichierJustificatif)
+                    VALUES (NOW(), 'en attente', :message, :idAbsence, :nomFichier)
+                ");
+                $stmt->execute([
+                    'message' => $message,
+                    'idAbsence' => $idAbsence,
+                    'nomFichier' => $nomFinal
+                ]);
+
+                header('Location: ' . $_SERVER['PHP_SELF']);
+                exit;
+            } else {
+                echo "<script>alert('Erreur lors de l envoi du fichier.');</script>";
+            }
+        } else {
+            echo "<script>alert('Extension non autorisée. Fichiers acceptés : jpg, jpeg, png, pdf');</script>";
         }
-
-        move_uploaded_file($nomTemp, $dossier . $nomFinal);
-
-        $stmt = $pdo->prepare("
-            INSERT INTO Justificatif (dateSoumission, statut, message, idAbsence, nomFichierJustificatif)
-            VALUES (NOW(), 'en attente', :message, :idAbsence, :nomFichier)
-        ");
-        $stmt->execute([
-            'message' => $message,
-            'idAbsence' => $idAbsence,
-            'nomFichier' => $nomFinal
-        ]);
-
-        //  Redirection pour éviter double soumission
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit;
-
     } else {
         echo "<script>alert('Erreur lors du téléchargement du fichier.');</script>";
     }
 }
-

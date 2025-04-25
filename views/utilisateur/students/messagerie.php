@@ -115,9 +115,10 @@ $justificatifs = $justificatifs->fetchAll(PDO::FETCH_ASSOC);
                     <strong>Statut :</strong> <?= htmlspecialchars($justificatif['statut']) ?><br>
                     <strong>Message :</strong> <?= nl2br(htmlspecialchars($justificatif['message'])) ?><br>
                     <strong>Fichier :</strong> 
-                    <a href="../../../uploads/justificatif/<?= urlencode($justificatif['nomFichierJustificatif']) ?>" target="_blank">
-                        Voir fichier
-                    </a><br><br>
+                    <a href="/views/proxy/justificatif.php?fichier=<?= rawurlencode($justificatif['nomFichierJustificatif']) ?>" target="_blank">
+                    Voir fichier
+                    </a>
+                    <br><br>
                     <a href="<?=$router->url('etudiant-absences')?>" class="btn-smtt">Voir plus</a>
                 </li>
                 <hr>
