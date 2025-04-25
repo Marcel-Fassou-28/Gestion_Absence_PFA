@@ -5,15 +5,14 @@ if (!isset($_SESSION['id_user'])) {
     exit("Accès interdit.");
 }
 
-use App\Connection;
-use App\Admin\adminTable;
-
-$cin = $_SESSION['id_user'];
-$pdo = Connection::getPDO();
-$result = new adminTable($pdo);
+if(isset($_SESSION['role']) && ($_SESSION['role'] != 'etudiant')){
+    http_response_code(403);
+    exit('Vous avez pas accés');
+}
 
 
-$file = $_GET['fichier'];
+
+$file = urldecode($_GET['fichier']);
 
 $photoPath = $file;
 $destinationDir = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR. 'uploads' .DIRECTORY_SEPARATOR.'justificatif' . DIRECTORY_SEPARATOR . $photoPath;
@@ -26,4 +25,5 @@ if (file_exists($destinationDir)) {
     readfile($destinationDir);
     exit();
 }
+
 

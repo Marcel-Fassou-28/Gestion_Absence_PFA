@@ -13,7 +13,8 @@
 .conteneur-messagerie{
     display: flex;
     flex-direction: column;
-    margin: 25px auto;
+    margin: auto;
+    margin-top: 20px;
     padding: 25px;
     border-radius: 20px;
     background-color: #1c1d1e90;
