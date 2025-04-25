@@ -27,6 +27,19 @@ $messages = $messageTable->getMessages($cin, $role);
 $messagesRecus = array_filter($messages, fn($m) => $m->getCinDestinataire() == $cin);
 $messagesEnvoyes = array_filter($messages, fn($m) => $m->getCinExpediteur() == $cin);
 
+// Récupérer les justificatifs envoyés par l'étudiant
+$justificatifs = $pdo->prepare("
+    SELECT j.dateSoumission, j.message, j.nomFichierJustificatif, j.statut, a.date AS dateAbsence, m.nomMatiere
+    FROM Justificatif j
+    JOIN Absence a ON j.idAbsence = a.idAbsence
+    JOIN Matiere m ON a.idMatiere = m.idMatiere
+    WHERE a.cinEtudiant = :cin
+    ORDER BY j.dateSoumission DESC
+");
+$justificatifs->execute(['cin' => $cin]);
+$justificatifs = $justificatifs->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 
  <div class="dshb-messagerie container">
@@ -88,6 +101,30 @@ $messagesEnvoyes = array_filter($messages, fn($m) => $m->getCinExpediteur() == $
                 </ul>
             <?php endif; ?>
         </div>
+
+        <div class="conteneur-messagerie">
+            <h3 class="messagerie-intro">Justificatifs soumis</h3><div class="hr"></div>
+            <?php if (empty($justificatifs)): ?>
+            <p>Aucun justificatif soumis.</p>
+            <?php else: ?>
+                <ul class="liste-messages">
+            <?php foreach ($justificatifs as $justificatif): ?>
+                <li class="message">
+                    <strong>Date de l'absence :</strong> <?= date('d/m/Y', strtotime($justificatif['dateAbsence'])) ?><br>
+                    <strong>Matière :</strong> <?= htmlspecialchars($justificatif['nomMatiere']) ?><br>
+                    <strong>Statut :</strong> <?= htmlspecialchars($justificatif['statut']) ?><br>
+                    <strong>Message :</strong> <?= nl2br(htmlspecialchars($justificatif['message'])) ?><br>
+                    <strong>Fichier :</strong> 
+                    <a href="../../../uploads/justificatif/<?= urlencode($justificatif['nomFichierJustificatif']) ?>" target="_blank">
+                        Voir fichier
+                    </a><br><br>
+                    <a href="<?=$router->url('etudiant-absences')?>" class="btn-smtt">Voir plus</a>
+                </li>
+                <hr>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</div>
 </div>
 
 <?php

@@ -37,7 +37,7 @@ $pdo->exec("INSERT INTO professeur (nom, prenom, email, cinProf) VALUES
 
 
 $pdo->exec("INSERT INTO etudiant (nom, prenom, cne, cinEtudiant, email, idclasse) VALUES 
-        ('Msaboue', 'Mohamed', 'BJ84785592', 'BJ8478559', 'mohamedmsb6@gmail.com', 1)");
+        ('Msaboue', 'Mohamed', 'BJ84785592', 'BJ8478559', 'mohamedmsb6@gmail.com', 5)");
 
 
 $pdo->exec("INSERT INTO filiere (idFiliere, nomFiliere, alias, idDepartement) VALUES

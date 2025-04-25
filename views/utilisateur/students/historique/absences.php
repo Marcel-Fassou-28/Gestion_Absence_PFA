@@ -62,11 +62,11 @@ $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <form method="post" enctype="multipart/form-data" style="display:inline;">
                                 <input type="hidden" name="idAbsence" value="<?= $absence['idAbsence'] ?>">
                                 <input type="file" name="justificatif" accept=".jpg,.png,.pdf,.jpeg" required>
-                                <input type="text" name="message" placeholder="Message" required>
+                                <input type="text" name="message" placeholder="Message" required style="color:black">
                                 <button type="submit" name="soumettre_justificatif" class="btn-soumettre">Soumettre</button>
                             </form>
                         <?php else: ?>
-                            <button type="button" onclick="alert('Message: <?= htmlspecialchars($absence['message']) ?>')">Voir détails</button>
+                            <button type="button" class="btn-soumettre" onclick="alert('Message: <?= htmlspecialchars($absence['message']) ?>')">Voir détails</button>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -85,7 +85,7 @@ if (isset($_POST['soumettre_justificatif'])) {
     if ($fichier['error'] === UPLOAD_ERR_OK) {
         $nomTemp = $fichier['tmp_name'];
         $nomFinal = uniqid() . '_' . basename($fichier['name']);
-        $dossier = __DIR__ . '/../../../../../uploads/justificatif/';
+        $dossier = $_SERVER['DOCUMENT_ROOT'] . '/uploads/justificatif/';
         if (!is_dir($dossier)) {
             mkdir($dossier, 0777, true);
         }
@@ -101,7 +101,9 @@ if (isset($_POST['soumettre_justificatif'])) {
             'nomFichier' => $nomFinal
         ]);
 
-        echo "<script>alert('Justificatif soumis avec succès.'); window.location.reload();</script>";
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit;
+
     } else {
         echo "<script>alert('Erreur lors du téléchargement du fichier.');</script>";
     }
