@@ -57,21 +57,25 @@ if (!empty($_POST)) {
     <div class="form-modifie-container">
         <form action="" class="creneau-modifie container" method="POST">
             <section class="edit-creneau-section">
-                <div class="creneau-debut">
+                <div>
                     <label for="filiere">Nom filiere</label>
                     <input type="text" name="nomfiliere" value="" required>
                 </div>
-                <div class="creneau-fin">
+                <div>
                     <label for="nom">Alias filiere</label>
                     <input type="text" name="alias" value="" required>
                 </div>
-                <div class="joursemaine">
+                <div>
                     <label for="prenom">nom Departement</label>
                     <input type="text" name="depart" value="" required>
                 </div>
-                <div class="joursemaine">
+                <div>
                     <label for="Annee_etude">Nombre d'annee d'etude</label>
-                    <input type="number" name="Annee_etude" value="" min=2 max=3 required>
+                    <select class="select-nbr-annee" name="Annee_etude" id="">
+                        <option name="Annee_etude" value="2">2 Années</option>
+                        <option name="Annee_etude" value="3" selected>3 Années</option>
+                    </select>
+                    <!--<input type="number" name="Annee_etude" value="" min=2 max=3 required>-->
                 </div>
 
             </section>

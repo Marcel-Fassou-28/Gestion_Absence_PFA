@@ -45,17 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         <h1>Liste des Présences</h1>
         <div class="date-group">
            <span><?= $dateDuJour ?></span>
-           <span>Créneau :  <?= $creneau->getHeureDebut() . ' - ' . $creneau->getHeureFin() ?></span>
+           <span>Créneau :  <?= $creneau ? $creneau->getHeureDebut() . ' - ' . $creneau->getHeureFin() : 'non specifié' ?></span>
         </div> 
     </div>
     <div class="hr"></div>
     <div class="presence-container">
         <section class="professor-info container">
             <div class="filiere-group">
-                <span><?= $filiere->getNomFiliere() ?></span>
+                <span><?= $filiere ? $filiere->getNomFiliere() : 'non spécifié' ?></span>
             </div>
             <div class="subject-group">
-                <span><?= $matiere->getNomMatiere() ?></span>
+                <span><?= $matiere ? $matiere->getNomMatiere() : 'non specifié' ?></span>
             </div>
             <div class="classe-group">
                 <span><?= $classe ?></span>

@@ -32,7 +32,7 @@ class EtudiantTable extends Table {
      * @param string $cinEtudiant
      * @return object
      */
-    public function getFiliere(string $cinEtudiant) {
+    public function getFiliere(string $cinEtudiant):?Filiere {
         $query = $this->pdo->prepare('
             SELECT f.nomFiliere FROM etudiant e JOIN '.$this->tableClasse.' c ON e.idClasse = c.idClasse
             JOIN '.$this->tableFiliere.' f ON c.idFiliere = f.idFiliere WHERE e.cinEtudiant = :cinEtudiant');
@@ -41,7 +41,7 @@ class EtudiantTable extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->classFiliere);
         $result = $query->fetch();
 
-        return $result;
+        return $result ?? null;
     }
 
     /**
@@ -49,7 +49,7 @@ class EtudiantTable extends Table {
      * @param string $cinEtudiant
      * @return object
      */
-    public function getDepartementEtudiant(string $cinEtudiant) {
+    public function getDepartementEtudiant(string $cinEtudiant):?Departement {
     
         $query = $this->pdo->prepare('
             SELECT DISTINCT d.nomDepartement FROM '.$this->tableEtudiant.' e JOIN '.$this->tableClasse.' c 
@@ -60,7 +60,7 @@ class EtudiantTable extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, \App\Model\Departement::class);
         $result = $query->fetch();
 
-        return $result;
+        return $result ?? null;
     }
 
     /**
@@ -108,7 +108,7 @@ class EtudiantTable extends Table {
      * @param string $cinEtudiant
      * @return object
      */
-    public function getInfoGeneralEtudiant(string $cinEtudiant) {
+    public function getInfoGeneralEtudiant(string $cinEtudiant):?DerniereAbsenceEtudiant {
         $query = $this->pdo->prepare('
             SELECT e.nom, e.prenom, c.nomClasse, f.nomFiliere, d.nomDepartement, m.nomMatiere,
             DATE(a.date) AS dateDerniereAbsence FROM Etudiant e JOIN Classe c ON e.idClasse = c.idClasse
@@ -121,7 +121,7 @@ class EtudiantTable extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, DerniereAbsenceEtudiant::class);
 
         $result = $query->fetch();
-        return $result;
+        return $result ?? null;
     }
 
     /**
@@ -142,7 +142,7 @@ class EtudiantTable extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, AbsenceParMatiere::class);
         $result = $query->fetchAll();
 
-        return $result;
+        return $result ?? [];
     }
 
 }

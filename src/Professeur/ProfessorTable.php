@@ -371,13 +371,14 @@ class ProfessorTable extends Table {
      */
     public function sendListPresence(ListePresence $list):bool {
         $query = $this->pdo->prepare('
-            INSERT INTO listepresence(cinProf, classe ,nomFichierPresence) VALUES (:cinProf, :classe, :nomFichierPresence)
+            INSERT INTO listepresence(cinProf, classe ,nomFichierPresence, matiere) VALUES (:cinProf, :classe, :nomFichierPresence, :matiere)
         ');
         if ($list !== null) {
             $query->execute([
                 'cinProf' => $list->getCINProf(),
                 'classe' => $list->getClasse(),
-                'nomFichierPresence' => $list->getNomFichierPresence()
+                'nomFichierPresence' => $list->getNomFichierPresence(),
+                'matiere' => $list->getMatiere()
             ]);
             return true;
         }else {

@@ -29,40 +29,7 @@ $dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $
 $dateSql = $date->format('Y-m-d H:i:s');
 $errorMessage = "";
 $success = null;
-/*    
-if (!empty($_POST)) {
-    var_dump($_POST);
-    exit();
 
-    $tmpName = $_FILES['absence-list']['tmp_name'];
-    $fileSize = $_FILES['absence-list']['size'];
-
-    $extensionsAutorisees = ['jpg', 'jpeg', 'png'];
-    $extension = strtolower(pathinfo($_FILES['absence-list']['name'], PATHINFO_EXTENSION));
-
-    if (in_array($extension, $extensionsAutorisees) && $fileSize <= 5000000) {
-
-        $nouveauNom = time() .uniqid('presence', true). '.' . $extension;
-        $destination = 'uploads/presence/' . $nouveauNom;
-
-        *//**
-        * Definition de la liste d'objet 
-        */
-        /*$listPresence->setNomFichierPresence($nouveauNom);
-        $listPresence->setCINProf($cinProf);
-        $listPresence->setClasse($classe);
-
-        if($tableProf->sendListPresence($listPresence) && move_uploaded_file($tmpName, $destination)) {
-            $success = 1;
-        } else {
-            $success = 0;
-            $errorMessage = "Erreur lors de l'enregistrement.";
-        }
-    } else {
-        $errorMessage = "Fichier invalide : extension non autorisée ou taille > 5 Mo.";
-    }
-}
-*/
 ?>
 
 <div class="presence">

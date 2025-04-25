@@ -8,6 +8,8 @@ $secretKey = $env['SECRET_KEY'];
 $router = new Router(dirname(__DIR__) . '/views');
 $router
     ->get('/', 'home/index', 'accueil')
+    ->get('/about', 'About/about', 'about')
+    ->match('/verification', 'utilisateur/verify_by_email', 'verify-email')
     ->match('/login', 'login/login', 'page-connexion')
     ->match('/my/logout', 'login/logout', 'page-deconnexion')
     ->match('/login/resetpassword', 'utilisateur/recovery/resetPassword', 'forget-password')
@@ -55,6 +57,7 @@ $router
     ->match('/my/administration/gestion/creneaux', 'utilisateur/admin/gestionCreneaux/listCreneau', 'gestion-creneau')
 
     ->match('/my/administration/gestion/liste-presence', 'utilisateur/admin/gestionListePresence/listePresence', 'liste-presence-soumis')
+    ->match('/my/administration/gestion/ajouter-absence-liste', 'utilisateur/admin/gestionListePresence/ajouterAbsence', 'ajouter-considerer')
     ->match('/my/administration/gestion/liste-presence/voir-details', 'utilisateur/admin/gestionListePresence/supprimer', 'liste-presence-soumis-delete')
     ->match('/my/administration/gestion/liste-presence/delete', 'utilisateur/admin/gestionListePresence/voirDetails', 'liste-presence-soumis-details')
 

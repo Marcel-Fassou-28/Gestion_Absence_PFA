@@ -22,29 +22,3 @@
     border-collapse: collapse;
     width: 100%;
 }
-
- /*table tr td{
-    border-bottom: solid 1px white;
-    text-align: center;
-    font-size: medium;
-    padding-bottom: 25px;
-    padding-top: 20px;
- }
-/*table tr th {
-    border-bottom: solid 1px white;
-    text-align: center;
-    
-    font-size: large;
-    padding-bottom: 25px;
-    padding-top: 20px;
-}
-/*table tr td button{
-    border-radius: 15px;
-    border: none;
-    width: 100%;
-    padding: 10px;
-    a {
-        text-decoration: none;
-        color: #000;
-    }
-}*/

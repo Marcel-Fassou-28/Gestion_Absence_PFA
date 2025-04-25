@@ -6,9 +6,6 @@ if(!isset($_SESSION['id_user'])) {
 
 use App\Professeur\ProfessorTable;
 use App\Connection;
-use App\Model\Utils\InfoAbsenceEtudiant;
-use App\Model\Absents;
-use App\Model\Utils\EtudiantsAbsents;
 
 $pdo = Connection::getPDO();
 $professeurTable = new ProfessorTable($pdo);
@@ -42,23 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
             <div class="level-group">
                 <select id="tri-classe" name="classe-prof" required>
                     <option value="">Sélectionner une classe</option>
-                    <?php
-                    /*foreach ($tableClasse as $classe) {
-                        $selected = ($class === $classe->getNomClasse()) ? 'selected' : '';
-                        echo '<option value="' . htmlspecialchars($classe->getNomClasse()) . '" ' . $selected . '>' . htmlspecialchars($classe->getNomClasse()) . '</option>';
-                    }*/
-                    ?>
+
                 </select>
             </div>
             <div class="subject-group">
                 <select id="tri-matiere" name="matiere-prof" required>
                     <option value="">Sélectionner une matière</option>
-                    <?php
-                    /*foreach ($tableMatiere as $subject) {
-                        $selected = ($matiere === $subject->getNomMatiere()) ? 'selected' : '';
-                        echo '<option value="' . htmlspecialchars($subject->getNomMatiere()) . '" ' . $selected . '>' . htmlspecialchars($subject->getNomMatiere()) . '</option>';
-                    }*/
-                    ?>
+
                 </select>
             </div>
             <div class="submit-group">

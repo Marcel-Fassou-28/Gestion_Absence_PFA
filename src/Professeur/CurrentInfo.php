@@ -100,7 +100,7 @@ class CurrentInfo extends Table {
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Etudiant::class);
         $result = $query->fetchAll();
-        return count($result) > 0 ? $result : null;
+        return count($result) > 0 ? $result : [];
     }
 
     /**
@@ -135,7 +135,7 @@ class CurrentInfo extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
         $result = $query->fetch();
 
-        return $result;
+        return $result ?? null;
     }
 
     

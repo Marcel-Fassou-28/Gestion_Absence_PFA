@@ -34,11 +34,15 @@ if (!empty($_POST)) {
             $authCode = sprintf('%06d', random_int(0, 999999));
             $table->codeInsertion($authCode, $email);
 
-            $mailer->resetPasswordMail($email, $authCode, $user->getNom() . ' '. $user->getPrenom());
-            session_start();
-            $_SESSION['user_mail'] = $user->getEmail();
-            header('Location: ' . $router->url('code-recuperation', ['id' => encodindCIN($user->getCIN())]));
-            exit();
+            if ($mailer->resetPasswordMail($email, $authCode, $user->getNom() . ' '. $user->getPrenom())) {
+                session_start();
+                $_SESSION['user_mail'] = $user->getEmail();
+                header('Location: ' . $router->url('code-recuperation', ['id' => encodindCIN($user->getCIN())]));
+                exit();
+            } else {
+                $error = true;
+                $errorEmail = "L'adresse email saisie n'est pas valide. Veuillez vérifier et réessayer avec une adresse correcte.";
+            }
         }
     }else {
         $error = true;

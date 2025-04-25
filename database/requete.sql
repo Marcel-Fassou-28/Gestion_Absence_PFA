@@ -23,7 +23,8 @@ CREATE TABLE Utilisateur (
     role ENUM('admin', 'professeur', 'etudiant') NOT NULL,
     nomPhoto VARCHAR(250),
     codeRecuperation VARCHAR(10),
-    dateDerniereReinitialisation DATETIME
+    dateDerniereReinitialisation DATETIME,
+    token VARCHAR(255)
 );
 
 -- Table des Departements
@@ -88,6 +89,7 @@ CREATE TABLE Professeur (
     nom VARCHAR(250) NOT NULL,
     prenom VARCHAR(250) NOT NULL,
     email VARCHAR(250) NOT NULL UNIQUE,
+    CONSTRAINT fk_prof_utilisateur FOREIGN KEY (email) REFERENCES Utilisateur(email) ON UPDATE CASCADE,
     CONSTRAINT fk_admin_professeur FOREIGN KEY (cinProf) REFERENCES Utilisateur(cin) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -131,7 +133,8 @@ CREATE TABLE ListePresence (
     cinProf VARCHAR(20) NOT NULL,
     date DATETIME NOT NULL,
     classe VARCHAR(10) NOT NULL,
-    nomFichierPresence VARCHAR(250),
+    nomFichierPresence VARCHAR(250) NOT NULL,
+    matiere VARCHAR(100) NOT NULL,
     CONSTRAINT fk_liste_professeur FOREIGN KEY (cinProf) REFERENCES Professeur(cinProf) ON UPDATE CASCADE,
     CONSTRAINT fk_liste_classe FOREIGN KEY (classe) REFERENCES Classe(nomClasse) ON UPDATE CASCADE ON DELETE CASCADE
 );

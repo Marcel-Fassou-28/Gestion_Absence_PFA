@@ -5,6 +5,10 @@ if(!isset($_SESSION['id_user'])) {
     exit();
 }
 
+function generateEmailToken($length = 64) {
+    return bin2hex(random_bytes($length / 2));
+}
+
 use App\Connection;
 use App\UserTable;
 use App\Model\Utilisateur;
@@ -59,13 +63,17 @@ if(!empty($_POST)) {
             }
         }
     }
-   
+
     $utilisateur->setUsername($username);
     $utilisateur->setCIN($cinUser);
-    $utilisateur->setEmail($email);
-
     if ($email !== $user->getEmail()) {
-        $mailer->emailChangeMail($email, $user->getNom() . ' ' . $user->getPrenom());
+        $token = generateEmailToken();
+        $confirmLink = $router->url('verify-email') . '?token='. urlencode($token) . '&email='. urlencode($email);
+        if ($mailer->emailChangeMail($email, $user->getNom() . ' ' . $user->getPrenom(), $confirmLink)) {
+            $utilisateur->setEmail($email);
+
+            $pdo->exec("INSERT INTO utilisateur (token) VALUES ($token)");
+        }
     }
     $userTable->updateUserInformation($utilisateur) ? $success = 1 : $success = 0;
     header('location: '. $router->url('user-profil', ['role'=> $_SESSION['role']]).'?user='.$_SESSION['role'] . '?success='. $success);

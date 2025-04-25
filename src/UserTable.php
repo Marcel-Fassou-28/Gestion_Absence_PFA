@@ -149,9 +149,14 @@ class UserTable extends Table {
         if ($user !== null) {
             $query->execute([
                 'username' => $user->getUsername(),
-                'email' => $user->getEmail(),
                 'cin' => $user->getCIN()
             ]);
+
+            if($user->getEmail()) {
+                $query->execute([
+                    'email' => $user->getEmail()
+                ]);
+            }
             return true;
         } else {
             return false;

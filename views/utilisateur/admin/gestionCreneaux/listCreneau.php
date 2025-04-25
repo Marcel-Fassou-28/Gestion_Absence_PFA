@@ -8,6 +8,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
     header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
     exit();
 }
+$line = 20;
+$offset = $_GET['p'] * $line;
 
 use App\Connection;
 use App\Admin\adminTable;
@@ -17,8 +19,21 @@ $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
 $adminTable = new adminTable($pdo);
-$allCreneaux = $adminTable->getAllCreneaux();
+$allCreneaux = $adminTable->getAllCreneaux($line, $offset);
+$n = count($allCreneaux);
 $numero = 1;
+
+if(!empty($_POST) && $_POST['submit-first'] == 'Trier') {
+    $filieres = $_POST['filiere'] ?? '';
+    $classes = $_POST['classe'] ?? '';
+
+    if($filieres != '') {
+        $allCreneaux = $adminTable->getAllCreneauxByFilieres($filieres, $line, $offset);
+
+    } elseif($filieres != '' && $classes != '') {
+        $allCreneaux = $adminTable->getAllCreneauxByFilieresClasses($filieres, $classes, $line, $offset);
+    }
+}
 ?>
 <div class="prof-list">
 
@@ -65,7 +80,7 @@ $numero = 1;
             </select>
             </div>
             <div class="submit-group">
-            <input class="submit-btn" type="submit" value="Trier" name="submit">
+            <input class="submit-btn" type="submit" value="Trier" name="submit-first">
             </div>
 
         </form>
@@ -103,6 +118,16 @@ $numero = 1;
 
         </table>
     </div>
+    <?php
+    // variable pour compter le nombre de page 
+    //pour aficher le nombre total de page avec ou sans tri 
+    $nbrpage = ceil($n / $line);
+    //boucle d'affichage des numero de page 
+    for ($i = 0; $i < $nbrpage; ) { ?>
+
+        <a href="?<?= $adminTable->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
+    }
+    ?>
 </div>
 
 <script>
