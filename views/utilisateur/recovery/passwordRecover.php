@@ -36,8 +36,8 @@ $pdo = Connection::getPDO();
 $error = false;
 
 if(!empty($_POST)) {
-    $newPassword = trim($_POST['new_password']);
-    $confirmPassword = trim($_POST['confirm_password']);
+    $newPassword = trim($_POST['new_password']) ?? '';
+    $confirmPassword = trim($_POST['confirm_password']) ?? '';
 
     if(!empty($newPassword) && !empty($confirmPassword) && $newPassword === $confirmPassword) {
         $table = new UserTable($pdo);

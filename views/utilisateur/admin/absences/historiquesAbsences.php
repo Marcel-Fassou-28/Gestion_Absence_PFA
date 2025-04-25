@@ -29,24 +29,39 @@ $offset = $_GET['p'] * $line;
 $n = count($list->getAll('etudiant', 'classEtudiant'));
 $listeEtudiant = $list->getAll('etudiant', 'classEtudiant', $line, $offset);
 
+if (isset($_GET['matiere']) && !isset($_POST['matiere']) && empty($_POST)) {
+    $_POST['matiere'] = $_GET['matiere'];
+}
 
-if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut')) {
-    $classe = $_POST['classe'];
-    
-    $listeEtudiant = $list->getStudentByClass($classe, $line, $offset);
-    $n = count($list->getStudentByClass($classe));
+if (isset($_GET['classe']) && !isset($_POST['classe'])) {
+    $_POST['classe'] = $_GET['classe'];
+}
 
+
+
+
+
+if (isset($_POST['classe'])) {
+    if ($_POST['classe'] !== 'defaut') {
+        $classe = $_POST['classe'];
+
+        $listeEtudiant = $list->getStudentByClass($classe, $line, $offset);
+        $n = count($list->getStudentByClass($classe));
+    }
+    $_GET['classe'] = $_POST['classe'];
 
 }
-if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
 
-
-    $matiere = $_POST['matiere'];
+if (isset($_POST['matiere'])) {
+    if ($_POST['matiere'] !== 'defaut') {
+        $matiere = $_POST['matiere'];
     $classe = $list->findClassByMatiere($matiere);
-    $_POST['classe'] = $classe;
+    
     $idMatiere = $list->getIdMatiereByName($matiere);
     $listeEtudiant = $list->getStudentByClass($classe, $line, $offset);
     $n = count($list->getStudentByClass($classe));
+    }
+    $_GET['matiere'] = $_POST['matiere'];
 }
 
 
@@ -68,12 +83,19 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
             <div class="list-classe">
                 <select name="classe" id="tri-classe">
                     <option value="defaut">Classe</option>
+                    <?php
+                    if (isset($classe)): ?>
+                        <option value="<?= $classe; ?>" selected><?= $classe; ?></option>
+                    <?php endif; ?>
                     <!-- Ensemble des classes tiré de la base de données -- -->
                 </select>
             </div>
             <div class="list-classe">
                 <select name="matiere" id="tri-matiere">
                     <option value="defaut">Matiere</option>
+                    <?php if (isset($matiere)): ?>
+                        <option value="<?= $matiere; ?>" selected><?= $matiere; ?></option>
+                    <?php endif; ?>
                     <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
                 </select>
             </div>
@@ -139,7 +161,7 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
                     const option = document.createElement('option');
                     option.value = classe.nomClasse;
                     option.textContent = classe.nomClasse;
-                    
+
                     classeSelect.appendChild(option);
 
                     classesData[classe.nomClasse] = classe.matieres;
@@ -155,7 +177,7 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
                             const option = document.createElement('option');
                             option.value = matiere.nomMatiere;
                             option.textContent = matiere.nomMatiere;
-                            
+
                             matiereSelect.appendChild(option);
                         });
                     } else {

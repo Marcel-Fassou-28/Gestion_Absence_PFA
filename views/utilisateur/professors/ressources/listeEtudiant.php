@@ -11,71 +11,49 @@ $pdo = Connection::getPDO();
 $professeurTable = new ProfessorTable($pdo);
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
-$moisEnFrancais = [
-    'January' => 'Janvier', 'February' => 'Février', 'March' => 'Mars', 'April' => 'Avril',
-    'May' => 'Mai', 'June' => 'Juin', 'July' => 'Juillet', 'August' => 'Août',
-    'September' => 'Septembre', 'October' => 'Octobre', 'November' => 'Novembre', 'December' => 'Décembre'
-];
-$moisAnglais = $date->format('F');
-$dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $date->format('Y');
-$dateSql = $date->format('Y-m-d H:i:s');
+$dateSql = $date->format('Y-m-d H:i');
+
+$line = 20;
+$offset = $_GET['p'] * $line;
 
 $cinProf = $_SESSION['id_user'];
-$listeEtudiant = $professeurTable->findStudent($cinProf);
-$listDesAbsents = $professeurTable->getAllStudentAbsenceState($cinProf);
-$listeComplete = $professeurTable->getAllStudentList($listeEtudiant, $listDesAbsents);
+$listeEtudiants = $professeurTable->findStudent($cinProf, $line, $offset);
 
-$filiere = ''; 
-$matiere = '';
 $class = '';
-
-$tableFiliere = $professeurTable->getFiliere($cinProf);
 $tableClasse = $professeurTable->getClasse($cinProf);
-$tableMatiere = $professeurTable->getMatiere($cinProf);
-$listeEtudiant = $professeurTable->findStudent($cinProf);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    $filiere = $_POST['filiere-prof'] ?? '';
-    $matiere = $_POST['matiere-prof'] ?? '';
-    $class = $_POST['classe-prof'] ?? '';
+    $class = trim($_POST['classe-prof']) ?? '';
 
-    $idMatiere = (int) array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
-    $idClasse = (int) array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class)[array_key_first(array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class))]->getIDClasse();
+    $classeSelectionnee = current(array_filter($tableClasse, fn($c) => $c->getIDClasse() == $class));
+    $idClasse = $classeSelectionnee ? (int) $classeSelectionnee->getIDClasse() : null;
 
-    if (!empty($class) && !empty($matiere)) {
+    if (!empty($class) && isset($idClasse)) {
 
-        $listeEtudiants = $professeurTable->findStudentByClass($idClasse);
-        $listAbsents = $professeurTable->getNbrAbsence($cinProf, $idClasse, $idMatiere);
-        $listeComplete = $professeurTable->getAllStudentList($listeEtudiants, $listAbsents);
+        $listeEtudiants = $professeurTable->findStudentByClass($idClasse, $line, $offset);
+    } else {
+        $listeEtudiants = $professeurTable->findStudent($cinProf, $line, $offset);
     }
+    
 }
+
+$n = count($listeEtudiants);
+
 ?> 
 
 <div class="presence">
     <div class="intro">
         <h1>Liste des Etudiants</h1>
-        <div class="date-group-etudiant">
-            <input type="text" value="<?= $dateDuJour ?>" readonly>
+        <div class="date-group">
+            <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
     </div>
     <div class="hr"></div>
     <div class="presence-container">
         <form class="professor-info container" method="post" action="">
-            <div class="filiere-group">
-                <select id="filiere" name="filiere-prof" required>
-                    <option value="">Filière</option>
-                    
-                </select>
-            </div>
             <div class="level-group">
                 <select id="classe" name="classe-prof" required>
                     <option name="classe-prof" value="" >Classe</option>
-                    
-                </select>
-            </div>
-            <div class="subject-group">
-                <select id="matiere" name="matiere-prof" required>
-                    <option name="matiere-prof"  value="">Matière</option>
                     
                 </select>
             </div>
@@ -83,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <input class="submit-btn" type="submit" name="submit" value="Afficher les Etudiants">
             </div>
         </form>
-        <?php if (!empty($listeEtudiant)): ?>
             <section class="table-container">
                 <table>
                     <thead>
@@ -91,126 +68,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                             <th>N°</th>
                             <th>CIN</th>
                             <th>CNE</th>
-                            <th>Nom et Prénom</th>
-                            <th>Nombre d'Absence</th>
-                            <th>Action</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Classe</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $numero = 1; ?>
-                        <?php foreach ($listeComplete as $etat): ?>
+                    <?php if (!empty($listeEtudiants)): ?>
+                        <?php foreach ($listeEtudiants as $etudiant): ?>
                             <tr>
                                 <td><?= sprintf("%02d", $numero++) ?></td>
-                                <td><?= htmlspecialchars($etat->getCINEtudiant()) ?></td>
-                                <td><?= htmlspecialchars($etat->getCNE()) ?></td>
-                                <td><?= htmlspecialchars($etat->getNom() . ' ' . $etat->getPrenom()) ?></td>
-                                <td><?= htmlspecialchars($etat->getNbrAbsence()) ?></td>
-                                <td><button class="show-state" data-modal-id="modal-<?= $numero ?>">Voir plus</button></td>
+                                <td><?= htmlspecialchars($etudiant->getCIN()) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getCNE()) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getNom()) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getPrenom()) ?></td>
+                                <td><?= htmlspecialchars($etudiant->getNomClasse()) ?></td>
                             </tr>
-                            <div class="modal" id="modal-<?= $numero ?>">
-                                <div class="modal-overlay"></div>
-                                <div class="modal-content">
-                                    <div>
-                                        <p>CIN: </p>
-                                        <p><?= htmlspecialchars($etat->getCINEtudiant()) ?></p>
-                                    </div>
-                                    <div>
-                                        <p>CNE: </p>
-                                        <p><?= htmlspecialchars($etat->getCNE()) ?></p>
-                                    </div>
-                                    <div>
-                                        <p>Nom: </p>
-                                        <p><?= htmlspecialchars($etat->getNom()) ?></p>
-                                    </div>
-                                    <div>
-                                        <p>Prénom: </p>
-                                        <p><?= htmlspecialchars($etat->getPrenom()) ?></p>
-                                    </div>
-                                    <div>
-                                        <p>Nombre d'Absence: </p>
-                                        <p><?= htmlspecialchars($etat->getNbrAbsence()) ?></p>
-                                    </div>
-                                    <div class="modal-buttons">
-                                        <button class="btn-modal close-modal">Fermer</button>
-                                        <button class="btn-modal">
-                                            <a href="mailto:<?= $etat->getEmail() ?>">Contactez</a>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                         <?php endforeach; ?>
+                    <?php endif ?>
                     </tbody>
                 </table>
             </section>
+            <div class="submit-group">
+            <?php
+                $nbrpage = ceil($n / $line);
+                for ($i = 0; $i < $nbrpage; ) { ?>
+                    <a href="?<?= $professeurTable->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
+                }
+            ?>
+            </div>
         </div>
-    <?php endif ?>
 </div>
 
-
 <script>
-    const apiUrl = "<?= $router->url('api-prof-liste-etud') . '?cinProf='.$cinProf?>";
+    const apiUrl = "<?= $router->url('api-prof-liste-etud') . '?cinProf=' . $cinProf ?>";
+
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            const filiereSelect = document.querySelector('#filiere');
+            console.log(data);
             const classeSelect = document.querySelector('#classe');
-            const matiereSelect = document.querySelector('#matiere');
+            const matiereSelect = document.querySelector('#matiere'); // Assurez-vous que l'élément #matiere existe dans le HTML
 
-            const filiereData = {};
-
-            // Remplir le select de filières
-            data.forEach(filiere => {
-            const option = document.createElement('option');
-            option.value = filiere.nomFiliere;
-            option.textContent = filiere.nomFiliere;
-            filiereSelect.appendChild(option);
-
-            filiereData[filiere.nomFiliere] = filiere.classes;
-            });
-
-            // Lorsqu’on change de filière
-            filiereSelect.addEventListener('change', function () {
-            const selectedFiliere = this.value;
-            classeSelect.innerHTML = '<option value="">Classe</option>';
-            matiereSelect.innerHTML = '<option value="">Matière</option>';
-            matiereSelect.disabled = true;
-
-            if (selectedFiliere && filiereData[selectedFiliere]) {
-                classeSelect.disabled = false;
-                console.log('dfsf');
-
-                filiereData[selectedFiliere].forEach(classe => {
+            // Remplir le select des classes
+            data.forEach(classe => {
                 const option = document.createElement('option');
-                option.value = classe.nomClasse;
+                option.value = classe.idClasse;
                 option.textContent = classe.nomClasse;
                 classeSelect.appendChild(option);
-                });
-            } else {
-                classeSelect.disabled = true;
-            }
             });
 
-            // Lorsqu’on change de classe
+            // Lorsque la classe change, vider le select des matières
             classeSelect.addEventListener('change', function () {
-            const selectedFiliere = filiereSelect.value;
-            const selectedClasse = this.value;
-            matiereSelect.innerHTML = '<option value="">Matière</option>';
-
-            const classeList = filiereData[selectedFiliere] || [];
-            const selectedClasseObj = classeList.find(cl => cl.nomClasse === selectedClasse);
-
-            if (selectedClasseObj && selectedClasseObj.matieres.length > 0) {
-                matiereSelect.disabled = false;
-
-                selectedClasseObj.matieres.forEach(matiere => {
-                const option = document.createElement('option');
-                option.value = matiere.nomMatiere;
-                option.textContent = matiere.nomMatiere;
-                matiereSelect.appendChild(option);
-                });
-            } else {
+                const selectedClasseId = parseInt(this.value);
+                matiereSelect.innerHTML = '<option value="">Matière</option>';
                 matiereSelect.disabled = true;
-            }
+
+                // Ici, il n'y a pas de données sur les matières, donc ce bloc peut être personnalisé plus tard
+                // Une fois que les matières sont ajoutées à l'API, décommenter et utiliser ce code.
+                /*
+                const selectedClasse = data.find(classe => classe.idClasse === selectedClasseId);
+                if (selectedClasse && selectedClasse.matieres.length > 0) {
+                    selectedClasse.matieres.forEach(matiere => {
+                        const option = document.createElement('option');
+                        option.value = matiere.idMatiere;
+                        option.textContent = matiere.nomMatiere;
+                        matiereSelect.appendChild(option);
+                    });
+                    matiereSelect.disabled = false;
+                }
+                */
             });
         })
         .catch(error => console.error('Erreur de chargement :', error));

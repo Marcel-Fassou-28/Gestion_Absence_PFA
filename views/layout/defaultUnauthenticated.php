@@ -18,6 +18,9 @@ if(isset($_SESSION['id_user'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/main-style.css">
+    <?php if (isset($_GET['about'])) {
+        echo '<link rel="stylesheet" href="/css/About/about.css">';
+    }?>
     <title>Gestion d'Absence</title>
 </head>
 <body>
@@ -40,25 +43,6 @@ if(isset($_SESSION['id_user'])) {
     <main>
         <?= $content ?>
     </main>
-    <!--<footer class="footer">
-        <div class="left-side"></div>
-        <div class="footer-container">
-        <div class="footer-brand">
-        <h2>GAENSAJ</h2>
-        <p>Plateforme de gestion d'absence de l'ENSAJ</p>
-        </div>
-        <div class="footer-links">
-        <a href="<?= $router->url('user-home') ?>">Accueil</a>
-        <a href="#">À propos</a>
-        <a href="#">Contact</a>
-        <a href="#">Support</a>
-        </div>
-        <div class="footer-rights">
-        <p>&copy; 2025 GAENSAJ - Tous droits réservés.</p>
-        </div>
-        </div>
-        <div class="right-side"></div>
-    </footer>-->
     <footer class="footer">
     <div class="footer-container">
         <div class="footer-brand">
@@ -73,8 +57,7 @@ if(isset($_SESSION['id_user'])) {
             <h3 class="footer-section-title">Liens utiles</h3>
             <ul>
                 <li><a href="<?= $router->url('accueil') ?>" aria-label="Accueil">Accueil</a></li>
-                <li><a href="#" aria-label="À propos">À propos</a></li>
-                <li><a href="#" aria-label="FAQ">FAQ</a></li>
+                <li><a href="<?= $router->url('about') . '?about=1' ?>" aria-label="À propos">À propos</a></li>
             </ul>
         </div>
         <div class="footer-contact">

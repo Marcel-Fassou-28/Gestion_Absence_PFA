@@ -332,6 +332,16 @@ class adminTable extends Table
         return count($result) != 0 ? $result : [];
     }
 
+    public function getinfoJustificatifById($id)
+    {
+        $sql = $this->pdo->prepare("
+        SELECT * FROM justificatif WHERE idJustificatif =:id;
+        ");
+        $sql->execute(['id' => $id]);
+        $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classJustificatif);
+        return $sql->fetch();
+    }
+
     /**
      * trouver l'id de la classe a l'aide de son nom 
      * @param mixed $name
@@ -788,7 +798,8 @@ class adminTable extends Table
         SELECT COUNT(e.cinEtudiant) as nbreAbsences FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
         ON m.idMatiere = a.idMatiere WHERE a.cinEtudiant =:cin AND 
-        a.idMatiere = :id";
+        a.idMatiere = :id AND a.idAbsence NOT IN 
+        (SELECT idAbsence FROM justificatif WHERE statut = 'accepté')";
 
         $sql = $this->pdo->prepare($querry);
         $sql->execute([
@@ -807,12 +818,14 @@ class adminTable extends Table
      */
     public function getPrivateStudentToPastExamByMatiere($matiere, int $line = 0, int $offset = 0): array
     {
+        "SELECT idAbsence FROM justificatif WHERE statut = 'accepté'";
         $querry = "
         SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant,
          e.cne as cne FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
-        ON m.idMatiere = a.idMatiere WHERE a.idMatiere = :id GROUP BY e.nom, e.prenom, e.cinEtudiant
-         HAVING COUNT(a.cinEtudiant)>=4";
+        ON m.idMatiere = a.idMatiere WHERE a.idMatiere = :id AND a.idAbsence NOT IN 
+        (SELECT idAbsence FROM justificatif WHERE statut = 'accepté')
+        GROUP BY e.nom, e.prenom, e.cinEtudiant HAVING COUNT(a.cinEtudiant)>=4";
 
         if ($line !== 0) {
             $querry .= " LIMIT " . $line . " OFFSET " . $offset;
@@ -827,15 +840,61 @@ class adminTable extends Table
     }
 
     /**
+     * cette methoodde permet de justifier une ou plusieurs absence d'un etudiant
+     *  entre deux date donnee
+     * @param int $id l'identifiant du justificatif pour mettre le satatut a acepte
+     * @param string $cinEtudiant cin de l'etudiant pour supprimer les absence de l'etudiant
+     * @param string $date1 date de debut de validite du justificatif
+     * @param string $date2 date de fin de validite du justificatif
+     * @return bool
+     */
+    public function justifierAbscence(int $id, string $cinEtudiant, string $date1, string $date2): bool
+    {
+
+        try {
+            $this->pdo->beginTransaction();
+            $query = "UPDATE justificatif SET statut = 'accepté' WHERE idJustificatif
+             = :id AND idAbsence 
+            IN (SELECT idAbsence FROM absence WHERE cinEtudiant = :cinEtudiant
+             AND DATE(date) BETWEEN :date1 AND :date2)";
+
+            $querrry = "DELETE FROM absence WHERE cinEtudiant = :cinEtudiant  AND DATE(date) BETWEEN :date1 AND :date2";
+            $sql = $this->pdo->prepare($query);
+            $sql->execute([
+                'id' => $id,
+                'cinEtudiant' => $cinEtudiant,
+                'date1' => $date1,
+                'date2' => $date2
+            ]);
+
+            $sql = $this->pdo->prepare($querrry);
+            $sql->execute([
+                'cinEtudiant' => $cinEtudiant,
+                'date1' => $date1,
+                'date2' => $date2
+            ]);
+            $this->pdo->commit();
+            return true;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+
+    }
+
+    /**
      * Cette méthode est défini pour recuperer la liste de tous les fichiers d'absence
      * soumis dans les classes
      * 
+     * @param int $line
+     * @param int $offset
      * @return array
      */
-    public function getAllFichierListPresence(): array
+    public function getAllFichierListPresence(int $line = 0, int $offset = 0): array
     {
         $query = $this->pdo->prepare('
-            SELECT lp.*, CONCAT(p.nom ," ", p.prenom) as nomPrenom FROM listepresence lp JOIN professeur p ON lp.cinProf = p.cinProf ORDER BY date DESC
+            SELECT lp.*, CONCAT(p.nom ," ", p.prenom) as nomPrenom FROM listepresence lp JOIN professeur p ON lp.cinProf = p.cinProf ORDER BY lp.date DESC
+            LIMIT ' . $line . ' OFFSET ' . $offset .' 
         ');
         $query->execute();
         $query->setFetchMode(\PDO::FETCH_CLASS, ListePresence::class);
@@ -844,8 +903,54 @@ class adminTable extends Table
         return $result ?? [];
     }
 
-    /*
-     * cette fonction permet generer une url avec comme un formulaire soumit avec get
+    /**
+     * Cette méthode est défini pour recuperer la liste de tous les fichiers d'absence
+     * soumis dans les classes par classe
+     * 
+     * @param int $line
+     * @param int $offset
+     * @param string $classe
+     * @return array
+     */
+    public function getAllFichierListPresenceByClasse(string $classe, int $line = 0, int $offset = 0): array
+    {
+        $query = $this->pdo->prepare('
+            SELECT lp.*, CONCAT(p.nom ," ", p.prenom) as nomPrenom FROM listepresence lp JOIN professeur p ON lp.cinProf = p.cinProf WHERE
+            lp.classe = :classe ORDER BY lp.date DESC LIMIT ' . $line . ' OFFSET ' . $offset .'
+        ');
+        $query->execute(['classe' => $classe]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, ListePresence::class);
+        $result = $query->fetchAll();
+
+        return $result ?? [];
+    }
+
+    /**
+     * Cette méthode est défini pour recuperer la liste de tous les fichiers d'absence
+     * soumis dans les classes by classe et par matiere
+     * 
+     * @param string $classe
+     * @param string $matiere
+     * @param int $line
+     * @param int $offset
+     * @return array
+     */
+    public function getAllFichierListPresenceByClasseMatiere(string $classe, string $matiere, int $line = 0, int $offset = 0): array
+    {
+        $query = $this->pdo->prepare('
+            SELECT lp.*, CONCAT(p.nom ," ", p.prenom) as nomPrenom FROM listepresence lp JOIN professeur p ON lp.cinProf = p.cinProf WHERE
+            lp.classe = :classe AND lp.matiere = :matiere ORDER BY lp.date DESC LIMIT ' . $line . ' OFFSET ' . $offset . '
+        ');
+        $query->execute(['classe' => $classe, 'matiere' => $matiere]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, ListePresence::class);
+        $result = $query->fetchAll();
+
+        return $result ?? [];
+    }
+
+    /**
+     * Cette methode permet generer une url avec comme un formulaire soumit avec get
+     * 
      * @param mixed $col
      * @param mixed $val
      * @return string
@@ -858,17 +963,73 @@ class adminTable extends Table
     /**
      * Cette méthode permet d'afficher tous les créneaux
      * 
+     * @param int $line
+     * @param int $offset
      * @return array
      */
-    public function getAllCreneaux(): ?array
+    public function getAllCreneaux(int $line, int $offset): ?array
     {
         $query = $this->pdo->prepare('
             SELECT C.jourSemaine, C.heureDebut, C.heureFin, C.id, P.nom as nomProf, P.prenom as prenomProf, Cl.nomClasse, M.nomMatiere
             FROM Creneaux C JOIN Professeur P ON C.cinProf = P.cinProf JOIN Matiere M ON C.idMatiere = M.idMatiere
             JOIN Classe Cl ON M.idClasse = Cl.idClasse ORDER BY 
-            FIELD(C.jourSemaine, \'Lundi\', \'Mardi\', \'Mercredi\', \'Jeudi\', \'Vendredi\', \'Samedi\'), C.heureDebut;
+            FIELD(C.jourSemaine, \'Lundi\', \'Mardi\', \'Mercredi\', \'Jeudi\', \'Vendredi\', \'Samedi\'), C.heureDebut LIMIT ' . $line . ' OFFSET ' .$offset . '
         ');
         $query->execute();
+        $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
+        $result = $query->fetchAll();
+
+        return $result ?? [];
+    }
+
+
+    /**
+     * Cette méthode permet d'afficher tous les créneaux
+     * par filière 
+     * 
+     * @param string $filiere
+     * @param int $line
+     * @param int $offset
+     * @return array
+     */
+    public function getAllCreneauxByFilieres(string $filiere, int $line, int $offset): ?array
+    {
+        $query = $this->pdo->prepare('
+            SELECT C.jourSemaine, C.heureDebut, C.heureFin, C.id, P.nom as nomProf, P.prenom as prenomProf, Cl.nomClasse, M.nomMatiere
+            FROM Creneaux C JOIN Professeur P ON C.cinProf = P.cinProf JOIN Matiere M ON C.idMatiere = M.idMatiere
+            JOIN Classe Cl ON M.idClasse = Cl.idClasse JOIN Filiere f ON Cl.idFiliere = f.idFiliere WHERE f.nomFiliere = :nomFiliere  ORDER BY 
+            FIELD(C.jourSemaine, \'Lundi\', \'Mardi\', \'Mercredi\', \'Jeudi\', \'Vendredi\', \'Samedi\'), C.heureDebut LIMIT ' . $line . ' OFFSET ' .$offset . '
+        ');
+        $query->execute(['nomFiliere' => $filiere]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
+        $result = $query->fetchAll();
+
+        return $result ?? [];
+    }
+
+
+    /**
+     * Cette méthode permet d'afficher tous les créneaux
+     * par filière et par classes
+     * 
+     * @param string $filiere
+     * @param string $classe
+     * @param int $line
+     * @param int $offset
+     * @return array
+     */
+    public function getAllCreneauxByFilieresClasses(string $filiere, string $classe , int $line, int $offset): ?array
+    {
+        $query = $this->pdo->prepare('
+            SELECT C.jourSemaine, C.heureDebut, C.heureFin, C.id, P.nom as nomProf, P.prenom as prenomProf, Cl.nomClasse, M.nomMatiere
+            FROM Creneaux C JOIN Professeur P ON C.cinProf = P.cinProf JOIN Matiere M ON C.idMatiere = M.idMatiere
+            JOIN Classe Cl ON M.idClasse = Cl.idClasse JOIN Filiere f ON Cl.idFiliere = f.idFiliere WHERE f.nomFiliere = :nomFiliere AND Cl.nomClasse = :nomClasse ORDER BY 
+            FIELD(C.jourSemaine, \'Lundi\', \'Mardi\', \'Mercredi\', \'Jeudi\', \'Vendredi\', \'Samedi\'), C.heureDebut LIMIT ' . $line . ' OFFSET ' .$offset . '
+        ');
+        $query->execute([
+            'nomClasse' => $classe,
+            'nomFiliere' => $filiere
+        ]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
         $result = $query->fetchAll();
 

@@ -96,14 +96,19 @@ if (isset($_POST['classe'])) {
             <div class="list-filiere">
                 <select name="filiere" id="tri-filiere" onchange="this.form.submit()">
                     <option value="defaut">Filières</option>
-
+                    <?php
+                    if (isset($filiere)): ?>
+                        <option value="<?= $filiere; ?>" selected><?= $filiere; ?></option>
+                    <?php endif; ?>
                 </select>
             </div>
             <div class="list-classe">
                 <select name="classe" id="tri-classe">
                     <option value="defaut">Classe</option>
                     <?php
-                    ?>
+                    if (isset($classe)): ?>
+                        <option value="<?= $classe; ?>" selected><?= $classe; ?></option>
+                    <?php endif; ?>
                 </select>
             </div>
             <div class="submit-group">

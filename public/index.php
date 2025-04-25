@@ -8,6 +8,8 @@ $secretKey = $env['SECRET_KEY'];
 $router = new Router(dirname(__DIR__) . '/views');
 $router
     ->get('/', 'home/index', 'accueil')
+    ->get('/about', 'About/about', 'about')
+    ->match('/verification', 'utilisateur/verify_by_email', 'verify-email')
     ->match('/login', 'login/login', 'page-connexion')
     ->match('/my/logout', 'login/logout', 'page-deconnexion')
     ->match('/login/resetpassword', 'utilisateur/recovery/resetPassword', 'forget-password')
@@ -17,6 +19,8 @@ $router
     /* Pour servir les images de profil */
     ->get('/my/profil/[*:role]/[*:id]', 'proxy/photo', 'serve-photo')
     ->get('/my/profil/serve-file', 'proxy/presence', 'serve-presence')
+
+    ->get('/my/justificatif/serve-file', 'proxy/justificatif', 'serve-justificatif')
 
     /* Lorsque l'utilisateur est connecté */
     ->get('/home/my/[*:role]', 'utilisateur/home','user-home')
@@ -33,7 +37,12 @@ $router
     ->match('/my/historics/professeur/absence', 'utilisateur/professors/historics/absence','historic-absence')
     
     /* Contenu pour les admins */
-    ->match('/my/administration/justificatif','utilisateur/admin/justifyHistory','justification')
+    ->match('/my/administration/justificatif','utilisateur/admin/gestionJustificatif/justifyHistory','justification')
+    ->match('/my/administration/Traiter_justificatif','utilisateur/admin/gestionJustificatif/traiterJustificatif','traitement_justificatif')
+    ->match('/my/administration/Detail_justificatif','utilisateur/admin/gestionJustificatif/detailJustificatif','detail_justificatif')
+    ->match('/my/administration/Rejeter_justificatif','utilisateur/admin/gestionJustificatif/rejecterJustificatif','rejecter_justificatif')
+    ->match('/my/administration/Supprimer_justificatif','utilisateur/admin/gestionJustificatif/supprimerJustificatif','supprimer_justificatif')
+
 
     ->match('/my/administration/modifier-prof','utilisateur/admin/gestionProf/modifierProf','modifier-professeur')
     ->match('/my/administration/supprimer-prof','utilisateur/admin/gestionProf/supprimerProf','supprimer-professeur')
@@ -48,6 +57,7 @@ $router
     ->match('/my/administration/gestion/creneaux', 'utilisateur/admin/gestionCreneaux/listCreneau', 'gestion-creneau')
 
     ->match('/my/administration/gestion/liste-presence', 'utilisateur/admin/gestionListePresence/listePresence', 'liste-presence-soumis')
+    ->match('/my/administration/gestion/ajouter-absence-liste', 'utilisateur/admin/gestionListePresence/ajouterAbsence', 'ajouter-considerer')
     ->match('/my/administration/gestion/liste-presence/voir-details', 'utilisateur/admin/gestionListePresence/supprimer', 'liste-presence-soumis-delete')
     ->match('/my/administration/gestion/liste-presence/delete', 'utilisateur/admin/gestionListePresence/voirDetails', 'liste-presence-soumis-details')
 
@@ -92,6 +102,9 @@ $router
     ->match('/my/administration/gestion-classe', 'utilisateur/admin/gestionClasses/listeClasse', 'gestion-classe')
     ->match('/my/administration/gestion-classe/supprimer', 'utilisateur/admin/gestionClasses/supprimerClasse', 'classe-delete')
     ->match('/my/administration/gestion-classe/modifie', 'utilisateur/admin/gestionClasses/modifierClasse', 'classe-modifie')
+
+
+    ->match('/my/export_pdf','utilisateur/admin/absences/export_pdf','exportPdf')
 
     /* API */
     ->match('/my/api/liste-fichier-presence', 'API/API_fichier_liste_presence', 'api-liste-classe')

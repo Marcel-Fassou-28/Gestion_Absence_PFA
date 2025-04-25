@@ -17,6 +17,7 @@ namespace App\Model;
  * @property string $codeRecuperation
  * @property string $dateDerniereReinitialisation
  * @property string $nomPhoto
+ * @property string $token
  */
 class Utilisateur {
 
@@ -74,6 +75,11 @@ class Utilisateur {
    * @var string $nomPhoto
    */
   private $nomPhoto;
+
+    /**
+   * @var string $token
+   */
+  private $token;
 
     /*public function __construct($id, $username, $nom, $prenom, $email, $password, $cin, $role)
     {
@@ -283,5 +289,24 @@ class Utilisateur {
      */
     public function setNomPhoto(string $value) {
       $this->nomPhoto = $value;
+    }
+
+    
+    /**
+     * Getters
+     * 
+     * @return string
+     */
+    public function getToken() {
+      return $this->token;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string $value 
+     */
+    public function setToken(string $value) {
+      $this->token = $value;
     }
 }

@@ -16,15 +16,36 @@ use App\Admin\adminTable;
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
+$line = 20;
+$offset = $_GET['p'] * $line;
+
 $pdo = Connection::getPDO();
 $tableAdmin = new adminTable($pdo);
 
-$listeFichierPresence = $tableAdmin->getAllFichierListPresence();
+$listeFichierPresence = $tableAdmin->getAllFichierListPresence($line, $offset);
+
 //$listeClasse = $tableAdmin->getAllClasse();
+if (isset($_POST['submit'])) {
+    $classe = $_POST['classe'] ?? '';
+    $matiere = $_POST['matiere'] ?? '';
+
+    if(!empty($classe)) {
+        $listeFichierPresence = $tableAdmin->getAllFichierListPresenceByClasse($classe, $line, $offset);
+    }elseif(!empty($classe) && !empty($matiere) ) {
+        $listeFichierPresence = $tableAdmin->getAllFichierListPresenceByClasseMatiere($classe, $matiere, $line, $offset);
+    }
+}
+$n = count($listeFichierPresence);
 ?>
 
 
 <div class="prof-list">
+    <?php if (isset($_GET['success_absence']) && $_GET['success_absence'] == '1'): ?>
+       <div class="alert alert-success">
+        Liste de presence prise en condération avec succès
+       </div>
+    <?php endif ?>
+
     <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
        <div class="alert alert-success">
         Liste de presence supprimer avec succès
@@ -34,7 +55,7 @@ $listeFichierPresence = $tableAdmin->getAllFichierListPresence();
         Votre opération n'a pas etre effectuée
        </div>
         <?php else: ?><?php endif ?>
-<div class="intro-prof-list">
+    <div class="intro-prof-list">
         <h1>Fichiers de Listes de Presence</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
@@ -83,6 +104,15 @@ $listeFichierPresence = $tableAdmin->getAllFichierListPresence();
                 <?php } ?>
             </table>
         </div>
+        <?php
+ 
+    $nbrpage = ceil($n / $line);
+    //boucle d'affichage des numero de page 
+    for ($i = 0; $i < $nbrpage; ) { ?>
+
+        <a href="?<?= $tableAdmin->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
+    }
+    ?>
     </div>
 </div>
 

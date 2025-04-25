@@ -66,64 +66,6 @@ showMenu.addEventListener('click', () => {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const modalButtons = document.querySelectorAll('.show-state');
-    const closeButtons = document.querySelectorAll('.close-modal');
-    const overlays = document.querySelectorAll('.modal-overlay');
-
-    // Ouvre le modal
-    modalButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const modalId = button.getAttribute('data-modal-id');
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('active');
-
-                const modalContent = modal.querySelector('.modal-content');
-                modalContent.style.top = '50vh';
-                modalContent.style.left = '50vw';
-                modalContent.style.transform = 'translate(-50%, -50%)'
-
-                //Scroll automatique vers le haut
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
-    });
-
-    // Ferme le modal avec le bouton fermer
-    closeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const modal = button.closest('.modal');
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = ''; // Restaure le scroll
-            }
-        });
-    });
-
-    // Ferme le modal en cliquant sur l'overlay
-    overlays.forEach(overlay => {
-        overlay.addEventListener('click', () => {
-            const modal = overlay.closest('.modal');
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = ''; // Restaure le scroll
-            }
-        });
-    });
-
-    // Ferme le modal avec la touche Échap
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            const activeModal = document.querySelector('.modal.active');
-            if (activeModal) {
-                activeModal.classList.remove('active');
-                document.body.style.overflow = ''; // Restaure le scroll
-            }
-        }
-    });
-});
-
 delteBtn = document.querySelectorAll('#delete');
 if (delteBtn) {
     delteBtn.forEach(btn => {

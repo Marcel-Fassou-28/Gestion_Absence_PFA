@@ -9,7 +9,7 @@ $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
 
-$line = 1;
+$line = 20;
 $offset = $_GET['p'] * $line;
 $n = 0;
 
@@ -18,18 +18,18 @@ $dateSql = $date->format('Y-m-d H:i');
 
 if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut')) {
     $classe = $_POST['classe'];
-   
+
     $listeMatiere = $list->getMatiereByClass($classe);
     $idClasse = $list->getIdClasseByClasseName($classe);
-    
+
 
 }
 if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
-    
+
     $matiere = $_POST['matiere'];
     $idMatiere = $list->getIdMatiereByName($matiere);
-    $listeEtudiant = $list->getPrivateStudentToPastExamByMatiere($idMatiere,$line,$offset);
-    
+    $listeEtudiant = $list->getPrivateStudentToPastExamByMatiere($idMatiere, $line, $offset);
+
     $n = count($list->getPrivateStudentToPastExamByMatiere($idMatiere));
 }
 
@@ -47,13 +47,20 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
             <div class="list-classe">
                 <select name="classe" id="tri-classe">
                     <option value="defaut">Classe</option>
-                    
+
+                    <?php
+                    if (isset($classe)): ?>
+                        <option value="<?= $classe; ?>" selected><?= $classe; ?></option>
+                    <?php endif; ?>
                 </select>
             </div>
             <div class="list-classe">
                 <select name="matiere" id="tri-matiere">
                     <option value="defaut">Matiere</option>
-                    
+                    <?php
+                    if (isset($matiere)): ?>
+                        <option value="<?= $matiere; ?>" selected><?= $matiere; ?></option>
+                    <?php endif; ?>
                     <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
                 </select>
             </div>
@@ -63,30 +70,32 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
         </form>
     </div>
     <div class="list-tri-table-justificatif">
-    <?php if (empty($listeEtudiant) || !isset($listeEtudiant)):
-                echo " <h1> Aucun etudiants !!!</h1>";
-            else:?>
-            <h3>Matiere: <?= $matiere?></h3>
-        <table>
-            <thead>
-                <th>N°</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>CNE</th>
-            </thead>
-            <?php
-            
-            foreach ($listeEtudiant as $row): ?>
-                <tr>
-                    <td><?= ++$offset; ?></td>
-                    <td> <?=$row->getNom()?></td>
-                    <td> <?=$row->getPrenom()?></td>
-                    <td> <?=$row->getCNE()?></td>
-                </tr><?php
+        <?php if (empty($listeEtudiant) || !isset($listeEtudiant)):
+            echo '<h1 class = "liste-vide"> Aucun etudiants !!!</h1>';
+        else: ?>
+            <a href="<?= $router->url('exportPdf') . '?matiere=' . $matiere ?>" class="btn-download-pdf" target="_blank">
+                Télécharger en PDF
+            </a>
+            <table>
+                <thead>
+                    <th>N°</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>CNE</th>
+                </thead>
+                <?php
 
-            endforeach;
-            endif
-            ?>
+                foreach ($listeEtudiant as $row): ?>
+                    <tr>
+                        <td><?= ++$offset; ?></td>
+                        <td> <?= $row->getNom() ?></td>
+                        <td> <?= $row->getPrenom() ?></td>
+                        <td> <?= $row->getCNE() ?></td>
+                    </tr><?php
+
+                endforeach;
+        endif
+        ?>
         </table>
 
     </div>
@@ -95,51 +104,51 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
     //pour aficher le nombre total de page avec ou sans tri 
     $nbrpage = ceil($n / $line);
     //boucle d'affichage des numero de page 
-    for ( $i = 0; $i <$nbrpage; ){?>
+    for ($i = 0; $i < $nbrpage; ) { ?>
 
-        <a href="?<?= $list->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page': '';?>"><?=++$i?></a><?php
+        <a href="?<?= $list->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
     }
     ?>
 </div>
 </div>
 
 <script>
-        const apiUrl = "<?= $router->url('api-liste-classe') ?>";
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
+    const apiUrl = "<?= $router->url('api-liste-classe') ?>";
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
 
-                const classeSelect = document.querySelector('#tri-classe');
-                const matiereSelect = document.querySelector('#tri-matiere');
+            const classeSelect = document.querySelector('#tri-classe');
+            const matiereSelect = document.querySelector('#tri-matiere');
 
-                const classesData = {};
-                data.forEach(classe => {
-                    const option = document.createElement('option');
-                    option.value = classe.nomClasse;
-                    option.textContent = classe.nomClasse;
-                    
-                    classeSelect.appendChild(option);
+            const classesData = {};
+            data.forEach(classe => {
+                const option = document.createElement('option');
+                option.value = classe.nomClasse;
+                option.textContent = classe.nomClasse;
 
-                    classesData[classe.nomClasse] = classe.matieres;
-                });
+                classeSelect.appendChild(option);
 
-                classeSelect.addEventListener('change', function () {
-                    const selectedId = this.value;
-                    matiereSelect.innerHTML = '<option value="defaut" selected >matiere</option>';
+                classesData[classe.nomClasse] = classe.matieres;
+            });
 
-                    if (selectedId && classesData[selectedId]) {
-                        matiereSelect.disabled = false;
-                        classesData[selectedId].forEach(matiere => {
-                            const option = document.createElement('option');
-                            option.value = matiere.nomMatiere;
-                            option.textContent = matiere.nomMatiere;
-                            
-                            matiereSelect.appendChild(option);
-                        });
-                    } else {
-                        matiereSelect.disabled = true;
-                    }
-                });
-            })
-            .catch(error => console.error('Erreur de chargement des classes/matières :', error));
-    </script>
+            classeSelect.addEventListener('change', function () {
+                const selectedId = this.value;
+                matiereSelect.innerHTML = '<option value="defaut" selected >matiere</option>';
+
+                if (selectedId && classesData[selectedId]) {
+                    matiereSelect.disabled = false;
+                    classesData[selectedId].forEach(matiere => {
+                        const option = document.createElement('option');
+                        option.value = matiere.nomMatiere;
+                        option.textContent = matiere.nomMatiere;
+
+                        matiereSelect.appendChild(option);
+                    });
+                } else {
+                    matiereSelect.disabled = true;
+                }
+            });
+        })
+        .catch(error => console.error('Erreur de chargement des classes/matières :', error));
+</script>

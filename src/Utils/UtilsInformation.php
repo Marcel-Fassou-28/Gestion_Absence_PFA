@@ -19,24 +19,26 @@ use App\Model\Utils\StatisticClass;
  *    - Les dernières statistiques
  *    - Les statistiques d'une classe
  */
-class UtilsInformation extends Table {
+class UtilsInformation extends Table
+{
 
     private $groupedByDay = [];
-      
+
     /**
      * Cette méthode retourne la liste des créneaux
      * 
      * @param string $cinProf
      * @return array
      */
-    public function getAllCreneaux(string $cinProf):?array {
+    public function getAllCreneaux(string $cinProf): ?array
+    {
         $query = $this->pdo->prepare('
             SELECT * FROM creneaux WHERE cinProf = :cinProf
         ');
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
         $creneaux = $query->fetchAll();
-        
+
         $query = $this->pdo->prepare('
             SELECT * FROM matiere WHERE cinProf = :cinProf
         ');
@@ -53,7 +55,7 @@ class UtilsInformation extends Table {
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Classe::class);
         $classes = $query->fetchAll();
-        
+
         $this->groupedByDay = $this->associerCreneaux($creneaux, $matieres, $classes);
         return $this->groupedByDay;
     }
@@ -66,7 +68,8 @@ class UtilsInformation extends Table {
      * @param Classe[] $classes Tableau d'objets Classe
      * @return array Tableau associatif avec jour comme clé et tableau de CreneauComplet comme valeur
      */
-    function associerCreneaux($creneaux, $matieres, $classes): array {
+    function associerCreneaux($creneaux, $matieres, $classes): array
+    {
         $matieresById = [];
         foreach ($matieres as $matiere) {
             $matieresById[$matiere->getIdMatiere()] = $matiere;
@@ -129,7 +132,8 @@ class UtilsInformation extends Table {
      * @param string $cinProf
      * @return LastAbsence|null
      */
-    public function getInfoDerniereAbsence(string $cinProf):?LastAbsence {
+    public function getInfoDerniereAbsence(string $cinProf): ?LastAbsence
+    {
         $query = $this->pdo->prepare('
             SELECT c.nomClasse, f.nomFiliere, m.nomMatiere, cr.heureDebut, cr.heureFin,
             a.date, COUNT(a.cinEtudiant) AS nombreAbsents FROM absence a JOIN 
@@ -145,6 +149,8 @@ class UtilsInformation extends Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, LastAbsence::class);
 
         $result = $query->fetch();
+        if (!$result)
+            return null;
 
         return $result;
     }
@@ -157,17 +163,18 @@ class UtilsInformation extends Table {
      * @param string $cinProf
      * @return array
      */
-    public function getInfoEffectifsNbrAbsents(string $cinProf):?array {
-       $query = $this->pdo->prepare('
+    public function getInfoEffectifsNbrAbsents(string $cinProf): ?array
+    {
+        $query = $this->pdo->prepare('
             SELECT c.idClasse, c.nomClasse, COUNT(DISTINCT e.cinEtudiant) AS effectifTotal, COUNT(DISTINCT a.cinEtudiant) AS totalAbsents
             FROM professeur p JOIN matiere m ON p.cinProf = m.cinProf JOIN classe c ON m.idClasse = c.idClasse
             JOIN etudiant e ON e.idClasse = c.idClasse LEFT JOIN absence a ON a.cinEtudiant = e.cinEtudiant AND a.idMatiere = m.idMatiere 
             WHERE  p.cinProf = :cinProf GROUP BY c.idClasse, c.nomClasse
        ');
 
-       $query->execute(['cinProf' => $cinProf]);
-       $query->setFetchMode(\PDO::FETCH_CLASS, StatisticClass::class);
-       $result = $query->fetchAll();
+        $query->execute(['cinProf' => $cinProf]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, StatisticClass::class);
+        $result = $query->fetchAll();
 
         return $result;
     }

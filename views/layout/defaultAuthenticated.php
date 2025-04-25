@@ -30,7 +30,9 @@ $user = $tableUser->getIdentification($cin);
     
     <link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">
 
- 
+    <?php if (isset($_GET['about'])) {
+        echo '<link rel="stylesheet" href="/css/About/about.css">';
+    }?>
 
     <?php if(isset($_GET['use-link'])) {
         echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
@@ -98,8 +100,8 @@ $user = $tableUser->getIdentification($cin);
                         <li><a href="<?= $router->url('admin-messagerie') ?>">Messagerie</a></li>
 
                     <?php else: ?>
-                        <li><a href="<?= $router->url('historic-absence') . '?historic=absence' ?>">Historique des Absences</a></li>
-                        <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list' ?>">Liste des Etudiants</a></li>
+                        <li><a href="<?= $router->url('historic-absence') . '?historic=absence&p=0' ?>">Historique des Absences</a></li>
+                        <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list&p=0' ?>">Liste des Etudiants</a></li>
 
                 <?php endif ?>
 
@@ -113,27 +115,6 @@ $user = $tableUser->getIdentification($cin);
     <main>
         <?= $content ?>
     </main>
-    <!--<footer class="footer">
-        <div class="left-side"></div>
-        
-        <div class="footer-container">
-        <div class="footer-brand">
-        <h2 class="footer-title">GAENSAJ</h2>
-        <p>Plateforme de gestion d'absence de l'ENSAJ</p>
-        </div>
-        <div class="footer-links">
-        <a href="<?= $router->url('user-home', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]) ?>">Accueil</a>
-      <a href="#">À propos</a>
-      <a href="#">Contact</a>
-      <a href="#">Support</a>
-        </div>
-        <div class="footer-rights">
-      <p>&copy; 2025 GAENSAJ - Tous droits réservés.</p>
-        </div>
-    </div>
-
-        <div class="right-side"></div>
-    </footer>-->
     <footer class="footer">
     <div class="footer-container">
         <div class="footer-brand">
@@ -148,8 +129,7 @@ $user = $tableUser->getIdentification($cin);
             <h3 class="footer-section-title">Liens utiles</h3>
             <ul>
                 <li><a href="<?= $router->url('user-home', ['role' => $_SESSION['role'], 'id' => $_SESSION['id_user']]) ?>" aria-label="Accueil">Accueil</a></li>
-                <li><a href="#" aria-label="À propos">À propos</a></li>
-                <li><a href="#" aria-label="FAQ">FAQ</a></li>
+                <li><a href="<?= $router->url('about') . '?about=1' ?>" aria-label="À propos">À propos</a></li>
             </ul>
         </div>
         <div class="footer-contact">

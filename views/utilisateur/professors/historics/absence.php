@@ -6,9 +6,9 @@ if(!isset($_SESSION['id_user'])) {
 
 use App\Professeur\ProfessorTable;
 use App\Connection;
-use App\Model\Utils\InfoAbsenceEtudiant;
-use App\Model\Absents;
-use App\Model\Utils\EtudiantsAbsents;
+
+$line = 20;
+$offset = $_GET['p'] * $line;
 
 $pdo = Connection::getPDO();
 $professeurTable = new ProfessorTable($pdo);
@@ -18,17 +18,28 @@ $cinProf = $_SESSION['id_user'];
 
 $tableMatiere = $professeurTable->getMatiere($cinProf);
 $tableClasse = $professeurTable->getClasse($cinProf);
-$listeEtudiant = $professeurTable->getAbsents($cinProf);
+$listeEtudiant = $professeurTable->getAbsents($cinProf, $line, $offset);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
     $class = $_POST['classe-prof'] ?? '';
     $matiere = $_POST['matiere-prof'] ?? '';
 
-    $idMatiere = array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
-    $idClasse = array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class)[array_key_first(array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class))]->getIDClasse();
-    $listeEtudiant = $professeurTable->getAbsentsByMatiereClasse($cinProf, $idClasse , $idMatiere);
+    if (!empty($class)) {
+        $idClasse = array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class)[array_key_first(array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class))]->getIDClasse();
+        $listeEtudiant = $professeurTable->getAbsentsByClasse($cinProf, $idClasse, $line, $offset);
+    }
+    elseif (!empty($class) && !empty($matiere)) {
+        $idClasse = array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class)[array_key_first(array_filter($tableClasse, fn($c) => $c->getNomClasse() === $class))]->getIDClasse();
+        $idMatiere = array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere)[array_key_first(array_filter($tableMatiere, fn($m) => $m->getNomMatiere() === $matiere))]->getIdMatiere();
+        $listeEtudiant = $professeurTable->getAbsentsByMatiereClasse($cinProf, $idClasse , $idMatiere, $line, $offset);
+    } else {
+        $listeEtudiant = $professeurTable->getAbsents($cinProf, $line, $offset);
+    }
 }
+
+$n = count($listeEtudiant);
 ?>
+
 <div class="absence">
     <div class="intro">
         <h1>Historique des absences</h1>
@@ -40,25 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
     <div class="absence-container">
         <form class="professor-info container" method="post" action="">
             <div class="level-group">
-                <select id="tri-classe" name="classe-prof" required>
+                <select id="tri-classe" name="classe-prof">
                     <option value="">Sélectionner une classe</option>
-                    <?php
-                    /*foreach ($tableClasse as $classe) {
-                        $selected = ($class === $classe->getNomClasse()) ? 'selected' : '';
-                        echo '<option value="' . htmlspecialchars($classe->getNomClasse()) . '" ' . $selected . '>' . htmlspecialchars($classe->getNomClasse()) . '</option>';
-                    }*/
-                    ?>
+
                 </select>
             </div>
             <div class="subject-group">
-                <select id="tri-matiere" name="matiere-prof" required>
+                <select id="tri-matiere" name="matiere-prof">
                     <option value="">Sélectionner une matière</option>
-                    <?php
-                    /*foreach ($tableMatiere as $subject) {
-                        $selected = ($matiere === $subject->getNomMatiere()) ? 'selected' : '';
-                        echo '<option value="' . htmlspecialchars($subject->getNomMatiere()) . '" ' . $selected . '>' . htmlspecialchars($subject->getNomMatiere()) . '</option>';
-                    }*/
-                    ?>
+
                 </select>
             </div>
             <div class="submit-group">
@@ -76,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
                             <th>Nom et Prénom</th>
                             <th>Nombre d'absences</th>
                             <th>Dates et Créneaux</th>
+                            <th>Classe</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
                                         <?php endforeach; ?>
                                     </ul>
                                 </td>
+                                <td><?= htmlspecialchars($etudiant->getNomClasse()) ?></td>
                             </tr>
                             
                         <?php endforeach; ?>
@@ -104,6 +107,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-first'])) {
         <?php else: ?>
             <p class="no-data">Aucune absence enregistrée.</p>
         <?php endif; ?>
+        <div class="submit-group-historic">
+            <?php
+                $nbrpage = ceil($n / $line);
+                for ($i = 0; $i < $nbrpage; ) { ?>
+                    <a href="?<?= $professeurTable->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
+                }
+            ?>
+            </div>
     </div>
 </div>
 
