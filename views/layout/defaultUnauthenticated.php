@@ -18,9 +18,6 @@ if(isset($_SESSION['id_user'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/main-style.css">
-    <?php if (isset($_GET['about'])) {
-        echo '<link rel="stylesheet" href="/css/About/about.css">';
-    }?>
     <title>Gestion d'Absence</title>
 </head>
 <body>

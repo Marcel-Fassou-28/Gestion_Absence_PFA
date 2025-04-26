@@ -116,7 +116,6 @@ $idjus = $justificatif->getIdJustificatif();
 
 
 <style>
-    .msg {}
 
     .valide {
         width: 100%;

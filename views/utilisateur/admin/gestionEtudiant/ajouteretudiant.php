@@ -13,11 +13,13 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\Admin\adminTable;
 use App\connection;
 use App\Model\Classe;
+use App\Mailer;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
+$mailer = new Mailer();
 $success_etudiant = null;
 $error = 0;
 
@@ -43,6 +45,7 @@ if (!empty($_POST)) {
 
         if ($result->AddStudentUser($cinEtudiant, $nomEtudiant, $prenomEtudiant,  $emailEtudiant, $username, $password, $cneEtudiant, $idClasse, $role)) {
             $success_etudiant = 1;
+            $mailer->confirmationAccount($nomEtudiant . ' ' . $prenomEtudiant, $emailEtudiant, $username, $_POST['password'], $emailEtudiant);
         } else {
             $success_etudiant = 0;
         }

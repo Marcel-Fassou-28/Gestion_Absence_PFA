@@ -7,7 +7,7 @@ if(!isset($_SESSION['id_user'])) {
 use App\Admin\StatisticAdmin;
 use App\Connection;
 use App\UserTable;
-use App\Utils\UtilsInformation;
+use App\Utils\InformationUtils;
 use App\Model\Utils\LastAbsence;
 use App\EtudiantTable;
 use App\Model\Utils\Admin\InformationActifs;
@@ -23,7 +23,7 @@ $user = $table->getIdentification($cin);
 
 //Informations qui intéressent les professeurs
 if ($_SESSION['role'] === 'professeur') {
-    $utilsInfo = new UtilsInformation($pdo);
+    $utilsInfo = new InformationUtils($pdo);
     $creneaux = $utilsInfo->getAllCreneaux($cin);
     $lastInfoAbsence = $utilsInfo->getInfoDerniereAbsence($cin);
     $statistiquesClasses = $utilsInfo->getInfoEffectifsNbrAbsents($cin);
@@ -283,7 +283,7 @@ $currentTime = $date->format('H:i:s');
                 <div class="hr"></div>
                 <ul class="use-link-list">
                     <li><a href="<?= $router->url('etudiant-messagerie').'?messagerie=1' ?>">Ma Messagerie</a></li>
-                    <li><a href="<?= $router->url('liste-etudiant-classe') ?>">Listes des Etudiants de ma classe</a></li>
+                    <li><a href="<?= $router->url('liste-etudiant-classe', ['id' => $_SESSION['id_user']]) ?>">Listes des Etudiants de ma classe</a></li>
                 </ul>
             </section>
             <section class="container historic">
@@ -295,6 +295,13 @@ $currentTime = $date->format('H:i:s');
                 </ul>
             </section>
         </div>
+        <style>
+.historic-list li:nth-child(2) a::before {
+    content: "\1F9D1\200D\1F3EB"; 
+    margin-right: 0.5rem;
+}
+
+</style>
     </div>
 
     <!-- Section pour Administrateur -->
@@ -433,7 +440,6 @@ $currentTime = $date->format('H:i:s');
     content: '\1F4C8'; 
     margin-right: 0.5rem;
 }
-
 
 .historic-list li:nth-child(1) a::before {
     content: '\1F393'; 
