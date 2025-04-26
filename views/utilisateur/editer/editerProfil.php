@@ -39,7 +39,7 @@ if(!empty($_POST)) {
     
             if (in_array($extension, $extensionsAutorisees) && $fileSize <= 2000000) {
     
-                $nouveauNom = $_SESSION['role'] . time().'_'.uniqid('profil', true). $cinUser. '.' . $extension;
+                $nouveauNom =  time() . uniqid('_profil', true). $_SESSION['role'] . '_'. $cinUser. '.' . $extension;
                 $destination = dirname(__DIR__, 3) .DIRECTORY_SEPARATOR.'uploads' .DIRECTORY_SEPARATOR . 'profil' . DIRECTORY_SEPARATOR . $nouveauNom;
 
                 $photoPath = $user->getNomPhoto() ?: 'avatar.png'; // Photo actuelle ou par défaut
