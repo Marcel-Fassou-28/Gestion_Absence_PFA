@@ -39,11 +39,10 @@ class Mailer {
      * @param string $destinataire Email du destinataire
      * @param string $code Code de réinitialisation
      * @param string $name Nom de l'utilisateur
-     * @param string $resetLink Lien de réinitialisation
      * @return bool Retourne true si l'envoi réussit, false sinon
      * @throws Exception Si l'email est invalide ou l'envoi échoue
      */
-    public function resetPasswordMail(string $destinataire, string $code, string $name, string $resetLink =""): bool
+    public function resetPasswordMail(string $destinataire, string $code, string $name): bool
     {
         try {
             // Définir le destinataire
@@ -94,7 +93,7 @@ class Mailer {
             </table>';
 
             // Corps texte brut
-            $this->mailer->AltBody = 'Bonjour ' . htmlspecialchars($name) . ',\n\nNous avons reçu une demande pour réinitialiser votre mot de passe. Voici votre code : ' . htmlspecialchars($code) . '\n\nValable 15 minutes. Visitez ce lien pour continuer : ' . $resetLink . '\n\nSi ce n’était pas vous, aucune action n’est nécessaire.\n\nCordialement,\nL’équipe de GAENSAJ';
+            $this->mailer->AltBody = 'Bonjour ' . htmlspecialchars($name) . ',\n\nNous avons reçu une demande pour réinitialiser votre mot de passe. Voici votre code : ' . htmlspecialchars($code) . '\n\nValable 15 minutes.' .'\n\nSi ce n’était pas vous, aucune action n’est nécessaire.\n\nCordialement,\nL’équipe de GAENSAJ';
 
             // Envoyer l'email
             $this->mailer->send();
@@ -422,7 +421,7 @@ class Mailer {
                         </p>
                         <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
                             Vous pouvez vous connecter dès maintenant en cliquant ici : 
-                            <a href="https://gaensaj.com/login" style="color: #8bb0f0; text-decoration: underline; font-weight: 500;">Se connecter</a>.
+                            <a href="http://gaensaj.com/login" style="color: #8bb0f0; text-decoration: underline; font-weight: 500;">Se connecter</a>.
                         </p>
                         <p style="color: #1c1d1e; font-size: 14px; line-height: 22px; margin: 20px 0 0; opacity: 0.8;">
                             Cordialement,<br>
@@ -500,7 +499,7 @@ class Mailer {
                         </p>
                         <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
                             Vous pouvez accéder à votre espace professeur dès maintenant pour commencer à gérer vos cours et interagir avec vos étudiants :
-                            <a href="https://gaensaj.com/professor/login" style="color: #8bb0f0; text-decoration: underline; font-weight: 500;">Accéder à mon espace</a>.
+                            <a href="http://gaensaj.com/login" style="color: #8bb0f0; text-decoration: underline; font-weight: 500;">Accéder à mon espace</a>.
                         </p>
                         <p style="color: #1c1d1e; font-size: 14px; line-height: 22px; margin: 20px 0 0; opacity: 0.8;">
                             Respectueusement,<br>
@@ -578,7 +577,7 @@ class Mailer {
                         </p>
                         <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
                             Accédez à votre tableau de bord administrateur pour commencer à configurer la plateforme :
-                            <a href="https://gaensaj.com/admin/login" style="color: #8bb0f0; text-decoration: underline; font-weight: 500;">Accéder au tableau de bord</a>.
+                            <a href="http://gaensaj.com/login" style="color: #8bb0f0; text-decoration: underline; font-weight: 500;">Accéder au tableau de bord</a>.
                         </p>
                         <p style="color: #1c1d1e; font-size: 14px; line-height: 22px; margin: 20px 0 0; opacity: 0.8;">
                             Cordialement,<br>

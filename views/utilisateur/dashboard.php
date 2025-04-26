@@ -291,17 +291,9 @@ $currentTime = $date->format('H:i:s');
                 <div class="hr"></div>
                 <ul class="historic-list">
                     <li><a href="<?= $router->url('etudiant-absences'). '?p=0' ?>">Historiques de mes Absences</a></li>
-                    <li><a href="<?= $router->url('etudiant-justificatifs') . '?p=0' ?>">Justificatifs Soumis</a></li>
                 </ul>
             </section>
         </div>
-        <style>
-.historic-list li:nth-child(2) a::before {
-    content: "\1F9D1\200D\1F3EB"; 
-    margin-right: 0.5rem;
-}
-
-</style>
     </div>
 
     <!-- Section pour Administrateur -->
