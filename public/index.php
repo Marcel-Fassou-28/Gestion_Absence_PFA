@@ -75,7 +75,7 @@ $router
     
     // Contenu pour les étudiants
     ->match(  '/my/etudiant/messagerie', 'utilisateur/students/messagerie','etudiant-messagerie')
-    ->match('/my/etudiant/ma_classe/[*:id]', 'utilisateur/students/listeEtudiantsClasse', 'liste-etudiant-classe')
+    ->match('/my/etudiant/ma_classe', 'utilisateur/students/listeEtudiantsClasse', 'liste-etudiant-classe')
     ->match('/my/etudiant/historique/absence', 'utilisateur/students/historique/absences','etudiant-absences')
     ->match('/my/etudiant/historique/justificatif', 'utilisateur/students/historique/justificatifs','etudiant-justificatifs')
 

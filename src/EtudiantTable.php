@@ -153,4 +153,18 @@ class EtudiantTable extends Table {
         return $result ?? [];
     }
 
+    public function findByCin(string $cin): ?Etudiant {
+        $query = $this->pdo->prepare("SELECT * FROM etudiant WHERE cinEtudiant = :cin");
+        $query->execute(['cin' => $cin]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
+        $etudiant = $query->fetch();
+        return $etudiant ?: null;
+    }
+    public function getAllByClasse(int $idClasse): array {
+        $query = $this->pdo->prepare("SELECT * FROM etudiant WHERE idClasse = :idClasse ORDER BY nom, prenom");
+        $query->execute(['idClasse' => $idClasse]);
+        return $query->fetchAll(\PDO::FETCH_CLASS, $this->classEtudiant);
+    }
+        
+
 }
