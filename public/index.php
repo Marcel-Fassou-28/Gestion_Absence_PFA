@@ -20,7 +20,7 @@ $router
     ->get('/my/profil/[*:role]/[*:id]', 'proxy/photo', 'serve-photo')
     ->get('/my/profil/serve-file', 'proxy/presence', 'serve-presence')
 
-    ->get('/my/justificatif/serve-file', 'proxy/justificatif', 'serve-justificatif')
+    ->get('/my/justificatif/serve-justificatif', 'proxy/justificatif', 'serve-justificatif')
 
     /* Lorsque l'utilisateur est connecté */
     ->get('/home/my/[*:role]', 'utilisateur/home','user-home')
