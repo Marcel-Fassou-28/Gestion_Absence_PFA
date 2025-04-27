@@ -76,7 +76,7 @@ $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <button type="submit" name="soumettre_justificatif" class="btn-soumettre">Soumettre</button>
                             </form>
                         <?php else: ?>
-                            <button type="button" class="btn-soumettre" onclick="alert('Message: <?= htmlspecialchars($absence['message']) ?>')">Voir détails</button>
+                            <button type="button" class="btn-soumettre" $ ?>')">Voir détails</button>
                         <?php endif; ?>
                     </td>
                 </tr>
