@@ -3,6 +3,13 @@ if(!isset($_SESSION['id_user'])) {
     header('location: ' .$router->url('accueil'));
     exit();
 }
+
+if(isset($_SESSION['id_user']) && $_SESSION['role'] != 'professeur') {
+    header('location: ' . $router->url('user-dashboard' , ['role' => $_SESSION['role']]));
+    exit();
+}
+
+
 use App\Connection;
 use App\Professeur\CurrentInfo;
 use App\Professeur\ProfessorTable;
@@ -12,6 +19,21 @@ $cinProf = $_SESSION['id_user'];
 $pdo = Connection::getPDO();
 $tableProf = new ProfessorTable($pdo);
 $tableProfCurrent = new CurrentInfo($pdo);
+
+$creneau = $tableProfCurrent->getCurrentCreneau($cinProf);
+$error = null;
+if (!isset($creneau)) {
+    $error = 1;
+    header('location: '. $router->url('user-dashboard', ['role' => $_SESSION['role']]) .'?error_prof=' . $error);
+    exit();
+}
+
+if ($tableProfCurrent->hasAlreadySendListPresence($cinProf)) {
+    $error_presence = 1;
+    header('location: ' . $router->url('user-dashboard', ['role' => $_SESSION['role']]) . '?error_presence_file='. $error);
+    exit();
+}
+
 
 $classe = $tableProfCurrent->getCurrentClasse($cinProf)->getNomClasse();
 $matiere = $tableProfCurrent->getCurrentMatiere($cinProf)->getNomMatiere();
@@ -71,6 +93,10 @@ function isDesktop() {
 
 <!-- Boîte modale pour le scanner -->
 <div class="modal-box" id="scanner-modal">
+<?php if (isset($_GET['should_submit']) && $_GET['should_submit'] == 1): ?>
+        <div class="alert alert-warning">
+            Vous devez soumettre une liste de présence
+    <?php endif ?>
         <div class="modal-box-overlay"></div>
         <form class="modal-box-content" method="post" action="<?= $router->url('add-presence') . '?use-link=student-presence' . '?redirect=1' ?>" enctype="multipart/form-data">
             <h2>Liste de présence</h2>

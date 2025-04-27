@@ -4,6 +4,11 @@ if(!isset($_SESSION['id_user'])) {
     exit();
 }
 
+if(isset($_SESSION['id_user']) && $_SESSION['role'] != 'professeur') {
+    header('location: ' . $router->url('user-dashboard' , ['role' => $_SESSION['role']]));
+    exit();
+}
+
 use App\Connection;
 use App\Professeur\ProfessorTable;
 

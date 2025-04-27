@@ -1,4 +1,17 @@
 <?php
+
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
+}
+
+if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
+    header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
+    exit();
+}
+
+
+
 use App\Connection;
 use App\Admin\adminTable;
 
@@ -24,7 +37,8 @@ $idjus = $justificatif->getIdJustificatif();
     <div class="hr"></div>
     <div class="presence-file">
         <div class="presence-file-show">
-            <img src="<?= $router->url('serve-justificatif') . '?fichier=' . $justificatif->getnomFichierJustificatif(); ?> "
+
+            <img src="<?= $router->url('serve-justificatif') . '?fichier=' . htmlspecialchars($justificatif->getnomFichierJustificatif()); ?> "
                 alt="Pas de photo">
         </div>
     </div>
@@ -61,7 +75,7 @@ $idjus = $justificatif->getIdJustificatif();
                 <h3> VALIDATION DU JUSTIFICATIF</h3>
             </div>
             <div class="hr"></div>
-            <div class="form-modifie-container global">
+            <div id="form" class="form-modifie-container global">
                 <form action="" class="creneau-modifie container" method="POST">
                     <section class="edit-creneau-section">
                         <div class="creneau-debut">
@@ -72,6 +86,11 @@ $idjus = $justificatif->getIdJustificatif();
                             <label for="nom">Date de fin</label>
                             <input type="date" name="fin" value="" max="<?= $dateSql; ?>" required>
                         </div>
+                        <section class="submit-group-creneau">
+                            <button type="submit" class="submit-btn">Sauvegarder</button>
+                            <button class="btn2 submit-btn"
+                                onclick="window.location.href='<?= $router->url('detail_justificatif') . '?listprof=1&p=0' . '&idjustificatif=' . $id; ?>'">Annuler</button>
+                        </section>
 
 
                 </form>
@@ -98,11 +117,7 @@ $idjus = $justificatif->getIdJustificatif();
 
             <?php endif;
         else: ?>
-            <section class="submit-group-creneau">
-                <button type="submit" class="submit-btn">Sauvegarder</button>
-                <button class="btn2 submit-btn"
-                    onclick="window.location.href='<?= $router->url('detail_justificatif') . '?listprof=1&p=0' . '&idjustificatif=' . $id; ?>'">Annuler</button>
-            </section>
+
 
 
 
@@ -116,7 +131,6 @@ $idjus = $justificatif->getIdJustificatif();
 
 
 <style>
-
     .valide {
         width: 100%;
         margin: auto;
@@ -124,7 +138,7 @@ $idjus = $justificatif->getIdJustificatif();
 
     .titre {
         padding-top: 0.5rem;
-        
+
         margin-bottom: -0.7rem;
     }
 

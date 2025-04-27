@@ -4,6 +4,11 @@ if(!isset($_SESSION['id_user'])) {
     exit();
 }
 
+if(isset($_SESSION['id_user']) && $_SESSION['role'] != 'professeur') {
+    header('location: ' . $router->url('user-dashboard' , ['role' => $_SESSION['role']]));
+    exit();
+}
+
 use App\Professeur\ProfessorTable;
 use App\Professeur\CurrentInfo;
 use App\Connection;
@@ -11,6 +16,22 @@ use App\Connection;
 $pdo = Connection::getPDO();
 $professeurTable = new ProfessorTable($pdo);
 $currentProfInfo = new CurrentInfo($pdo);
+$creneau = $currentProfInfo->getCurrentCreneau($cinProf);
+
+$error = null;
+if (!isset($creneau)) {
+    $error = 1;
+    header('location: '. $router->url('user-dashboard', ['role' => $_SESSION['role']]) .'?error_prof=' . $error);
+    exit();
+}
+
+if ($currentProfInfo->hasAlreadyTakenAbsence($cinProf)) {
+    $error_presence = 1;
+    header('location: ' . $router->url('user-dashboard', ['role' => $_SESSION['role']]) . '?error_presence='. $error);
+    exit();
+}
+
+
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $moisEnFrancais = [

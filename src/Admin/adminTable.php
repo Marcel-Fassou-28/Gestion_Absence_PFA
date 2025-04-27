@@ -304,8 +304,12 @@ class adminTable extends Table
     public function getAllJustificatif($line = 0, $offset = 0, $idMatiere = 0, $idClasse = 0): array
     {
         $sql = ' 
-        SELECT e.nom as nom,e.prenom as prenom , e.cne as cne, j.dateSoumission as Date_Soumission ,j.idJustificatif as id FROM ' . $this->tableAbsence . ' a JOIN '
-            . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence' . ' JOIN ' . $this->tableEtudiant . ' e ON e.cinEtudiant = a.cinEtudiant ';
+        SELECT e.nom as nom,e.prenom as prenom , e.cne as cne, 
+        j.dateSoumission as Date_Soumission ,j.idJustificatif 
+        as id FROM ' . $this->tableAbsence . ' a JOIN '
+        . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence' 
+        . ' JOIN ' . $this->tableEtudiant . ' e ON 
+        e.cinEtudiant = a.cinEtudiant WHERE j.statut = "en attente"';
 
         if ($idClasse != 0 || $idMatiere != 0) {
             $sql .= ' WHERE ';

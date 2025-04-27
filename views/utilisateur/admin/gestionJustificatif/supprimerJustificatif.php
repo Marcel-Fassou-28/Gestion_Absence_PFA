@@ -1,4 +1,17 @@
 <?php
+
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
+}
+
+if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
+    header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
+    exit();
+}
+
+
+
 use App\Connection;
 use App\Admin\adminTable;
 
@@ -10,7 +23,7 @@ if (isset($_GET['idjustificatif'])){
 
 
 $id = $_GET['idjustificatif'];
-$sql = "DELETE  FROM justificatif WHERE idJustificatif = :id";
+$sql = "DELETE  FROM justificatif WHERE idJustificatif = :id and statut = 'accepté'";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['id' => $id]);
 header('Location: ' . $router->url('justification').'?listprof=1&p=0');
