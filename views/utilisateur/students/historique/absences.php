@@ -148,7 +148,7 @@ $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <button type="submit" name="soumettre_justificatif" class="btn-soumettre">Soumettre</button>
                             </form>
                         <?php else: ?>
-                            <a href="<?= $router->url('etudiant-messagerie') ?>">
+                            <a href="<?= $router->url('etudiant-messagerie').'?messagerie=1&listprof=1' ?>">
                             <button type="button" class="btn-soumettre">Voir détails</button></a>
                         <?php endif; ?>
                     </td>

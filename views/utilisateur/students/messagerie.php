@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['objet']) && !isset($_
                         <strong>Message :</strong> <?= nl2br(htmlspecialchars($justificatif['message'])) ?><br>
                         <strong>Fichier :</strong>
                         <a href="<?= $router->url('serve-justificatif') . '?fichier=' . urlencode($justificatif['nomFichierJustificatif']) ?>" target="_blank">Voir fichier</a><br><br>
-                        <a href="<?= $router->url('etudiant-absences') ?>" class="btn-smtt">Voir plus</a>
+                        <a href="<?= $router->url('etudiant-absences').'?listprof=1' ?>" class="btn-smtt">Voir plus</a>
                     </li>
                     <hr>
                 <?php endforeach; ?>
