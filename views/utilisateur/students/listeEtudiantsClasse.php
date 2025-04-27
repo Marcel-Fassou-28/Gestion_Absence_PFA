@@ -1,14 +1,18 @@
 <?php
+if(!isset($_SESSION['id_user'])) {
+    header('location: ' .$router->url('accueil'));
+    exit();
+}
+
+if (isset($_SESSION['role']) && $_SESSION['role'] !== 'etudiant') {
+    header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
+    exit();
+}
 use App\Connection;
 use App\EtudiantTable;
 use App\ClasseTable;
 
 $pdo = Connection::getPDO(); 
-
-if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'etudiant') {
-    header('Location: ' . $router->url('accueil'));
-    exit();
-}
 
 $cin = $_SESSION['id_user'];
 

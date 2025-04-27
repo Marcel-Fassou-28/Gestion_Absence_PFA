@@ -15,11 +15,11 @@ $router
     ->match('/login/resetpassword', 'utilisateur/recovery/resetPassword', 'forget-password')
     ->match('/login/resetpassword/recover/[*:id]', 'utilisateur/recovery/passwordRecover', 'password-recovery')
     ->match('/login/recover/authentification/[*:id]', 'utilisateur/recovery/codeAuth', 'code-recuperation' )
+    ->match('/user/signaler_probleme/[*:id]', 'utilisateur/signaler_probleme', 'signaler_probleme')
 
     /* Pour servir les images de profil */
     ->get('/my/profil/[*:role]/[*:id]', 'proxy/photo', 'serve-photo')
     ->get('/my/profil/serve-file', 'proxy/presence', 'serve-presence')
-
     ->get('/my/justificatif/serve-justificatif', 'proxy/justificatif', 'serve-justificatif')
 
     /* Lorsque l'utilisateur est connecté */

@@ -11,12 +11,14 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 
 use App\Admin\adminTable;
-use App\connection;
+use App\Connection;
+use App\Mailer;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
+$mailer = new Mailer();
 $success_prof = null;
 
 if (!empty($_POST)) {
@@ -29,6 +31,7 @@ if (!empty($_POST)) {
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
     if ($result->AddProfUser($cinProf, $nomProf, $prenomProf, $emailProf, $username, $password, $role)) {
+        $mailer->confirmationProfessorAccount($nomProf . ' ' . $prenomProf, $emailProf, $username, $_POST['password'], $emailProf);
         $success_prof = 1;
     } else {
         $success_prof = 0;

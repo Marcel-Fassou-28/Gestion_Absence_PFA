@@ -19,7 +19,7 @@ use App\Model\Utils\StatisticClass;
  *    - Les dernières statistiques
  *    - Les statistiques d'une classe
  */
-class UtilsInformation extends Table
+class InformationUtils extends Table
 {
 
     private $groupedByDay = [];

@@ -10,12 +10,14 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-use App\connection;
+use App\Connection;
+use App\Mailer;
 use App\Model\Administrateur;
 
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
+$mailer = new Mailer();
 $success = null;
 $super_admin = null;
 $error = 0;
@@ -24,6 +26,8 @@ if (!empty($_POST)) {
     $cinAdmin = $_POST['cinAdmin'];
     $nomAdmin = $_POST['nomAdmin'];
     $prenomAdmin = $_POST['prenomAdmin'];
+    $emailAdmin = filter_var($_POST['emailAdmin'], FILTER_VALIDATE_EMAIL);
+
     $password = $_POST['password'];
 
     /* Impossible d'ajouter si vous n'etes pas le super administrateur, ici, c'est le premier admin */
@@ -33,12 +37,12 @@ if (!empty($_POST)) {
     $admin_verifie = $query_verifie->fetch();
 
     if ((string) $admin_verifie->getIDAdmin() === '1') {
-        $query1 = $pdo->prepare('INSERT INTO administrateur(cinAdmin, nom, prenom) VALUES ( ?, ?, ?');
-        $query1->execute([ $cinAdmin, $nomAdmin, $prenomAdmin]);
+        $query1 = $pdo->prepare('INSERT INTO administrateur(cinAdmin, nom, prenom, email) VALUES ( ?, ?, ?, ?');
+        $query1->execute([ $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin]);
 
-        $query2 = $pdo->prepare('INSERT INTO utilisateur(username, cin, nom, prenom, password, nomPhoto, role) VALUES ( ?, ?, ?, ?, ?, ?, ?');
-        $query2->execute([$cinAdmin . $nomAdmin, $cinAdmin, $nomAdmin, $prenomAdmin, password_hash($password, PASSWORD_BCRYPT), "avatar.png", "admin"]);
-        
+        $query2 = $pdo->prepare('INSERT INTO utilisateur(username, cin, nom, prenom, email, password, nomPhoto, role) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?');
+        $query2->execute([$cinAdmin . $nomAdmin, $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin, password_hash($password, PASSWORD_BCRYPT), "avatar.png", "admin"]);
+        $mailer->confirmationAdminAccount($nomAdmin . ' ' . $prenomAdmin, $emailAdmin, $cinAdmin . $nomAdmin, $password, $emailAdmin);
         $success = 1;
         header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&success='.$success);
         exit();
@@ -63,19 +67,23 @@ if (!empty($_POST)) {
             <section class="edit-matiere-section">
                 <div>
                     <label for="cinAdmin">CIN Admin</label>
-                    <input type="text" name="cinAdmin" id="cinAdmin" value="">
+                    <input type="text" name="cinAdmin" id="cinAdmin" value="" required>
                 </div>
                 <div>
                     <label for="nomAdmin">Nom de l'Admin</label>
-                    <input type="text" name="nomAdmin" id="nomAdmin" value="">
+                    <input type="text" name="nomAdmin" id="nomAdmin" value="" required>
                 </div>
                 <div>
                     <label for="prenomAdmin">Prenom de l'Admin</label>
-                    <input type="text" name="prenomAdmin" id="prenomAdmin" value="">
+                    <input type="text" name="prenomAdmin" id="prenomAdmin" value="" required>
+                </div>
+                <div>
+                    <label for="emailAdmin">Email de l'admin</label>
+                    <input type="email" name="emailAdmin" id="emailAdmin" value="" required>
                 </div>
                 <div>
                     <label for="password">Mot de Passe par defaut</label>
-                    <input type="password" name="password" id="password" value="">
+                    <input type="password" name="password" id="password" value="" required>
                 </div>
             </section>
             <section class="submit-group-matiere">

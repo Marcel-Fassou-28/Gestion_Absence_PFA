@@ -10,10 +10,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 
 use App\Admin\adminTable;
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-/*<a href="<?= $urlUser['modification']; ?>">modifier</a>*/
 use App\Connection;
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);

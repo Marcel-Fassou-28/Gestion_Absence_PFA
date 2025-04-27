@@ -105,7 +105,7 @@ $user = $tableUser->getIdentification($cin);
 
                 <?php endif ?>
 
-                    <li><a href="#">Signaler un problème</a></li>
+                    <li><a href="<?= $router->url('signaler_probleme', ['id' => $_SESSION['id_user']]) . '?classe=1' ?>">Signaler un problème</a></li>
                     <li></li>
                     <li><a href="<?= $router->url('page-deconnexion') ?>">Deconnexion</a></li>
                 </ul>

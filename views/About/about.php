@@ -3,7 +3,6 @@
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
-
 ?>
 <div class="presence">
     <div class="intro">
