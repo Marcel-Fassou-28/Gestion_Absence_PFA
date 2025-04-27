@@ -35,7 +35,7 @@ $stmt->execute([
 ]);
 $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
 */
-//Selection l'historique des etudiants jusqu'a la date indiquée
+//Selection l'historique de l'etudiants jusqu'a la date indiquée
 $stmt = $pdo->prepare("
     SELECT a.idAbsence, a.date, m.nomMatiere, j.statut, j.message, j.nomFichierJustificatif
     FROM Absence a

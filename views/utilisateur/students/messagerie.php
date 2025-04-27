@@ -119,7 +119,7 @@ $justificatifs = $justificatifs->fetchAll(PDO::FETCH_ASSOC);
                     Voir fichier
                     </a>
                     <br><br>
-                    <a href="<?=$router->url('etudiant-absences')?>" class="btn-smtt">Voir plus</a>
+                    <a href="<?=$router->url('etudiant-absences') .'?listprof=1&p=0'?>" class="btn-smtt">Voir plus</a>
                 </li>
                 <hr>
             <?php endforeach; ?>

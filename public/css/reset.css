@@ -205,11 +205,11 @@ footer {
 /* Ajustements pour les petits écrans */
 @media (max-width: 425px) {
   .footer {
-      padding: 20px 0;
+      padding: 15px 0;
   }
 
   .footer-container {
-      gap: 10px;
+      gap: 5px;
   }
 
   .footer-logo-img {

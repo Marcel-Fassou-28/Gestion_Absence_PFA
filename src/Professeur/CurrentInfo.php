@@ -3,12 +3,13 @@
 namespace App\Professeur;
 
 use App\Abstract\Table;
+use App\Model\Absence;
 use App\Model\Filiere;
 use App\Model\Matiere;
 use App\Model\Classe;
 use App\Model\Etudiant;
 use App\Model\Creneaux;
-
+use App\Model\ListePresence;
 
 /**
  * Cette classe sert à l'obtention des information en temps
@@ -129,15 +130,97 @@ class CurrentInfo extends Table {
     public function getCurrentCreneau(string $cinProf):?Creneaux {
         $query = $this->pdo->prepare('
             SELECT cr.* FROM creneaux cr WHERE cr.cinProf = :cinProf 
-            AND CURRENT_TIME BETWEEN cr.heureDebut AND cr.heureFin');
+            AND (CURRENT_TIME BETWEEN cr.heureDebut AND cr.heureFin) 
+            AND cr.jourSemaine = 
+      CASE DAYOFWEEK(CURRENT_DATE)
+          WHEN 2 THEN \'Lundi\'
+          WHEN 3 THEN \'Mardi\'
+          WHEN 4 THEN \'Mercredi\'
+          WHEN 5 THEN \'Jeudi\'
+          WHEN 6 THEN \'Vendredi\'
+          WHEN 7 THEN \'Samedi\'
+          ELSE NULL
+      END');
 
         $query->execute(['cinProf' => $cinProf]);
         $query->setFetchMode(\PDO::FETCH_CLASS, Creneaux::class);
         $result = $query->fetch();
 
-        return $result ?? null;
+        if(!$result) {
+            return null;
+        }
+        return $result;
     }
 
-    
+    /**
+     * Cette méthode nous permet de d'indiquer si le professeur à déjà effectuer l'absence 
+     * pour un créneau courant
+     * 
+     * @param string $cinProf
+     * @return bool
+     */
+    public function hasAlreadyTakenAbsence(string $cinProf):bool {
+        $query = $this->pdo->prepare('
+            SELECT a.* FROM Absence a JOIN Matiere m ON a.idMatiere = m.idMatiere
+            JOIN Creneaux c ON c.idMatiere = m.idMatiere WHERE m.cinProf = :cinProf
+            AND c.jourSemaine = 
+                CASE DAYOFWEEK(CURRENT_DATE)
+                    WHEN 2 THEN \'Lundi\'
+                    WHEN 3 THEN \'Mardi\'
+                    WHEN 4 THEN \'Mercredi\'
+                    WHEN 5 THEN \'Jeudi\'
+                    WHEN 6 THEN \'Vendredi\'
+                    WHEN 7 THEN \'Samedi\'
+                    ELSE NULL
+                END
+            AND TIME(a.date) BETWEEN c.heureDebut AND c.heureFin
+            AND DATE(a.date) = CURRENT_DATE
+        ');
 
+        $query->execute([
+            'cinProf' => $cinProf
+        ]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, Absence::class);
+        $result = $query->fetchAll();
+        if (count($result) == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /** 
+     * Cette méthode nous permet de d'indiquer si le professeur à déjà envoyer un justificatif
+     * pour une matière dans son créneau courant
+     * 
+     * @param string $cinProf
+     * @return bool
+    */
+    public function hasAlreadySendListPresence(string $cinProf):bool {
+        $query = $this->pdo->prepare('
+            SELECT lp.* FROM ListePresence lp JOIN Matiere m ON m.nomMatiere = lp.matiere
+            JOIN Creneaux c ON c.idMatiere = m.idMatiere WHERE lp.cinProf = :cinProf
+            AND c.cinProf = :cinProf AND c.jourSemaine = 
+                CASE DAYOFWEEK(CURRENT_DATE)
+                    WHEN 2 THEN \'Lundi\'
+                    WHEN 3 THEN \'Mardi\'
+                    WHEN 4 THEN \'Mercredi\'
+                    WHEN 5 THEN \'Jeudi\'
+                    WHEN 6 THEN \'Vendredi\'
+                    WHEN 7 THEN \'Samedi\'
+                    ELSE NULL
+                END
+            AND TIME(lp.date) BETWEEN c.heureDebut AND c.heureFin
+            AND DATE(lp.date) = CURRENT_DATE
+        ');
+
+        $query->execute([
+            'cinProf' => $cinProf
+        ]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, ListePresence::class);
+        $result = $query->fetchAll();
+        if (count($result) == 0) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -12,6 +12,7 @@ use App\Model\Utils\LastAbsence;
 use App\EtudiantTable;
 use App\Model\Utils\Admin\InformationActifs;
 use App\Model\Utils\Etudiant\DerniereAbsenceEtudiant;
+use App\Professeur\CurrentInfo;
 
 $pdo = Connection::getPDO();
 $table = new UserTable($pdo);
@@ -24,6 +25,8 @@ $user = $table->getIdentification($cin);
 //Informations qui intéressent les professeurs
 if ($_SESSION['role'] === 'professeur') {
     $utilsInfo = new InformationUtils($pdo);
+    $currentProfInfo = new CurrentInfo($pdo);
+
     $creneaux = $utilsInfo->getAllCreneaux($cin);
     $lastInfoAbsence = $utilsInfo->getInfoDerniereAbsence($cin);
     $statistiquesClasses = $utilsInfo->getInfoEffectifsNbrAbsents($cin);
@@ -70,9 +73,23 @@ $currentTime = $date->format('H:i:s');
         <span class="user-info"><?= $_SESSION['role'] === 'etudiant' ? 'Bonjour ' : 'Bonjour Mr. '?> <?= htmlspecialchars($user->getNom()) .' '. htmlspecialchars($user->getPrenom()) ?></span>
         <span class="date-today"><?= $dateSql ?></span>
     </div>
-
     <?php if ($_SESSION['role'] === 'professeur'): ?>
     <div class="dashboard-container">
+    <?php if (isset($_GET['error_prof']) && $_GET['error_prof'] == 1): ?>
+        <div class="alert alert-danger">
+            Vous n'etes pas autorisez à accéder à la liste des présences pour le moment, revenez plus tard, selon votre emploi du temps
+        </div> 
+    <?php endif ?>
+
+    <?php if (isset($_GET['error_presence']) && $_GET['error_presence'] == 1): ?>
+        <div class="alert alert-danger">
+            Vous avez déjà effectué une absence pour cette matière
+    <?php endif ?>
+
+    <?php if (isset($_GET['error_presence_file']) && $_GET['error_presence_file'] == 1): ?>
+        <div class="alert alert-danger">
+            Vous avez déjà effectué envoyé le fichier de présence
+    <?php endif ?>
         <div class="statistic">
             <section class="last-absence">
                 <h2>Derniere Absence Effectuées sur Site</h2>
@@ -105,6 +122,20 @@ $currentTime = $date->format('H:i:s');
                             : 'Non spécifié' ?>
                     </span>
                 </div>
+                <?php if (date('w') !== '0'): ?>
+                <div class="absence-detail">
+                    <span class="absence-label">Etat d'Absence :</span>
+                    <span class="absence-value">
+                        <?= $currentProfInfo->hasAlreadyTakenAbsence($cin) ? 'Déjà effectué pour ce créneau' : 'Vous devez effectuer l\'absence' ?>
+                    </span>
+                </div>
+                <?php if (!$currentProfInfo->hasAlreadySendListPresence($cin)): ?>
+                    <div class="absence-detail">
+                    <span class="absence-label">Etat Fiche d'Absence :</span>
+                    <span class="absence-value">Vous n'avez pas encore envoyé de fiche d'absence</span>
+                </div>
+                <?php endif ?>
+                <?php endif ?>
                 
             </li>
         <?php else: ?>
