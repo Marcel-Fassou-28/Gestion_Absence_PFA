@@ -283,14 +283,14 @@ $currentTime = $date->format('H:i:s');
                 <div class="hr"></div>
                 <ul class="use-link-list">
                     <li><a href="<?= $router->url('etudiant-messagerie').'?messagerie=1' ?>">Ma Messagerie</a></li>
-                    <li><a href="<?= $router->url('liste-etudiant-classe', ['id' => $_SESSION['id_user']]) ?>">Listes des Etudiants de ma classe</a></li>
+                    <li><a href="<?= $router->url('liste-etudiant-classe', ['id' => $_SESSION['id_user']]) . '?use-link=student-list' ?>">Listes des Etudiants de ma classe</a></li>
                 </ul>
             </section>
             <section class="container historic">
                 <h2>Historiques</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
-                    <li><a href="<?= $router->url('etudiant-absences'). '?p=0' ?>">Historiques de mes Absences</a></li>
+                    <li><a href="<?= $router->url('etudiant-absences'). '?listprof=1&p=0' ?>">Historiques de mes Absences</a></li>
                 </ul>
             </section>
         </div>
