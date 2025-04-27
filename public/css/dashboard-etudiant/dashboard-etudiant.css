@@ -313,3 +313,46 @@ p{
     font-size: 0.95rem;
     color: #333;
 }
+.btn1, .btn2{
+    color: var(--text-color);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-weight: 600;
+    background-color: var(--navbar-color);
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+.btn1:hover, .btn2:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn2{
+    margin-left: 12px;
+    background-color: red;
+}
+
+.edit-msg-form input{
+    background-color: #333;
+    border-radius: 10px;
+    padding: 8px;
+}
+.edit-msg-form textarea{
+    background-color: #333;
+    border-radius: 8px;
+}
+.edit-msg-form button{
+    background-color: var(--navbar-color);
+    border-radius: 8px;
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+.edit-msg-form button:hover{
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}

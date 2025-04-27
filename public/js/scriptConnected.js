@@ -93,3 +93,14 @@ document.querySelectorAll('img').forEach(img => {
     img.setAttribute('draggable', false);
     img.addEventListener('contextmenu', e => e.preventDefault());
 });
+
+
+function toggleForm(id) {
+    const form = document.getElementById('edit-form-' + id);
+    if (form.style.display === 'block') {
+        form.style.display = 'none';
+    } else {
+        form.style.display = 'block';
+    }
+}
+
