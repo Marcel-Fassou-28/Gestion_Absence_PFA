@@ -5,7 +5,7 @@ if (!isset($_SESSION['id_user'])) {
     exit("Accès interdit.");
 }
 
-if(isset($_SESSION['role']) && ($_SESSION['role'] != 'etudiant')){
+if(isset($_SESSION['role']) && ($_SESSION['role'] != 'admin')){
     http_response_code(403);
     exit('Vous avez pas accés');
 }
@@ -14,7 +14,7 @@ if(isset($_SESSION['role']) && ($_SESSION['role'] != 'etudiant')){
 
 $file = urldecode($_GET['fichier']);
 
-$photoPath = $file;
+$photoPath = $_GET['fichier'];
 $destinationDir = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR. 'uploads' .DIRECTORY_SEPARATOR.'justificatif' . DIRECTORY_SEPARATOR . $photoPath;
 
 if (!file_exists($destinationDir)) {

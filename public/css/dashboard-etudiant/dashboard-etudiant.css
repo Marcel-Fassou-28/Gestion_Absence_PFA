@@ -17,9 +17,9 @@
     margin-top: 20px;
     padding: 25px;
     border-radius: 20px;
-    background-color: #1c1d1e90;
+    background-color: #2f303190;
     width: 80%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.543);
+    box-shadow: 0 4px 20px rgba(143, 143, 143, 0.543);
 }
 
 .messagerie-intro{
@@ -248,6 +248,7 @@ p{
     border-radius: 8px;
     font-size: 16px;
     outline: none;
+    width: 130px;
     transition: border-color 0.3s;
     color: black;
 }
@@ -312,4 +313,122 @@ p{
     font-weight: 500;
     font-size: 0.95rem;
     color: #333;
+}
+.btn1, .btn2{
+    color: var(--text-color);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-weight: 600;
+    background-color: var(--navbar-color);
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+.btn1:hover, .btn2:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn2{
+    margin-left: 12px;
+    background-color: red;
+}
+
+.edit-msg-form input{
+    background-color: #333;
+    border-radius: 10px;
+    padding: 8px;
+}
+.edit-msg-form textarea{
+    background-color: #333;
+    border-radius: 8px;
+}
+.edit-msg-form button{
+    background-color: var(--navbar-color);
+    border-radius: 8px;
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+.edit-msg-form button:hover{
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.intro-prof-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2%;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.intro-prof-list h1 {
+    color: var(--text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 0;
+}
+.hr {
+    border-top: 1px solid var(--text-color);
+    opacity: 0.3;
+    margin: 1rem 0;
+}
+.prof-list {
+    max-width: 90%;
+    margin: 0 auto;
+    background-color: #1c1d1e88;
+    border-radius: 10px;
+    padding: 2%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+.form-tri-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2%;
+}
+.tri-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 1.5rem 0;
+}
+
+.submit-group {
+    display: flex;
+    justify-content: center;
+}
+
+.submit-btn {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    max-width: 150px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: var(--bg-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
 }

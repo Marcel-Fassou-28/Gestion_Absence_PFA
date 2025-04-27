@@ -42,7 +42,7 @@ $stmt = $pdo->prepare("
     JOIN Matiere m ON a.idMatiere = m.idMatiere
     LEFT JOIN Justificatif j ON a.idAbsence = j.idAbsence
     WHERE a.cinEtudiant = :cin
-    AND DATE(a.date) < :filtreDate
+    AND DATE(a.date) <= :filtreDate
     ORDER BY a.date DESC
 ");
 $stmt->execute([
@@ -94,7 +94,7 @@ $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <button type="submit" name="soumettre_justificatif" class="btn-soumettre">Soumettre</button>
                             </form>
                         <?php else: ?>
-                            <button type="button" class="btn-soumettre" onclick="alert('Message: <?= htmlspecialchars($absence['message']) ?>')">Voir détails</button>
+                            <button type="button" class="btn-soumettre" $ ?>')">Voir détails</button>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -148,7 +148,8 @@ $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <button type="submit" name="soumettre_justificatif" class="btn-soumettre">Soumettre</button>
                             </form>
                         <?php else: ?>
-                            <button type="button" class="btn-soumettre" onclick="alert('Message: <?= htmlspecialchars($absence['message']) ?>')">Voir détails</button>
+                            <a href="<?= $router->url('etudiant-messagerie') ?>">
+                            <button type="button" class="btn-soumettre">Voir détails</button></a>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -195,8 +196,9 @@ if (isset($_POST['soumettre_justificatif'])) {
                     'nomFichier' => $nomFinal
                 ]);
 
-                header('Location: ' . $_SERVER['PHP_SELF']);
-                exit;
+                header('Location: ' . $router->url('etudiant-messagerie'));
+                exit();
+
             } else {
                 echo "<script>alert('Erreur lors de l envoi du fichier.');</script>";
             }

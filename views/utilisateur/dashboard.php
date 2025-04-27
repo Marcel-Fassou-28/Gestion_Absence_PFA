@@ -321,7 +321,7 @@ $currentTime = $date->format('H:i:s');
                 <h2>Historiques</h2>
                 <div class="hr"></div>
                 <ul class="historic-list">
-                    <li><a href="<?= $router->url('etudiant-absences'). '?listprof=1&p=0' ?>">Historiques de mes Absences</a></li>
+                    <li><a href="<?= $router->url('etudiant-absences')?>">Historiques de mes Absences</a></li>
                 </ul>
             </section>
         </div>

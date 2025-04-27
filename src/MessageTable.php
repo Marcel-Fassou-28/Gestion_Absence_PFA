@@ -19,7 +19,7 @@ class MessageTable extends Table{
         string $typeDestinataire,
         string $objet,
         string $contenu
-    ): void {
+    ): void{
         if (empty($objet) || empty($contenu)) {
             throw new \Exception("L'objet et le contenu ne peuvent pas être vides.");
         }
@@ -119,4 +119,29 @@ class MessageTable extends Table{
             'cinUser' => $cinUtilisateur
         ]);
     }
+    /**
+ * Modifier un message
+ */
+    public function modifierMessage(int $idMessage, string $nouvelObjet, string $nouveauContenu): void
+    {
+    $stmt = $this->pdo->prepare("UPDATE message SET objet = :objet, contenu = :contenu WHERE id = :id");
+    $stmt->execute([
+        'objet' => $nouvelObjet,
+        'contenu' => $nouveauContenu,
+        'id' => $idMessage
+    ]);
+}
+
+/**
+ * Supprimer un message
+ */
+    public function supprimerMessage(int $idMessage): void
+    {
+    $stmt = $this->pdo->prepare("DELETE FROM message WHERE id = :id");
+    $stmt->execute([
+        'id' => $idMessage
+    ]);
+    }
+
+
 }
