@@ -117,7 +117,7 @@ $academic_info = [
                 <?php elseif($_SESSION['role'] === 'professeur'): ?>
                     <li><a href="<?= $router->url('professor-listeEtudiant') . '?use-link=student-list&p=0'?>">Listes des étudiants</a></li>
                 <?php elseif($_SESSION['role'] === 'etudiant'): ?>
-                    <li><a href="<?= $router->url('etudiant-messagerie').'?messagerie=1'?>">Ma messagerie</a></li>
+                    <li><a href="<?= $router->url('etudiant-messagerie').'?messagerie=1&listprof=1'?>">Ma messagerie</a></li>
                 <?php endif ?>
 
                 <?php if ($_SESSION['role'] === 'admin'): ?>
@@ -129,7 +129,7 @@ $academic_info = [
         <div class="historic-section">
             <h3>Historiques</h3>
             <ul>
-                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('historikAbscences').'?listprof=1';} elseif ($_SESSION['role'] === 'etudiant') {echo $router->url('etudiant-absences'). '?p=0';} else {echo $router->url('historic-absence') . '?historic=absence&p=0';}?>">Historiques des absences</a></li>
+                <li><a href="<?php if ($_SESSION['role'] === 'admin') {echo $router->url('historikAbscences').'?listprof=1';} elseif ($_SESSION['role'] === 'etudiant') {echo $router->url('etudiant-absences'). '?listprof=1';} else {echo $router->url('historic-absence') . '?historic=absence&p=0';}?>">Historiques des absences</a></li>
                 <?php if ($_SESSION['role'] === 'admin') :?>
                     <li><a href="<?=  $router->url('justification').'?listprof=1&justifier=1&p=0';?>">Historiques des justificatifs</a></li>
                     <li><a href="<?=  $router->url('etudiantprivee').'?listprof=1&justifier=1&p=0';?>">Liste des etudiants Privés d'examen</a></li>
