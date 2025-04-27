@@ -23,24 +23,29 @@ $numero = 1;
 ?>
 <div class="prof-list">
     <?php if (isset($_GET['super_admin']) && $_GET['super_admin'] == '1'): ?>
-        <div class="alert alert-danger">Impossible de supprimer cet utilisateur ou de modifier un autre admin</div>
+        <div class="alert alert-danger">Vous devez etre le super administrateur pour effectuer cette opération</div>
     <?php endif ?>
 
     <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
         <div class="alert alert-success">Les Infos Admin modifiée avec succès</div>
+
     <?php elseif(isset($_GET['success']) && $_GET['success'] == '0'): ?>
+
         <div class="alert alert-danger">Les Infos de cet Admin n'ont pas pu être modifiée</div>
     <?php endif ?>
 
     <?php if (isset($_GET['add']) && $_GET['add'] == '1'): ?>
         <div class="alert alert-success">Admin ajoutée avec succès</div>
+
         <?php elseif(isset($_GET['add']) && $_GET['add'] == '0'): ?>
             <div class="alert alert-danger">Aucun Admin ajouté</div>
     <?php endif ?>
 
     <?php if (isset($_GET['success_delete']) && $_GET['success_delete'] == '1'): ?>
         <div class="alert alert-success">Admin supprimé avec succès</div>
+
         <?php elseif(isset($_GET['success_delete']) && $_GET['success_delete'] == '0'): ?>
+            
             <div class="alert alert-danger">Aucun admin supprimer</div>
     <?php endif ?>
 
