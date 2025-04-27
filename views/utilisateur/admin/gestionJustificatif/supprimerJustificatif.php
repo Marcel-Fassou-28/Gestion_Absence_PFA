@@ -10,7 +10,7 @@ if (isset($_GET['idjustificatif'])){
 
 
 $id = $_GET['idjustificatif'];
-$sql = "DELETE  FROM justificatif WHERE idJustificatif = :id";
+$sql = "DELETE  FROM justificatif WHERE idJustificatif = :id and statut = 'accepté'";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['id' => $id]);
 header('Location: ' . $router->url('justification').'?listprof=1&p=0');
