@@ -16,6 +16,9 @@ use App\Connection;
 
 $pdo = Connection::getPDO();
 
+$date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
+$dateSql = $date->format('Y-m-d H:i');
+
 $messageTable = new MessageTable($pdo);
 $cin = $_SESSION['id_user'];
 $role = $_SESSION['role'];
@@ -79,16 +82,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['objet']) && !isset($_
     }
 }
 ?>
-
-<div class="dshb-messagerie container">
-    <div>
-        <h2 class="messagerie-intro">MESSAGERIE</h2><div class="underline"></div>
+<div class="prof-list">
+    <div class="intro-prof-list">
+        <h1>MESSAGERIE</h1>
+        <div class="date-group">
+            <span><?= htmlspecialchars($dateSql) ?></span>
+        </div>
     </div>
-
+    <div class="hr"></div>
     <div class="new-msg-btn">
         <button type="button" class="btn-nouveau-message">Nouveau message +</button>
     </div>
-
     <div class="new-msg-form"></div>
 
     <center>
