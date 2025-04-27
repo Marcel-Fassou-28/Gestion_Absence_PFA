@@ -276,3 +276,40 @@ p{
     border-radius: 8px;
     margin: 3px;
 }
+.list-tri-table {
+    overflow-x: auto;
+   margin: auto;
+}
+
+.list-tri-table table {
+    width: 100%;
+    background-color: var(--text-color);
+    border-collapse: collapse;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.list-tri-table thead tr th {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.list-tri-table thead tr th {
+    background-color: var(--navbar-color);
+    color: var(--text-color);
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.list-tri-table tbody tr td {
+    padding: 8px;
+    border: 1px solid var(--navbar-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+}

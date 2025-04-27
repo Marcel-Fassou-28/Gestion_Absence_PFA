@@ -16,7 +16,7 @@ $etudiantTable = new EtudiantTable($pdo);
 $classeTable = new ClasseTable($pdo);
 
 $etudiant = $etudiantTable->findByCin($cin);
-
+$filiere = $etudiantTable->getFiliere($cin); 
 if (!$etudiant) {
     echo "Étudiant non trouvé.";
     exit();
@@ -27,11 +27,21 @@ $classe = $classeTable->findById($idClasse);
 $etudiantsDeMaClasse = $etudiantTable->getAllByClasse($idClasse);
 ?>
 <div class="dashboard-messagerie container">
-    <h2 class="messagerie-intro">Élèves de ma classe : <?= htmlspecialchars($classe->getNomClasse()) ?></h2>
+    <h2 class="messagerie-intro">Filière : <?= htmlspecialchars($filiere->getNomFiliere()) ?></h2>
+    <h2></h2>
+    <hr>
+<!--getFiliere-->
+
+    <div class="list-tri-table">
+    <h3>Élèves de ma classe : <?= htmlspecialchars($classe->getNomClasse()) ?></h3>
+
     
-    <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; margin-top: 20px;">
+
+    <table  cellpadding="8" cellspacing="0" style="width: 100%; margin-top: 20px;">
+
         <thead>
             <tr>
+                <th>N°</th>
                 <th>Nom</th>
                 <th>Prénom</th>
                 <th>Email</th>
@@ -40,11 +50,13 @@ $etudiantsDeMaClasse = $etudiantTable->getAllByClasse($idClasse);
         <tbody>
             <?php foreach ($etudiantsDeMaClasse as $e) : ?>
                 <tr>
+                    <td><?= htmlspecialchars($e->getIdEtudiant()) ?></td>
                     <td><?= htmlspecialchars($e->getNom()) ?></td>
                     <td><?= htmlspecialchars($e->getPrenom()) ?></td>
                     <td><?= htmlspecialchars($e->getEmail()) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
-    </table>
+    </table>   
+    </div>
 </div>
