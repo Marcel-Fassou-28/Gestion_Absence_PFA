@@ -47,14 +47,12 @@ class ProfessorTable extends Table {
      * Cette methode permet d'obtenir les noms des etudiants d'une classe 
      * 
      * @param int $idClass
-     * @param int $line
-     * @param int $offset
      * @return array
      */
     public function findStudentByClass(int $idClass, int $line = 0 , $offset = 0):array {
         $query = $this->pdo->prepare('
             SELECT e.idEtudiant, e.nom, e.prenom, e.cne, e.cinEtudiant, e.email, e.idClasse, c.nomClasse FROM 
-            etudiant e JOIN classe c ON e.idClasse = c.idClasse WHERE e.idClasse = :idClasse LIMIT '. $line .' OFFSET ' . $offset .'
+            etudiant e JOIN classe c ON e.idClasse = c.idClasse WHERE e.idClasse = :idClasse
             ');
 
         $query->execute(['idClasse' => $idClass]);
@@ -71,8 +69,9 @@ class ProfessorTable extends Table {
      * @param array $ArrayAbsence Contient les cin des etudiants absents lors du cours
      * @param array $studentList Contient la liste des étudiants enseignés par le prof
      * @param int $idMatiere L'id de la matière enseignée par le professeur
+     * @return bool
      */
-    public function setAbsence(array $ArrayAbsence, string $date, array $studentList, int $idMatiere) {
+    public function setAbsence(array $ArrayAbsence, string $date, array $studentList, int $idMatiere):bool {
         $query = $this->pdo->prepare('INSERT INTO absence (date, cinEtudiant, idMatiere) VALUES (:date, :cinEtudiant, :idMatiere)');
 
         foreach($studentList as $student) {
@@ -85,8 +84,10 @@ class ProfessorTable extends Table {
                     'cinEtudiant' => $cinEtudiant,
                     'idMatiere' => $idMatiere
                 ]);
+                return true;
             }
         }
+        return false;
     }
 
     /**

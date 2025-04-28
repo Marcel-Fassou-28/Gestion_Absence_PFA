@@ -30,7 +30,7 @@ if (!isset($creneau)) {
 
 if (!$tableProfCurrent->hasAlreadySendListPresence($cinProf)) {
     $error = 1;
-    header('location: '. $router->url('add-presence') .'?should_submit=' . $error);
+    header('location: '. $router->url('add-presence') .'?use-link=student-presence&should_submit=' . $error);
     exit();
 }
 
