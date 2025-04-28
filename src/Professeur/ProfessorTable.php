@@ -45,11 +45,33 @@ class ProfessorTable extends Table {
 
     /**
      * Cette methode permet d'obtenir les noms des etudiants d'une classe 
+     * avec option de pagination
+     * 
+     * @param int $idClass
+     * @param int $line
+     * @param int $offset
+     * @return array
+     */
+    public function findStudentByClass(int $idClass, int $line = 0 , $offset = 0):array {
+        $query = $this->pdo->prepare('
+            SELECT e.idEtudiant, e.nom, e.prenom, e.cne, e.cinEtudiant, e.email, e.idClasse, c.nomClasse FROM 
+            etudiant e JOIN classe c ON e.idClasse = c.idClasse WHERE e.idClasse = :idClasse LIMIT '. $line . ' OFFSET ' . $offset .'
+            ');
+
+        $query->execute(['idClasse' => $idClass]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, Etudiant::class);
+        $result = $query->fetchAll();
+
+        return count($result) != 0 ? $result : [];
+    }
+
+    /**
+     * Cette methode permet d'obtenir les noms des etudiants d'une classe 
      * 
      * @param int $idClass
      * @return array
      */
-    public function findStudentByClass(int $idClass, int $line = 0 , $offset = 0):array {
+    public function findStudentByClassID(int $idClass):array {
         $query = $this->pdo->prepare('
             SELECT e.idEtudiant, e.nom, e.prenom, e.cne, e.cinEtudiant, e.email, e.idClasse, c.nomClasse FROM 
             etudiant e JOIN classe c ON e.idClasse = c.idClasse WHERE e.idClasse = :idClasse

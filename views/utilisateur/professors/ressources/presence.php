@@ -52,7 +52,7 @@ $creneau = $currentProfInfo->getCurrentCreneau($cinProf);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $arrayAbsence = $_POST['arrayCheckbox'] ?? [];
-    $listeEtudiant = $professeurTable->findStudentByClass($currentProfInfo->getCurrentClasse($cinProf)->getIDClasse());
+    $listeEtudiant = $professeurTable->findStudentByClassID($currentProfInfo->getCurrentClasse($cinProf)->getIDClasse());
     $idMatiere = $matiere->getIdMatiere();
 
     if($professeurTable->setAbsence($arrayAbsence, $dateSql, $listeEtudiant, $idMatiere)) {
