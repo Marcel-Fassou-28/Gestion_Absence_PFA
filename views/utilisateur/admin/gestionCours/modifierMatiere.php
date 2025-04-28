@@ -123,7 +123,7 @@ if (isset($matiere)) {
             </section>
             <section class="submit-group-matiere">
                 <button type="submit" class="submit-btn-matiere">Modifier</button>
-                <button class="btn2" onclick="window.location.href='<?=$router->url('liste-matiere-admin'). '?modifie=1&p=0' ?>'">Annuler</button>
+                <a class="btn2" href="<?=$router->url('liste-matiere-admin'). '?modifie=1&p=0' ?>">Annuler</a>
             </section>
 
         </form>

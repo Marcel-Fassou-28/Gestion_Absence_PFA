@@ -133,7 +133,7 @@ if (isset($creneau)) {
             </section>
             <section class="submit-group-creneau">
                 <button type="submit" class="submit-btn-creneau">Modifier</button>
-                <button class="btn2" onclick="window.location.href='<?=$router->url('gestion-creneau'). '?listprof=1&p=0' ?>'">Annuler</button>
+                <a class="btn2" href="<?=$router->url('gestion-creneau'). '?listprof=1&p=0' ?>">Annuler</a>
             </section>
 
         </form>
