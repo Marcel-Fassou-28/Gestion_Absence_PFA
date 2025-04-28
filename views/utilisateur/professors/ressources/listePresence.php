@@ -4,6 +4,12 @@ if(!isset($_SESSION['id_user'])) {
     exit();
 }
 
+if(isset($_SESSION['id_user']) && $_SESSION['role'] != 'professeur') {
+    header('location: ' . $router->url('user-dashboard' , ['role' => $_SESSION['role']]));
+    exit();
+}
+
+
 use App\Connection;
 use App\Professeur\ProfessorTable;
 use App\Professeur\CurrentInfo;
@@ -13,6 +19,21 @@ $cinProf = $_SESSION['id_user'];
 $pdo = Connection::getPDO();
 $tableProf = new ProfessorTable($pdo);
 $tableProfCurrent = new CurrentInfo($pdo);
+$creneau = $tableProfCurrent->getCurrentCreneau($cinProf);
+$error = null;
+
+if (!isset($creneau)) {
+    $error = 1;
+    header('location: '. $router->url('user-dashboard', ['role' => $_SESSION['role']]) .'?error_prof=' . $error);
+    exit();
+}
+
+if (!$tableProfCurrent->hasAlreadySendListPresence($cinProf)) {
+    $error = 1;
+    header('location: '. $router->url('add-presence') .'?should_submit=' . $error);
+    exit();
+}
+
 
 $classe = $tableProfCurrent->getCurrentClasse($cinProf)->getNomClasse();
 $listPresence = new ListePresence();

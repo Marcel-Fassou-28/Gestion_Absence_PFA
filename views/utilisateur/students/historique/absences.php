@@ -35,7 +35,7 @@ $stmt->execute([
 ]);
 $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
 */
-//Selection l'historique des etudiants jusqu'a la date indiquée
+//Selection l'historique de l'etudiants jusqu'a la date indiquée
 $stmt = $pdo->prepare("
     SELECT a.idAbsence, a.date, m.nomMatiere, j.statut, j.message, j.nomFichierJustificatif
     FROM Absence a
@@ -148,7 +148,7 @@ $absences = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <button type="submit" name="soumettre_justificatif" class="btn-soumettre">Soumettre</button>
                             </form>
                         <?php else: ?>
-                            <a href="<?= $router->url('etudiant-messagerie') ?>">
+                            <a href="<?= $router->url('etudiant-messagerie').'?messagerie=1&listprof=1' ?>">
                             <button type="button" class="btn-soumettre">Voir détails</button></a>
                         <?php endif; ?>
                     </td>

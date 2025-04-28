@@ -27,7 +27,7 @@ $utilisateur = new Utilisateur();
 if(!empty($_POST)) {
     $email = filter_var($_POST['email'] , FILTER_VALIDATE_EMAIL);
     $username = trim($_POST['username']);
-    $checkImage = $_POST['delete-image'];
+    $checkImage = $_POST['delete-image'] ?? false;
 
     if($checkImage) {
         if (!empty($_FILES)) {
@@ -52,7 +52,6 @@ if(!empty($_POST)) {
 
                     $query = $pdo->prepare('UPDATE utilisateur SET nomPhoto= :nomPhoto WHERE cin= :cin');
                     $query->execute(['cin' => $user->getCIN(), 'nomPhoto' => $nouveauNom]);
-                    $utilisateur->setNomPhoto($nouveauNom);
                     $success = 1;
                 } else {
                     $success = 0;
@@ -64,18 +63,17 @@ if(!empty($_POST)) {
         }
     }
 
-    $utilisateur->setUsername($username);
-    $utilisateur->setCIN($cinUser);
     if ($email !== $user->getEmail()) {
         $token = generateEmailToken();
         $confirmLink = $router->url('verify-email') . '?token='. urlencode($token) . '&email='. urlencode($email);
         if ($mailer->emailChangeMail($email, $user->getNom() . ' ' . $user->getPrenom(), $confirmLink)) {
-            $utilisateur->setEmail($email);
+            $pdo->prepare("UPDATE utilisateur SET email = :email WHERE cin= :cin");
+            $pdo->execute(['email' => $email, 'cin' => $user->getCIN()]);
 
             $pdo->exec("INSERT INTO utilisateur (token) VALUES ($token)");
         }
     }
-    $userTable->updateUserInformation($utilisateur) ? $success = 1 : $success = 0;
+    $userTable->updateUserInformation($username, $cinUser) ? $success = 1 : $success = 0;
     header('location: '. $router->url('user-profil', ['role'=> $_SESSION['role']]).'?user='.$_SESSION['role'] . '?success='. $success);
     exit();
 }

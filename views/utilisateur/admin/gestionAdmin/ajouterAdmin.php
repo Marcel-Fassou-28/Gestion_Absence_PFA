@@ -18,6 +18,7 @@ $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 $mailer = new Mailer();
+$cinAdmin = $_SESSION['id_user'];
 $success = null;
 $super_admin = null;
 $error = 0;
@@ -32,25 +33,26 @@ if (!empty($_POST)) {
 
     /* Impossible d'ajouter si vous n'etes pas le super administrateur, ici, c'est le premier admin */
     $query_verifie = $pdo->prepare('SELECT * FROM administrateur WHERE cinAdmin = :cinAdmin LIMIT 1');
-    $query_verifie->execute(['cinAdmin' => $admin]);
+    $query_verifie->execute(['cinAdmin' => $cinAdmin]);
     $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
     $admin_verifie = $query_verifie->fetch();
+    
+    if ($admin_verifie) {
+        if((string) $admin_verifie->getIDAdmin() === '1') {
+            $query1 = $pdo->prepare('INSERT INTO administrateur(cinAdmin, nom, prenom, email) VALUES ( ?, ?, ?, ?');
+            $query1->execute([ $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin]);
 
-    if ((string) $admin_verifie->getIDAdmin() === '1') {
-        $query1 = $pdo->prepare('INSERT INTO administrateur(cinAdmin, nom, prenom, email) VALUES ( ?, ?, ?, ?');
-        $query1->execute([ $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin]);
-
-        $query2 = $pdo->prepare('INSERT INTO utilisateur(username, cin, nom, prenom, email, password, nomPhoto, role) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?');
-        $query2->execute([$cinAdmin . $nomAdmin, $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin, password_hash($password, PASSWORD_BCRYPT), "avatar.png", "admin"]);
-        $mailer->confirmationAdminAccount($nomAdmin . ' ' . $prenomAdmin, $emailAdmin, $cinAdmin . $nomAdmin, $password, $emailAdmin);
-        $success = 1;
-        header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&success='.$success);
-        exit();
-    }else {
-        $super_admin = 1;
-        header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&super_admin='.$super_admin);
-        exit();
+            $query2 = $pdo->prepare('INSERT INTO utilisateur(username, cin, nom, prenom, email, password, nomPhoto, role) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?');
+            $query2->execute([$cinAdmin . $nomAdmin, $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin, password_hash($password, PASSWORD_BCRYPT), "avatar.png", "admin"]);
+            $mailer->confirmationAdminAccount($nomAdmin . ' ' . $prenomAdmin, $emailAdmin, $cinAdmin . $nomAdmin, $password, $emailAdmin);
+            $success = 1;
+            header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&success='.$success);
+            exit();
+        } 
     }
+    $super_admin = 1;
+    header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&super_admin='.$super_admin);
+    exit();
 }
 ?>
 

@@ -22,20 +22,21 @@ $admin = $_GET['id_admin'];
 if (isset($admin)) {
     /* Impossible de supprimer le super administrateur, ici, c'est le premier admin */
     $query_verifie = $pdo->prepare('SELECT * FROM administrateur WHERE cinAdmin = :cinAdmin LIMIT 1');
-    $query_verifie->execute(['cinAdmin' => $admin]);
+    $query_verifie->execute(['cinAdmin' => $_SESSION['id_user']]);
     $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
     $admin_verifie = $query_verifie->fetch();
 
-    if ((string) $admin_verifie->getIDAdmin() !== '1') {
-        header('location:' . $router->url('liste-des-admin') .'?admin=1&p=0&super_admin=1');
-        exit();
-    } else {
+    if ($admin_verifie && (string) $admin_verifie->getIDAdmin() === '1' && $admin != $_SESSION['id_user']) {
+
         $query = $pdo->prepare('DELETE FROM administrateur WHERE cinAdmin = :cinAdmin');
         $query->execute(['cinAdmin' => $admin]);
 
         $query = $pdo->prepare('DELETE FROM utilisateur WHERE cin = :cinAdmin');
         $query->execute(['cinAdmin' => $admin]);
         $success = 1;
+    } else {
+        header('location:' . $router->url('liste-des-admin') .'?admin=1&p=0&super_admin=1');
+        exit();
     }
 } else {
     $success = 0;

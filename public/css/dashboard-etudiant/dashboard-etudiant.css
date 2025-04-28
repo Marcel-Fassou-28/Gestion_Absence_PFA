@@ -1,7 +1,4 @@
 @import url(../variables.css);
-*{
-    color: white;
-}
 
 .dshb-messagerie{
     display: flex;
@@ -230,6 +227,11 @@ p{
 }
 .btn-soumettre{
     background-color: #8bb0f0;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
 
 }
 .btn-soumettre:hover{
@@ -276,6 +278,7 @@ p{
     padding: 5px;
     border-radius: 8px;
     margin: 3px;
+    
 }
 .list-tri-table {
     overflow-x: auto;
@@ -340,15 +343,18 @@ p{
     background-color: #333;
     border-radius: 10px;
     padding: 8px;
+    color: #fff;
 }
 .edit-msg-form textarea{
     background-color: #333;
     border-radius: 8px;
+    color: #fff;
 }
 .edit-msg-form button{
     background-color: var(--navbar-color);
     border-radius: 8px;
     border: none;
+    color: #fff;
     transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 
 }
@@ -384,6 +390,7 @@ p{
 .prof-list {
     max-width: 90%;
     margin: 0 auto;
+    color: var(--text-color);
     background-color: #1c1d1e88;
     border-radius: 10px;
     padding: 2%;
