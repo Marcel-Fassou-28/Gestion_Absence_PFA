@@ -42,6 +42,7 @@ $router
     ->match('/my/administration/Detail_justificatif','utilisateur/admin/gestionJustificatif/detailJustificatif','detail_justificatif')
     ->match('/my/administration/Rejeter_justificatif','utilisateur/admin/gestionJustificatif/rejecterJustificatif','rejecter_justificatif')
     ->match('/my/administration/Supprimer_justificatif','utilisateur/admin/gestionJustificatif/supprimerJustificatif','supprimer_justificatif')
+    
 
 
     ->match('/my/administration/modifier-prof','utilisateur/admin/gestionProf/modifierProf','modifier-professeur')
@@ -63,6 +64,7 @@ $router
 
     ->match('/my/Liste-des-etudiants-privees-pour-examen','utilisateur/admin/absences/etudiantPrivee','etudiantprivee')
     ->match('/my/administration/historiques-des-absences','utilisateur/admin/absences/historiquesAbsences','historikAbscences')
+    ->match('/my/administration/notificatition','utilisateur/admin/absences/notifierEtudiant', 'notifier')
     ->match('/my/administration/recapitulatif-Absences','utilisateur/admin/absences/recapAbsences','RecapAbsences')
     
 
