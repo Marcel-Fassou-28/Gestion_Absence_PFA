@@ -36,7 +36,7 @@ if (!empty($_POST)) {
     $query_verifie->execute(['cinAdmin' => $_SESSION['id_user']]);
     $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
     $admin_verifie = $query_verifie->fetch();
-    
+     
     if ($admin_verifie && $admin_verifie->getIDAdmin() == '1') {
         $query1 = $pdo->prepare('INSERT INTO administrateur(cinAdmin, nom, prenom, email) VALUES ( ?, ?, ?, ?');
         $query1->execute([ $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin]);
