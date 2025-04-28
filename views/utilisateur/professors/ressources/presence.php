@@ -12,7 +12,7 @@ if(isset($_SESSION['id_user']) && $_SESSION['role'] != 'professeur') {
 use App\Professeur\ProfessorTable;
 use App\Professeur\CurrentInfo;
 use App\Connection;
-
+$cinProf = $_SESSION['id_user'];
 $pdo = Connection::getPDO();
 $professeurTable = new ProfessorTable($pdo);
 $currentProfInfo = new CurrentInfo($pdo);
@@ -26,7 +26,7 @@ if (!isset($creneau)) {
 }
 
 if ($currentProfInfo->hasAlreadyTakenAbsence($cinProf)) {
-    $error_presence = 1;
+    $error = 1;
     header('location: ' . $router->url('user-dashboard', ['role' => $_SESSION['role']]) . '?error_presence='. $error);
     exit();
 }
@@ -42,9 +42,8 @@ $moisEnFrancais = [
 $moisAnglais = $date->format('F');
 $dateDuJour = $date->format('d') . ' ' . $moisEnFrancais[$moisAnglais] . ' ' . $date->format('Y');
 $dateSql = $date->format('Y-m-d H:i:s');
-
-$cinProf = $_SESSION['id_user'];
 $listeEtudiant = $currentProfInfo->getCurrentStudentList($cinProf);
+$status = null;
 
 $filiere = $currentProfInfo->getCurrentFiliere($cinProf);
 $matiere = $currentProfInfo->getCurrentMatiere($cinProf);
@@ -53,11 +52,19 @@ $creneau = $currentProfInfo->getCurrentCreneau($cinProf);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $arrayAbsence = $_POST['arrayCheckbox'] ?? [];
-    $listeEtudiant = $professeurTable->findStudentByClass($currentProfInfo->getCurrentClasse($cinProf)->getIDClasse());
+    $listeEtudiant = $professeurTable->findStudentByClassID($currentProfInfo->getCurrentClasse($cinProf)->getIDClasse());
     $idMatiere = $matiere->getIdMatiere();
 
-    $professeurTable->setAbsence($arrayAbsence, $dateSql, $listeEtudiant, $idMatiere);
+    if($professeurTable->setAbsence($arrayAbsence, $dateSql, $listeEtudiant, $idMatiere)) {
+        $status = 1;
+        header('location: ' . $router->url('user-dashboard', ['role' => $_SESSION['role']]) . '?status_presence='. $status);
+        exit();
+    }else {
+        $status = 0;
+    }
+    $listeEtudiant = $currentProfInfo->getCurrentStudentList($cinProf);
 }
+
 
 ?>
  
@@ -71,6 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     </div>
     <div class="hr"></div>
     <div class="presence-container">
+        <?php if($status === 0): ?>
+            <div class="alert alert danger">
+                L'absence n'a pas été soumis
+            </div>
+        <?php endif ?>
         <section class="professor-info container">
             <div class="filiere-group">
                 <span><?= $filiere ? $filiere->getNomFiliere() : 'non spécifié' ?></span>

@@ -93,16 +93,16 @@ function isDesktop() {
 
 <!-- Boîte modale pour le scanner -->
 <div class="modal-box" id="scanner-modal">
-<?php if (isset($_GET['should_submit']) && $_GET['should_submit'] == 1): ?>
-        <div class="alert alert-warning">
-            Vous devez soumettre une liste de présence
-    <?php endif ?>
         <div class="modal-box-overlay"></div>
         <form class="modal-box-content" method="post" action="<?= $router->url('add-presence') . '?use-link=student-presence' . '?redirect=1' ?>" enctype="multipart/form-data">
             <h2>Liste de présence</h2>
             <?php if ($success === 0): ?>
                 <div><?= $errorMessage?></div>
             <?php endif ?>
+            <?php if (isset($_GET['should_submit']) && $_GET['should_submit'] == 1): ?>
+        <div class="alert alert-warning" style="color:#333">
+            Vous devez soumettre une liste de présence</div>
+    <?php endif ?>
             <?php if(isDesktop()): ?> 
             <div class="upload-desktop">
                 <label for="presence-file">Uploader un fichier :</label>

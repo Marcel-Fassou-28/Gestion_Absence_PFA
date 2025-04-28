@@ -18,7 +18,7 @@ $dateSql = $date->format('Y-m-d H:i');
             <h2>Qui sommes-nous ?</h2>
             <div class="hr"></div>
             <div class="use-info">
-            <h3>GAENSAJ (Gestion Automatisée des Étudiants, Notes, Salles, Absences et Justifications) </h3><br>
+            <h3>GAENSAJ </h3><br>
             Nous sommes une équipe d'étudiants passionnés en ingénierie informatique, réunis autour d’un objectif commun : moderniser et simplifier la gestion des absences dans les établissements d’enseignement. Conscients des défis quotidiens que rencontrent les enseignants, les responsables pédagogiques et les étudiants, à l'aide de notre professeur encadrant <strong style="color:#8bb0f0;">Prof. Nourredine Assad</strong> nous avons conçu GAENSAJ, une application web intuitive, performante et évolutive.
             Notre projet est né d’un besoin réel observé sur le terrain : le manque d’outils centralisés, fluides et accessibles pour suivre efficacement les présences, les justifications d’absence et la communication entre les différents acteurs pédagogiques. GAENSAJ répond à cette problématique en offrant une plateforme tout-en-un qui intègre la gestion des utilisateurs (administrateurs, professeurs, étudiants), le suivi des absences en temps réel, l’association intelligente des matières aux enseignants, et bien plus encore.
             Nous combinons des technologies avancées du web avec une approche orientée utilisateur pour offrir une expérience fluide, fiable et sécurisée, aussi bien pour les petites structures que pour les établissements de grande taille.

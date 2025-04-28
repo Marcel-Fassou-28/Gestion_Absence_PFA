@@ -19,6 +19,7 @@ namespace App\Model\Utils\Etudiant;
  * @property string $dateDerniereReinitialisation
  * @property string $nomPhoto
  * @property string $nomClasse
+ * @property string $token
  */
 class UtilisateurEtudiant {
 
@@ -87,7 +88,12 @@ class UtilisateurEtudiant {
      */
     private $nomClasse;
 
-    /*public function __construct($id, $username, $nom, $prenom, $email, $password, $cin, $cne, $role, $nomClasse)
+    /**
+     * @var string $token
+     */
+    private $token;
+
+    /*public function __construct($id, $username, $nom, $prenom, $email, $password, $cin, $cne, $role, $nomClasse, $token)
     {
         $this->id = $id;
         $this->username = $username;
@@ -99,6 +105,7 @@ class UtilisateurEtudiant {
         $this->cne = $cne;
         $this->role = $role;
         $this->nomClasse = $nomClasse;
+        $this->token = $token;
     }*/
 
     /**
@@ -322,5 +329,23 @@ class UtilisateurEtudiant {
     }
     public function setNomClasse($value) {
       $this->nomClasse = $value;
+    }
+
+      /**
+     * Getters
+     * 
+     * @return string|null
+     */
+    public function getToken():?string {
+      return $this->token;
+    }
+
+    /**
+     * Setters
+     * 
+     * @param string $token
+     */
+    public function setToken(string $token) {
+      $this->token = $token;
     }
 }
