@@ -46,12 +46,10 @@ if (!empty($_POST)) {
             $query2->execute([$cinAdmin . $nomAdmin, $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin, password_hash($password, PASSWORD_BCRYPT), "avatar.png", "admin"]);
             $mailer->confirmationAdminAccount($nomAdmin . ' ' . $prenomAdmin, $emailAdmin, $cinAdmin . $nomAdmin, $password, $emailAdmin);
             $success = 1;
-            header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&success='.$success);
             exit();
         } 
     }
     $super_admin = 1;
-    header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&super_admin='.$super_admin);
     exit();
 }
 ?>
