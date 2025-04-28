@@ -23,7 +23,7 @@ $numero = 1;
 ?>
 <div class="prof-list">
     <?php if (isset($_GET['super_admin']) && $_GET['super_admin'] == '1'): ?>
-        <div class="alert alert-danger">Vous devez etre le super administrateur pour effectuer cette opération</div>
+        <div class="alert alert-danger">Vous devez etre le super administrateur pour effectuer cette opération ou Vous ne pouvez pas supprimer ce compte</div>
     <?php endif ?>
 
     <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>

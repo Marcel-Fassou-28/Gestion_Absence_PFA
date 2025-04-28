@@ -45,7 +45,7 @@ if (isset($admin)) {
         $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
         $admin_verifie = $query_verifie->fetch();
 
-        if ($admin_verifie && (string) $admin_verifie->getIDAdmin() === '1') {
+        if ($admin_verifie && (string) $admin_verifie->getIDAdmin() == '1') {
             $query1 = $pdo->prepare('UPDATE administrateur SET cinAdmin = :cinAdmin, nom = :nom, prenom = :prenom WHERE cinAdmin = :oldcinAdmin');
             $query1->execute([
                 'cinAdmin' => $cinAdmin,

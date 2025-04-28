@@ -26,7 +26,7 @@ if (isset($admin)) {
     $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
     $admin_verifie = $query_verifie->fetch();
 
-    if ($admin_verifie && (string) $admin_verifie->getIDAdmin() === '1' && $admin != $_SESSION['id_user']) {
+    if ($admin_verifie && (string) $admin_verifie->getIDAdmin() == '1' && $admin != $_SESSION['id_user']) {
 
         $query = $pdo->prepare('DELETE FROM administrateur WHERE cinAdmin = :cinAdmin');
         $query->execute(['cinAdmin' => $admin]);
@@ -35,7 +35,8 @@ if (isset($admin)) {
         $query->execute(['cinAdmin' => $admin]);
         $success = 1;
     } else {
-        header('location:' . $router->url('liste-des-admin') .'?admin=1&p=0&super_admin=1');
+        $super_admin = 1;
+        header('location:' . $router->url('liste-des-admin') .'?admin=1&p=0&super_admin=' . $super_admin);
         exit();
     }
 } else {
