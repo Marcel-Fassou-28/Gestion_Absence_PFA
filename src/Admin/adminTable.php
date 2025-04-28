@@ -725,13 +725,13 @@ class adminTable extends Table
      * @param mixed $id
      * @return array
      */
-    public function getMatiereById($id): array
+    public function getMatiereById($id): ?Matiere
     {
         $sql = $this->pdo->prepare('SELECT nomMatiere,idClasse FROM ' . $this->tableMatiere . ' WHERE idMatiere = :id ');
         $sql->execute(['id' => $id]);
         $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classMatiere);
-        $result = $sql->fetchALL();
-        return count($result) > 0 ? $result : [];
+        $result = $sql->fetch();
+        return  (!empty($result)) ? $result : [];
     }
 
 
@@ -825,7 +825,7 @@ class adminTable extends Table
         "SELECT idAbsence FROM justificatif WHERE statut = 'accepté'";
         $querry = "
         SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant,
-         e.cne as cne FROM absence a JOIN 
+         e.cne as cne, e.email as email FROM absence a JOIN 
         etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
         ON m.idMatiere = a.idMatiere WHERE a.idMatiere = :id AND a.idAbsence NOT IN 
         (SELECT idAbsence FROM justificatif WHERE statut = 'accepté')

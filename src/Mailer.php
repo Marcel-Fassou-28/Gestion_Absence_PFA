@@ -8,7 +8,8 @@ use PHPMailer\PHPMailer\Exception;
 /**
  * Classe pour envoyer des emails via PHPMailer avec SMTP
  */
-class Mailer {
+class Mailer
+{
 
     /**
      * @var PHPMailer Instance de PHPMailer
@@ -93,7 +94,7 @@ class Mailer {
             </table>';
 
             // Corps texte brut
-            $this->mailer->AltBody = 'Bonjour ' . htmlspecialchars($name) . ',\n\nNous avons reçu une demande pour réinitialiser votre mot de passe. Voici votre code : ' . htmlspecialchars($code) . '\n\nValable 15 minutes.' .'\n\nSi ce n’était pas vous, aucune action n’est nécessaire.\n\nCordialement,\nL’équipe de GAENSAJ';
+            $this->mailer->AltBody = 'Bonjour ' . htmlspecialchars($name) . ',\n\nNous avons reçu une demande pour réinitialiser votre mot de passe. Voici votre code : ' . htmlspecialchars($code) . '\n\nValable 15 minutes.' . '\n\nSi ce n’était pas vous, aucune action n’est nécessaire.\n\nCordialement,\nL’équipe de GAENSAJ';
 
             // Envoyer l'email
             $this->mailer->send();
@@ -173,14 +174,15 @@ class Mailer {
         }
     }
 
-    public function emailChangeMail(string $destinataire, string $name, string $confirmationLink):bool {
+    public function emailChangeMail(string $destinataire, string $name, string $confirmationLink): bool
+    {
         try {
             // Définir le destinataire
             $this->mailer->addAddress($destinataire);
-        
+
             // Définir le sujet
             $this->mailer->Subject = 'Confirmez votre nouvelle adresse email';
-        
+
             // Corps HTML
             $this->mailer->Body = '
             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Arial, sans-serif; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px #1c1d1e33;">
@@ -219,10 +221,10 @@ class Mailer {
                     </td>
                 </tr>
             </table>';
-        
+
             // Corps texte brut
             $this->mailer->AltBody = 'Bonjour ' . htmlspecialchars($name) . ',\n\nVous avez demandé à modifier l\'adresse email associée à votre compte. Veuillez confirmer cette nouvelle adresse en cliquant sur le lien suivant : ' . htmlspecialchars($confirmationLink) . '\n\nCe lien est valide pendant 24 heures. Si vous n\'avez pas initié cette demande, veuillez ignorer cet email ou contacter notre support à support@gaensaj.com.\n\nCordialement,\nL’équipe de GAENSAJ';
-        
+
             // Envoyer l'email
             $this->mailer->send();
             return true;
@@ -454,7 +456,7 @@ class Mailer {
         }
     }
 
-        /**
+    /**
      * Envoie un email de confirmation avec les informations de connexion pour un compte professeur
      *
      * @param string $name Nom du professeur
@@ -532,7 +534,7 @@ class Mailer {
         }
     }
 
-        /**
+    /**
      * Envoie un email de confirmation avec les informations de connexion pour un compte administrateur
      *
      * @param string $name Nom de l'administrateur
@@ -609,4 +611,73 @@ class Mailer {
             $this->mailer->clearAddresses();
         }
     }
+
+    public function absenceAlertMail(string $destinataire, string $name, string $courseName, string $nbreAbsence): bool
+    {
+        try {
+            // Définir le destinataire
+            $this->mailer->addAddress($destinataire);
+
+            // Définir le sujet
+            $this->mailer->Subject = 'Alerte du nombre d\'heure d\'abscence cumuler en absence en' . $courseName;
+
+            // Corps HTML
+            $this->mailer->Body = '
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Arial, sans-serif; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px #1c1d1e33;">
+                <tr>
+                    <td align="center" bgcolor="#363753" style="padding: 30px 20px; background: linear-gradient(180deg, #363753 0%, #1c1d1e 100%);">
+                        <h1 style="color: #ffffff; font-size: 26px; font-weight: 600; margin: 0; letter-spacing: 0.5px;">Alerte d\'absence</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 40px 25px;">
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                            Bonjour ' . mb_convert_encoding( htmlspecialchars($name), 'ISO-8859-1', 'UTF-8') . ',
+                            <br><br>
+                            Nous vous informons que vous avez accumuler un nombre total de ' . htmlspecialchars($nbreAbsence) . ' absences dans le cours suivant :
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                            <strong>Cours :</strong> ' . mb_convert_encoding( htmlspecialchars($courseName), 'ISO-8859-1', 'UTF-8'). '<br>
+                            <strong>Nombre d\'heure d\'abscence : ' . htmlspecialchars($nbreAbsence) . '</strong>' .'
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                             Veuillez prendre les mesures nécessaires pour ne pas depasser le plafond d\'heure d\'abscence qui est de 8heures par module.
+                             
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                             Rappel: en depassant le plafond d\'heure d\'abscence, vous ne pourrez pas ppassez l\'examen final du module et vous passerez directement à la session de rattrapage.
+                             Veuillez contacter l\'administration pour régulariser votre situation.
+                             
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 14px; line-height: 22px; margin: 20px 0 0; opacity: 0.8;">
+                            Cordialement,<br>
+                            L’équipe de GAENSAJ
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" bgcolor="#363753" style="padding: 15px; background-color: #363753;">
+                        <p style="color: #ffffff; font-size: 12px; line-height: 18px; margin: 0; opacity: 0.7;">
+                            Vous avez reçu cet email suite à une alerte d\'absence.<br>
+                            © 2025 GAENSAJ. Tous droits réservés.
+                        </p>
+                    </td>
+                </tr>
+            </table>';
+
+            // Corps texte brut
+            $this->mailer->AltBody = 'Bonjour ' . htmlspecialchars($name) . ',\n\nNous vous informons que vous avez accumuler un nombre total de ' . htmlspecialchars($nbreAbsence) . ' absences dans le cours suivant :\n\nCours : ' . htmlspecialchars($courseName) . '\nNombre d\'heure d\'abscence : ' . htmlspecialchars($nbreAbsence) . 
+            '\n\nVeuillez prendre les mesures nécessaires pour ne pas depasser le plafond d\'heure d\'abscence qui est de 8heures par module.\n\nRappel: en depassant le plafond d\'heure d\'abscence, vous ne pourrez pas ppassez l\examen final du module et vous passerez directement à la session de rattrapage.\n\nCordialement,\nL’équipe de GAENSAJ';
+
+            $this->mailer->send();
+            return true;
+        } catch (Exception $e) {
+            // En cas d'erreur (email invalide, problème serveur SMTP, etc.), retourner false
+            return false;
+        } finally {
+            // Réinitialiser les destinataires pour éviter des envois accidentels ultérieurs
+            $this->mailer->clearAddresses();
+        }
+    }
+
 }

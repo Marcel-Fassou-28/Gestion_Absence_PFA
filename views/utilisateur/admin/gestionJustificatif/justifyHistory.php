@@ -12,6 +12,9 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\Connection;
 use App\Admin\adminTable;
 
+
+
+
 $line = 20;
 $offset = $_GET['p'] * $line;
 

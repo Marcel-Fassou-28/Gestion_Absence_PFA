@@ -9,17 +9,26 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
     exit();
 }
 
+use App\Connection;
 use App\Admin\adminTable;
 
 
+if (isset($_GET['notifier']) && $_GET['notifier'] == 1): ?>
+    <div class="alert alert-success">L'email de notification a été envoyé avec succès</div>
+    
+    <?php
+ $_GET['notifier'] = 5;
+elseif (isset($_GET['notifier']) && $_GET['notifier'] == 0): ?>
+    <div class="alert alert-danger">Erreur d'envoi de l'email de notification</div>
+<?php endif; ?>
 
-
+<?php
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
 /*<a href="<?= $urlUser['modification']; ?>">modifier</a>*/
-use App\Connection;
+
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
@@ -55,11 +64,11 @@ if (isset($_POST['classe'])) {
 if (isset($_POST['matiere'])) {
     if ($_POST['matiere'] !== 'defaut') {
         $matiere = $_POST['matiere'];
-    $classe = $list->findClassByMatiere($matiere);
-    
-    $idMatiere = $list->getIdMatiereByName($matiere);
-    $listeEtudiant = $list->getStudentByClass($classe, $line, $offset);
-    $n = count($list->getStudentByClass($classe));
+        $classe = $list->findClassByMatiere($matiere);
+
+        $idMatiere = $list->getIdMatiereByName($matiere);
+        $listeEtudiant = $list->getStudentByClass($classe, $line, $offset);
+        $n = count($list->getStudentByClass($classe));
     }
     $_GET['matiere'] = $_POST['matiere'];
 }
@@ -143,9 +152,16 @@ if (isset($_POST['matiere'])) {
                 <a href="?<?= $list->test('p', $i); ?>"
                     class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
             }
-            ?>
+
+            if (isset($idMatiere)): ?>
+                <a href="<?= $router->url('notifier') . '?matiere=' . $idMatiere; ?>" style="float: right;" class="btn1"> notifier les
+                    Absents</a>
+            <?php endif; ?>
         </div>
+
     </div>
+
+
 
     <script>
         const apiUrl = "<?= $router->url('api-liste-classe') ?>";
