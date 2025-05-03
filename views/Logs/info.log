@@ -1,0 +1,2 @@
+[2025-05-03 16:02:30][INFO][user:guest][::1] Call to a member function getPassword() on null in D:\PFA\Gestion_Absence_PFA\views\login\login.php on line 43 (UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36)
+[2025-05-03 16:04:32][INFO][user:guest][::1] Call to a member function getPassword() on null in D:\PFA\Gestion_Absence_PFA\views\login\login.php on line 43 (UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36)
