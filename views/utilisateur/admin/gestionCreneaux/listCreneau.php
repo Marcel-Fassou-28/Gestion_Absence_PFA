@@ -10,7 +10,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 $line = 20;
 $offset = $_GET['p'] * $line;
-
+$title = "Administration";
 use App\Connection;
 use App\Admin\adminTable;
 

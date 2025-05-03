@@ -14,7 +14,7 @@ use App\Admin\adminTable;
 
 
 
-
+$title = "Administration";
 $line = 20;
 $offset = $_GET['p'] * $line;
 

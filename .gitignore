@@ -1,2 +1,7 @@
 /database/Fill/fill1.php
 /uploads
+/views/Logs/db.log
+/views/Logs/error.log
+/views/Logs/info.log
+/views/Logs/security.log
+/views/Logs/uploads.log
