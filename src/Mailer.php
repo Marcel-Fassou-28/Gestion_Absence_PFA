@@ -680,4 +680,72 @@ class Mailer
         }
     }
 
+    public function alertEtudiantPrivee(string $destinataire, string $name, string $courseName): bool
+    {
+        try {
+            // Définir le destinataire
+            $this->mailer->addAddress($destinataire);
+
+            // Définir le sujet
+            $this->mailer->Subject = 'Situation Concernant la session d\'examen du module ' . $courseName;
+
+            // Corps HTML
+            $this->mailer->Body = '
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Arial, sans-serif; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px #1c1d1e33;">
+                <tr>
+                    <td align="center" bgcolor="#363753" style="padding: 30px 20px; background: linear-gradient(180deg, #363753 0%, #1c1d1e 100%);">
+                        <h1 style="color: #ffffff; font-size: 26px; font-weight: 600; margin: 0; letter-spacing: 0.5px;">Suspension pour l\'examen</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 40px 25px;">
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                            Bonjour ' . mb_convert_encoding( htmlspecialchars($name), 'ISO-8859-1', 'UTF-8') . ',
+                            <br><br>
+                            Nous vous informons que vous avez depasser le plafond d\'heure d\'absences qui est de 8heures pour chaque module.\n
+                            par consequent pour le cours suivant :
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                            <strong>Cours :</strong> ' . mb_convert_encoding( htmlspecialchars($courseName), 'ISO-8859-1', 'UTF-8'). '<br>
+                            
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                             <strong>Vous etes suspendu pour la session d\'examen de ce module<//strong>
+                             
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
+                             Donc ,de ce fait vous passerez directement a la session de ratrappage!!!!
+                             
+                        </p>
+                        <p style="color: #1c1d1e; font-size: 14px; line-height: 22px; margin: 20px 0 0; opacity: 0.8;">
+                            Cordialement,<br>
+                            L’équipe de GAENSAJ
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" bgcolor="#363753" style="padding: 15px; background-color: #363753;">
+                        <p style="color: #ffffff; font-size: 12px; line-height: 18px; margin: 0; opacity: 0.7;">
+                            Vous avez reçu cet email suite à une alerte d\'absence.<br>
+                            © 2025 GAENSAJ. Tous droits réservés.
+                        </p>
+                    </td>
+                </tr>
+            </table>';
+
+            // Corps texte brut
+            $this->mailer->AltBody = 'Bonjour ' . htmlspecialchars($name) . ',\n\nNous vous informons que vous avez depasser le nombre d\'heure absence accepter par module 
+            \nVvous etes donc suspendu pour la session d\'examen dudit module.\n  vous passerez directement à la session de rattrapage.\n\nCordialement,\nL’équipe de GAENSAJ';
+
+            $this->mailer->send();
+            return true;
+        } catch (Exception $e) {
+            // En cas d'erreur (email invalide, problème serveur SMTP, etc.), retourner false
+            return false;
+        } finally {
+            // Réinitialiser les destinataires pour éviter des envois accidentels ultérieurs
+            $this->mailer->clearAddresses();
+        }
+    }
+
 }

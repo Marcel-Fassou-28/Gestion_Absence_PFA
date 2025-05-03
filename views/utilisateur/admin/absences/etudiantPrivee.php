@@ -28,6 +28,16 @@ $n = 0;
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
+
+if (isset($_GET['notifier']) && $_GET['notifier'] == 1): ?>
+    <div class="alert alert-success">L'email de notification a été envoyé avec succès</div>
+    
+    <?php
+ $_GET['notifier'] = 5;
+elseif (isset($_GET['notifier']) && $_GET['notifier'] == 0): ?>
+    <div class="alert alert-danger">Erreur d'envoi de l'email de notification</div>
+<?php endif;
+
 if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut')) {
     $classe = $_POST['classe'];
 
@@ -85,7 +95,7 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
         <?php if (empty($listeEtudiant) || !isset($listeEtudiant)):
             echo '<h1 class = "liste-vide"> Aucun etudiants !!!</h1>';
         else: ?>
-            <a href="<?= $router->url('exportPdf') . '?matiere=' . $matiere ?>" class="btn-download-pdf" target="_blank">
+            <a href="<?= $router->url('exportPdf') . '?matiere=' . $matiere ?>" class="btn-download-pdf submit-btn" target="_blank">
                 Télécharger en PDF
             </a>
             <table>
@@ -120,7 +130,11 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
 
         <a href="?<?= $list->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
     }
-    ?>
+
+    if (isset($idMatiere)): ?>
+        <a href="<?= $router->url('notifier') . '?matiere=' . $idMatiere . '&privee=1'; ?>" style="float: right;" class="btn1"> notifier ces etudiants</a>
+    <?php endif; ?>
+    
 </div>
 </div>
 
