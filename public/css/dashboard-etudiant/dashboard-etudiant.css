@@ -151,7 +151,7 @@ p{
 }
 
 .new-msg input,
-.new-msg textarea {
+.new-msg textarea,.new-msg select {
     margin-bottom: 20px;
     border-radius: 12px;
     padding: 10px 15px;
@@ -162,7 +162,9 @@ p{
     font-size: 14px;
     transition: border 0.3s ease, background 0.3s ease;
 }
-
+.new-msg option{
+    color: black;
+}
 .new-msg input:focus,
 .new-msg textarea:focus {
     outline: none;
