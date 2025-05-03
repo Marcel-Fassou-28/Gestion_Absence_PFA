@@ -8,7 +8,7 @@ if(isset($_SESSION['id_user']) && $_SESSION['role'] != 'professeur') {
     header('location: ' . $router->url('user-dashboard' , ['role' => $_SESSION['role']]));
     exit();
 }
-
+$title = "Professeur";
 use App\Professeur\ProfessorTable;
 use App\Professeur\CurrentInfo;
 use App\Connection;

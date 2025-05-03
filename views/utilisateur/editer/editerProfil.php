@@ -14,7 +14,7 @@ use App\UserTable;
 use App\Model\Utilisateur;
 use App\Mailer;
 use App\Logger;
-
+$title = "Editer Profil";
 
 $pdo = Connection::getPDO();
 $userTable = new UserTable($pdo);

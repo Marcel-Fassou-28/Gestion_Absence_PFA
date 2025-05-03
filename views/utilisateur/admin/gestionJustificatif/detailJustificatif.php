@@ -11,7 +11,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 
 
-
+$title = "Administration";
 use App\Connection;
 use App\Admin\adminTable;
 

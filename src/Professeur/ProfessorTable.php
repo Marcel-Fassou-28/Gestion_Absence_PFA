@@ -9,6 +9,7 @@ use App\Model\Absents;
 use App\Model\Classe;
 use App\Model\Matiere;
 use App\Model\AbsenceEtudiant;
+use App\Model\Departement;
 use App\Model\ListePresence;
 use App\Model\Utils\InfoAbsenceEtudiant;
 use App\Model\Utils\EtudiantsAbsents;

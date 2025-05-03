@@ -9,7 +9,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
     header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
     exit();
 }
-
+$title = "Administration";
 use App\Connection;
 use App\Admin\adminTable;
 

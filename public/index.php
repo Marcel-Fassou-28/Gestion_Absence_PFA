@@ -121,5 +121,7 @@ $router
     ->match('/my/api/professeur/select-classe-etudiant', 'API/Professeur/API_list_etudiant', 'api-prof-liste-etud')
     ->match('/my/api-admin/select-niveau-filiere', 'API/Admin/API_fichier_liste_classe', 'api-admin-niveau-filiere')
 
+    ->match('/historique/logs', 'utilisateur/admin/gestionLogs/detailsLog', 'log')
+
     ->run();
     

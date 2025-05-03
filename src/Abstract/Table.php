@@ -28,7 +28,10 @@ abstract class Table {
         $query->setFetchMode(\PDO::FETCH_CLASS, \App\Model\Departement::class);
         $result = $query->fetch();
 
-        return $result;
+        if (!$result) {
+            return null;
+        }
+        return $result ;
     }
 
 }

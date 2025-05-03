@@ -13,7 +13,7 @@ use App\MessageTable;
 use App\UserTable;
 use App\Model\Message;
 use App\Connection;
-
+$title = "Messagerie";
 $pdo = Connection::getPDO(); 
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -67,6 +67,14 @@ if (isset($_POST['reply_message']) && isset($_POST['cin_destinataire'])) {
     }
 }
 
+//suppression de message
+if (isset($_POST['delete_message'])) {
+    $idMessage = (int) $_POST['delete_message'];
+    $messageTable->supprimerMessage($idMessage);
+    header('Location: ' . $router->url('admin-messagerie'));
+    exit();
+}
+
 // Envoi d’un message à un étudiant sélectionné
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['objet'], $_POST['cin_destinataire']) && !isset($_POST['edit_message'])) {
     $objet = trim($_POST['objet']);
@@ -105,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['objet'], $_POST['cin_
     <center>
     <form class="new-msg" method="post" action="<?= $router->url('admin-messagerie') ?>">
     <h2 class="messagerie-intro">Envoyer un message</h2>
+    <div class="hr"></div>
     <!-- Sélection de l'étudiant destinataire -->
     <label for="cin_destinataire">Étudiant destinataire</label>
     <select name="cin_destinataire" required>
@@ -127,7 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['objet'], $_POST['cin_
     </center>
 
     <div class="conteneur-messagerie">
-        <h3 class="messagerie-intro">Messages reçus</h3><div class="hr"></div>
+        <h3 class="messagerie-intro">Messages reçus</h3>
+        <div class="hr"></div>
         <div class="msg">
             <?php if (empty($messagesRecus)): ?>
                 <p>Aucun message reçu.</p>
@@ -140,6 +150,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['objet'], $_POST['cin_
                             <strong>Date :</strong> <?= htmlspecialchars($message->getDate()) ?><br>
                             <strong>Contenu :</strong> <?= nl2br(htmlspecialchars($message->getContenu())) ?>
                         </li>
+                        
+                        <form method="post" action="<?= $router->url('admin-messagerie') ?>" style="display:inline;">
+                            <input type="hidden" name="delete_message" value="<?= $message->getId() ?>">
+                            <button type="submit" class="btn2" onclick="return confirm('Voulez-vous vraiment supprimer ce message ?')">Supprimer</button>
+                        </form>
                         <!-- Bouton Répondre -->
                         <button type="button" class="btn1" onclick="toggleReplyForm(<?= $message->getId() ?>)">Répondre</button>
 

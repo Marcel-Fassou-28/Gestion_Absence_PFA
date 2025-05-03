@@ -27,8 +27,6 @@ $user = $tableUser->getIdentification($cin);
     <meta property="og:title" content="Gestion des Absences - Application PFA">
     <meta property="og:description" content="Plateforme intuitive de gestion des absences pour enseignants et étudiants.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://www.gaensaj.local/">
-    <meta property="og:image" content="http://www.gaensaj.local/assets/images/GAENSAJ.svg">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,15 +37,14 @@ $user = $tableUser->getIdentification($cin);
     <link rel="stylesheet" href="/css/dashbord/connected.css">
     
     <link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">
-
     <?php
-       $allowedKeys = [
+    $allowedKeys = [
             'about', 'success_prof', 'modifie_success', 'success_filiere', 'departement', 'delete_success', 
             'modifie_success', 'use-link', 'success_delete', 'modifier', 'admin', 'matiere', 'classe', 'listprof', 
             'user', 'filiere', 'add', 'historic', 'success', 'super_admin', 'edit_profil', 'messagerie', 'p', 
             'redirect', 'fichier', 'file', 'cin', 'about', 'success_modifie', 'success_etudiant', 'justifier', 'notifier',
             'fichier', 'traite', 'idjustificatif', 'success_absence', 'success_prof', 'error_presence_file', 'error_prof', 'cinProf',
-            'error_prof', 'error_presence', 'status_presence', 'user'
+            'error_prof', 'error_presence', 'status_presence', 'user', 'id_user'
         ];
 
         if (!empty($_GET)) {
@@ -64,41 +61,42 @@ $user = $tableUser->getIdentification($cin);
             }
         }
     ?>
+    
     <?php if (isset($_GET['about'])) {
-        echo '<link rel="stylesheet" href="/css/About/about.css">';
+        echo '<link rel="stylesheet" href="/css/About/about.css">' . PHP_EOL;
     }?>
 
     <?php if(isset($_GET['use-link'])) {
-        echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
+        echo '<link rel="stylesheet" href="/css/use-link/presence.css">' . PHP_EOL;
     }
     if (isset($_GET['modifier'])){
-        echo '<link rel="stylesheet" href="/css/list_prof/modifierProf.css">';
+        echo '<link rel="stylesheet" href="/css/list_prof/modifierProf.css">' . PHP_EOL;
     }
     if (isset($_GET['matiere']) || isset($_GET['admin']) || isset($_GET['classe'])) {
-        echo '<link rel="stylesheet" href="/css/matiere/list-matiere.css">';
-        echo '<link rel="stylesheet" href="/css/matiere/modifie-matiere.css">';
+        echo '<link rel="stylesheet" href="/css/matiere/list-matiere.css">' . PHP_EOL;
+        echo '<link rel="stylesheet" href="/css/matiere/modifie-matiere.css">' . PHP_EOL;
     }
     if (isset($_GET['listprof'])) {
-        echo '<link rel="stylesheet" href="/css/list_prof/list.css">';
-        echo '<link rel="stylesheet" href="/css/modifie/modifie.css">';
+        echo '<link rel="stylesheet" href="/css/list_prof/list.css">' . PHP_EOL;
+        echo '<link rel="stylesheet" href="/css/modifie/modifie.css">' . PHP_EOL;
         if (isset($_GET['justifier'])) {
-            echo '<link rel="stylesheet" href="/css/justificatif/justificatif.css">';
+            echo '<link rel="stylesheet" href="/css/justificatif/justificatif.css">' . PHP_EOL;
         }
     }
     if (isset($_GET['historic'])) {
-        echo '<link rel="stylesheet" href="/css/use-link/historic.css">';
+        echo '<link rel="stylesheet" href="/css/use-link/historic.css">' . PHP_EOL;
     }
     if(isset($_GET['user'])) {
-        echo '<link rel="stylesheet" href="/css/profil/profil.css">';
+        echo '<link rel="stylesheet" href="/css/profil/profil.css">' . PHP_EOL;
     }
     if(isset($_GET['edit_profil'])) {
-        echo '<link rel="stylesheet" href="/css/profil/editerProfil.css">';
+        echo '<link rel="stylesheet" href="/css/profil/editerProfil.css">' . PHP_EOL;
     }
     if(isset($_GET['messagerie'])){
-        echo '<link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">';
+        echo '<link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">' . PHP_EOL;
     }
     ?>
-    <title>Gestion d'Absence <?= $title ? ' | ' . $title : ''  ?></title>
+    <title>Gestion d'Absence <?= isset($title) ? ' | ' . $title : ''  ?></title>
 </head>
 <body> 
     <nav>

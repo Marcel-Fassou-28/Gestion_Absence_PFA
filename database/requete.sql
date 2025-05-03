@@ -21,7 +21,7 @@ CREATE TABLE Utilisateur (
     email VARCHAR(250) NOT NULL,
     password VARCHAR(250) NOT NULL,
     role ENUM('admin', 'professeur', 'etudiant') NOT NULL,
-    nomPhoto VARCHAR(250),
+    nomPhoto VARCHAR(250) DEFAULT 'avatar.png',
     codeRecuperation VARCHAR(10),
     dateDerniereReinitialisation DATETIME,
     token VARCHAR(255)

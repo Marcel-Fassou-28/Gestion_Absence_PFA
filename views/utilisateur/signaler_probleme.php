@@ -7,6 +7,7 @@ if(!isset($_SESSION['id_user'])) {
 
 use App\Mailer;
 use App\Connection;
+use App\Logger;
 use App\UserTable;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -27,6 +28,7 @@ if (!empty($_POST['message']))  {
     $message = $_POST['message'];
     
     $success = $mailer->signalerProbleme($nom . ' ' .$prenom, $email, $message);
+    Logger::log($message, 1, 'INFO', $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
 }
 
 ?>

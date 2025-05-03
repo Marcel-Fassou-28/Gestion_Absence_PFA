@@ -135,6 +135,7 @@ p{
     color: #fff;
     margin-bottom: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    width: 80%;
 }
 
 .new-msg h2.messagerie-intro {
@@ -143,12 +144,14 @@ p{
     font-size: 24px;
     font-weight: bold;
     color: #ffffff;
+    text-transform: uppercase;
 }
 
 .new-msg label {
     margin-bottom: 5px;
     font-weight: 500;
     font-size: 15px;
+    margin-top: 0.5rem;
 }
 
 .new-msg input,
@@ -162,6 +165,13 @@ p{
     color: #ffffff;
     font-size: 14px;
     transition: border 0.3s ease, background 0.3s ease;
+    width: 80%;
+    margin: auto;
+    font-weight: 600;
+}
+
+.new-msg textarea {
+    height: 150px;
 }
 .new-msg option{
     color: black;
@@ -171,9 +181,11 @@ p{
     outline: none;
     border: 1px solid #ffffff;
     background-color: rgba(255, 255, 255, 0.15);
+    font-size: 15px;
 }
 
 .new-msg input[type="submit"] {
+    margin-top: .5rem;
     width: auto;
     padding: 10px 20px;
     color: white;
@@ -183,6 +195,7 @@ p{
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 80%;
 }
 
 .new-msg input[type="submit"]:hover {
