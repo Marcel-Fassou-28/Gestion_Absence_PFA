@@ -83,12 +83,12 @@ $currentTime = $date->format('H:i:s');
 
     <?php if (isset($_GET['error_presence']) && $_GET['error_presence'] == 1): ?>
         <div class="alert alert-danger">
-            Vous avez déjà effectué une absence pour cette matière
+            Vous avez déjà effectué une absence pour cette matière</div>
     <?php endif ?>
 
     <?php if (isset($_GET['error_presence_file']) && $_GET['error_presence_file'] == 1): ?>
         <div class="alert alert-danger">
-            Vous avez déjà effectué envoyé le fichier de présence
+            Vous avez déjà effectué envoyé le fichier de présence</div>
     <?php endif ?>
         <div class="statistic">
             <section class="last-absence">

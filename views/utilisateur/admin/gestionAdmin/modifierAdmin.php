@@ -34,18 +34,18 @@ if (isset($admin)) {
         exit();
     }
 
-    if (!empty($_POST)) {
+    if (!empty($_POST) && isset($_POST['submit-modifier'])) {
         $cinAdmin = $_POST['cinAdmin'];
         $nomAdmin = $_POST['nomAdmin'];
         $prenomAdmin = $_POST['prenomAdmin'];
 
         /* Impossible de supprimer le super administrateur, ici, c'est le premier admin */
         $query_verifie = $pdo->prepare('SELECT * FROM administrateur WHERE cinAdmin = :cinAdmin LIMIT 1');
-        $query_verifie->execute(['cinAdmin' => $admin]);
+        $query_verifie->execute(['cinAdmin' => $_SESSION['id_user']]);
         $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
         $admin_verifie = $query_verifie->fetch();
 
-        if ((string) $admin_verifie->getIDAdmin() === '1') {
+        if ($admin_verifie && (string) $admin_verifie->getIDAdmin() == '1') {
             $query1 = $pdo->prepare('UPDATE administrateur SET cinAdmin = :cinAdmin, nom = :nom, prenom = :prenom WHERE cinAdmin = :oldcinAdmin');
             $query1->execute([
                 'cinAdmin' => $cinAdmin,
@@ -101,8 +101,9 @@ if (isset($admin)) {
                 </div>
             </section>
             <section class="submit-group-matiere">
-                <button type="submit" class="submit-btn-matiere">Modifier</button>
-                <button class="btn2" onclick="window.location.href='<?=$router->url('liste-des-admin'). '?admin=1&p=0' ?>'">Annuler</button>
+                <button type="submit" class="submit-btn-matiere" value="submit-modifier" name="submit-modifier">Modifier</button>
+                <!--<button class="btn2" onclick="window.location.href=''">Annuler</button>-->
+                <a href="<?=$router->url('liste-des-admin'). '?admin=1&p=0' ?>" class="btn2">Annuler</a>
             </section>
 
         </form>

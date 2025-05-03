@@ -18,6 +18,7 @@ $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 $mailer = new Mailer();
+$cinAdmin = $_SESSION['id_user'];
 $success = null;
 $super_admin = null;
 $error = 0;
@@ -32,11 +33,11 @@ if (!empty($_POST)) {
 
     /* Impossible d'ajouter si vous n'etes pas le super administrateur, ici, c'est le premier admin */
     $query_verifie = $pdo->prepare('SELECT * FROM administrateur WHERE cinAdmin = :cinAdmin LIMIT 1');
-    $query_verifie->execute(['cinAdmin' => $admin]);
+    $query_verifie->execute(['cinAdmin' => $_SESSION['id_user']]);
     $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
     $admin_verifie = $query_verifie->fetch();
-
-    if ((string) $admin_verifie->getIDAdmin() === '1') {
+     
+    if ($admin_verifie && $admin_verifie->getIDAdmin() == '1') {
         $query1 = $pdo->prepare('INSERT INTO administrateur(cinAdmin, nom, prenom, email) VALUES ( ?, ?, ?, ?');
         $query1->execute([ $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin]);
 
@@ -46,7 +47,7 @@ if (!empty($_POST)) {
         $success = 1;
         header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&success='.$success);
         exit();
-    }else {
+    } else {
         $super_admin = 1;
         header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&super_admin='.$super_admin);
         exit();
