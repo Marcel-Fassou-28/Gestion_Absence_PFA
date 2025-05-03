@@ -100,8 +100,8 @@ if (isset($_POST['matiere'])) {
                 </select>
             </div>
             <div class="list-classe">
-                <select name="matiere" id="tri-matiere">
-                    <option value="defaut">Matiere</option>
+                <select name="matiere" id="tri-matiere" required>
+                    
                     <?php if (isset($matiere)): ?>
                         <option value="<?= $matiere; ?>" selected><?= $matiere; ?></option>
                     <?php endif; ?>
