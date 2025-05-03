@@ -65,37 +65,37 @@ $user = $tableUser->getIdentification($cin);
         }
     ?>
     <?php if (isset($_GET['about'])) {
-        echo '<link rel="stylesheet" href="/css/About/about.css"><br>';
+        echo '<link rel="stylesheet" href="/css/About/about.css">';
     }?>
 
     <?php if(isset($_GET['use-link'])) {
-        echo '<link rel="stylesheet" href="/css/use-link/presence.css"><br>';
+        echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
     }
     if (isset($_GET['modifier'])){
-        echo '<link rel="stylesheet" href="/css/list_prof/modifierProf.css"><br>';
+        echo '<link rel="stylesheet" href="/css/list_prof/modifierProf.css">';
     }
     if (isset($_GET['matiere']) || isset($_GET['admin']) || isset($_GET['classe'])) {
-        echo '<link rel="stylesheet" href="/css/matiere/list-matiere.css"><br>';
-        echo '<link rel="stylesheet" href="/css/matiere/modifie-matiere.css"><br>';
+        echo '<link rel="stylesheet" href="/css/matiere/list-matiere.css">';
+        echo '<link rel="stylesheet" href="/css/matiere/modifie-matiere.css">';
     }
     if (isset($_GET['listprof'])) {
-        echo '<link rel="stylesheet" href="/css/list_prof/list.css"><br>';
-        echo '<link rel="stylesheet" href="/css/modifie/modifie.css"><br>';
+        echo '<link rel="stylesheet" href="/css/list_prof/list.css">';
+        echo '<link rel="stylesheet" href="/css/modifie/modifie.css">';
         if (isset($_GET['justifier'])) {
-            echo '<link rel="stylesheet" href="/css/justificatif/justificatif.css"><br>';
+            echo '<link rel="stylesheet" href="/css/justificatif/justificatif.css">';
         }
     }
     if (isset($_GET['historic'])) {
-        echo '<link rel="stylesheet" href="/css/use-link/historic.css"><br>';
+        echo '<link rel="stylesheet" href="/css/use-link/historic.css">';
     }
     if(isset($_GET['user'])) {
-        echo '<link rel="stylesheet" href="/css/profil/profil.css"><br>';
+        echo '<link rel="stylesheet" href="/css/profil/profil.css">';
     }
     if(isset($_GET['edit_profil'])) {
-        echo '<link rel="stylesheet" href="/css/profil/editerProfil.css"><br>';
+        echo '<link rel="stylesheet" href="/css/profil/editerProfil.css">';
     }
     if(isset($_GET['messagerie'])){
-        echo '<link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css"><br>';
+        echo '<link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">';
     }
     ?>
     <title>Gestion d'Absence <?= $title ? ' | ' . $title : ''  ?></title>
