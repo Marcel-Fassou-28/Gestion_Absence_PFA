@@ -14,6 +14,7 @@ use App\Connection;
 use App\Professeur\CurrentInfo;
 use App\Professeur\ProfessorTable;
 use App\Model\ListePresence;
+use App\Logger;
 
 $cinProf = $_SESSION['id_user'];
 $pdo = Connection::getPDO();
@@ -63,6 +64,7 @@ if (!empty($_POST)) {
 
         if(move_uploaded_file($tmpName, $destination) && $tableProf->sendListPresence($listPresence)) {
             $success = 1;
+            Logger::log("Soumission d'un justificatif", 1, "UPLOAD", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
             header('location: '. $router->url('professor-listePresence') . '?use-link=student-presence' . '?success='.$success);
             exit();
         } else {

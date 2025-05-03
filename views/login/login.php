@@ -6,8 +6,10 @@ if(isset($_SESSION['id_user'])) {
 
 use App\UserTable;
 use App\Connection;
+use App\Logger;
 
 $secretKey = getenv('SECRET_KEY');
+$logger = new Logger();
 
 /**
  * On peut le faire avec une clé sécrete (hash_hmac)
@@ -43,11 +45,14 @@ if (!empty($_POST)) {
             $_SESSION['id_user'] = $user->getCIN();
             $_SESSION['role'] = $user->getRole();
             $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
-            
+
+            Logger::log("Connexion reussie", 1, "SECURITY", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
+
             header('Location:' . $router->url('user-home', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));
             exit();
         }else {
             $errorPassword = true;
+            Logger::log("Échec de connexion", 1,  "SECURITY");
         }
     } 
 }

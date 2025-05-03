@@ -15,22 +15,22 @@ class Classe {
     /**
      * @var int $idClasse
      */
-    protected $idClasse;
+    private $idClasse;
 
     /**
      * @var string $nomClasse
      */
-    protected $nomClasse;
+    private $nomClasse;
 
     /**
      * @var int $idNiveau
      */
-    protected $idNiveau;
+    private $idNiveau;
 
     /**
      * @var int $idFiliere
      */
-    protected $idFiliere;
+    private $idFiliere;
 
     /*public function __construct($idClasse, $nomClasse, $idFiliere)
     {

@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\Admin\adminTable;
 use App\Connection;
 use App\Mailer;
+use App\Logger;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
@@ -33,6 +34,7 @@ if (!empty($_POST)) {
     if ($result->AddProfUser($cinProf, $nomProf, $prenomProf, $emailProf, $username, $password, $role)) {
         $mailer->confirmationProfessorAccount($nomProf . ' ' . $prenomProf, $emailProf, $username, $_POST['password'], $emailProf);
         $success_prof = 1;
+        Logger::log("Ajout d'un prof", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
     } else {
         $success_prof = 0;
     }

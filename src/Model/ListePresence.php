@@ -16,37 +16,37 @@ class ListePresence {
     /**
      * @var int $id
      */
-    protected $id;
+    private $id;
     
     /**
      * @var string $date
      */
-    protected $date;
+    private $date;
     
     /**
      * @var string $classe
      */
-    protected $classe;
+    private $classe;
 
     /**
      * @var string $matiere
      */
-    protected $matiere;
+    private $matiere;
     
     /**
      * @var string $cinProf
      */
-    protected $cinProf;
+    private $cinProf;
 
     /**
      * @var string $nomPrenom
      */
-    protected $nomPrenom;
+    private $nomPrenom;
     
     /**
      * @var string $nomFichierPresence
      */
-    protected $nomFichierPresence;
+    private $nomFichierPresence;
 
     /*public function __construct(int $id, string $date, string $classe, string $cinProf, $nomFichierPresence, $nomPrenom) {
         $this->id = $id;

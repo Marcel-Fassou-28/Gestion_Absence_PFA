@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\connection;
 use App\Model\Matiere;
 use App\Model\Professeur;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -44,6 +45,7 @@ if (!empty($_POST)) {
         try {
             $query2->execute([$jourSemaine, $heureDebut, $heureFin, $professeur->getCIN(), $matiere->getIdMatiere()]);
             $success = 1;
+            Logger::log("Ajout d'un Créneau", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
         } catch(PDOException $e) {
             $add = 0;
         }

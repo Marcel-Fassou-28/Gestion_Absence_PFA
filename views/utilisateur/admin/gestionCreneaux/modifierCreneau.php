@@ -14,6 +14,7 @@ use App\connection;
 use App\Model\Creneaux;
 use App\Model\Matiere;
 use App\Model\Professeur;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -73,6 +74,7 @@ if (isset($creneau)) {
                 'id_creneau' => $creneau
             ]);
             $success = 1;
+            Logger::log("Modification d'un Créneau", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
             header('location:' . $router->url('gestion-creneau') .'?listprof=1&p=0&success='.$success);
             exit();
         }else {

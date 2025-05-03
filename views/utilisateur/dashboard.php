@@ -14,6 +14,8 @@ use App\Model\Utils\Admin\InformationActifs;
 use App\Model\Utils\Etudiant\DerniereAbsenceEtudiant;
 use App\Professeur\CurrentInfo;
 
+$title ="Dashbord";
+
 $pdo = Connection::getPDO();
 $table = new UserTable($pdo);
 $cin = $_SESSION['id_user'];
@@ -423,7 +425,7 @@ $currentTime = $date->format('H:i:s');
                 <h2>Liens Utiles</h2>
                 <div class="hr"></div>
                 <ul class="use-link-list">
-                    <li><a href="<?= $router->url('admin-messagerie') ?>"> Messageries </a></li>
+                    <li><a href="<?= $router->url('admin-messagerie').'?messagerie=1&listprof=1' ?>"> Messageries </a></li>
                     <li><a href="<?= $router->url('justification'). '?listprof=1&p=0' ?>">Justificatifs</a></li>
                     <li><a href="<?= $router->url('liste-presence-soumis') . '?listprof=1&p=0'?>">Liste de Presence Soumis</a></li>
                     <li><a href="<?= $router->url('historikAbscences') .'?listprof=1&p=0' ?>">Absence des Etudiants</a></li>

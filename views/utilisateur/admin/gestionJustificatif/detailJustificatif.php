@@ -39,7 +39,7 @@ $idjus = $justificatif->getIdJustificatif();
         <div class="presence-file-show">
 
             <img src="<?= $router->url('serve-justificatif') . '?fichier=' . htmlspecialchars($justificatif->getnomFichierJustificatif()); ?> "
-                alt="Pas de photo">
+                alt="justificatif">
         </div>
     </div>
     <div class="description">

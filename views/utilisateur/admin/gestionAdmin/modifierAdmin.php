@@ -12,6 +12,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\connection;
 use App\Model\Administrateur;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -61,6 +62,7 @@ if (isset($admin)) {
                 'prenom' => $prenomAdmin
             ]);
             $success = 1;
+            Logger::log("Modification des infos d'un Admin", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
             header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&success='.$success);
             exit();
         }else {

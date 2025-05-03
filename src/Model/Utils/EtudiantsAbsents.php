@@ -18,37 +18,37 @@ class EtudiantsAbsents {
     /**
      * @var string $nom
      */
-    protected $nom;
+    private $nom;
 
     /**
      * @var string $prenom
      */
-    protected $prenom;
+    private $prenom;
 
     /**
      * @var string $cne
      */
-    protected $cne;
+    private $cne;
 
     /**
      * @var string $nomClasse
      */
-    protected $nomClasse;
+    private $nomClasse;
 
     /**
      * @var string $nomMatiere
      */
-    protected $nomMatiere;
+    private $nomMatiere;
 
     /**
      * @var int|null $nombreAbsences
      */
-    protected $nombreAbsences = null;
+    private $nombreAbsences = null;
 
     /**
      * @var array $absences
      */
-    protected $absences;
+    private $absences;
 
     /**
      * Constructeur

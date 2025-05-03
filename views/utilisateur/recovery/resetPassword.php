@@ -3,6 +3,7 @@
 use App\Connection;
 use App\UserTable;
 use App\Mailer;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $mailer = new Mailer();
@@ -37,6 +38,7 @@ if (!empty($_POST)) {
             if ($mailer->resetPasswordMail($email, $authCode, $user->getNom() . ' '. $user->getPrenom())) {
                 session_start();
                 $_SESSION['user_mail'] = $user->getEmail();
+                Logger::log("Demande de réinitialisation de mot de passe", 1, "SECURITY", $_SESSION['user_mail']);
                 header('Location: ' . $router->url('code-recuperation', ['id' => encodindCIN($user->getCIN())]));
                 exit();
             } else {

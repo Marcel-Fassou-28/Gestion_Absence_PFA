@@ -20,6 +20,16 @@ $user = $tableUser->getIdentification($cin);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Application web de gestion des absences pour les établissements scolaires. Suivi, présence, rapports et tableaux de bord pour enseignants, étudiants et Administration de l'établissement. Cette application web a été réalisé dans le cadre d'un PFA">
+    <meta name="keywords" content="gestion absence, école, étudiants, professeurs, présence, PFA, plateforme scolaire, suivi absence">
+    <meta name="author" content="Nourredine Assad, Marcel Fassou Haba, Claude Youmini Ngounou Douglas, Msaboue Mohamed">
+
+    <meta property="og:title" content="Gestion des Absences - Application PFA">
+    <meta property="og:description" content="Plateforme intuitive de gestion des absences pour enseignants et étudiants.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://www.gaensaj.local/">
+    <meta property="og:image" content="http://www.gaensaj.local/assets/images/GAENSAJ.svg">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,41 +40,65 @@ $user = $tableUser->getIdentification($cin);
     
     <link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">
 
+    <?php
+       $allowedKeys = [
+            'about', 'success_prof', 'modifie_success', 'success_filiere', 'departement', 'delete_success', 
+            'modifie_success', 'use-link', 'success_delete', 'modifier', 'admin', 'matiere', 'classe', 'listprof', 
+            'user', 'filiere', 'add', 'historic', 'success', 'super_admin', 'edit_profil', 'messagerie', 'p', 
+            'redirect', 'fichier', 'file', 'cin', 'about', 'success_modifie', 'success_etudiant', 'justifier', 'notifier',
+            'fichier', 'traite', 'idjustificatif', 'success_absence', 'success_prof', 'error_presence_file', 'error_prof', 'cinProf',
+            'error_prof', 'error_presence', 'status_presence', 'user'
+        ];
+
+        if (!empty($_GET)) {
+            foreach ($_GET as $key => $value) {
+                // Si une clé inconnue est détectée → redirection
+                if (!in_array($key, $allowedKeys, true)) {
+
+                    header('Location: ' . $router->url('user-home', [
+                        'role' => $_SESSION['role'],
+                        'id'   => $_SESSION['id_user']
+                    ]));
+                    exit();
+                }
+            }
+        }
+    ?>
     <?php if (isset($_GET['about'])) {
-        echo '<link rel="stylesheet" href="/css/About/about.css">';
+        echo '<link rel="stylesheet" href="/css/About/about.css"><br>';
     }?>
 
     <?php if(isset($_GET['use-link'])) {
-        echo '<link rel="stylesheet" href="/css/use-link/presence.css">';
+        echo '<link rel="stylesheet" href="/css/use-link/presence.css"><br>';
     }
     if (isset($_GET['modifier'])){
-        echo '<link rel="stylesheet" href="/css/list_prof/modifierProf.css">';
+        echo '<link rel="stylesheet" href="/css/list_prof/modifierProf.css"><br>';
     }
     if (isset($_GET['matiere']) || isset($_GET['admin']) || isset($_GET['classe'])) {
-        echo '<link rel="stylesheet" href="/css/matiere/list-matiere.css">';
-        echo '<link rel="stylesheet" href="/css/matiere/modifie-matiere.css">';
+        echo '<link rel="stylesheet" href="/css/matiere/list-matiere.css"><br>';
+        echo '<link rel="stylesheet" href="/css/matiere/modifie-matiere.css"><br>';
     }
     if (isset($_GET['listprof'])) {
-        echo '<link rel="stylesheet" href="/css/list_prof/list.css">';
-        echo '<link rel="stylesheet" href="/css/modifie/modifie.css">';
+        echo '<link rel="stylesheet" href="/css/list_prof/list.css"><br>';
+        echo '<link rel="stylesheet" href="/css/modifie/modifie.css"><br>';
         if (isset($_GET['justifier'])) {
-            echo '<link rel="stylesheet" href="/css/justificatif/justificatif.css">';
+            echo '<link rel="stylesheet" href="/css/justificatif/justificatif.css"><br>';
         }
     }
     if (isset($_GET['historic'])) {
-        echo '<link rel="stylesheet" href="/css/use-link/historic.css">';
+        echo '<link rel="stylesheet" href="/css/use-link/historic.css"><br>';
     }
     if(isset($_GET['user'])) {
-        echo '<link rel="stylesheet" href="/css/profil/profil.css">';
+        echo '<link rel="stylesheet" href="/css/profil/profil.css"><br>';
     }
     if(isset($_GET['edit_profil'])) {
-        echo '<link rel="stylesheet" href="/css/profil/editerProfil.css">';
+        echo '<link rel="stylesheet" href="/css/profil/editerProfil.css"><br>';
     }
     if(isset($_GET['messagerie'])){
-        echo '<link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css">';
+        echo '<link rel="stylesheet" href="/css/dashboard-etudiant/dashboard-etudiant.css"><br>';
     }
     ?>
-    <title>Gestion d'Absence</title>
+    <title>Gestion d'Absence <?= $title ? ' | ' . $title : ''  ?></title>
 </head>
 <body> 
     <nav>
@@ -97,7 +131,7 @@ $user = $tableUser->getIdentification($cin);
                         <li><a href="<?= $router->url('etudiant-messagerie').'?listprof=1' ?>">Messagerie</a></li>
                     <?php elseif($_SESSION['role'] === 'admin'): ?>
                         <li><a href="<?= $router->url('historikAbscences') .'?listprof=1&p=0' ?>">Absences des Etudiants</a></li>
-                        <li><a href="<?= $router->url('admin-messagerie') ?>">Messagerie</a></li>
+                        <li><a href="<?= $router->url('admin-messagerie').'?messagerie=1&listprof=1' ?>">Messagerie</a></li>
 
                     <?php else: ?>
                         <li><a href="<?= $router->url('historic-absence') . '?historic=absence&p=0' ?>">Historique des Absences</a></li>

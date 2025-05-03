@@ -11,6 +11,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 
 use App\Connection;
+use App\Logger;
+
 $pdo = Connection::getPDO();
 
 $success = null;
@@ -22,7 +24,7 @@ if (file_exists($filePath)) {
     $query = $pdo->prepare('DELETE FROM listePresence WHERE nomFichierPresence = :file');
     $query->execute(['file' => $filename]);
     $success = 1;
-    
+    Logger::log("Suppression d'une fiche de presence", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
     header('location: ' . $router->url('liste-presence-soumis') .'?listprof=1&p=0&success='.$success);
     exit();
     

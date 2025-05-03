@@ -12,6 +12,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\Admin\adminTable;
 use App\connection;
 use App\Model\Classe;
+use App\Logger;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
@@ -44,6 +45,7 @@ if (isset($cinEtudiant)) {
     
             if ($result->ModifierStudent($newcin, $nom, $prenom, $email, $username, $cne,$idClasse, $oldCin)) {
                 $success_modifie = 1;
+                Logger::log("Modification d'un Etudiant", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
             } else {
                 $success_modifie = 0;
             }

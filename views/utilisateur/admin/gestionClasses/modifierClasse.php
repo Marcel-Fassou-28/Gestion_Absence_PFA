@@ -17,6 +17,7 @@ use App\Model\Filiere;
 use App\Model\Niveau;
 use App\Model\Utils\Admin\ClasseFiliere;
 use App\Admin\StatisticAdmin;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -76,6 +77,7 @@ if (isset($classe)) {
                     'idClasse' => $classe
                 ]);
                 $success = 1;
+                Logger::log("Modification d'une Classe", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
                 header('location:' . $router->url('gestion-classe'). '?classe=1&p=0&success='.$success);
                 exit();
             }else {

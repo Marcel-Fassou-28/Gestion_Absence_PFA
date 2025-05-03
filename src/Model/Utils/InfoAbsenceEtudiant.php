@@ -7,52 +7,52 @@ class InfoAbsenceEtudiant {
     /**
      * @var string
      */
-    protected $cinEtudiant;
+    private $cinEtudiant;
 
     /**
      * @var string
      */
-    protected $nom;
+    private $nom;
 
     /**
      * @var string
      */
-    protected $prenom;
+    private $prenom;
 
     /**
      * @var string
      */
-    protected $cne;
+    private $cne;
 
     /**
      * @var string|null
      */
-    protected $nomClasse;
+    private $nomClasse;
 
     /**
      * @var string|null
      */
-    protected $nomMatiere;
+    private $nomMatiere;
 
     /**
      * @var string|null
      */
-    protected $dateAbsence;
+    private $dateAbsence;
 
     /**
      * @var string|null
      */
-    protected $heureDebut;
+    private $heureDebut;
 
     /**
      * @var string|null
      */
-    protected $heureFin;
+    private $heureFin;
 
     /**
      * @var int
      */
-    protected $nombreAbsences;
+    private $nombreAbsences;
 
     /**
      * Getters

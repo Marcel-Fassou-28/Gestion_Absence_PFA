@@ -2,7 +2,7 @@
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
-
+$title = "A Propos";
 ?>
 <div class="presence">
     <div class="intro">

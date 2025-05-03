@@ -18,42 +18,42 @@ class Etudiant {
     /**
      * @var int $idEtudiant
      */
-    protected $idEtudiant;
+    private $idEtudiant;
     
     /**
      * @var string $nom
      */
-    protected $nom;
+    private $nom;
     
     /**
      * @var string $prenom
      */
-    protected $prenom;
+    private $prenom;
 
     /**
      * @var string $nomClasse
      */
-    protected $nomClasse;
+    private $nomClasse;
     
     /**
      * @var string $cne
      */
-    protected $cne;
+    private $cne;
     
     /**
      * @var string $cinEtudiant
      */
-    protected $cinEtudiant;
+    private $cinEtudiant;
     
     /**
      * @var string $email
      */
-    protected $email;
+    private $email;
     
     /**
      * @var int $idClasse
      */
-    protected $idClasse;
+    private $idClasse;
 
     /**
      * Constructeur

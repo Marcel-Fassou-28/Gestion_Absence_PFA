@@ -13,12 +13,12 @@ class Niveau {
     /**
      * @var int $idFiliere
      */
-    protected $idNiveau;
+    private $idNiveau;
 
     /**
      * @var string $nomNiveau
      */
-    protected $nomNiveau;
+    private $nomNiveau;
 
     /*public function __construct($idNiveau, $nomNiveau)
     {

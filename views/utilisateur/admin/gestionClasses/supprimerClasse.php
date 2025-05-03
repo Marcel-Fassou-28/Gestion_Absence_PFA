@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Connection;
 use App\Model\Administrateur;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $success = null;
@@ -34,6 +35,7 @@ if (isset($classe)) {
         $query = $pdo->prepare('DELETE FROM classe WHERE idClasse = :idClasse');
         $query->execute(['idClasse' => $classe]);
         $success = 1;
+        Logger::log("Suppression d'une Classe", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
     }
 } else {
     $success = 0;

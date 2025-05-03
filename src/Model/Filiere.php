@@ -15,22 +15,22 @@ class Filiere {
     /**
      * @var int $idFiliere
      */
-    protected $idFiliere;
+    private $idFiliere;
 
     /**
      * @var string $nomFiliere
      */
-    protected $nomFiliere;
+    private $nomFiliere;
 
     /**
      * @var string $alias
      */
-    protected $alias;
+    private $alias;
 
     /**
      * @var int $idDepartement
      */
-    protected $idDepartement;
+    private $idDepartement;
 
     /*public function __construct($idFiliere, $nomFiliere, $alias, $idDepartement)
     {

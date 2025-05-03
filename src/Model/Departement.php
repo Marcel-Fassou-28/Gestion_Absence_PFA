@@ -13,12 +13,12 @@ class Departement {
     /**
      * @var int $idDepartement
      */
-    protected $idDepartement;
+    private $idDepartement;
 
     /**
      * @var string $nomDepartement
      */
-    protected $nomDepartement;
+    private $nomDepartement;
 
     /*public function __construct($idDepartement, $nomDepartement)
     {

@@ -1,3 +1,12 @@
 # Bloque l'accès direct via URL
 Order Allow,Deny
 Deny from all
+
+# Empêche l'accès direct à tous les fichiers
+<FilesMatch ".*">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Empêche l'affichage du contenu du dossier
+Options -Indexes

@@ -1,0 +1,6 @@
+# Empêcher l'accès direct aux fichiers .log via l'URL
+
+<Files "*.log">
+    Order Allow,Deny
+    Deny from all
+</Files>

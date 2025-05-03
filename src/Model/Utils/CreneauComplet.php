@@ -7,27 +7,27 @@ class CreneauComplet
     /**
      * @var string
      */
-    protected $jour;
+    private $jour;
 
     /**
      * @var string
      */
-    protected $heureDebut;
+    private $heureDebut;
 
     /**
      * @var string
      */
-    protected $heureFin;
+    private $heureFin;
 
     /**
      * @var string|null
      */
-    protected $nomMatiere;
+    private $nomMatiere;
 
     /**
      * @var string|null
      */
-    protected $nomClasse;
+    private $nomClasse;
 
     /**
      * Getters

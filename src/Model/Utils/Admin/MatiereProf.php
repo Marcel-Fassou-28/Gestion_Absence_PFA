@@ -20,42 +20,42 @@ class MatiereProf {
     /**
      * @var int $idMatiere
      */
-    protected $idMatiere;
+    private $idMatiere;
 
     /**
      * @var string $cinProf
      */
-    protected $cinProf;
+    private $cinProf;
 
     /**
      * @var string $nomMatiere
      */
-    protected $nomMatiere;
+    private $nomMatiere;
 
     /**
      * @var string $nomProf
      */
-    protected $nomProf;
+    private $nomProf;
 
     /**
      * @var string $prenomProf
      */
-    protected String $prenomProf;
+    private String $prenomProf;
 
     /**
      * @var int $idFiliere
      */
-    protected $idFiliere;
+    private $idFiliere;
 
     /**
      * @var int $idClasse
      */
-    protected $idClasse;
+    private $idClasse;
 
     /**
      * @var string $nomClasse
      */
-    protected string $nomClasse;
+    private string $nomClasse;
 
     /**
      * Getters

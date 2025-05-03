@@ -1,6 +1,10 @@
 <?php
 require '../vendor/autoload.php';
+
+use App\Logger;
 use App\Router;
+
+Logger::initErrorHandlers();
 
 $env = parse_ini_file(dirname(__DIR__) .DIRECTORY_SEPARATOR . '.env');
 $secretKey = $env['SECRET_KEY'];

@@ -6,17 +6,17 @@ class StatisticFiliere {
     /**
      * @var string|null
      */
-    protected $nomFiliere;
+    private $nomFiliere;
 
     /**
      * @var int
      */
-    protected $totalEtudiants;
+    private $totalEtudiants;
 
     /**
      * @var int
      */
-    protected $totalAbsences;
+    private $totalAbsences;
 
     /**
      * Getters

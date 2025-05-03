@@ -17,32 +17,32 @@ class Justificatif {
     /**
      * @var int $idJustificatif
      */
-    protected $idJustificatif;
+    private $idJustificatif;
 
     /**
      * @var string $dateSoumission
      */
-    protected $dateSoumission;
+    private $dateSoumission;
 
     /**
      * @var string $statut
      */
-    protected $statut;
+    private $statut;
 
     /**
      * @var string $message
      */
-    protected $message;
+    private $message;
 
     /**
      * @var int $idAbsence
      */
-    protected $idAbsence;
+    private $idAbsence;
 
     /**
      * @var string $nomFichierJustificatif
      */
-    protected $nomFichierJustificatif;
+    private $nomFichierJustificatif;
 
     /*public function __construct(int $idJustificatif, string $dateSoumission, string $statut, string $message, int $idAbsence) {
         $this->idJustificatif = $idJustificatif;
