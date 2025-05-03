@@ -16,27 +16,27 @@ class Matiere {
     /**
      * @var int $idMatiere
      */
-    protected $idMatiere;
+    private $idMatiere;
 
     /**
      * @var string $cinProf
      */
-    protected $cinProf;
+    private $cinProf;
 
     /**
      * @var string $nomMatiere
      */
-    protected $nomMatiere;
+    private $nomMatiere;
 
     /**
      * @var int $idFiliere
      */
-    protected $idFiliere;
+    private $idFiliere;
 
     /**
      * @var int $idClasse
      */
-    protected $idClasse;
+    private $idClasse;
 
     /**
      * Getters

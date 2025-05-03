@@ -15,6 +15,7 @@ use App\Model\Classe;
 use App\Model\Matiere;
 use App\Model\Professeur;
 use App\Model\Utils\Admin\MatiereProf;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -71,6 +72,7 @@ if (isset($matiere)) {
                 'idMatiere' => $matiere
             ]);
             $success = 1;
+            Logger::log("Modification d'une matiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
             header('location:' . $router->url('liste-matiere-admin') .'?matiere=1&p=0&success='.$success);
             exit();
         }else {

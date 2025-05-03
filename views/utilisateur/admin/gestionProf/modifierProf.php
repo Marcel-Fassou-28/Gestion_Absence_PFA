@@ -12,6 +12,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Admin\adminTable;
 use App\Connection;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
@@ -34,6 +35,7 @@ if (isset($cinProf)) {
 
         if ($result->ModifierProf($username, $cinProf, $nomProf, $prenomProf, $emailProf, $oldCinProf)) {
             $modifie_sucess = 1;
+            Logger::log("Modification des infos d'un prof", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
         } else {
             $modifie_sucess = 0;
         }

@@ -13,6 +13,7 @@ use App\Connection;
 use App\UserTable;
 use App\Model\Utilisateur;
 use App\Mailer;
+use App\Logger;
 
 
 $pdo = Connection::getPDO();
@@ -53,8 +54,10 @@ if(!empty($_POST)) {
                     $query = $pdo->prepare('UPDATE utilisateur SET nomPhoto= :nomPhoto WHERE cin= :cin');
                     $query->execute(['cin' => $user->getCIN(), 'nomPhoto' => $nouveauNom]);
                     $success = 1;
+                    Logger::log("Changement photo de profil avec succès", 1, "UPLOAD", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
                 } else {
                     $success = 0;
+                    Logger::log("Changement de Profil échoué", 1, "UPLOAD", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
                     $errorMessage = "Erreur lors de l'envoi.";
                 }
             } else {
@@ -74,6 +77,7 @@ if(!empty($_POST)) {
         }
     }
     $userTable->updateUserInformation($username, $cinUser) ? $success = 1 : $success = 0;
+    Logger::log("Mise à jour des informations de Profil", 2, "db", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
     header('location: '. $router->url('user-profil', ['role'=> $_SESSION['role']]).'?user='.$_SESSION['role'] . '?success='. $success);
     exit();
 }

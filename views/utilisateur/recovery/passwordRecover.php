@@ -11,6 +11,7 @@ if(!isset($_SESSION['user_mail'])) {
 use App\Connection;
 use App\UserTable;
 use App\Mailer;
+use App\Logger;
 
 
 $secretKey = getenv('SECRET_KEY');
@@ -65,6 +66,7 @@ if(!empty($_POST)) {
                 $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
 
                 $mailer->passwordChangedMail($user->getEmail(), $user->getNom() . ' ' .$user->getPrenom());
+                Logger::log("Changement de mot de Passe avec succès", 1, "SECURITY", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
                 header('Location:' . $router->url('user-home', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));
                 exit();
             } else {

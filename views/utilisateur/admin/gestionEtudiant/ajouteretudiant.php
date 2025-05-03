@@ -14,6 +14,7 @@ use App\Admin\adminTable;
 use App\connection;
 use App\Model\Classe;
 use App\Mailer;
+use App\Logger;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
@@ -45,6 +46,7 @@ if (!empty($_POST)) {
 
         if ($result->AddStudentUser($cinEtudiant, $nomEtudiant, $prenomEtudiant,  $emailEtudiant, $username, $password, $cneEtudiant, $idClasse, $role)) {
             $success_etudiant = 1;
+            Logger::log("Ajout d'un Etudiant", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
             $mailer->confirmationAccount($nomEtudiant . ' ' . $prenomEtudiant, $emailEtudiant, $username, $_POST['password'], $emailEtudiant);
         } else {
             $success_etudiant = 0;

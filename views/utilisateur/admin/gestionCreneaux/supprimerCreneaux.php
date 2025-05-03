@@ -12,6 +12,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 
 use App\Connection;
+use App\Logger;
+
 $pdo = Connection::getPDO();
 $success = null;
 
@@ -20,6 +22,7 @@ if (isset($creneau)) {
     $query = $pdo->prepare('DELETE FROM creneaux WHERE id = :id_creneau');
     $query->execute(['id_creneau' => $creneau]);
     $success = 1;
+    Logger::log("Suppression d'un créneau", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
     header('location:' . $router->url('gestion-creneau') .'?listprof=1&p=0&success_delete='.$success);
     exit();
 } else {

@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Connection;
 use App\Model\Administrateur;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $success = null;
@@ -34,6 +35,7 @@ if (isset($admin)) {
         $query = $pdo->prepare('DELETE FROM utilisateur WHERE cin = :cinAdmin');
         $query->execute(['cinAdmin' => $admin]);
         $success = 1;
+        Logger::log("Suppression d'un Admin", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
     } else {
         $super_admin = 1;
         header('location:' . $router->url('liste-des-admin') .'?admin=1&p=0&super_admin=' . $super_admin);

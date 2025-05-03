@@ -12,6 +12,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Admin\adminTable;
 use App\Connection;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
@@ -35,6 +36,7 @@ if (isset($idFiliere)) {
 
         if ($result->modifierFiliere($idFiliere, $newfiliere, $oldfiliere, $alias, $idDepartement)) {
             $modifie_sucess = 1;
+            Logger::log("Mofication d'une filiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
         } else {
             $modifie_sucess = 0;
         }

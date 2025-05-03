@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\Connection;
 use App\Mailer;
 use App\Model\Administrateur;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -45,6 +46,7 @@ if (!empty($_POST)) {
         $query2->execute([$cinAdmin . $nomAdmin, $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin, password_hash($password, PASSWORD_BCRYPT), "avatar.png", "admin"]);
         $mailer->confirmationAdminAccount($nomAdmin . ' ' . $prenomAdmin, $emailAdmin, $cinAdmin . $nomAdmin, $password, $emailAdmin);
         $success = 1;
+        Logger::log("Ajout d'un Admin", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
         header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&success='.$success);
         exit();
     } else {

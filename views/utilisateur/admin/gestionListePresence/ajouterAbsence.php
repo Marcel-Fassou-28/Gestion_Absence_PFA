@@ -14,6 +14,7 @@ use App\Admin\adminTable;
 use App\Model\Etudiant;
 use App\Model\ListePresence;
 use App\Model\Matiere;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 
@@ -61,6 +62,7 @@ if(isset($_POST['submit-last']) && $_POST['submit-last'] == 'submitAbsence') {
         $query2 = $pdo->prepare('INSERT INTO absence (date, cinEtudiant, idMatiere) VALUES (?, ?, ?)');
         foreach($prepareCIN as $cin) {
             $query2->execute([$result->getDate(), $cin, $matiere->getIdMatiere()]);
+            Logger::log("Consideration des absences de ". $cin , 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
         }
         $success = 1;
         header('location: ' . $router->url('liste-presence-soumis') .'?listprof=1&p=0&success_absence='.$success);

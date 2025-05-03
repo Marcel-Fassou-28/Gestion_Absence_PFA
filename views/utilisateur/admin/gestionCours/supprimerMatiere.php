@@ -12,6 +12,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 
 use App\Connection;
+use App\Logger;
+
 $pdo = Connection::getPDO();
 $success = null;
 
@@ -20,6 +22,7 @@ if (isset($matiere)) {
     $query = $pdo->prepare('DELETE FROM matiere WHERE idMatiere = :idMatiere');
     $query->execute(['idMatiere' => $matiere]);
     $success = 1;
+    Logger::log("Suppression d'une Matiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
     header('location:' . $router->url('liste-matiere-admin') .'?matiere=1&p=0&success_delete='.$success);
     exit();
 } else {

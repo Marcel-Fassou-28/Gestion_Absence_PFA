@@ -5,7 +5,7 @@ if (!isset($_SESSION['id_user'])) {
     exit("Accès interdit.");
 }
 
-if(isset($_SESSION['role']) && ($_SESSION['role'] != 'admin')){
+if(isset($_SESSION['role']) && ($_SESSION['role'] === 'professeur')){
     http_response_code(403);
     exit('Vous avez pas accés');
 }

@@ -12,6 +12,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Admin\adminTable;
 use App\connection;
+use App\Logger;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
@@ -36,7 +37,7 @@ if (!empty($_POST)) {
 
     if ($success === 1) {
         $result->addFiliere($id + 1, $nomfiliere, $alias, $idDepartement, $nbreAnneeEtude);
-
+        Logger::log("Ajout d'une filiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
     }
 
     header('Location: ' . $router->url('liste-filiere-admin') . '?listprof=1&p=0&success_filiere=' . $success);

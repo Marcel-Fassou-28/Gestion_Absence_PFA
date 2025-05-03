@@ -14,6 +14,8 @@ use App\Model\Utils\Admin\InformationActifs;
 use App\Model\Utils\Etudiant\DerniereAbsenceEtudiant;
 use App\Professeur\CurrentInfo;
 
+$title ="Dashbord";
+
 $pdo = Connection::getPDO();
 $table = new UserTable($pdo);
 $cin = $_SESSION['id_user'];

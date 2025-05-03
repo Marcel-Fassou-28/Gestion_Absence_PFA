@@ -14,6 +14,7 @@ use App\connection;
 use App\Model\Classe;
 use App\Model\Filiere;
 use App\Model\Professeur;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -43,6 +44,7 @@ if (!empty($_POST)) {
         try {
             $query2->execute([$cinProf, $nomMatiere, $classe->getIdFiliere(), $classe->getIDClasse()]);
             $success = 1;
+            Logger::log("Ajout d'une Matiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
         } catch(PDOException $e) {
             $add = 0;
         }

@@ -17,27 +17,27 @@ class Administrateur {
     /**
      * @var int $idAdmin
      */
-    protected $idAdmin;
+    private $idAdmin;
 
     /**
      * @var string $nom
      */
-    protected $nom;
+    private $nom;
 
     /**
      * @var string $prenom
      */
-    protected $prenom;
+    private $prenom;
 
     /**
      * @var string $email
      */
-    protected $email;
+    private $email;
 
     /**
      * @var string $cinAdmin
      */
-    protected $cinAdmin;
+    private $cinAdmin;
 
     /*public function __construct($idAdmin, $nom, $prenom, $email, $cinAdmin)
     {

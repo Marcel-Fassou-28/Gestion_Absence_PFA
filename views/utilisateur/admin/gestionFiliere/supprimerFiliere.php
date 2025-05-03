@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Connection;
 use App\Admin\adminTable;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
@@ -24,7 +25,7 @@ if (isset($idFiliere)) {
 
     if ($result->SuprimerFiliere($idFiliere)) {
         $success_delete = 1;
-
+        Logger::log("Suppression d'une filiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
 
     } else {
         $success_delete = 0;

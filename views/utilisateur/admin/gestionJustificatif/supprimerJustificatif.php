@@ -14,6 +14,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Connection;
 use App\Admin\adminTable;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
@@ -21,15 +22,16 @@ $result = new adminTable($pdo);
 
 if (isset($_GET['idjustificatif'])){
 
+    $id = $_GET['idjustificatif'];
+    $sql = "DELETE  FROM justificatif WHERE idJustificatif = :id and statut = 'accepté'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    Logger::log("Accepte un justificatif", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
+    header('Location: ' . $router->url('justification').'?listprof=1&p=0');
+    exit();
 
-$id = $_GET['idjustificatif'];
-$sql = "DELETE  FROM justificatif WHERE idJustificatif = :id and statut = 'accepté'";
-$stmt = $pdo->prepare($sql);
-$stmt->execute(['id' => $id]);
-header('Location: ' . $router->url('justification').'?listprof=1&p=0');
-exit();
 } else {
-    echo "Aucun justificatif trouvé.";
+    header('Location: ' . $router->url('justification').'?listprof=1&p=0');
     exit();
 }
 ?>

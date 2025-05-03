@@ -3,6 +3,8 @@ if(!isset($_SESSION['id_user'])) {
     header('location: ' .$router->url('accueil'));
     exit();
 }
+
+$title = "Accueil";
 ?>
 
 <section class="presentation-section">

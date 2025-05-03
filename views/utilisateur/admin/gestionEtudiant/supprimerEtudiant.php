@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Connection;
 use App\Admin\adminTable;
+use App\Logger;
 
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
@@ -22,6 +23,7 @@ $cinEtudiant = $_GET['cin'];
 if (isset($cinEtudiant)) {
     if ($result->SuprimerStudent($cinEtudiant)) {
         $success_delete = 1;
+        Logger::log("Suppression d'un Etudiant", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
 
     } else {
         $success_delete = 0;

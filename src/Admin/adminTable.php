@@ -723,7 +723,7 @@ class adminTable extends Table
     /**
      * trouver le nom de la matiere par son id 
      * @param mixed $id
-     * @return array
+     * @return object
      */
     public function getMatiereById($id): ?Matiere
     {
@@ -731,7 +731,7 @@ class adminTable extends Table
         $sql->execute(['id' => $id]);
         $sql->setFetchMode(\PDO::FETCH_CLASS, $this->classMatiere);
         $result = $sql->fetch();
-        return  (!empty($result)) ? $result : [];
+        return  (!empty($result)) ? $result : null;
     }
 
 
@@ -748,6 +748,7 @@ class adminTable extends Table
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
     }
+    
     public function getDepartementById($id): array
     {
         $sql = $this->pdo->prepare('SELECT * FROM ' . $this->tableDepartement . ' WHERE idDepartement = :id ');
@@ -756,6 +757,7 @@ class adminTable extends Table
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
     }
+
     public function getClassById($id): array
     {
         $sql = $this->pdo->prepare('SELECT nomClasse FROM ' . $this->tableClasse . ' WHERE idClasse = :id ');

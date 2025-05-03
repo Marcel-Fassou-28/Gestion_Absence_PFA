@@ -16,22 +16,22 @@ class Absence {
     /**
      * @var int $idAbsence
      */
-    protected $idAbsence;
+    private $idAbsence;
 
     /**
      * @var \DateTime $date
      */
-    protected $date;
+    private $date;
 
     /**
      * @var string $cinEtudiant
      */
-    protected $cinEtudiant;
+    private $cinEtudiant;
 
     /**
      * @var int $idMatiere
      */
-    protected $idMatiere;
+    private $idMatiere;
 
     /*public function __construct($idAbsence, $date, $cinEtudiant, $idMatiere)
     {

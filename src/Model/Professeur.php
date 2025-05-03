@@ -18,27 +18,27 @@ class Professeur {
     /**
      * @var int $idProf
      */
-    protected $idProf;
+    private $idProf;
 
     /**
      * @var string $nom
      */
-    protected $nom;
+    private $nom;
 
     /**
      * @var string $prenom
      */
-    protected $prenom;
+    private $prenom;
 
     /**
      * @var string $email
      */
-    protected $email;
+    private $email;
 
     /**
      * @var string $cin
      */
-    protected $cinProf;
+    private $cinProf;
 
     /*public function __construct($idProf, $nom, $prenom, $email, $password, $cinProf)
     {

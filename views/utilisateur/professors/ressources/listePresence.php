@@ -104,10 +104,13 @@ $success = null;
         <div class="hr"></div>
         <div class="documentation-container">
         <section class="container how-to-scan">
-            <h2>Comment Scanner</h2>
+            <h2>Capture de photo de document via téléphone</h2>
             <div class="hr"></div>
             <div class="use-info">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta quidem ab iste vitae aut harum laudantium illum quas. Itaque ullam ipsa tempora modi ab maiores! Fuga ad, porro cumque, quas saepe placeat in eligendi labore vero provident minus, odit dolores vel possimus ab ea unde! Nemo vel quas totam in.
+                Connectez-vous à votre compte utilisateur. <br> <br> Allez dans votre dashboard puis cliquez sur le lien, effectuer présence puis cliqué sur « Liste de Présence ». <br>
+                Cliquez sur le bouton « Prendre photo ». <br>
+                Autorisez l'accès à la caméra si une demande s’affiche. <br> Cadrez le document et cliquez sur « Capturer ». <br>
+                Prévisualisez la photo. Vous pouvez soit valider, soit reprendre une nouvelle photo. <br> Cliquez sur « Valider » pour envoyer la photo au serveur.
             </div>
             
         </section>
@@ -115,7 +118,15 @@ $success = null;
             <h2>Effectuer la présence</h2>
             <div class="hr"></div>
             <div class="use-info">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas, natus quam! Aspernatur omnis rerum libero voluptate, perferendis perspiciatis ex cumque praesentium, quo odit alias? Sapiente aspernatur itaque beatae eius minima vitae! Delectus rerum officiis nisi porro. Tempora omnis commodi dicta nesciunt reiciendis, minus voluptatum quidem quis esse dignissimos quisquam laboriosam veritatis. Possimus fuga ex, vero quo assumenda vel architecto unde sed veniam veritatis quam quisquam laboriosam, laudantium inventore quibusdam atque voluptate quasi quis recusandae eius dicta tenetur enim delectus. Quidem reprehenderit ad provident nulla quas pariatur aspernatur nam suscipit numquam molestias temporibus vitae unde, repudiandae eos voluptate culpa sunt ex?
+                Connectez-vous à votre compte utilisateur. <br><br>
+                Allez dans votre tableau de bord (dashboard). <br>
+                Cliquez sur le lien « Effectuer présence ». <br>
+                Cliquez ensuite sur « Effectuer la présence ». <br>
+                Un tableau s’affiche contenant la liste des étudiants inscrits à votre cours. <br>
+                Par défaut, tous les étudiants sont considérés comme présents. <br>
+                Cochez les cases des étudiants absents dans la colonne prévue à cet effet. <br>
+                Cliquez sur le bouton « Soumettre l’absence » pour enregistrer les absences. <br>
+                Une confirmation apparaîtra pour indiquer que la soumission a bien été prise en compte. <br>
             </div>
 
         </section>
