@@ -35,18 +35,39 @@ if (isset($idMatiere) && !isset($isEtudiantPrivee)) {
     exit();
 }
 
-if (isset($idMatiere) && isset($isEtudiantPrivee)) {
-    $course = $list->getMatiereById($idMatiere)->getNomMatiere();
-    $listeEtudiant = $list->getPrivateStudentToPastExamByMatiere($idMatiere);
     
-    foreach ($listeEtudiant as $row) {
+   
+
+$classe = $_GET['classe'];
+if (isset($classe) && isset($isEtudiantPrivee)) {
+    $etudiant = $list->getStudentByClass($classe);
+    $listeMatiere = $list->getMatiereByClass($classe);
+    $absence = [];
+    
+    foreach ($etudiant as $etu):
+        $course = '';
         
+        foreach( $listeMatiere as $mat):
             
-            $email = $row->getEmail();
-            $name = $row->getNom() . ' ' . $row->getPrenom();
-            $mail->alertEtudiantPrivee($email, $name, $course);
+            if ( $list->getAbsenceStudentByMatiere($etu->getCIN(),$mat->getIDMatiere()) > 6):
+                $absence[$etu->getIdEtudiant()][$mat->getNomMatiere()] = $list->getAbsenceStudentByMatiere($etu->getCIN(),$mat->getIDMatiere());
+                $course = $course === '' ? $course : $course.', ';
+                $course .= $mat->getNomMatiere();
+               
+            endif;
+        endforeach;
+       
         
-    }
+        if ( !empty($absence[$etu->getIdEtudiant()])):
+            
+            
+            $email = $etu->getEmail();
+            $name = $etu->getNom() . ' ' . $etu->getPrenom();
+            $mail->alertEtudiantPrivee($email, $name, $course);
+
+        endif;
+    endforeach;
+
     $notifier = 1;
     header('Location: '.$router->url('etudiantprivee') . '?listprof=1' . '&justifier=1' . '&p=0&notifier='.$notifier);
     exit();

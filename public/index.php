@@ -66,7 +66,7 @@ $router
     ->match('/my/administration/gestion/liste-presence/voir-details', 'utilisateur/admin/gestionListePresence/supprimer', 'liste-presence-soumis-delete')
     ->match('/my/administration/gestion/liste-presence/delete', 'utilisateur/admin/gestionListePresence/voirDetails', 'liste-presence-soumis-details')
 
-    ->match('/my/Liste-des-etudiants-privees-pour-examen','utilisateur/admin/absences/etudiantPrivee','etudiantprivee')
+    ->match('/my/Liste-des-etudiants-privees-pour-examen','utilisateur/admin/absences/privateStudent','etudiantprivee')
     ->match('/my/administration/historiques-des-absences','utilisateur/admin/absences/historiquesAbsences','historikAbscences')
     ->match('/my/administration/notificatition','utilisateur/admin/absences/notifierEtudiant', 'notifier')
     ->match('/my/administration/recapitulatif-Absences','utilisateur/admin/absences/recapAbsences','RecapAbsences')
