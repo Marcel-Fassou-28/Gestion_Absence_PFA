@@ -65,10 +65,11 @@ if (!empty($_POST)) {
     <div class="form-tri-container">
         <form class="tri-list container" method="post" action="">
             <input type="date" name="filtre_date" class="date-picker" value="<?= date('Y-m-d', strtotime($filtreDate)) ?>" required>
-            <div class="submit-group">
-                <input class="submit-btn" type="submit" name="submit-first" value="Filtrer">
+            <div class="submit-group">            
+            <input class="submit-btn" type="submit" name="submit-first" value="Filtrer">
             </div>
         </form>
+        <a class="submit-btn" href="<?=$router->url('etudiant-justificatifs').'?messagerie=1&listprof=1'?>">Soumettre un justificatif</a>
     </div>
     <div class="list-tri-table">
         <table>
@@ -78,7 +79,6 @@ if (!empty($_POST)) {
                 <th>Date</th>
                 <th>Module</th>
                 <th>Statut</th>
-                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -90,19 +90,6 @@ if (!empty($_POST)) {
                     <td><?= htmlspecialchars(date('d/m/Y H:i', strtotime($absence['date']))) ?></td>
                     <td><?= htmlspecialchars($absence['nomMatiere']) ?></td>
                     <td><?= $absence['statut'] ?? 'Non justifiée' ?></td>
-                    <td>
-                        <?php if ($absence['statut'] === null): ?>
-                            <form method="post" enctype="multipart/form-data" style="display:inline;">
-                                <input type="hidden" name="idAbsence" value="<?= $absence['idAbsence'] ?>">
-                                <input type="file" name="justificatif" accept=".jpg,.png,.pdf,.jpeg" required>
-                                <input type="text" name="message" placeholder="Message" required style="color:black">
-                                <button type="submit" name="soumettre_justificatif" class="btn-soumettre">Soumettre</button>
-                            </form>
-                        <?php else: ?>
-                            <a href="<?= $router->url('etudiant-messagerie').'?messagerie=1&listprof=1' ?>">
-                            <button type="button" class="btn-soumettre">Voir détails</button></a>
-                        <?php endif; ?>
-                    </td>
                 </tr>
                 <?php endforeach; ?>
             <?php else : ?>
@@ -115,50 +102,3 @@ if (!empty($_POST)) {
         </table>
     </div>
 </div>
-
-<?php
-// Traitement de la soumission d’un justificatif
-if (isset($_POST['soumettre_justificatif'])) {
-    $idAbsence = (int)$_POST['idAbsence'];
-    $message = trim($_POST['message']);
-    $fichier = $_FILES['justificatif'];
-
-    if ($fichier['error'] === UPLOAD_ERR_OK) {
-        $nomTemp = $fichier['tmp_name'];
-        $extension = strtolower(pathinfo($fichier['name'], PATHINFO_EXTENSION));
-        $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'pdf'];
-
-        if (in_array($extension, $extensionsAutorisees)) {
-
-            $timestamp = time();
-            $nomFinal = 'justificatif_' . $timestamp . '_' . $cinEtudiant . '_' . $idAbsence . '.' . $extension;
-
-            $dossier = dirname(__DIR__, 4) . '/uploads/justificatif/';
-            if (!is_dir($dossier)) {
-                mkdir($dossier, 0777, true);
-            }
-
-            if (move_uploaded_file($nomTemp, $dossier . $nomFinal)) {
-                $stmt = $pdo->prepare("
-                    INSERT INTO Justificatif (dateSoumission, statut, message, idAbsence, nomFichierJustificatif)
-                    VALUES (NOW(), 'en attente', :message, :idAbsence, :nomFichier)
-                ");
-                $stmt->execute([
-                    'message' => $message,
-                    'idAbsence' => $idAbsence,
-                    'nomFichier' => $nomFinal
-                ]);
-                Logger::log("Soumission de justificatifs", 1, "UPLOAD", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
-                header('Location: ' . $router->url('etudiant-messagerie'));
-                exit();
-
-            } else {
-                echo "<script>alert('Erreur lors de l envoi du fichier.');</script>";
-            }
-        } else {
-            echo "<script>alert('Extension non autorisée. Fichiers acceptés : jpg, jpeg, png, pdf');</script>";
-        }
-    } else {
-        echo "<script>alert('Erreur lors du téléchargement du fichier.');</script>";
-    }
-}

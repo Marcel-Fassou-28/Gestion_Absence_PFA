@@ -404,6 +404,10 @@ p{
     display: flex;
     flex-direction: column;
     padding: 0 2%;
+    
+}
+.form-tri-container a{
+    margin: 10px;
 }
 .tri-list {
     display: grid;
@@ -414,7 +418,8 @@ p{
 
 .submit-group {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    flex-direction: row;  
 }
 
 .submit-btn {
@@ -441,4 +446,24 @@ p{
 .submit-btn:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+.form-groupe {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-groupe label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+.form-groupe input[type="text"],
+.form-groupe input[type="date"],
+.form-groupe input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
 }
