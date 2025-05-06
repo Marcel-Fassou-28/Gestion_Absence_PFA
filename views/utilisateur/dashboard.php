@@ -442,6 +442,7 @@ $currentTime = $date->format('H:i:s');
                     <li><a href="<?= $router->url('liste-des-admin').'?admin=1&p=0'?>">Gestion des Administrateurs</a></li>
                     <li><a href="<?= $router->url('gestion-classe').'?classe=1&p=0' ?>">Gestion des Classes</a></li>
                     <li><a href="<?= $router->url('liste-filiere-admin').'?listprof=1&p=0'?>">Gestion des filières</a></li>
+                    <li><a href="<?= $router->url('log'). '?listprof=1&p=0' ?>">Historique des Logs</a></li>
                 </ul>
             </section>
         </div>
@@ -457,7 +458,7 @@ $currentTime = $date->format('H:i:s');
     margin-right: 0.5rem;
 }
 .use-link-list li:nth-child(3) a::before {
-    content: '\1F464'; 
+    content: '\1F4C4'; 
     margin-right: 0.5rem;
 }
 
@@ -494,6 +495,18 @@ $currentTime = $date->format('H:i:s');
     content: "\1F4DA"; 
     margin-right: 0.5rem;
 }
+.historic-list li:nth-child(6) a::before {
+    content: '\1F5A5'; 
+    margin-right: 0.5rem;
+}
 </style>
     <?php endif ?>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fullHeight = document.body.scrollHeight;
+        const scrollY = fullHeight - (fullHeight * 0.4);
+        window.scrollTo(0, scrollY);
+    });
+</script>

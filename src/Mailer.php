@@ -619,7 +619,7 @@ class Mailer
             $this->mailer->addAddress($destinataire);
 
             // Définir le sujet
-            $this->mailer->Subject = 'Alerte du nombre d\'heure d\'abscence cumuler en absence en' . $courseName;
+            $this->mailer->Subject = 'Alerte du nombre d\'heure d\'abscence cumuler en absence en' . mb_convert_encoding( htmlspecialchars($courseName), 'ISO-8859-1', 'UTF-8');
 
             // Corps HTML
             $this->mailer->Body = '
@@ -687,7 +687,7 @@ class Mailer
             $this->mailer->addAddress($destinataire);
 
             // Définir le sujet
-            $this->mailer->Subject = 'Situation Concernant la session d\'examen du module ' . $courseName;
+            $this->mailer->Subject = 'Situation Concernant la session d\'examen du/des module(s)';
 
             // Corps HTML
             $this->mailer->Body = '
@@ -702,7 +702,7 @@ class Mailer
                         <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">
                             Bonjour ' . mb_convert_encoding( htmlspecialchars($name), 'ISO-8859-1', 'UTF-8') . ',
                             <br><br>
-                            Nous vous informons que vous avez depasser le plafond d\'heure d\'absences qui est de 8heures pour chaque module.\n
+                            Nous vous informons que vous avez depasser le plafond d\'heure d\'absences qui est de 8 heures pour chaque module.
                             par consequent pour le cours suivant :
                         </p>
                         <p style="color: #1c1d1e; font-size: 16px; line-height: 26px; margin: 0 0 20px;">

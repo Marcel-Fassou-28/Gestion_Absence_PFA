@@ -69,8 +69,10 @@ showMenu.addEventListener('click', () => {
 delteBtn = document.querySelectorAll('#delete');
 if (delteBtn) {
     delteBtn.forEach(btn => {
-        btn.addEventListener('click', () => {
-            alert("Vous allez supprimer cet element");
+        btn.addEventListener('click', (event) => {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.')) {
+                event.preventDefault(); // Annuler la soumission si l'utilisateur clique sur "Annuler"
+            }
         })
     });
 }

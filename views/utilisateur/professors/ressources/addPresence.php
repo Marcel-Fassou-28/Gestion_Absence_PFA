@@ -9,7 +9,7 @@ if(isset($_SESSION['id_user']) && $_SESSION['role'] != 'professeur') {
     exit();
 }
 
-
+$title = "Professeur";
 use App\Connection;
 use App\Professeur\CurrentInfo;
 use App\Professeur\ProfessorTable;

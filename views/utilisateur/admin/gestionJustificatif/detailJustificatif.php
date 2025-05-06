@@ -11,7 +11,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 }
 
 
-
+$title = "Administration";
 use App\Connection;
 use App\Admin\adminTable;
 
@@ -112,9 +112,11 @@ $idjus = $justificatif->getIdJustificatif();
                     class="btn2 submit-btn">Rejeter</a>
                 <?php
             else: ?>
-                <a href="<?= $router->url('supprimer_justificatif') . '?listprof=1' . '&idjustificatif=' . $idjus; ?>"
-                    class="btn2 submit-btn">Supprimer</a>
-
+                <!--<a href="<?php // $router->url('supprimer_justificatif') . '?listprof=1' . '&idjustificatif=' . $idjus; ?>"
+                    class="btn2 submit-btn">Supprimer</a>-->
+                    <?= '<h4> Justificatif deja traiter !!!</h4>';?>
+                    <a href="<?= $router->url('justification').'?listprof=1&p=0';?>" class="btn2"> Retour</a>
+                    
             <?php endif;
         else: ?>
 

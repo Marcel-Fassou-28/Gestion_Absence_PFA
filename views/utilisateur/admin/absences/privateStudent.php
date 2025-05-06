@@ -40,20 +40,30 @@ elseif (isset($_GET['notifier']) && $_GET['notifier'] == 0): ?>
 
 if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut')) {
     $classe = $_POST['classe'];
-
+    $etudiant = $list->getStudentByClass($classe);
     $listeMatiere = $list->getMatiereByClass($classe);
     $idClasse = $list->getIdClasseByClasseName($classe);
+    
+    $absence = [];
+    foreach ($etudiant as $etu):
+        
+        foreach( $listeMatiere as $mat):
+            if ( $list->getAbsenceStudentByMatiere($etu->getCIN(),$mat->getIDMatiere()) > 6):
+                $absence[$etu->getIdEtudiant()][$mat->getNomMatiere()] = $list->getAbsenceStudentByMatiere($etu->getCIN(),$mat->getIDMatiere());
+            endif;
+        endforeach;
+    endforeach;
+
+
+    
+
+    $n = count( $absence);
+    
 
 
 }
-if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
 
-    $matiere = $_POST['matiere'];
-    $idMatiere = $list->getIdMatiereByName($matiere);
-    $listeEtudiant = $list->getPrivateStudentToPastExamByMatiere($idMatiere, $line, $offset);
-
-    $n = count($list->getPrivateStudentToPastExamByMatiere($idMatiere));
-}
+    
 
 ?>
 <div class="prof-list">
@@ -76,26 +86,28 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
                     <?php endif; ?>
                 </select>
             </div>
+            <!--
             <div class="list-classe">
                 <select name="matiere" id="tri-matiere">
                     <option value="defaut">Matiere</option>
                     <?php
-                    if (isset($matiere)): ?>
+                    /*if (isset($matiere)): ?>
                         <option value="<?= $matiere; ?>" selected><?= $matiere; ?></option>
-                    <?php endif; ?>
-                    <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
+                    <?php endif; */?>
+                     Affichage dynamique des matières en fonction de la classe par utilisation du javascript 
                 </select>
             </div>
+            -->
             <div class="submit-group">
                 <input class="submit-btn" type="submit" value="Trier" name="submit">
             </div>
         </form>
     </div>
     <div class="list-tri-table-justificatif">
-        <?php if (empty($listeEtudiant) || !isset($listeEtudiant)):
+        <?php if (empty($absence) || !isset($absence)):
             echo '<h1 class = "liste-vide"> Aucun etudiants !!!</h1>';
         else: ?>
-            <a href="<?= $router->url('exportPdf') . '?matiere=' . $matiere ?>" class="btn-download-pdf submit-btn" target="_blank">
+            <a href="<?= $router->url('exportPdf') . '?classe=' . $classe ?>" class="btn-download-pdf submit-btn" target="_blank">
                 Télécharger en PDF
             </a>
             <table>
@@ -104,17 +116,29 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>CNE</th>
+                    <th>Matieres</th>
                 </thead>
                 <?php
 
-                foreach ($listeEtudiant as $row): ?>
+                foreach ($etudiant as $row): 
+                if ( !empty($absence[$row->getIdEtudiant()])):
+                ?>
+
                     <tr>
                         <td><?= ++$offset; ?></td>
                         <td> <?= $row->getNom() ?></td>
                         <td> <?= $row->getPrenom() ?></td>
                         <td> <?= $row->getCNE() ?></td>
-                    </tr><?php
+                        <td>
+                            <?php
+                            foreach($absence[$row->getIdEtudiant()] as $col=>$val):
+                                echo $col.'<br>';
+                            endforeach;
+                         ?>
+                         </td>
 
+                    </tr><?php
+                    endif;
                 endforeach;
         endif
         ?>
@@ -131,8 +155,8 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
         <a href="?<?= $list->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
     }
 
-    if (isset($idMatiere)): ?>
-        <a href="<?= $router->url('notifier') . '?matiere=' . $idMatiere . '&privee=1'; ?>" style="float: right;" class="btn1"> notifier ces etudiants</a>
+    if (isset($classe)): ?>
+        <a href="<?= $router->url('notifier') . '?classe=' . $classe . '&privee=1'; ?>" style="float: right;" class="btn1"> notifier ces etudiants</a>
     <?php endif; ?>
     
 </div>

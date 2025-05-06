@@ -66,7 +66,7 @@ $router
     ->match('/my/administration/gestion/liste-presence/voir-details', 'utilisateur/admin/gestionListePresence/supprimer', 'liste-presence-soumis-delete')
     ->match('/my/administration/gestion/liste-presence/delete', 'utilisateur/admin/gestionListePresence/voirDetails', 'liste-presence-soumis-details')
 
-    ->match('/my/Liste-des-etudiants-privees-pour-examen','utilisateur/admin/absences/etudiantPrivee','etudiantprivee')
+    ->match('/my/Liste-des-etudiants-privees-pour-examen','utilisateur/admin/absences/privateStudent','etudiantprivee')
     ->match('/my/administration/historiques-des-absences','utilisateur/admin/absences/historiquesAbsences','historikAbscences')
     ->match('/my/administration/notificatition','utilisateur/admin/absences/notifierEtudiant', 'notifier')
     ->match('/my/administration/recapitulatif-Absences','utilisateur/admin/absences/recapAbsences','RecapAbsences')
@@ -120,6 +120,8 @@ $router
     ->match('/my/api/professeur/select-classe-matiere', 'API/Professeur/API_list_absence', 'api-prof-liste-clm')
     ->match('/my/api/professeur/select-classe-etudiant', 'API/Professeur/API_list_etudiant', 'api-prof-liste-etud')
     ->match('/my/api-admin/select-niveau-filiere', 'API/Admin/API_fichier_liste_classe', 'api-admin-niveau-filiere')
+
+    ->match('/historique/logs', 'utilisateur/admin/gestionLogs/detailsLog', 'log')
 
     ->run();
     

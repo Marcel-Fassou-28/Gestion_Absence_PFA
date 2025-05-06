@@ -8,7 +8,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'professeur') {
     header('location: ' .$router->url('user-home', ['role' => $_SESSION['role']]));
     exit();
 }
-
+$title = "Professeur";
 use App\Professeur\ProfessorTable;
 use App\Connection;
 

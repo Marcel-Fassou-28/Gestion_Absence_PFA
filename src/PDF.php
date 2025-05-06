@@ -5,12 +5,12 @@ namespace App;
 use FPDF\FPDF;
 class PDF extends \FPDF
 {
-    private $matiere;
+    private $classe;
     
-    function __construct($matiere)
+    function __construct($classe)
     {
         parent::__construct();
-        $this->matiere = $matiere;
+        $this->classe = $classe;
     }
     
     // En-tête du tableau
@@ -22,12 +22,12 @@ class PDF extends \FPDF
         
         // Sous-titre avec la matière
         $this->SetFont('Arial', 'B', 12);
-        $this->Cell(0, 10, mb_convert_encoding('Matiere : ' . $this->matiere, 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $this->Cell(0, 10, mb_convert_encoding('Classe : ' . $this->classe, 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
         
         // Date
         $this->SetFont('Arial', 'I', 10);
         $date = new \DateTime('now', new \DateTimeZone('Africa/Casablanca'));
-        $this->Cell(0, 6, $date->format('Y-m-d H:i'), 0, 1, 'R');
+        $this->Cell(0, 6, $date->format('d-m-Y'), 0, 1, 'R');
         
         // En-têtes du tableau
         $this->SetFont('Arial', 'B', 12);
@@ -37,7 +37,7 @@ class PDF extends \FPDF
         $this->Cell(60, 7, mb_convert_encoding('Nom', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
         
         $this->Cell(40, 7, mb_convert_encoding('CNE', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $this->Cell(70, 7, mb_convert_encoding('email', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+        $this->Cell(70, 7, mb_convert_encoding('Matieres', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
     }
     
     // Pied de page

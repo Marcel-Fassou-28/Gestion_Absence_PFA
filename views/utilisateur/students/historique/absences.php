@@ -9,6 +9,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'etudiant') {
     exit();
 }
 
+$title = "Etudiant";
+
 use App\Connection;
 use App\Logger;
 

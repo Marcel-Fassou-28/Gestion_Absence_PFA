@@ -45,66 +45,88 @@ $academic_info = [
     
     <div class="image-section">
         <img src="<?= $router->url('serve-photo', ['role'=> $_SESSION['role'],'id'=> $_SESSION['id_user']]).'?id_user='.$_SESSION['id_user'] ?>" alt="Photo de profil de <?= htmlspecialchars($user->getNom()) ?>">
-        <h3><?= htmlspecialchars($user->getRole() . ' ' . $user->getNom()) ?></h3>
+        <h3><?= htmlspecialchars($user->getRole() . ' ' . $user->getNom() ) ?></h3>
     </div>
     <div class="container-useful">
         <div class="info-section">
             <h3>Vos Informations</h3>
-            <a href="<?= $router->url('edit-profil', ['role' => $user->getRole(), 'id' =>$user->getCIN()]) . '?edit_profil=1' ?>" target="_blank" class="edit-profile">Modifier le profil</a>
+            <a href="<?= $router->url('edit-profil', ['role' => $user->getRole(), 'id' =>$user->getCIN()]) . '?edit_profil=1' ?>" class="edit-profile">Modifier le profil</a>
             <div class="personal-info">
                 <div>
                     <p>Email:</p>
-                    <p><?= htmlspecialchars($user->getEmail()) ?></p>
+                    <p><?= htmlspecialchars($user->getEmail()  ?? 'Not defined') ?></p>
                 </div>
                 <div>
                     <p>Username:</p>
-                    <p><?= htmlspecialchars($user->getUsername()) ?></p>
+                    <p><?= htmlspecialchars($user->getUsername()  ?? 'Not defined') ?></p>
                 </div>
                 <div>
                     <p>CIN:</p>
-                    <p><?= htmlspecialchars($user->getCIN()) ?></p>
+                    <p><?= htmlspecialchars($user->getCIN() ?? 'Not defined') ?></p>
                 </div>
                 <div>
                     <p>Nom:</p>
-                    <p><?= htmlspecialchars($user->getNom()) ?></p>
+                    <p><?= htmlspecialchars($user->getNom()  ?? 'Not defined') ?></p>
                 </div>
                 <div>
                     <p>Prénom:</p>
-                    <p><?= htmlspecialchars($user->getPrenom()) ?></p>
+                    <p><?= htmlspecialchars($user->getPrenom()  ?? 'Not defined') ?></p>
                 </div>
                 <?php if ($_SESSION['role'] === 'professeur'): ?>
                     <div>
                         <p>Matières enseignées:</p>
+                        <?php if (count($academic_info['matiere']) > 0) : ?>
                         <p><?php foreach ($academic_info['matiere'] as $matiere) {
                             echo htmlspecialchars($matiere->getNomMatiere()) . ', ';
                         } ?></p>
+                        <?php else: ?>
+                            <p>non defini</p>
+                        <?php endif ?>
                     </div>
                 <?php endif ?>
                 <?php if ($_SESSION['role'] === 'etudiant'): ?>
                     <div>
                         <p>Filière:</p>
-                        <p><?= htmlspecialchars($studentFiliere->getNomFiliere()) ?></p>
+                        <?php if ($studentFiliere->getNomFiliere()) : ?>
+                        <p><p><?= htmlspecialchars($studentFiliere->getNomFiliere()) ?></p></p>
+                        <?php else: ?>
+                            <p>non defini</p>
+                        <?php endif ?>
                     </div>
                 <?php endif ?>
             </div>
         </div>
-        <?php if ($_SESSION['role'] != 'admin'): ?>
+        <?php if ($_SESSION['role'] !== 'admin'): ?>
             <div class="academic-section">
                 <div class="departement">
                     <?php if ($_SESSION['role'] === 'professeur'): ?>
                         <p>Département:</p>
-                        <p><?= htmlspecialchars($academic->getDepartementProf($_SESSION['id_user'])->getNomDepartement()) ?></p>
+                        <?php if ($academic->getDepartementProf($_SESSION['id_user'])) : ?>
+                            <p><?= htmlspecialchars($academic->getDepartementProf($_SESSION['id_user'])->getNomDepartement())?></p>
+                        <?php else: ?>
+                            <p>Not defined</p>
+                        <?php endif ?>
+
                     <?php elseif ($_SESSION['role'] === 'etudiant'): ?>
                         <p>Département:</p>
-                        <p><?= htmlspecialchars($student->getDepartementEtudiant($_SESSION['id_user'])->getNomDepartement()) ?></p>
+
+                        <?php if ($student->getDepartementEtudiant($_SESSION['id_user'])) : ?>
+                            <p><?= htmlspecialchars($student->getDepartementEtudiant($_SESSION['id_user'])->getNomDepartement())?></p>
+                        <?php else: ?>
+                            <p>Not defined</p>
+                        <?php endif ?>
                     <?php endif ?>
                 </div>
                 <?php if ($_SESSION['role'] === 'professeur'): ?>
                     <div class="filiere">
                         <p>Filière d'affectation:</p>
+                        <?php if (count($academic_info['filiere']) > 0) : ?>
                         <p><?php foreach ($academic_info['filiere'] as $filiere) {
                             echo htmlspecialchars($filiere->getNomFiliere()) . ', ';
                         } ?></p>
+                        <?php else: ?>
+                            <p>Not defined</p>
+                        <?php endif ?>
                     </div>
                 <?php endif ?>
             </div>

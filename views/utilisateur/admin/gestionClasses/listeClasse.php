@@ -11,7 +11,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Connection;
 use App\Admin\StatisticAdmin;
-
+$title = "Administration";
 $pdo = Connection::getPDO();
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
