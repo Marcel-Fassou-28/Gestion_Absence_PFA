@@ -156,7 +156,7 @@ class adminTable extends Table
      */
     public function getMatiereByClass($class): array
     {
-        $sql = 'SELECT m.nomMatiere FROM ' . $this->tableMatiere .
+        $sql = 'SELECT m.nomMatiere,m.idMatiere FROM ' . $this->tableMatiere .
             ' m JOIN ' . $this->tableClasse . ' c ON 
         m.idClasse = c.idClasse WHERE c.nomClasse = :nom ';
         $query = $this->pdo->prepare($sql);
@@ -307,10 +307,10 @@ class adminTable extends Table
         $sql = ' 
         SELECT e.nom as nom,e.prenom as prenom , e.cne as cne, 
         j.dateSoumission as Date_Soumission ,j.idJustificatif 
-        as id FROM ' . $this->tableAbsence . ' a JOIN '
+        as id,j.statut as statut FROM ' . $this->tableAbsence . ' a JOIN '
         . $this->tableJustificatif . ' j ON a.idAbsence = j.idAbsence' 
         . ' JOIN ' . $this->tableEtudiant . ' e ON 
-        e.cinEtudiant = a.cinEtudiant WHERE j.statut = "en attente"';
+        e.cinEtudiant = a.cinEtudiant ';
 
         if ($idClasse != 0 || $idMatiere != 0) {
             $sql .= ' WHERE ';
@@ -777,6 +777,11 @@ class adminTable extends Table
     }
 
 
+    /**
+     * cette methode permet de retorune la liste des matiere par classe
+     * @param mixed $class
+     * @return array
+     */
     public function getAllMatiereByclass($class): array
     {
         $querry = "SELECT * FROM matiere WHERE idClasse = :id ORDER BY nomMatiere";

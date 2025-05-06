@@ -19,7 +19,7 @@ use DateTimeZone;
 
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
-
+$numero = 1;
 
 $line = 20;
 $offset = $_GET['p'] * $line;
@@ -31,34 +31,37 @@ $dateSql = $date->format('Y-m-d H:i');
 $listeEtudiantComplet = $list->getPrivateStudentToPastExam($line, $offset);
 $n = count($listeEtudiantComplet);
 
-if (isset($_GET['notifier']) && $_GET['notifier'] == 1): ?>
-    <div class="alert alert-success">L'email de notification a été envoyé avec succès</div>
-    
-    <?php
- $_GET['notifier'] = 5;
-elseif (isset($_GET['notifier']) && $_GET['notifier'] == 0): ?>
-    <div class="alert alert-danger">Erreur d'envoi de l'email de notification</div>
-<?php endif;
 
 if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut')) {
     $classe = $_POST['classe'];
-
+    $etudiant = $list->getStudentByClass($classe);
     $listeMatiere = $list->getMatiereByClass($classe);
     $idClasse = $list->getIdClasseByClasseName($classe);
+    
+    $absence = [];
+    foreach ($etudiant as $etu):
+        
+        foreach( $listeMatiere as $mat):
+            if ( $list->getAbsenceStudentByMatiere($etu->getCIN(),$mat->getIDMatiere()) > 6):
+                $absence[$etu->getIdEtudiant()][$mat->getNomMatiere()] = $list->getAbsenceStudentByMatiere($etu->getCIN(),$mat->getIDMatiere());
+            endif;
+        endforeach;
+    endforeach;
+
+    $n = count( $absence);
 }
 
-if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
-
-    $matiere = $_POST['matiere'];
-    $idMatiere = $list->getIdMatiereByName($matiere);
-    $listeEtudiant = $list->getPrivateStudentToPastExamByMatiere($idMatiere, $line, $offset);
-
-    $n = count($list->getPrivateStudentToPastExamByMatiere($idMatiere));
-}
+    
 
 ?>
 
 <div class="prof-list">
+    <?php if (isset($_GET['notifier']) && $_GET['notifier'] == 1): ?>
+        <div class="alert alert-success">L'email de notification a été envoyé avec succès</div>
+    <?php elseif (isset($_GET['notifier']) && $_GET['notifier'] == 0): ?>
+        <div class="alert alert-danger">Erreur d'envoi de l'email de notification</div>
+    <?php endif ?>
+
     <div class="intro-prof-list">
         <h1> Liste Des Etudiants prives de passer l'examen</h1>
         <div class="date-group">
@@ -76,70 +79,112 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
                     <?php endif; ?>
                 </select>
             </div>
-            <div class="list-classe">
+            <!--<div class="list-classe">
                 <select name="matiere" id="tri-matiere" required>
                     <option value="defaut">Matiere</option>
                     <?php if (isset($matiere)): ?>
                         <option value="<?= $matiere; ?>" selected><?= $matiere; ?></option>
-                    <?php endif; ?>
-                    <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
+                    <?php endif ?>
                 </select>
-            </div>
+            </div>-->
             <div class="submit-group">
                 <input class="submit-btn" type="submit" value="Trier" name="submit">
             </div>
         </form>
     </div>
     <div class="list-tri-table-justificatif">
-        <?php if(isset($listeEtudiant) && !empty($listeEtudiant)): ?>
-            <?php if (empty($listeEtudiant) || !isset($listeEtudiant)): ?>
-                <p class = "liste-vide"> Aucun etudiants !!!</p>
-            <?php else: ?>
-                <a href="<?= $router->url('exportPdf') . '?matiere=' . $matiere ?>" class="btn-download-pdf submit-btn" target="_blank">
-                    Télécharger en PDF
-                </a>
-                <table>
-                    <thead>
-                        <th>N°</th>
-                        <th>Nom</th>
-                        <th>Prenom</th>
-                        <th>CNE</th>
-                    </thead>
-                    <?php foreach ($listeEtudiant as $row): ?>
-                        <tr>
-                            <td><?= ++$offset; ?></td>
-                            <td><?= htmlspecialchars($row->getNom()) ?></td>
-                            <td><?= htmlspecialchars($row->getPrenom()) ?></td>
-                            <td><?= htmlspecialchars($row->getCNE()) ?></td>
-                        </tr>
-                    <?php endforeach ?>
-            <?php endif ?>
-        <?php else: ?>
-            <?php if(!empty($listeEtudiantComplet)): ?>
-                <table>
+        <?php if (!empty($listeEtudiantComplet) && !isset($absence)) : ?>
+            <table>
+        <thead>
+            <th>N°</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>CNE</th>
+            <th>Email</th>
+            <th>Matieres</th>
+            <th>Classe</th>
+        </thead>
+            <?php foreach($listeEtudiantComplet as $row) : ?>
+                <tr>
+                    <td><?= $numero++ ?></td>
+                    <td><?= htmlspecialchars($row->getNom()) ?></td>
+                    <td><?= htmlspecialchars($row->getPrenom()) ?></td>
+                    <td><?= htmlspecialchars($row->getCNE()) ?></td>
+                    <td><?= htmlspecialchars($row->getEmail()) ?></td>
+                    <td><?= htmlspecialchars($row->getNomMatiere()) ?></td>
+                    <td><?= htmlspecialchars($row->getNomClasse()) ?></td>
+                </tr>
+            <?php endforeach ?>
+    </table>
+        <?php elseif(!empty($absence)) : ?>
+            <a href="<?= $router->url('exportPdf') . '?classe=' . $classe ?>" class="btn-download-pdf submit-btn" target="_blank">
+                Télécharger en PDF
+            </a>
+            <table>
                 <thead>
                     <th>N°</th>
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>CNE</th>
-                    <th>Matiere</th>
-                    <th>Classe</th>
+                    <th>Matieres</th>
                 </thead>
-                <?php foreach ($listeEtudiantComplet as $row): ?>
+                <?php foreach ($etudiant as $row): ?>
+                <?php if ( !empty($absence[$row->getIdEtudiant()])): ?>
                     <tr>
                         <td><?= ++$offset; ?></td>
-                        <td><?= htmlspecialchars($row->getNom()) ?></td>
-                        <td><?= htmlspecialchars($row->getPrenom()) ?></td>
-                        <td><?= htmlspecialchars($row->getCNE()) ?></td>
-                        <td><?= htmlspecialchars($row->getNomMatiere()) ?></td>
-                        <td><?= htmlspecialchars($row->getNomClasse()) ?></td>
+                        <td> <?= htmlspecialchars($row->getNom()) ?></td>
+                        <td> <?= htmlspecialchars($row->getPrenom()) ?></td>
+                        <td> <?= htmlspecialchars($row->getCNE()) ?></td>
+                        <td>
+                            <?php
+                            foreach($absence[$row->getIdEtudiant()] as $col=>$val):
+                                echo htmlspecialchars($col).'<br>';
+                            endforeach;
+                         ?>
+                        </td>
                     </tr>
+                <?php endif ?>
                 <?php endforeach ?>
-            <?php else: ?>
-                <p class = "liste-vide"> Aucun etudiants !!!</p>
-            <?php endif ?>
+        </table>
+        <?php else: ?>
+            <p class="liste-vide">Aucun etudiant mentionné</p>
         <?php endif ?>
-                </table>
+        
+
+        <!--<?php if (empty($absence) || !isset($absence)):
+            echo '<p class = "liste-vide"> Aucun etudiants !!!</p>';
+        else: ?>
+            <a href="<?= $router->url('exportPdf') . '?classe=' . $classe ?>" class="btn-download-pdf submit-btn" target="_blank">
+                Télécharger en PDF
+            </a>
+            <table>
+                <thead>
+                    <th>N°</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>CNE</th>
+                    <th>Matieres</th>
+                </thead>
+                <?php foreach ($etudiant as $row): ?>
+                <?php if ( !empty($absence[$row->getIdEtudiant()])): ?>
+                    <tr>
+                        <td><?= ++$offset; ?></td>
+                        <td> <?= $row->getNom() ?></td>
+                        <td> <?= $row->getPrenom() ?></td>
+                        <td> <?= $row->getCNE() ?></td>
+                        <td>
+                            <?php
+                            foreach($absence[$row->getIdEtudiant()] as $col=>$val):
+                                echo $col.'<br>';
+                            endforeach;
+                         ?>
+                         </td>
+
+                    </tr>
+                <?php endif ?>
+                <?php endforeach ?>
+        <?php endif ?>
+        </table>-->
 
     </div>
     <?php
@@ -152,8 +197,8 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
         <a href="?<?= $list->test('p', $i); ?>" class="btn1 <?= ($_GET['p'] == $i) ? 'page' : ''; ?>"><?= ++$i ?></a><?php
     }
 
-    if (isset($idMatiere)): ?>
-        <a href="<?= $router->url('notifier') . '?matiere=' . $idMatiere . '&privee=1'; ?>" style="float: right;" class="btn1"> notifier ces etudiants</a>
+    if (isset($classe)): ?>
+        <a href="<?= $router->url('notifier') . '?classe=' . $classe . '&privee=1'; ?>" style="float: right;" class="btn1"> notifier ces etudiants</a>
     <?php endif; ?>
     
 </div>
