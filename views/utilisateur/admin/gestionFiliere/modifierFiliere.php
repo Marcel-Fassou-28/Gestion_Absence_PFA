@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\Admin\adminTable;
 use App\Connection;
 use App\Logger;
+use App\Model\Administrateur;
 
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
@@ -20,6 +21,7 @@ $result = new adminTable($pdo);
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 $modifie_sucess = null;
+$super_admin = null;
 
 $idFiliere = $_GET['id'];
 if (isset($idFiliere)) {
@@ -34,15 +36,30 @@ if (isset($idFiliere)) {
         $alias = $_POST['alias'];
         $idDepartement =  $result->getIdDepartementByName( $_POST['Nom_departement']);
 
-        if ($result->modifierFiliere($idFiliere, $newfiliere, $oldfiliere, $alias, $idDepartement)) {
-            $modifie_sucess = 1;
-            Logger::log("Mofication d'une filiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
+        $query_verifie = $pdo->prepare('SELECT * FROM administrateur WHERE cinAdmin = :cinAdmin LIMIT 1');
+        $query_verifie->execute(['cinAdmin' => $_SESSION['id_user']]);
+        $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
+        $admin_verifie = $query_verifie->fetch();
+     
+        if ($admin_verifie && $admin_verifie->getIDAdmin() == '1') {
+
+            if ($result->modifierFiliere($idFiliere, $newfiliere, $oldfiliere, $alias, $idDepartement)) {
+                $modifie_sucess = 1;
+                Logger::log("Mofication d'une filiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
+            } else {
+                $modifie_sucess = 0;
+            }
+            header('location: '.$router->url('liste-filiere-admin').'?listprof=1&p=0&modifie_success='.$modifie_sucess);
+            exit();
         } else {
-            $modifie_sucess = 0;
+            $super_admin = 1;
+            header('location:' . $router->url('liste-filiere-admin'). '?listprof=1&p=0&super_admin='.$super_admin);
+            exit();
         }
-        header('location: '.$router->url('liste-filiere-admin').'?listprof=1&p=0&modifie_success='.$modifie_sucess);
-        exit();
-    }
+} else {
+
+}
+
 } else {
     /*header('location: '.$router->url('liste-filiere-admin').'?listprof=1&p=0&modifie_success='.$modifie_sucess);
     exit();*/

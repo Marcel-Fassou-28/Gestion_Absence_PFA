@@ -28,6 +28,8 @@ $n = 0;
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 
+$listeEtudiantComplet = $list->getPrivateStudentToPastExam($line, $offset);
+$n = count($listeEtudiantComplet);
 
 if (isset($_GET['notifier']) && $_GET['notifier'] == 1): ?>
     <div class="alert alert-success">L'email de notification a été envoyé avec succès</div>
@@ -43,9 +45,8 @@ if ((isset($_POST['classe']) && $_POST['classe'] !== 'defaut')) {
 
     $listeMatiere = $list->getMatiereByClass($classe);
     $idClasse = $list->getIdClasseByClasseName($classe);
-
-
 }
+
 if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
 
     $matiere = $_POST['matiere'];
@@ -56,9 +57,10 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
 }
 
 ?>
+
 <div class="prof-list">
     <div class="intro-prof-list">
-        <h1> Liste Des Etudiants privees de passer l'examen</h1>
+        <h1> Liste Des Etudiants prives de passer l'examen</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
@@ -67,20 +69,17 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
     <div class="form-tri-container">
         <form action="" class="tri-list container" method="POST">
             <div class="list-classe">
-                <select name="classe" id="tri-classe">
+                <select name="classe" id="tri-classe" required>
                     <option value="defaut">Classe</option>
-
-                    <?php
-                    if (isset($classe)): ?>
+                    <?php if (isset($classe)): ?>
                         <option value="<?= $classe; ?>" selected><?= $classe; ?></option>
                     <?php endif; ?>
                 </select>
             </div>
             <div class="list-classe">
-                <select name="matiere" id="tri-matiere">
+                <select name="matiere" id="tri-matiere" required>
                     <option value="defaut">Matiere</option>
-                    <?php
-                    if (isset($matiere)): ?>
+                    <?php if (isset($matiere)): ?>
                         <option value="<?= $matiere; ?>" selected><?= $matiere; ?></option>
                     <?php endif; ?>
                     <!-- Affichage dynamique des matières en fonction de la classe par utilisation du javascript -->
@@ -92,33 +91,55 @@ if ((isset($_POST['matiere']) && $_POST['matiere'] !== 'defaut')) {
         </form>
     </div>
     <div class="list-tri-table-justificatif">
-        <?php if (empty($listeEtudiant) || !isset($listeEtudiant)):
-            echo '<h1 class = "liste-vide"> Aucun etudiants !!!</h1>';
-        else: ?>
-            <a href="<?= $router->url('exportPdf') . '?matiere=' . $matiere ?>" class="btn-download-pdf submit-btn" target="_blank">
-                Télécharger en PDF
-            </a>
-            <table>
+        <?php if(isset($listeEtudiant) && !empty($listeEtudiant)): ?>
+            <?php if (empty($listeEtudiant) || !isset($listeEtudiant)): ?>
+                <p class = "liste-vide"> Aucun etudiants !!!</p>
+            <?php else: ?>
+                <a href="<?= $router->url('exportPdf') . '?matiere=' . $matiere ?>" class="btn-download-pdf submit-btn" target="_blank">
+                    Télécharger en PDF
+                </a>
+                <table>
+                    <thead>
+                        <th>N°</th>
+                        <th>Nom</th>
+                        <th>Prenom</th>
+                        <th>CNE</th>
+                    </thead>
+                    <?php foreach ($listeEtudiant as $row): ?>
+                        <tr>
+                            <td><?= ++$offset; ?></td>
+                            <td><?= htmlspecialchars($row->getNom()) ?></td>
+                            <td><?= htmlspecialchars($row->getPrenom()) ?></td>
+                            <td><?= htmlspecialchars($row->getCNE()) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+            <?php endif ?>
+        <?php else: ?>
+            <?php if(!empty($listeEtudiantComplet)): ?>
+                <table>
                 <thead>
                     <th>N°</th>
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>CNE</th>
+                    <th>Matiere</th>
+                    <th>Classe</th>
                 </thead>
-                <?php
-
-                foreach ($listeEtudiant as $row): ?>
+                <?php foreach ($listeEtudiantComplet as $row): ?>
                     <tr>
                         <td><?= ++$offset; ?></td>
-                        <td> <?= $row->getNom() ?></td>
-                        <td> <?= $row->getPrenom() ?></td>
-                        <td> <?= $row->getCNE() ?></td>
-                    </tr><?php
-
-                endforeach;
-        endif
-        ?>
-        </table>
+                        <td><?= htmlspecialchars($row->getNom()) ?></td>
+                        <td><?= htmlspecialchars($row->getPrenom()) ?></td>
+                        <td><?= htmlspecialchars($row->getCNE()) ?></td>
+                        <td><?= htmlspecialchars($row->getNomMatiere()) ?></td>
+                        <td><?= htmlspecialchars($row->getNomClasse()) ?></td>
+                    </tr>
+                <?php endforeach ?>
+            <?php else: ?>
+                <p class = "liste-vide"> Aucun etudiants !!!</p>
+            <?php endif ?>
+        <?php endif ?>
+                </table>
 
     </div>
     <?php

@@ -50,7 +50,7 @@ $numero = 1;
     <?php endif ?>
 
     <div class="intro-prof-matiere">
-        <h1> Liste Des Administrateur</h1>
+        <h1> Liste Des Administrateurs</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>

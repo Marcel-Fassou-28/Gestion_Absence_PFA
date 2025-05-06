@@ -13,6 +13,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 use App\Admin\adminTable;
 use App\connection;
 use App\Logger;
+use App\Model\Administrateur;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
@@ -31,17 +32,32 @@ if (!empty($_POST)) {
     $nbreAnneeEtude = $_POST['Annee_etude'];
     $idDepartement = $result->getIdDepartementByName($nomDepartement);
     $idFiliere = $result->getIdFiliereByName($nomfiliere);
-    //on verifie si le departement existe et le filiere n'existe pas deja 
-    if ($idDepartement === null || $idFiliere !== null)
-        $success = 0;
 
-    if ($success === 1) {
-        $result->addFiliere($id + 1, $nomfiliere, $alias, $idDepartement, $nbreAnneeEtude);
-        Logger::log("Ajout d'une filiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
+    $query_verifie = $pdo->prepare('SELECT * FROM administrateur WHERE cinAdmin = :cinAdmin LIMIT 1');
+    $query_verifie->execute(['cinAdmin' => $_SESSION['id_user']]);
+    $query_verifie->setFetchMode(\PDO::FETCH_CLASS, Administrateur::class);
+    $admin_verifie = $query_verifie->fetch();
+     
+    if ($admin_verifie && $admin_verifie->getIDAdmin() == '1') {
+            //on verifie si le departement existe et le filiere n'existe pas deja 
+        if ($idDepartement === null || $idFiliere !== null) {
+            $success = 0;
+        }
+
+        if ($success === 1) {
+            $result->addFiliere($id + 1, $nomfiliere, $alias, $idDepartement, $nbreAnneeEtude);
+            Logger::log("Ajout d'une filiere", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
+        }
+
+        header('Location: ' . $router->url('liste-filiere-admin') . '?listprof=1&p=0&success_filiere=' . $success);
+        exit();
+    } else {
+        $super_admin = 1;
+        header('location:' . $router->url('liste-filiere-admin'). '?listprof=1&p=0&super_admin='.$super_admin);
+        exit();
     }
 
-    header('Location: ' . $router->url('liste-filiere-admin') . '?listprof=1&p=0&success_filiere=' . $success);
-    exit();
+    
     /**/
 }
 ?>

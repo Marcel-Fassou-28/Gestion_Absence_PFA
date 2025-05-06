@@ -62,7 +62,11 @@ class UserTable extends Table {
         $query->execute(['cin' => $cin]);
 
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
-        return $query->fetch();
+        $result = $query->fetch();
+        if($result === false) {
+            return null;
+        }
+        return $result;
     }
 
     /**
@@ -132,11 +136,10 @@ class UserTable extends Table {
             $query = $this->pdo->prepare('
                     UPDATE '. $this->table .' SET password = :password WHERE email = :email
                 ');
-            $query->execute([
+            return $query->execute([
                 'password' => password_hash($password, PASSWORD_BCRYPT),
                 'email' => $email
             ]);
-            return true;
         }else {
             return false;
         }
@@ -146,11 +149,10 @@ class UserTable extends Table {
         $query = $this->pdo->prepare('
             UPDATE '. $this->table . ' SET username= :username WHERE cin= :cin
         ');
-        $query->execute([
+        return $query->execute([
             'username' => $username,
             'cin' => $cin
         ]);
-        return true;
     }
 
     /**

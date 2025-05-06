@@ -12,7 +12,8 @@ class Logger {
 
     // Fonction pour loguer les messages
     public static function log(string $message, int $level = 1, string $block = 'info', ?string $userId = null): void {
-        $date = date('Y-m-d H:i:s');
+        $dateL = new \DateTime('now', new \DateTimeZone('Africa/Casablanca'));
+        $date = $dateL->format('Y-m-d H:i:s');
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'CLI';
         $agent = $_SERVER['HTTP_USER_AGENT'] ?? 'CLI';
         $uid = $userId ?? 'guest';
