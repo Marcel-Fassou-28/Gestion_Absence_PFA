@@ -15,6 +15,7 @@ use App\Model\Utilisateur;
 
 use App\Model\Justificatif;
 use App\Model\ListePresence;
+use App\Model\Utils\Etudiant\EtudiantWithMatiere;
 use App\Model\Utils\Etudiant\UtilisateurEtudiant;
 use App\Professeur\ProfessorTable;
 
@@ -64,7 +65,7 @@ class adminTable extends Table
 
         $query = $this->pdo->prepare($sql);
         $query->execute();
-        $query->setFetchMode(\PDO::FETCH_CLASS, $this->$class);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $class);
         $result = $query->fetchAll();
         return count($result) != 0 ? $result : [];
     }
@@ -151,7 +152,7 @@ class adminTable extends Table
      * cette fonction permet de recuperer
      * la liste des matieres en fonction d'une classe precise
      * @param mixed $class
-     * @return void
+     * @return array
      */
     public function getMatiereByClass($class): array
     {
@@ -464,8 +465,7 @@ class adminTable extends Table
             $query2 = $this->pdo->prepare($sql3);
             $query2->execute(['newcin' => $newcin, 'oldcin' => $oldCin]);
 
-            $this->pdo->commit();
-            return true;
+            return $this->pdo->commit();
         } catch (\Exception $e) {
             $this->pdo->rollBack();
             return false;
@@ -520,12 +520,10 @@ class adminTable extends Table
                 $query->execute([$cin, $nom, $prenom, $cne, $email, $idClasse]);
                 $query = $this->pdo->prepare($sql2);
                 $query->execute([$username, $cin, $nom, $prenom, $email, $password, $role]);
-                $this->pdo->commit();
-                return true;
+                return $this->pdo->commit();
             }
         } catch (\Exception $e) {
             $this->pdo->rollBack();
-            echo $e->getMessage();
             return false;
         }
     }
@@ -636,7 +634,6 @@ class adminTable extends Table
             return true;
         } catch (\Exception $e) {
             $this->pdo->rollBack();
-            echo $e->getMessage();
             return false;
         }
     }
@@ -656,11 +653,9 @@ class adminTable extends Table
             $query = $this->pdo->prepare($sql3);
             $query->execute(['id' => $idFiliere]);
 
-            $this->pdo->commit();
-            return true;
+            return $this->pdo->commit();
         } catch (\Exception $e) {
             $this->pdo->rollBack();
-            echo $e->getMessage();
             return false;
         }
     }
@@ -695,10 +690,10 @@ class adminTable extends Table
 
 
 
-            $this->pdo->commit();
-            return true;
+            return $this->pdo->commit();
+            
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            
             $this->pdo->rollBack();
             return false;
         }
@@ -824,6 +819,7 @@ class adminTable extends Table
     /**
      * cette fonction permet d'avoir la liste des etudiant 
      * privees de passer l'exam dans une matiere
+     * 
      * @param mixed $matiere
      * @return array
      */
@@ -849,6 +845,36 @@ class adminTable extends Table
         $result = $sql->fetchALL();
         return count($result) > 0 ? $result : [];
     }
+
+    /**
+     * cette fonction permet d'avoir la liste des etudiant 
+     * privees de passer l'exam toutes matières confondu
+     * 
+     * @param int $line
+     * @param int $offset
+     * @return array
+     */
+    public function getPrivateStudentToPastExam(int $line = 0, int $offset = 0): array
+    {
+        "SELECT idAbsence FROM justificatif WHERE statut = 'accepté'";
+        $querry = "
+        SELECT e.nom as nom,e.prenom as prenom,e.cinEtudiant as cinEtudiant,
+         e.cne as cne, e.email as email, m.nomMatiere, c.nomClasse FROM absence a JOIN 
+        etudiant e ON  e.cinEtudiant = a.cinEtudiant JOIN matiere m
+        ON m.idMatiere = a.idMatiere JOIN classe c ON m.idClasse = c.idClasse WHERE a.idAbsence NOT IN 
+        (SELECT idAbsence FROM justificatif WHERE statut = 'accepté')
+        GROUP BY e.nom, e.prenom, e.cinEtudiant HAVING COUNT(a.cinEtudiant)>=4";
+
+        if ($line !== 0) {
+            $querry .= " LIMIT " . $line . " OFFSET " . $offset;
+        }
+        $sql = $this->pdo->prepare($querry);
+        $sql->execute([]);
+        $sql->setFetchMode(\PDO::FETCH_CLASS, EtudiantWithMatiere::class);
+        $result = $sql->fetchALL();
+        return count($result) > 0 ? $result : [];
+    }
+
 
     /**
      * cette methoodde permet de justifier une ou plusieurs absence d'un etudiant
@@ -884,10 +910,8 @@ class adminTable extends Table
                 'date1' => $date1,
                 'date2' => $date2
             ]);
-            $this->pdo->commit();
-            return true;
+            return $this->pdo->commit();
         } catch (\Exception $e) {
-            echo $e->getMessage();
             return false;
         }
 

@@ -39,7 +39,8 @@ CREATE TABLE Filiere (
     idFiliere INT PRIMARY KEY AUTO_INCREMENT,
     nomFiliere VARCHAR(100) NOT NULL,
     alias VARCHAR(10) NOT NULL,
-    idDepartement INT NOT NULL
+    idDepartement INT NOT NULL,
+    CONSTRAINT fk_filiere_departement FOREIGN KEY (idDepartement) REFERENCES Departement(nomDepartement) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Table Niveau

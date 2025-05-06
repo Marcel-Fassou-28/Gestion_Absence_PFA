@@ -133,6 +133,30 @@ class EtudiantTable extends Table {
     }
 
     /**
+     * Cette methode permet de retourner les informations générales d'un étudiants
+     * sur ça situation académique
+     * 
+     * @param string $cinEtudiant
+     * @return object
+     */
+    public function getInfoGeneralEtudiantWithoutLastAbsence(string $cinEtudiant):?DerniereAbsenceEtudiant {
+        $query = $this->pdo->prepare('
+            SELECT e.nom, e.prenom, c.nomClasse, f.nomFiliere, d.nomDepartement
+            FROM Etudiant e JOIN Classe c ON e.idClasse = c.idClasse
+            JOIN Filiere f ON c.idFiliere = f.idFiliere JOIN Departement d ON f.idDepartement = d.idDepartement
+            WHERE e.cinEtudiant = :cinEtudiant LIMIT 1;
+        ');
+        $query->execute(['cinEtudiant' => $cinEtudiant]);
+        $query->setFetchMode(\PDO::FETCH_CLASS, DerniereAbsenceEtudiant::class);
+
+        $result = $query->fetch();
+        if (!$result) {
+            return null;
+        }
+        return $result;
+    }
+
+    /**
      * Cette méthode permet de retourner les statistique des absences d'un etudiant
      * par matières qu'il suit dans sa classe
      * 
@@ -160,10 +184,14 @@ class EtudiantTable extends Table {
         $etudiant = $query->fetch();
         return $etudiant ?: null;
     }
+
     public function getAllByClasse(int $idClasse): array {
         $query = $this->pdo->prepare("SELECT * FROM etudiant WHERE idClasse = :idClasse ORDER BY nom, prenom");
         $query->execute(['idClasse' => $idClasse]);
-        return $query->fetchAll(\PDO::FETCH_CLASS, $this->classEtudiant);
+        $query->setFetchMode(\PDO::FETCH_CLASS, $this->classEtudiant);
+
+        $result = $query->fetchAll();
+        return count($result) > 0 ? $result : $result;
     }
         
 

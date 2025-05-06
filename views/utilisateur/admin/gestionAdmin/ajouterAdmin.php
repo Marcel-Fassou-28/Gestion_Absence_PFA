@@ -39,12 +39,12 @@ if (!empty($_POST)) {
     $admin_verifie = $query_verifie->fetch();
      
     if ($admin_verifie && $admin_verifie->getIDAdmin() == '1') {
-        $query1 = $pdo->prepare('INSERT INTO administrateur(cinAdmin, nom, prenom, email) VALUES ( ?, ?, ?, ?');
+        $query1 = $pdo->prepare('INSERT INTO administrateur(cinAdmin, nom, prenom, email) VALUES ( ?, ?, ?, ?)');
         $query1->execute([ $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin]);
 
-        $query2 = $pdo->prepare('INSERT INTO utilisateur(username, cin, nom, prenom, email, password, nomPhoto, role) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?');
+        $query2 = $pdo->prepare('INSERT INTO utilisateur(username, cin, nom, prenom, email, password, nomPhoto, role) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)');
         $query2->execute([$cinAdmin . $nomAdmin, $cinAdmin, $nomAdmin, $prenomAdmin, $emailAdmin, password_hash($password, PASSWORD_BCRYPT), "avatar.png", "admin"]);
-        $mailer->confirmationAdminAccount($nomAdmin . ' ' . $prenomAdmin, $emailAdmin, $cinAdmin . $nomAdmin, $password, $emailAdmin);
+        $mailer->confirmationAdminAccount($nomAdmin . ' ' . $prenomAdmin, $emailAdmin, $cinAdmin . '.'. $nomAdmin, $password, $emailAdmin);
         $success = 1;
         Logger::log("Ajout d'un Admin", 1, "DB", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
         header('location:' . $router->url('liste-des-admin'). '?admin=1&p=0&success='.$success);
