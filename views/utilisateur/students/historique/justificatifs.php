@@ -5,7 +5,10 @@ use App\Logger;
 $pdo = Connection::getPDO();
 $cinEtudiant = $_SESSION['id_user'];
 $message = '';
-$success = false;
+$success = null;
+
+$date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
+$dateSql = $date->format('Y-m-d H:i');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dateDebut = $_POST['date_debut'];
@@ -74,6 +77,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <div class="prof-list">
+    <?php if($success===true):?>
+        <div class="alert alert-success">
+            <?=$message?>
+        </div>
+    <?php elseif($success===false):?>
+        <div class="alert alert-danger">
+            <?=$message?>
+        </div>
+    <?php endif?>
     <div class="intro-prof-list">
         <h1>Soumettre un justificatif</h1>
         <div class="date-group">
@@ -82,9 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="hr"></div>
 
-<?php if ($message): ?>
-    <p style="color: <?= $success ? 'green' : 'red' ?>"><?= $message ?></p>
-<?php endif; ?>
+
 <div class="list-tri-table">
     
 <form method="POST" enctype="multipart/form-data" class="justif-form">
