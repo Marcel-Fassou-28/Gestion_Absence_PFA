@@ -26,7 +26,7 @@ intuitive, adaptée aux réalités d'un établissement.
 ## Objectifs du Projet 
 Les Objectifs de la réalisation de ce projet sont : 
  
-### • Accès facile et rapide aux informations d’absences des étudiants,
+### Accès facile et rapide aux informations d’absences des étudiants,
 Offrir une plateforme conviviale où les étudiants, les professeurs et l’administrations 
 peuvent avoir accès à tous ce qui concerne les informations d’absences des étudiants. 
 Les étudiants accèdent à leur propre information d’absences ; 
@@ -124,7 +124,8 @@ navigation, etc…) permettant de construire des interfaces cohérentes, esthét
 nous avons choisi d’utiliser ***DRAW.IO*** comme outil pour modéliser nos diagrammes UML. 
 ***DRAW.IO*** est un outil utilisé pour faire de la modélisation, il offre plusieurs éléments 
 pour faciliter le travail des développeurs, un de ces atouts majeurs est qu’il est intégré à Visual Studio 
-Code qui est un IDE.
+Code qui est un IDE. Dont le logo se présente comme suit : 
+![drawio](visiualisation/draw.io.png)
 
 # Visualisation
 
