@@ -125,7 +125,7 @@ nous avons choisi d’utiliser ***DRAW.IO*** comme outil pour modéliser nos dia
 ***DRAW.IO*** est un outil utilisé pour faire de la modélisation, il offre plusieurs éléments 
 pour faciliter le travail des développeurs, un de ces atouts majeurs est qu’il est intégré à Visual Studio 
 Code qui est un IDE. Dont le logo se présente comme suit : 
-![drawio](visiualisation/draw.io.png)
+![drawio](visualisation/draw.io.png)
 
 # Visualisation
 
