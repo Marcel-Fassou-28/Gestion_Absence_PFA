@@ -17,17 +17,22 @@ class Mailer
     private $mailer;
 
     /**
+     * @var $env Pour lire la variable d'environnement
+     */
+    private $env;
+
+    /**
      * Constructeur qui initialise PHPMailer avec les paramètres SMTP
      */
     public function __construct()
     {
         $this->mailer = new PHPMailer(true);
-
+        $this->env = parse_ini_file(dirname(__DIR__) .DIRECTORY_SEPARATOR . '.env');
         $this->mailer->isSMTP();
         $this->mailer->Host = 'smtp.gmail.com';
         $this->mailer->SMTPAuth = true;
-        $this->mailer->Username = 'projetpfa2025.hmc@gmail.com';
-        $this->mailer->Password = 'uoauxhuyjeiyjctj';
+        $this->mailer->Username = $this->env['EMAIL_USERNAME'];
+        $this->mailer->Password = $this->env['EMAIL_PASSWORD'];
         $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->mailer->Port = 587;
         $this->mailer->isHTML(true);

@@ -164,7 +164,11 @@ composer install
 + Commencer par exécuter les requêtes de création de la base de données dans [requetes](database/requete.sql)
 + Remplir les informations de connection à votre base de données dans le fichier [connection](src/Connection.php)
 + Executer le script de remplissage de la base de donnée dans [remplissage](database/Fill/fill.php)
-avec ```bash php ./database/Fill/fill.php/``` pour remplir votre base de données
+avec la commande
+```bash 
+php ./database/Fill/fill.php/
+```
+pour remplir votre base de données
 + Si vous utiliser vscode exécuter dans votre terminal depuis la racine du projet la commande suivante :
 
 ```bash
@@ -190,4 +194,5 @@ et faite une configuration dans le fichier httpd-vhosts.conf comme ceci:
     </Directory>
 </VirtualHost>
 ```
-Puis ajouter le fichier /System32/drivers/etc/hosts : **127.0.0.1 gaensaj.local**
++ Puis ajouter cette ligne **127.0.0.1 gaensaj.local** au fichier C:\Windows\System32\drivers\etc\hosts
++ Enfin aller dans votre navigation et ecriver gaensaj.local

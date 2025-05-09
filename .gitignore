@@ -1,3 +1,5 @@
 /database/Fill/fill1.php
 /uploads
 /views/Logs/*.log
+.env
+generateKey.php
