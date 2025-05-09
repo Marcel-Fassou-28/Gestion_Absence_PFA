@@ -22,22 +22,27 @@ $pdo->exec('TRUNCATE TABLE creneaux');
 
 
 $pdo->exec("INSERT INTO utilisateur (username, nom, prenom, email, cin, password, role) VALUES 
-        ('O00790130.haba', 'Haba', 'Marcel Fassou', 'marcelfassouhaba2003@gmail.com', 'O00790130','" . password_hash('O00790130', PASSWORD_BCRYPT)."', 'professeur'),
-        ('JK84785592.kolie','kolie', 'Justin', 'justinkolie6@gmail.com', 'JK84785592','" . password_hash('JK84785592', PASSWORD_BCRYPT)."', 'professeur'),
-        ('BJ8478559.msaboue', 'Msaboue', 'Mohamed', 'mohamedmsb6@gmail.com', 'BJ8478559','" . password_hash('BJ8478559', PASSWORD_BCRYPT)."' ,'etudiant'),
-        ('CD8478559.claude', 'Claude', 'Douglas', 'tyu87885@gmail.com', 'CD8478559','" . password_hash('CD8478559', PASSWORD_BCRYPT)."',  'admin')");
-        
+    ('AA12345678.jdupont', 'Dupont', 'Jean', 'jean.dupont@example.com', 'AA12345678','" . password_hash('AA12345678', PASSWORD_BCRYPT) . "', 'admin'),
+    ('BB87654321.mlouis', 'Louis', 'Marie', 'marie.louis@example.com', 'BB87654321','" . password_hash('BB87654321', PASSWORD_BCRYPT) . "', 'admin'),
+    ('CC11223344.rlegrand', 'Legrand', 'Robert', 'robert.legrand@example.com', 'CC11223344','" . password_hash('CC11223344', PASSWORD_BCRYPT) . "', 'admin'),
+
+    ('DD99887766.spierre', 'Pierre', 'Sophie', 'sophie.pierre@example.com', 'DD99887766','" . password_hash('DD99887766', PASSWORD_BCRYPT) . "', 'professeur'),
+    ('EE55667788.mmartin', 'Martin', 'Michel', 'michel.martin@example.com', 'EE55667788','" . password_hash('EE55667788', PASSWORD_BCRYPT) . "', 'professeur'),
+    ('FF44332211.nlecoq', 'Lecoq', 'Nadia', 'nadia.lecoq@example.com', 'FF44332211','" . password_hash('FF44332211', PASSWORD_BCRYPT) . "', 'professeur')
+");
 
 $pdo->exec("INSERT INTO administrateur (nom, prenom, email, cinAdmin) VALUES 
-        ('Claude', 'Douglas', 'tyu87885@gmail.com', 'CD8478559')");
+    ('Dupont', 'Jean', 'jean.dupont@example.com', 'AA12345678'),
+    ('Louis', 'Marie', 'marie.louis@example.com', 'BB87654321'),
+    ('Legrand', 'Robert', 'robert.legrand@example.com', 'CC11223344')
+");
 
 $pdo->exec("INSERT INTO professeur (nom, prenom, email, cinProf) VALUES 
-        ('Haba', 'Marcel Fassou', 'marcelfassouhaba2003@gmail.com', 'O00790130'),
-        ('Kolie', 'Justin', 'justinkolie6@gmail.com', 'JK84785592')");
+    ('Pierre', 'Sophie', 'sophie.pierre@example.com', 'DD99887766'),
+    ('Martin', 'Michel', 'michel.martin@example.com', 'EE55667788'),
+    ('Lecoq', 'Nadia', 'nadia.lecoq@example.com', 'FF44332211')
+");
 
-
-$pdo->exec("INSERT INTO etudiant (nom, prenom, cne, cinEtudiant, email, idclasse) VALUES 
-        ('Msaboue', 'Mohamed', 'BJ84785592', 'BJ8478559', 'mohamedmsb6@gmail.com', 5)");
 
 
 $pdo->exec("INSERT INTO filiere (idFiliere, nomFiliere, alias, idDepartement) VALUES
