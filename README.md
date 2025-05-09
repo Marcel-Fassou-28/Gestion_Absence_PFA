@@ -198,3 +198,8 @@ et faite une configuration dans le fichier httpd-vhosts.conf comme ceci:
 ```
 + Puis ajouter cette ligne **127.0.0.1 gaensaj.local** au fichier C:\Windows\System32\drivers\etc\hosts
 + Enfin aller dans votre navigation et ecriver gaensaj.local
+
+# Contributeurs
++ Marcel Fassou Haba ![Github](https://github.com/Marcel-Fassou-28)
++ Mohamed Msaboue ![Github](https://github.com/momomsb)
++ Claude Youmini Ngougou ![Github](https://github.com/NGONORMALIA)
