@@ -49,8 +49,6 @@ if ((isset($_POST['Matiere']) && $_POST['Matiere'] !== 'defaut')) {
     $n = count($list->getAllJustificatif(0, 0, $idMatiere));
 }
 
-var_dump($listeJustificatif);
-exit();
 ?>
 
 
