@@ -13,13 +13,16 @@ use App\Admin\adminTable;
 
 
 use App\Connection;
+use App\Model\Classe;
+use App\Model\Etudiant;
+
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 //variable pour la gestion de la pagination
 $line = 20;
 $offset = $_GET['p'] * $line;
 //variable n pour compter le nombre total de ligne extraite de la fonction getALL()
-$n = count($list->getAll("etudiant", "classEtudiant"));
+$n = count($list->getAll("etudiant", Classe::class));
 
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -35,7 +38,7 @@ if (isset($_GET['classe']) && !isset($_POST['classe']) && empty($_POST)) {
     $_POST['classe'] = $_GET['classe'];
 }
 //affichage des etudiants sans tri
-$listeEtudiant = $list->getAll("etudiant", "classEtudiant", $line, $offset);
+$listeEtudiant = $list->getAll("etudiant", Etudiant::class, $line, $offset);
 
 // tri si la filiere est choisit
 if (isset($_POST['filiere'])) {

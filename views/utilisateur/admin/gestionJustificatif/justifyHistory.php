@@ -11,8 +11,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Connection;
 use App\Admin\adminTable;
-
-
+use App\Model\Classe;
+use App\Model\Matiere;
 
 $title = "Administration";
 $line = 20;
@@ -23,8 +23,8 @@ $list = new adminTable($pdo);
 
 $listeJustificatif = $list->getAllJustificatif($line, $offset);
 $n = count($list->getAllJustificatif());
-$listeClasse = $list->getAll("classe", "classClasse");
-$listeMatiere = $list->getAll("matiere", "classMatiere");
+$listeClasse = $list->getAll("classe", Classe::class);
+$listeMatiere = $list->getAll("matiere", Matiere::class);
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
@@ -48,6 +48,9 @@ if ((isset($_POST['Matiere']) && $_POST['Matiere'] !== 'defaut')) {
     $listeJustificatif = $list->getAllJustificatif(0, 0, $idMatiere);
     $n = count($list->getAllJustificatif(0, 0, $idMatiere));
 }
+
+var_dump($listeJustificatif);
+exit();
 ?>
 
 

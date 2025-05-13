@@ -13,13 +13,16 @@ use App\Admin\adminTable;
 
 
 use App\Connection;
+use App\Model\Departement;
+use App\Model\Filiere;
+
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 //variable pour la gestion de la pagination
 $line = 20;
 $offset = $_GET['p'] * $line;
 //variable n pour compter le nombre total de ligne extraite de la fonction getALL()
-$n = count($list->getAll('filiere', 'classFiliere'));
+$n = count($list->getAll('filiere', Filiere::class));
 
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
@@ -35,9 +38,9 @@ if (isset($_GET['classe']) && !isset($_POST['classe']) && empty($_POST)) {
     $_POST['classe'] = $_GET['classe'];
 }
 //extraction de tous les departement 
-$listeDepartement = $list->getAll('departement','classDepartement');
+$listeDepartement = $list->getAll('departement',Departement::class);
  // extraction de toutes les filiere
- $listeFiliere = $list->getAll('filiere','classFiliere',$line,$offset);
+ $listeFiliere = $list->getAll('filiere',Filiere::class,$line,$offset);
 // tri si le departement  est choisit
 if (isset($_POST['departement'])) {
     if ($_POST['departement'] !== 'defaut') {

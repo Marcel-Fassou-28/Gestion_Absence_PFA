@@ -11,11 +11,12 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 
 use App\Connection;
 use App\Admin\adminTable;
+use App\Model\Classe;
 
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
-$listeClasse = $list->getAll("classe", "classClasse");
+$listeClasse = $list->getAll("classe", Classe::class);
 foreach ($listeClasse as $class) {
     $listeMat = $list->getAllMatiereByclass($class->getIdClasse());
     if (!empty($listeMat)) {

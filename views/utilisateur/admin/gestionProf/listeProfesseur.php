@@ -11,6 +11,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 $title = "Administration";
 use App\Admin\adminTable;
 use App\Connection;
+use App\Model\Professeur;
+
 $pdo = Connection::getPDO();
 $list = new adminTable($pdo);
 
@@ -32,8 +34,8 @@ if (isset($_GET['classe']) && !isset($_POST['classe']) && empty($_POST)) {
     $_POST['classe'] = $_GET['classe'];
 }
 //affichage des prof sans tri
-$listeProf = $list->getAll("professeur", "classProf", $line, $offset);
-$n = count($list->getAll("professeur", "classProf"));
+$listeProf = $list->getAll("professeur", Professeur::class, $line, $offset);
+$n = count($list->getAll("professeur", Professeur::class));
 
 
 

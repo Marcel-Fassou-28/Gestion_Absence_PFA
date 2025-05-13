@@ -14,13 +14,14 @@ use App\Admin\adminTable;
 use App\connection;
 use App\Logger;
 use App\Model\Administrateur;
+use App\Model\Filiere;
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $dateSql = $date->format('Y-m-d H:i');
 $pdo = Connection::getPDO();
 $result = new adminTable($pdo);
  // chercher l'id de la dernier filiere afin de creer les classe
-$filiere = $result->getAll('filiere', 'classFiliere');
+$filiere = $result->getAll('filiere', Filiere::class);
 foreach ($filiere as $field)
     $id = $field->getIDFiliere();
 
