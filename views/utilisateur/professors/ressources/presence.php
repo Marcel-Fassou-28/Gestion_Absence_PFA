@@ -24,14 +24,13 @@ if (!isset($creneau)) {
     header('location: '. $router->url('user-dashboard', ['role' => $_SESSION['role']]) .'?error_prof=' . $error);
     exit();
 }
-
+/*
 if ($currentProfInfo->hasAlreadyTakenAbsence($cinProf)) {
     $error = 1;
     header('location: ' . $router->url('user-dashboard', ['role' => $_SESSION['role']]) . '?error_presence='. $error);
     exit();
 }
-
-
+*/
 
 $date = new DateTime('now', new DateTimeZone('Africa/Casablanca'));
 $moisEnFrancais = [

@@ -102,12 +102,11 @@ class ProfessorTable extends Table {
             
             if (isset($ArrayAbsence[$cinEtudiant]) && $ArrayAbsence[$cinEtudiant] === 'on') {
 
-                $query->execute([
+                return $query->execute([
                     'date' => $date,
                     'cinEtudiant' => $cinEtudiant,
                     'idMatiere' => $idMatiere
                 ]);
-                return true;
             }
         }
         return false;
@@ -448,13 +447,12 @@ class ProfessorTable extends Table {
             INSERT INTO listepresence(cinProf, classe ,nomFichierPresence, matiere) VALUES (:cinProf, :classe, :nomFichierPresence, :matiere)
         ');
         if ($list !== null) {
-            $query->execute([
+            return $query->execute([
                 'cinProf' => $list->getCINProf(),
                 'classe' => $list->getClasse(),
                 'nomFichierPresence' => $list->getNomFichierPresence(),
                 'matiere' => $list->getMatiere()
             ]);
-            return true;
         }else {
             return false;
         }

@@ -11,7 +11,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin') {
 $title = "Administration";
 use App\Connection;
 use App\Admin\adminTable;
-
+use App\Model\Etudiant;
 
 if (isset($_GET['notifier']) && $_GET['notifier'] == 1): ?>
     <div class="alert alert-success">L'email de notification a été envoyé avec succès</div>
@@ -35,8 +35,8 @@ $list = new adminTable($pdo);
 $line = 20;
 $offset = $_GET['p'] * $line;
 
-$n = count($list->getAll('etudiant', 'classEtudiant'));
-$listeEtudiant = $list->getAll('etudiant', 'classEtudiant', $line, $offset);
+$n = count($list->getAll('etudiant', Etudiant::class));
+$listeEtudiant = $list->getAll('etudiant', Etudiant::class, $line, $offset);
 
 if (isset($_GET['matiere']) && !isset($_POST['matiere']) && empty($_POST)) {
     $_POST['matiere'] = $_GET['matiere'];

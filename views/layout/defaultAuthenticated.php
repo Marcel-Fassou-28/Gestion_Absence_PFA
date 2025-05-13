@@ -28,7 +28,7 @@ $user = $tableUser->getIdentification($cin);
     <meta property="og:description" content="Plateforme intuitive de gestion des absences pour enseignants et étudiants.">
     <meta property="og:type" content="website">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap" rel="stylesheet">
@@ -44,7 +44,8 @@ $user = $tableUser->getIdentification($cin);
             'user', 'filiere', 'add', 'historic', 'success', 'super_admin', 'edit_profil', 'messagerie', 'p', 
             'redirect', 'fichier', 'file', 'cin', 'about', 'success_modifie', 'success_etudiant', 'justifier', 'notifier',
             'fichier', 'traite', 'idjustificatif', 'success_absence', 'success_prof', 'error_presence_file', 'error_prof', 'cinProf',
-            'error_prof', 'error_presence', 'status_presence', 'user', 'id_user'
+            'error_prof', 'error_presence', 'status_presence', 'user', 'id_user', 'id_admin', 'privee', 'id_classe', 'id', 'id_creneau', 'id_matiere',
+            
         ];
 
         if (!empty($_GET)) {

@@ -56,7 +56,6 @@ if(!empty($_POST)) {
             session_destroy();
             header('Location:' . $router->url('page-connexion') .'?error=1');
             exit();
-
         } else {
             $status = $table->changePassword($newPassword, $email);
             if($status) {
@@ -65,6 +64,7 @@ if(!empty($_POST)) {
                 $_SESSION['role'] = $user->getRole();
                 $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
 
+                $table->codeReset($email);
                 $mailer->passwordChangedMail($user->getEmail(), $user->getNom() . ' ' .$user->getPrenom());
                 Logger::log("Changement de mot de Passe avec succès", 1, "SECURITY", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
                 header('Location:' . $router->url('user-home', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));

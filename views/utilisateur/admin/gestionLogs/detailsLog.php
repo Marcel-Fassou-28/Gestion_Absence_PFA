@@ -23,7 +23,7 @@ $dateSql = $date->format('Y-m-d H:i');
 $super_admin = null;
 
 $levels = ['INFO', 'ERROR', 'SECURITY', 'DB', 'UPLOAD'];
-$selectedLevel = $_POST['filiere'] ?? 'INFO';
+$selectedLevel = $_POST['filiere'] ?? 'info';
 $dateTrie = $_POST['date'] ?? date('Y-m-d');
 $logs = $logManager->getLogsByDateAndLevel($selectedLevel, $dateTrie);
 
@@ -45,17 +45,16 @@ if (isset($_POST['clear-logs'])) {
 ?>
 
 <div class="prof-list">
+    <?php if (isset($super_admin) && $super_admin == 1): ?>
+            <div class="alert alert-danger">Vous devez etre le super administrateur pour effectuer cette opération</div>
+        <?php elseif(isset($super_admin) && $super_admin == 0): ?>
+            <div class="alert alert-success">Fichier de log supprimer avec succès</div>
+        <?php endif ?>
    <div class="intro-prof-list">
         <h1>Consultation des Logs</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
-        <?php if (isset($super_admin) && $super_admin == 1): ?>
-            <div class="alert alert-danger">Vous devez etre le super administrateur pour effectuer cette opération</div>
-        <?php elseif(isset($super_admin) && $super_admin == 0): ?>
-            <div class="alert alert-success">Fichier de log supprimer avec succès</div>
-        <?php endif ?>
-
     </div>
     <div class="hr"></div>
     <div class="form-tri-container">
@@ -63,7 +62,7 @@ if (isset($_POST['clear-logs'])) {
             <div class="list-filiere">
                 <select name="filiere" id="tri-filiere">
                     <?php foreach ($levels as $level): ?>
-                        <option value="<?= strtolower($level) ?>" <?= $selectedLevel === $level ? 'selected' : '' ?>><?= ucfirst($level) ?></option>
+                        <option value="<?= strtolower($level) ?>" <?= $selectedLevel === strtolower($level) ? 'selected' : '' ?>><?= ucfirst($level) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

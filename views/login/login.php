@@ -39,21 +39,24 @@ if (!empty($_POST)) {
     if (!empty($username) && !empty($password)) {
         $table = new UserTable($pdo);
         $user = $table->findByUsername($username);
-
-        if (password_verify( $password, $user->getPassword()) === true){
-            session_start();
-            $_SESSION['id_user'] = $user->getCIN();
-            $_SESSION['role'] = $user->getRole();
-            $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
-
-            Logger::log("Connexion reussie", 1, "SECURITY", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
-
-            header('Location:' . $router->url('user-home', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));
-            exit();
-        }else {
+        if ($user) {
+            if (password_verify( $password, $user->getPassword()) === true){
+                session_start();
+                $_SESSION['id_user'] = $user->getCIN();
+                $_SESSION['role'] = $user->getRole();
+                $_SESSION['username'] = pascalCase($user->getNom() . ' ' .$user->getPrenom());
+    
+                Logger::log("Connexion reussie", 1, "SECURITY", $_SESSION['id_user'] . ' - ' . $_SESSION['username']);
+    
+                header('Location:' . $router->url('user-home', ['role' =>$user->getRole(), 'id' => encodindCIN($user->getCIN())]));
+                exit();
+            }else {
+                $errorPassword = true;
+                Logger::log("Échec de connexion", 1,  "SECURITY");
+            }
+        } else {
             $errorPassword = true;
-            Logger::log("Échec de connexion", 1,  "SECURITY");
-        }
+        }  
     } 
 }
 

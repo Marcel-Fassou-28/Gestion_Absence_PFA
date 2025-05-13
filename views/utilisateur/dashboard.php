@@ -28,7 +28,7 @@ $user = $table->getIdentification($cin);
 if ($_SESSION['role'] === 'professeur') {
     $utilsInfo = new InformationUtils($pdo);
     $currentProfInfo = new CurrentInfo($pdo);
-
+    $creneau = $currentProfInfo->getCurrentCreneau($cin);
     $creneaux = $utilsInfo->getAllCreneaux($cin);
     $lastInfoAbsence = $utilsInfo->getInfoDerniereAbsence($cin);
     $statistiquesClasses = $utilsInfo->getInfoEffectifsNbrAbsents($cin);
@@ -40,6 +40,7 @@ if ($_SESSION['role'] === 'etudiant') {
 
     $creneauProfesseurs = $etudiantInfo->getAllCreneauxProf($cin);
     $infoEtudiant = $etudiantInfo->getInfoGeneralEtudiant($cin);
+    $infoEtudiantWithoutAbsence = $etudiantInfo->getInfoGeneralEtudiantWithoutLastAbsence($cin);
     $absenceParMatiere = $etudiantInfo->getStatistiqueAbsenceEtudiant($cin);
 }
 
@@ -72,7 +73,7 @@ $currentTime = $date->format('H:i:s');
 <div class="container dashboard">
     <div class="dashboard-intro">
         <h1>Tableau de Bord</h1>
-        <span class="user-info"><?= $_SESSION['role'] === 'etudiant' ? 'Bonjour ' : 'Bonjour Mr. '?> <?= htmlspecialchars($user->getNom()) .' '. htmlspecialchars($user->getPrenom()) ?></span>
+        <span class="user-info"><?= $_SESSION['role'] === 'etudiant' ? 'Bonjour ' : 'Bonjour Mr. '?> <?= $user ? htmlspecialchars($user->getNom()) .' '. htmlspecialchars($user->getPrenom()) : ''?></span>
         <span class="date-today"><?= $dateSql ?></span>
     </div>
     <?php if ($_SESSION['role'] === 'professeur'): ?>
@@ -124,7 +125,7 @@ $currentTime = $date->format('H:i:s');
                             : 'Non spécifié' ?>
                     </span>
                 </div>
-                <?php if (date('w') !== '0'): ?>
+                <?php if (date('w') !== '0' && $creneau): ?>
                 <div class="absence-detail">
                     <span class="absence-label">Etat d'Absence :</span>
                     <span class="absence-value">
@@ -229,7 +230,7 @@ $currentTime = $date->format('H:i:s');
                 <h2>Information Générale</h2>
                 <div class="hr"></div>
                 <ul class="list-info-absence">
-                <?php if ($infoEtudiant instanceof DerniereAbsenceEtudiant): ?>
+        <?php if ($infoEtudiant instanceof DerniereAbsenceEtudiant): ?>
             <li class="absence-item">
                 <div class="absence-detail">
                     <span class="absence-label">Département :</span>
@@ -251,11 +252,26 @@ $currentTime = $date->format('H:i:s');
                 </div>
                 
             </li>
+        <?php elseif ($infoEtudiantWithoutAbsence instanceof DerniereAbsenceEtudiant): ?>
+            <li class="absence-item">
+                <div class="absence-detail">
+                    <span class="absence-label">Département :</span>
+                    <span class="absence-value"><?= htmlspecialchars($infoEtudiantWithoutAbsence->getNomDepartement() ?? 'Non spécifiée') ?></span>
+                </div>
+                <div class="absence-detail">
+                    <span class="absence-label">Filière :</span>
+                    <span class="absence-value"><?= htmlspecialchars($infoEtudiantWithoutAbsence->getNomFiliere() ?? 'Non spécifiée') ?></span>
+                </div>
+                <div class="absence-detail">
+                    <span class="absence-label">Classe :</span>
+                    <span class="absence-value"><?= htmlspecialchars($infoEtudiantWithoutAbsence->getNomClasse() ?? 'Non spécifiée') ?></span>
+                </div>
+            </li>
         <?php else: ?>
             <li class="absence-item absence-empty">
                 <span>Aucune information enregistrée.</span>
             </li>
-        <?php endif; ?>
+        <?php endif ?>
                 </ul>
             </section>
             <section class="creneaux">
@@ -303,7 +319,7 @@ $currentTime = $date->format('H:i:s');
                         <?php endforeach; ?>
                     <?php else: ?>
                         <li class="stat-item stat-empty">
-                            <span>Aucune statistique disponible.</span>
+                            <span>Aucune statistique disponible, vous êtes ponctuel (le).</span>
                         </li>
                     <?php endif; ?>
                 </ul>
@@ -337,7 +353,7 @@ $currentTime = $date->format('H:i:s');
                 <h2>Information Générale</h2>
                 <div class="hr"></div>
                 <ul class="list-info-absence">
-                <?php if ($infoGeneral instanceof InformationActifs): ?>
+        <?php if ($infoGeneral instanceof InformationActifs): ?>
             <li class="absence-item">
                 <div class="absence-detail">
                     <span class="absence-label">Nombre Total Inscrit :</span>

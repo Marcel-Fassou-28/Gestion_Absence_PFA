@@ -4,7 +4,7 @@ require '../vendor/autoload.php';
 use App\Logger;
 use App\Router;
 
-Logger::initErrorHandlers();
+Logger::initErrorHandlers(); //Système d'enregiistrement des logs
 
 $env = parse_ini_file(dirname(__DIR__) .DIRECTORY_SEPARATOR . '.env');
 $secretKey = $env['SECRET_KEY'];
@@ -85,7 +85,7 @@ $router
     ->match('/my/etudiant/historique/absence', 'utilisateur/students/historique/absences','etudiant-absences')
     ->match('/my/etudiant/historique/justificatif', 'utilisateur/students/historique/justificatifs','etudiant-justificatifs')
 
-
+//soumettreJustificatif
     /* gestion des matieres... */
     ->match('/my/administration/gestion-matiere', 'utilisateur/admin/gestionCours/listeMatiere', 'liste-matiere-admin')
     ->match('/my/administration/gestion-matiere/supprimer', 'utilisateur/admin/gestionCours/supprimerMatiere', 'liste-matiere-delete')

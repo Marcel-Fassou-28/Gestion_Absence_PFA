@@ -53,6 +53,10 @@ if (isset($_POST['departement'])) {
 
 ?>
 <div class="prof-list">
+    <?php if (isset($_GET['super_admin']) && $_GET['super_admin'] == '1'): ?>
+        <div class="alert alert-danger">Vous devez etre le super administrateur pour effectuer cette opération</div>
+    <?php endif ?>
+
     <?php if (isset($_GET['success_filiere']) && $_GET['success_filiere'] == '1'): ?>
         <div class="alert alert-success">Filiere ajouté avec succès</div>
     <?php elseif (isset($_GET['success_filiere']) && $_GET['success_filiere'] == '0'): ?>
@@ -72,7 +76,7 @@ if (isset($_POST['departement'])) {
     <?php else: ?><?php endif ?>
 
     <div class="intro-prof-list">
-        <h1> Liste De toutes les  filiere </h1><br>
+        <h1>Liste des filières</h1>
         <div class="date-group">
             <span><?= htmlspecialchars($dateSql) ?></span>
         </div>
@@ -122,8 +126,8 @@ if (isset($_POST['departement'])) {
                     <td><?= htmlspecialchars($row->getAlias()); ?></td>
                     
                     <td class="btns">
-                        <a href="<?= $router->url('liste-filiere-modifie') . '?listprof=1&modifier=1&id=' . $row->getIDFiliere(); ?>" class="btn1">Modifier</a>
-                        <a id="delete" href="<?= $router->url('liste-filiere-delete') . '?listprof=1&id=' . $row->getIDFiliere(); ?>" class="btn2">Supprimer</a>
+                        <a href="<?= $router->url('liste-filiere-modifie') . '?listprof=1&modifier=1&id=' . $row->getIDFiliere() ?>" class="btn1">Modifier</a>
+                        <a id="delete" href="<?= $router->url('liste-filiere-delete') . '?listprof=1&id=' . $row->getIDFiliere() ?>" class="btn2">Supprimer</a>
                     </td>
                 </tr><?php
             }
