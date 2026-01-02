@@ -1,6 +1,6 @@
-/database/Fill/fill1.php
+/database/Fill/*
 /uploads
 /views/Logs/*.log
 .env
-generateKey.php
-database/Fill/*
+composer.lock
+vendor
